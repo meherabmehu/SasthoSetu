@@ -1,7 +1,11 @@
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
 
-DATABASE_URL = "postgresql://postgres:Meherab%40965@localhost:5432/sasthosetu_db"
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 
