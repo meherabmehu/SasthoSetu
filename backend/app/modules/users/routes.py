@@ -25,7 +25,8 @@ def create_user(
             phone=payload.phone,
             password_hash=hash_password(
                 payload.password
-            )
+            ),
+            role="PATIENT"
         )
 
         db.add(user)
