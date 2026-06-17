@@ -11,6 +11,10 @@ from app.models.doctor import Doctor
 from app.modules.doctors.routes import (
     router as doctor_router
 )
+from app.models.appointment import Appointment
+from app.modules.appointments.routes import (
+    router as appointment_router
+)
 
 Base.metadata.create_all(bind=engine)
 
@@ -40,6 +44,12 @@ app.include_router(
     doctor_router,
     prefix="/api/v1",
     tags=["Doctors"]
+)
+
+app.include_router(
+    appointment_router,
+    prefix="/api/v1",
+    tags=["Appointments"]
 )
 
 @app.get("/")
