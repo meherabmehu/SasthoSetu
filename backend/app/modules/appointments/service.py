@@ -59,3 +59,61 @@ def create_appointment_service(
         "message": "Appointment created",
         "status": "PENDING"
     }
+
+def get_patient_appointments_service(
+    patient_user_id: str,
+    db: Session
+):
+
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.user_id == patient_user_id
+        )
+        .first()
+    )
+
+    if not patient:
+        raise HTTPException(
+            status_code=404,
+            detail="Patient profile not found"
+        )
+
+    appointments = (
+        db.query(Appointment)
+        .filter(
+            Appointment.patient_id == patient.id
+        )
+        .all()
+    )
+
+    return appointments
+
+def get_doctor_appointments_service(
+    doctor_id: str,
+    db: Session
+):
+
+    doctor = (
+        db.query(Doctor)
+        .filter(
+            Doctor.id == doctor_id
+        )
+        .first()
+    )
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor not found"
+        )
+
+    appointments = (
+        db.query(Appointment)
+        .filter(
+            Appointment.doctor_id == doctor.id
+        )
+        .all()
+    )
+
+    return appointments
