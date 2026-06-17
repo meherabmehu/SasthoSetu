@@ -10,6 +10,10 @@ from app.models.user import User
 from app.models.patient import Patient
 
 from app.schemas.patient import PatientCreate
+from app.modules.patients.service import (
+    create_patient_profile_service,
+    get_patient_profile_service
+)
 
 router = APIRouter()
 
@@ -20,69 +24,18 @@ def create_patient_profile(
     payload: PatientCreate,
     db: Session = Depends(get_db)
 ):
-
-    user = (
-        db.query(User)
-        .filter(User.id == user_id)
-        .first()
-    )
-
-    if not user:
-        raise HTTPException(
-            status_code=404,
-            detail="User not found"
-        )
-
-    existing_profile = (
-        db.query(Patient)
-        .filter(
-            Patient.user_id == user_id
-        )
-        .first()
-    )
-
-    if existing_profile:
-        raise HTTPException(
-            status_code=409,
-            detail="Patient profile already exists"
-        )
-
-    patient = Patient(
+    return create_patient_profile_service(
         user_id=user_id,
-        date_of_birth=payload.date_of_birth,
-        gender=payload.gender,
-        blood_group=payload.blood_group,
-        height_cm=payload.height_cm,
-        weight_kg=payload.weight_kg,
-        emergency_contact=payload.emergency_contact,
-        address=payload.address
+        payload=payload,
+        db=db
     )
-
-    db.add(patient)
-    db.commit()
-
-    return {
-        "message": "Patient profile created successfully"
-    }
 
 @router.get("/patients/{user_id}")
 def get_patient_profile(
     user_id: str,
     db: Session = Depends(get_db)
 ):
-
-    patient = (
-        db.query(Patient)
-        .filter(
-            Patient.user_id == user_id
-        )
-        .first()
+    return get_patient_profile_service(
+        user_id=user_id,
+        db=db
     )
-
-    if not patient:
-        raise HTTPException(
-            status_code=404,
-            detail="Patient profile not found"
-        )
-
-    return patient
