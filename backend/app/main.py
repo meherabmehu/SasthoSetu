@@ -7,6 +7,10 @@ from app.modules.users.routes import router as user_router
 from app.modules.auth.routes import router as auth_router
 from app.models.patient import Patient
 from app.modules.patients.routes import router as patient_router
+from app.models.doctor import Doctor
+from app.modules.doctors.routes import (
+    router as doctor_router
+)
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,6 +35,11 @@ app.include_router(
     patient_router,
     prefix="/api/v1",
     tags=["Patients"]
+)
+app.include_router(
+    doctor_router,
+    prefix="/api/v1",
+    tags=["Doctors"]
 )
 
 @app.get("/")
