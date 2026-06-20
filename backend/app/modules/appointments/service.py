@@ -117,3 +117,31 @@ def get_doctor_appointments_service(
     )
 
     return appointments
+def update_appointment_status_service(
+    appointment_id: str,
+    status: str,
+    db: Session
+):
+
+    appointment = (
+        db.query(Appointment)
+        .filter(
+            Appointment.id == appointment_id
+        )
+        .first()
+    )
+
+    if not appointment:
+        raise HTTPException(
+            status_code=404,
+            detail="Appointment not found"
+        )
+
+    appointment.status = status
+
+    db.commit()
+
+    return {
+        "message": "Appointment status updated",
+        "new_status": status
+    }

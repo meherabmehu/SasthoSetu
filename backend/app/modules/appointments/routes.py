@@ -17,6 +17,15 @@ from app.modules.appointments.service import (
     get_patient_appointments_service,
     get_doctor_appointments_service
 )
+from app.schemas.appointment_status import (
+    AppointmentStatusUpdate
+)
+from app.modules.appointments.service import (
+    create_appointment_service,
+    get_patient_appointments_service,
+    get_doctor_appointments_service,
+    update_appointment_status_service
+)
 
 router = APIRouter()
 
@@ -56,5 +65,19 @@ def get_doctor_appointments(
 ):
     return get_doctor_appointments_service(
         doctor_id=doctor_id,
+        db=db
+    )
+
+@router.patch(
+    "/appointments/{appointment_id}/status"
+)
+def update_appointment_status(
+    appointment_id: str,
+    payload: AppointmentStatusUpdate,
+    db: Session = Depends(get_db)
+):
+    return update_appointment_status_service(
+        appointment_id=appointment_id,
+        status=payload.status,
         db=db
     )
