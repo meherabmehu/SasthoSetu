@@ -26,6 +26,32 @@ def create_prescription_service(
             detail="Appointment not found"
         )
 
+    if appointment.status != "COMPLETED":
+        raise HTTPException(
+            status_code=400,
+            detail="Appointment not completed"
+        )
+
+    if appointment.doctor_id != doctor_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Unauthorized doctor"
+        )
+
+    existing_prescription = (
+        db.query(Prescription)
+        .filter(
+            Prescription.appointment_id == appointment.id
+        )
+        .first()
+    )
+
+    if existing_prescription:
+        raise HTTPException(
+            status_code=409,
+            detail="Prescription already exists"
+        )
+
     prescription = Prescription(
         appointment_id=appointment.id,
         doctor_id=doctor_id,
