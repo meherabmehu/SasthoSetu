@@ -15,7 +15,10 @@ from app.models.appointment import Appointment
 from app.modules.appointments.routes import (
     router as appointment_router
 )
-
+from app.models.prescription import Prescription
+from app.modules.prescriptions.routes import (
+    router as prescription_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -50,6 +53,11 @@ app.include_router(
     appointment_router,
     prefix="/api/v1",
     tags=["Appointments"]
+)
+app.include_router(
+    prescription_router,
+    prefix="/api/v1",
+    tags=["Prescriptions"]
 )
 
 @app.get("/")
