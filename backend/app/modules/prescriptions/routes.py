@@ -12,6 +12,11 @@ from app.schemas.prescription import (
 from app.modules.prescriptions.service import (
     create_prescription_service
 )
+from app.modules.prescriptions.service import (
+    create_prescription_service,
+    get_patient_prescriptions_service,
+    get_doctor_prescriptions_service
+)
 
 router = APIRouter()
 
@@ -27,5 +32,29 @@ def create_prescription(
     return create_prescription_service(
         doctor_id=doctor_id,
         payload=payload,
+        db=db
+    )
+@router.get(
+    "/prescriptions/patient/{patient_user_id}"
+)
+def get_patient_prescriptions(
+    patient_user_id: str,
+    db: Session = Depends(get_db)
+):
+    return get_patient_prescriptions_service(
+        patient_user_id=patient_user_id,
+        db=db
+    )
+
+
+@router.get(
+    "/prescriptions/doctor/{doctor_id}"
+)
+def get_doctor_prescriptions(
+    doctor_id: str,
+    db: Session = Depends(get_db)
+):
+    return get_doctor_prescriptions_service(
+        doctor_id=doctor_id,
         db=db
     )
