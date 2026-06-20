@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 
 from app.models.appointment import Appointment
 from app.models.prescription import Prescription
+from app.models.patient import Patient
+from app.models.doctor import Doctor
 
 
 def create_prescription_service(
@@ -68,3 +70,61 @@ def create_prescription_service(
     return {
         "message": "Prescription created successfully"
     }
+def get_patient_prescriptions_service(
+    patient_user_id: str,
+    db: Session
+):
+
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.user_id == patient_user_id
+        )
+        .first()
+    )
+
+    if not patient:
+        raise HTTPException(
+            status_code=404,
+            detail="Patient not found"
+        )
+
+    prescriptions = (
+        db.query(Prescription)
+        .filter(
+            Prescription.patient_id == patient.id
+        )
+        .all()
+    )
+
+    return prescriptions
+
+
+def get_doctor_prescriptions_service(
+    doctor_id: str,
+    db: Session
+):
+
+    doctor = (
+        db.query(Doctor)
+        .filter(
+            Doctor.id == doctor_id
+        )
+        .first()
+    )
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor not found"
+        )
+
+    prescriptions = (
+        db.query(Prescription)
+        .filter(
+            Prescription.doctor_id == doctor.id
+        )
+        .all()
+    )
+
+    return prescriptions
