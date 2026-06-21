@@ -19,6 +19,10 @@ from app.models.prescription import Prescription
 from app.modules.prescriptions.routes import (
     router as prescription_router
 )
+from app.models.medical_record import MedicalRecord
+from app.modules.medical_records.routes import (
+    router as medical_record_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -58,6 +62,11 @@ app.include_router(
     prescription_router,
     prefix="/api/v1",
     tags=["Prescriptions"]
+)
+app.include_router(
+    medical_record_router,
+    prefix="/api/v1",
+    tags=["Medical Records"]
 )
 
 @app.get("/")
