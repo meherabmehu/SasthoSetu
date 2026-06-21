@@ -55,3 +55,61 @@ def create_medical_record_service(
     return {
         "message": "Medical record created successfully"
     }
+def get_patient_medical_records_service(
+    patient_user_id: str,
+    db: Session
+):
+
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.user_id == patient_user_id
+        )
+        .first()
+    )
+
+    if not patient:
+        raise HTTPException(
+            status_code=404,
+            detail="Patient not found"
+        )
+
+    records = (
+        db.query(MedicalRecord)
+        .filter(
+            MedicalRecord.patient_id == patient.id
+        )
+        .all()
+    )
+
+    return records
+
+
+def get_doctor_medical_records_service(
+    doctor_id: str,
+    db: Session
+):
+
+    doctor = (
+        db.query(Doctor)
+        .filter(
+            Doctor.id == doctor_id
+        )
+        .first()
+    )
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor not found"
+        )
+
+    records = (
+        db.query(MedicalRecord)
+        .filter(
+            MedicalRecord.doctor_id == doctor.id
+        )
+        .all()
+    )
+
+    return records
