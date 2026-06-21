@@ -17,6 +17,9 @@ from app.modules.prescriptions.service import (
     get_patient_prescriptions_service,
     get_doctor_prescriptions_service
 )
+from app.core.security import (
+    require_doctor
+)
 
 router = APIRouter()
 
@@ -27,6 +30,9 @@ router = APIRouter()
 def create_prescription(
     doctor_id: str,
     payload: PrescriptionCreate,
+    current_user=Depends(
+        require_doctor
+    ),
     db: Session = Depends(get_db)
 ):
     return create_prescription_service(

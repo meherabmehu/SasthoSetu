@@ -101,3 +101,17 @@ def require_admin(
         )
 
     return current_user
+def require_doctor(
+    current_user=Depends(
+        get_current_user
+    )
+):
+
+    if current_user["role"] != "DOCTOR":
+
+        raise HTTPException(
+            status_code=403,
+            detail="Doctor access required"
+        )
+
+    return current_user
