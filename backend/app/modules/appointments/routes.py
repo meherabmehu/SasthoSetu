@@ -9,22 +9,16 @@ from app.schemas.appointment import (
     AppointmentCreate
 )
 
-from app.modules.appointments.service import (
-    create_appointment_service
-)
-from app.modules.appointments.service import (
-    create_appointment_service,
-    get_patient_appointments_service,
-    get_doctor_appointments_service
-)
 from app.schemas.appointment_status import (
     AppointmentStatusUpdate
 )
+
 from app.modules.appointments.service import (
     create_appointment_service,
     get_patient_appointments_service,
     get_doctor_appointments_service,
-    update_appointment_status_service
+    update_appointment_status_service,
+    cancel_appointment_service
 )
 
 router = APIRouter()
@@ -44,6 +38,7 @@ def create_appointment(
         db=db
     )
 
+
 @router.get(
     "/appointments/patient/{patient_user_id}"
 )
@@ -55,6 +50,7 @@ def get_patient_appointments(
         patient_user_id=patient_user_id,
         db=db
     )
+
 
 @router.get(
     "/appointments/doctor/{doctor_id}"
@@ -68,6 +64,7 @@ def get_doctor_appointments(
         db=db
     )
 
+
 @router.patch(
     "/appointments/{appointment_id}/status"
 )
@@ -79,5 +76,18 @@ def update_appointment_status(
     return update_appointment_status_service(
         appointment_id=appointment_id,
         status=payload.status,
+        db=db
+    )
+
+
+@router.patch(
+    "/appointments/{appointment_id}/cancel"
+)
+def cancel_appointment(
+    appointment_id: str,
+    db: Session = Depends(get_db)
+):
+    return cancel_appointment_service(
+        appointment_id=appointment_id,
         db=db
     )

@@ -173,3 +173,48 @@ def update_appointment_status_service(
         "message": "Appointment status updated",
         "new_status": status
     }
+
+
+def cancel_appointment_service(
+    appointment_id: str,
+    db: Session
+):
+
+    appointment = (
+        db.query(Appointment)
+        .filter(
+            Appointment.id == appointment_id
+        )
+        .first()
+    )
+
+    if not appointment:
+        raise HTTPException(
+            status_code=404,
+            detail="Appointment not found"
+        )
+
+    availability = (
+        db.query(DoctorAvailability)
+        .filter(
+            DoctorAvailability.doctor_id
+            == appointment.doctor_id,
+            DoctorAvailability.available_date
+            == appointment.appointment_date,
+            DoctorAvailability.start_time
+            == appointment.appointment_time
+        )
+        .first()
+    )
+
+    if availability:
+        availability.is_booked = False
+
+    appointment.status = "CANCELLED"
+
+    db.commit()
+
+    return {
+        "message": "Appointment cancelled successfully",
+        "status": "CANCELLED"
+    }
