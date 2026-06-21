@@ -68,3 +68,47 @@ def create_doctor_profile_service(
             status_code=409,
             detail="BMDC number already exists"
         )
+
+
+def get_all_doctors_service(
+    db: Session
+):
+    return db.query(Doctor).all()
+
+
+def get_doctor_by_id_service(
+    doctor_id: str,
+    db: Session
+):
+
+    doctor = (
+        db.query(Doctor)
+        .filter(
+            Doctor.id == doctor_id
+        )
+        .first()
+    )
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor not found"
+        )
+
+    return doctor
+
+
+def get_doctors_by_specialization_service(
+    specialization: str,
+    db: Session
+):
+
+    doctors = (
+        db.query(Doctor)
+        .filter(
+            Doctor.specialization == specialization
+        )
+        .all()
+    )
+
+    return doctors
