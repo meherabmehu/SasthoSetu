@@ -27,6 +27,9 @@ from app.models.doctor_availability import DoctorAvailability
 from app.modules.doctor_availability.routes import (
     router as doctor_availability_router
 )
+from app.modules.dashboard.routes import (
+    router as dashboard_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -76,6 +79,11 @@ app.include_router(
     doctor_availability_router,
     prefix="/api/v1",
     tags=["Doctor Availability"]
+)
+app.include_router(
+    dashboard_router,
+    prefix="/api/v1",
+    tags=["Dashboard"]
 )
 
 @app.get("/")
