@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.patient import Patient
 from app.models.doctor import Doctor
 from app.models.appointment import Appointment
+from app.models.doctor_availability import DoctorAvailability
 
 
 def create_appointment_service(
@@ -41,6 +42,27 @@ def create_appointment_service(
             detail="Doctor not found"
         )
 
+    availability = (
+        db.query(DoctorAvailability)
+        .filter(
+            DoctorAvailability.doctor_id
+            == doctor.id,
+            DoctorAvailability.available_date
+            == str(payload.appointment_date),
+            DoctorAvailability.start_time
+            == payload.appointment_time,
+            DoctorAvailability.is_booked
+            == False
+        )
+        .first()
+    )
+
+    if not availability:
+        raise HTTPException(
+            status_code=400,
+            detail="Selected slot not available"
+        )
+
     appointment = Appointment(
         patient_id=patient.id,
         doctor_id=doctor.id,
@@ -52,6 +74,8 @@ def create_appointment_service(
         status="PENDING"
     )
 
+    availability.is_booked = True
+
     db.add(appointment)
     db.commit()
 
@@ -59,6 +83,7 @@ def create_appointment_service(
         "message": "Appointment created",
         "status": "PENDING"
     }
+
 
 def get_patient_appointments_service(
     patient_user_id: str,
@@ -89,6 +114,7 @@ def get_patient_appointments_service(
 
     return appointments
 
+
 def get_doctor_appointments_service(
     doctor_id: str,
     db: Session
@@ -117,6 +143,8 @@ def get_doctor_appointments_service(
     )
 
     return appointments
+
+
 def update_appointment_status_service(
     appointment_id: str,
     status: str,
