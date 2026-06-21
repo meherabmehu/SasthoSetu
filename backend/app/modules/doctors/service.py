@@ -112,3 +112,44 @@ def get_doctors_by_specialization_service(
     )
 
     return doctors
+
+
+def get_pending_doctors_service(
+    db: Session
+):
+    return (
+        db.query(Doctor)
+        .filter(
+            Doctor.verification_status == False
+        )
+        .all()
+    )
+
+
+def verify_doctor_service(
+    doctor_id: str,
+    db: Session
+):
+
+    doctor = (
+        db.query(Doctor)
+        .filter(
+            Doctor.id == doctor_id
+        )
+        .first()
+    )
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor not found"
+        )
+
+    doctor.verification_status = True
+
+    db.commit()
+
+    return {
+        "message": "Doctor verified successfully",
+        "verification_status": True
+    }
