@@ -11,7 +11,9 @@ from app.modules.doctors.service import (
     create_doctor_profile_service,
     get_all_doctors_service,
     get_doctor_by_id_service,
-    get_doctors_by_specialization_service
+    get_doctors_by_specialization_service,
+    get_pending_doctors_service,
+    verify_doctor_service
 )
 
 router = APIRouter()
@@ -28,6 +30,7 @@ def create_doctor_profile(
         payload=payload,
         db=db
     )
+
 
 @router.get("/doctors")
 def get_all_doctors(
@@ -58,5 +61,25 @@ def get_doctors_by_specialization(
 ):
     return get_doctors_by_specialization_service(
         specialization=specialization,
+        db=db
+    )
+
+
+@router.get("/doctors/pending")
+def get_pending_doctors(
+    db: Session = Depends(get_db)
+):
+    return get_pending_doctors_service(
+        db=db
+    )
+
+
+@router.patch("/doctors/{doctor_id}/verify")
+def verify_doctor(
+    doctor_id: str,
+    db: Session = Depends(get_db)
+):
+    return verify_doctor_service(
+        doctor_id=doctor_id,
         db=db
     )
