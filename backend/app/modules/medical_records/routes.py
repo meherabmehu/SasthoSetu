@@ -17,7 +17,9 @@ from app.modules.medical_records.service import (
     get_patient_medical_records_service,
     get_doctor_medical_records_service
 )
-
+from app.core.security import (
+    require_doctor
+)
 router = APIRouter()
 
 
@@ -27,6 +29,9 @@ router = APIRouter()
 def create_medical_record(
     doctor_id: str,
     payload: MedicalRecordCreate,
+    current_user=Depends(
+        require_doctor
+    ),
     db: Session = Depends(get_db)
 ):
     return create_medical_record_service(

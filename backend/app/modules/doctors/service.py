@@ -40,6 +40,7 @@ def create_doctor_profile_service(
         )
 
     try:
+        user.role = "DOCTOR"
 
         doctor = Doctor(
             user_id=user_id,
