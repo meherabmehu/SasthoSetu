@@ -1,8 +1,15 @@
 from datetime import datetime, timedelta
 
-from jose import jwt
+from jose import jwt, JWTError
 from passlib.context import CryptContext
 from dotenv import load_dotenv
+
+from fastapi import HTTPException
+from fastapi import Depends
+from fastapi.security import (
+    HTTPBearer,
+    HTTPAuthorizationCredentials
+)
 
 import os
 
@@ -15,6 +22,8 @@ pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
 )
+
+security = HTTPBearer()
 
 
 def hash_password(password: str):
@@ -50,3 +59,45 @@ def create_access_token(
         SECRET_KEY,
         algorithm=ALGORITHM
     )
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(
+        security
+    )
+):
+
+    token = credentials.credentials
+
+    try:
+
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=[ALGORITHM]
+        )
+
+        return payload
+
+    except JWTError:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
+
+
+def require_admin(
+    current_user=Depends(
+        get_current_user
+    )
+):
+
+    if current_user["role"] != "ADMIN":
+
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    return current_user
