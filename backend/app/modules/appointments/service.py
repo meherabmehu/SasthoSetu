@@ -42,6 +42,12 @@ def create_appointment_service(
             detail="Doctor not found"
         )
 
+    if doctor.verification_status is False:
+        raise HTTPException(
+            status_code=403,
+            detail="Doctor is not verified"
+        )
+
     availability = (
         db.query(DoctorAvailability)
         .filter(
