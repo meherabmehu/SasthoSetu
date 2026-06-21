@@ -15,6 +15,9 @@ from app.modules.doctors.service import (
     get_pending_doctors_service,
     verify_doctor_service
 )
+from app.core.security import (
+    require_admin
+)
 
 router = APIRouter()
 
@@ -77,6 +80,18 @@ def get_pending_doctors(
 @router.patch("/doctors/{doctor_id}/verify")
 def verify_doctor(
     doctor_id: str,
+    db: Session = Depends(get_db)
+):
+    return verify_doctor_service(
+        doctor_id=doctor_id,
+        db=db
+    )
+@router.patch("/doctors/{doctor_id}/verify")
+def verify_doctor(
+    doctor_id: str,
+    current_user=Depends(
+        require_admin
+    ),
     db: Session = Depends(get_db)
 ):
     return verify_doctor_service(
