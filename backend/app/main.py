@@ -30,6 +30,9 @@ from app.modules.doctor_availability.routes import (
 from app.modules.dashboard.routes import (
     router as dashboard_router
 )
+from app.modules.patient_history.routes import (
+    router as patient_history_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -85,7 +88,11 @@ app.include_router(
     prefix="/api/v1",
     tags=["Dashboard"]
 )
-
+app.include_router(
+    patient_history_router,
+    prefix="/api/v1",
+    tags=["Patient History"]
+)
 @app.get("/")
 def root():
     return {
