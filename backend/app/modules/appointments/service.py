@@ -6,6 +6,9 @@ from app.models.patient import Patient
 from app.models.doctor import Doctor
 from app.models.appointment import Appointment
 from app.models.doctor_availability import DoctorAvailability
+from app.modules.notifications.service import (
+    create_notification
+)
 
 
 def create_appointment_service(
@@ -84,6 +87,18 @@ def create_appointment_service(
 
     db.add(appointment)
     db.commit()
+
+    create_notification(
+        user_id=patient.user_id,
+        title="Appointment Booked",
+        message=(
+            f"Your appointment on "
+            f"{appointment.appointment_date} "
+            f"at {appointment.appointment_time} "
+            f"has been booked."
+        ),
+        db=db
+    )
 
     return {
         "message": "Appointment created",

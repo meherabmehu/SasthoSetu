@@ -33,6 +33,11 @@ from app.modules.dashboard.routes import (
 from app.modules.patient_history.routes import (
     router as patient_history_router
 )
+from app.models.notification import Notification
+
+from app.modules.notifications.routes import (
+    router as notification_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -92,6 +97,11 @@ app.include_router(
     patient_history_router,
     prefix="/api/v1",
     tags=["Patient History"]
+)
+app.include_router(
+    notification_router,
+    prefix="/api/v1",
+    tags=["Notifications"]
 )
 @app.get("/")
 def root():
