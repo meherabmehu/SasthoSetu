@@ -224,3 +224,87 @@ def cancel_appointment_service(
         "message": "Appointment cancelled successfully",
         "status": "CANCELLED"
     }
+def reschedule_appointment_service(
+    appointment_id: str,
+    payload,
+    db: Session
+):
+
+    appointment = (
+        db.query(Appointment)
+        .filter(
+            Appointment.id == appointment_id
+        )
+        .first()
+    )
+
+    if not appointment:
+        raise HTTPException(
+            status_code=404,
+            detail="Appointment not found"
+        )
+
+    if appointment.status == "COMPLETED":
+        raise HTTPException(
+            status_code=400,
+            detail="Completed appointment cannot be rescheduled"
+        )
+
+    if appointment.status == "CANCELLED":
+        raise HTTPException(
+            status_code=400,
+            detail="Cancelled appointment cannot be rescheduled"
+        )
+
+    old_slot = (
+        db.query(DoctorAvailability)
+        .filter(
+            DoctorAvailability.doctor_id
+            == appointment.doctor_id,
+            DoctorAvailability.available_date
+            == appointment.appointment_date,
+            DoctorAvailability.start_time
+            == appointment.appointment_time
+        )
+        .first()
+    )
+
+    if old_slot:
+        old_slot.is_booked = False
+
+    new_slot = (
+        db.query(DoctorAvailability)
+        .filter(
+            DoctorAvailability.doctor_id
+            == appointment.doctor_id,
+            DoctorAvailability.available_date
+            == str(payload.appointment_date),
+            DoctorAvailability.start_time
+            == payload.appointment_time,
+            DoctorAvailability.is_booked
+            == False
+        )
+        .first()
+    )
+
+    if not new_slot:
+        raise HTTPException(
+            status_code=400,
+            detail="New slot not available"
+        )
+
+    new_slot.is_booked = True
+
+    appointment.appointment_date = str(
+        payload.appointment_date
+    )
+
+    appointment.appointment_time = (
+        payload.appointment_time
+    )
+
+    db.commit()
+
+    return {
+        "message": "Appointment rescheduled successfully"
+    }
