@@ -233,7 +233,29 @@ def cancel_appointment_service(
 
     appointment.status = "CANCELLED"
 
+
     db.commit()
+
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.id == appointment.patient_id
+        )
+        .first()
+    )
+
+    if patient:
+        create_notification(
+            user_id=patient.user_id,
+            title="Appointment Cancelled",
+            message=(
+                f"Your appointment on "
+                f"{appointment.appointment_date} "
+                f"at {appointment.appointment_time} "
+                f"has been cancelled."
+            ),
+            db=db
+        )
 
     return {
         "message": "Appointment cancelled successfully",
@@ -319,6 +341,26 @@ def reschedule_appointment_service(
     )
 
     db.commit()
+
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.id == appointment.patient_id
+        )
+        .first()
+    )
+
+    if patient:
+        create_notification(
+            user_id=patient.user_id,
+            title="Appointment Rescheduled",
+            message=(
+                f"Your appointment has been moved to "
+                f"{appointment.appointment_date} "
+                f"at {appointment.appointment_time}."
+            ),
+            db=db
+        )
 
     return {
         "message": "Appointment rescheduled successfully"
