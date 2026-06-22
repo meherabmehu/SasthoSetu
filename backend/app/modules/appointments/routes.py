@@ -13,12 +13,17 @@ from app.schemas.appointment_status import (
     AppointmentStatusUpdate
 )
 
+from app.schemas.appointment_reschedule import (
+    AppointmentReschedule
+)
+
 from app.modules.appointments.service import (
     create_appointment_service,
     get_patient_appointments_service,
     get_doctor_appointments_service,
     update_appointment_status_service,
-    cancel_appointment_service
+    cancel_appointment_service,
+    reschedule_appointment_service
 )
 
 router = APIRouter()
@@ -89,5 +94,20 @@ def cancel_appointment(
 ):
     return cancel_appointment_service(
         appointment_id=appointment_id,
+        db=db
+    )
+
+
+@router.patch(
+    "/appointments/{appointment_id}/reschedule"
+)
+def reschedule_appointment(
+    appointment_id: str,
+    payload: AppointmentReschedule,
+    db: Session = Depends(get_db)
+):
+    return reschedule_appointment_service(
+        appointment_id=appointment_id,
+        payload=payload,
         db=db
     )
