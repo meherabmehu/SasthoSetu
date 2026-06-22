@@ -38,6 +38,9 @@ from app.models.notification import Notification
 from app.modules.notifications.routes import (
     router as notification_router
 )
+from app.modules.admin.routes import (
+    router as admin_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -102,6 +105,11 @@ app.include_router(
     notification_router,
     prefix="/api/v1",
     tags=["Notifications"]
+)
+app.include_router(
+    admin_router,
+    prefix="/api/v1",
+    tags=["Admin"]
 )
 @app.get("/")
 def root():
