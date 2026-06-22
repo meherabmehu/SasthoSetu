@@ -5,7 +5,9 @@ from sqlalchemy.orm import Session
 from app.models.patient import Patient
 from app.models.doctor import Doctor
 from app.models.medical_record import MedicalRecord
-
+from app.modules.notifications.service import (
+    create_notification
+)
 
 def create_medical_record_service(
     doctor_id: str,
@@ -52,9 +54,20 @@ def create_medical_record_service(
     db.add(record)
     db.commit()
 
+    create_notification(
+        user_id=patient.user_id,
+        title="Medical Record Added",
+        message=(
+            "A new medical record has been "
+            "added to your profile."
+        ),
+        db=db
+    )
+
     return {
         "message": "Medical record created successfully"
     }
+
 def get_patient_medical_records_service(
     patient_user_id: str,
     db: Session

@@ -6,6 +6,9 @@ from app.models.appointment import Appointment
 from app.models.prescription import Prescription
 from app.models.patient import Patient
 from app.models.doctor import Doctor
+from app.modules.notifications.service import (
+    create_notification
+)
 
 
 def create_prescription_service(
@@ -67,9 +70,29 @@ def create_prescription_service(
     db.add(prescription)
     db.commit()
 
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.id == appointment.patient_id
+        )
+        .first()
+    )
+
+    if patient:
+        create_notification(
+            user_id=patient.user_id,
+            title="Prescription Added",
+            message=(
+                "A new prescription has been "
+                "added by your doctor."
+            ),
+            db=db
+        )
+
     return {
         "message": "Prescription created successfully"
     }
+
 def get_patient_prescriptions_service(
     patient_user_id: str,
     db: Session
