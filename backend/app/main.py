@@ -46,6 +46,9 @@ from app.models.file_record import FileRecord
 from app.modules.files.routes import (
     router as file_router
 )
+from app.modules.symptom_checker.routes import (
+    router as symptom_checker_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -120,6 +123,11 @@ app.include_router(
     file_router,
     prefix="/api/v1",
     tags=["Files"]
+)
+app.include_router(
+    symptom_checker_router,
+    prefix="/api/v1",
+    tags=["AI Health Assistant"]
 )
 @app.get("/")
 def root():
