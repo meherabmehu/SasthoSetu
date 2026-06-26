@@ -2,6 +2,10 @@ from app.schemas.symptom_checker import (
     SymptomResponse
 )
 
+from app.modules.symptom_checker.rules import (
+    DISEASE_RULES
+)
+
 
 def analyze_symptoms_service(
     symptoms: str
@@ -9,72 +13,33 @@ def analyze_symptoms_service(
 
     text = symptoms.lower()
 
-    # Emergency
-    if (
-        "chest pain" in text
-        or "বুকে ব্যথা" in text
-        or "shortness of breath" in text
-        or "শ্বাসকষ্ট" in text
-    ):
-        return SymptomResponse(
-            severity="EMERGENCY",
-            possible_disease="Possible Heart or Lung Emergency",
-            recommended_specialist="Emergency Medicine",
-            recommendation="Go to the nearest hospital immediately."
-        )
+    for rule in DISEASE_RULES:
 
-    # Dengue
-    if (
-        "fever" in text
-        and "body pain" in text
-    ) or (
-        "জ্বর" in text
-        and "শরীর ব্যথা" in text
-    ):
-        return SymptomResponse(
-            severity="SPECIALIST",
-            possible_disease="Possible Dengue",
-            recommended_specialist="Medicine Specialist",
-            recommendation="Get a CBC test and consult a physician immediately."
-        )
+        if rule["match"] == "any":
 
-    # Viral Fever
-    if (
-        "fever" in text
-        or "জ্বর" in text
-    ):
-        return SymptomResponse(
-            severity="CONSULT_DOCTOR",
-            possible_disease="Viral Fever",
-            recommended_specialist="General Physician",
-            recommendation="Drink plenty of fluids and consult a doctor if fever persists."
-        )
+            if any(
+                symptom.lower() in text
+                for symptom in rule["symptoms"]
+            ):
+                return SymptomResponse(
+                    severity=rule["severity"],
+                    possible_disease=rule["name"],
+                    recommended_specialist=rule["doctor"],
+                    recommendation=rule["recommendation"]
+                )
 
-    # Common Cold
-    if (
-        "cough" in text
-        or "কাশি" in text
-        or "sore throat" in text
-        or "গলা ব্যথা" in text
-    ):
-        return SymptomResponse(
-            severity="SELF_CARE",
-            possible_disease="Common Cold",
-            recommended_specialist="General Physician",
-            recommendation="Take rest, drink warm fluids and monitor your symptoms."
-        )
+        elif rule["match"] == "all":
 
-    # Headache
-    if (
-        "headache" in text
-        or "মাথা ব্যথা" in text
-    ):
-        return SymptomResponse(
-            severity="SELF_CARE",
-            possible_disease="Tension Headache",
-            recommended_specialist="General Physician",
-            recommendation="Rest well, stay hydrated and consult a doctor if pain continues."
-        )
+            if all(
+                symptom.lower() in text
+                for symptom in rule["symptoms"]
+            ):
+                return SymptomResponse(
+                    severity=rule["severity"],
+                    possible_disease=rule["name"],
+                    recommended_specialist=rule["doctor"],
+                    recommendation=rule["recommendation"]
+                )
 
     return SymptomResponse(
         severity="CONSULT_DOCTOR",
