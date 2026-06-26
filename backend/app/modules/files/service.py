@@ -125,3 +125,31 @@ def download_file_service(
         filename=file.file_name,
         media_type=file.file_type
     )
+def delete_file_service(
+    file_id: str,
+    db: Session
+):
+
+    file = (
+        db.query(FileRecord)
+        .filter(
+            FileRecord.id == file_id
+        )
+        .first()
+    )
+
+    if not file:
+        raise HTTPException(
+            status_code=404,
+            detail="File not found"
+        )
+
+    if os.path.exists(file.file_path):
+        os.remove(file.file_path)
+
+    db.delete(file)
+    db.commit()
+
+    return {
+        "message": "File deleted successfully"
+    }
