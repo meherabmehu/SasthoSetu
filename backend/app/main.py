@@ -41,6 +41,11 @@ from app.modules.notifications.routes import (
 from app.modules.admin.routes import (
     router as admin_router
 )
+from app.models.file_record import FileRecord
+
+from app.modules.files.routes import (
+    router as file_router
+)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -110,6 +115,11 @@ app.include_router(
     admin_router,
     prefix="/api/v1",
     tags=["Admin"]
+)
+app.include_router(
+    file_router,
+    prefix="/api/v1",
+    tags=["Files"]
 )
 @app.get("/")
 def root():
