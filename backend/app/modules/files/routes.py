@@ -10,7 +10,8 @@ from app.core.dependencies import get_db
 from app.modules.files.service import (
     upload_file_service,
     get_patient_files_service,
-    download_file_service
+    download_file_service,
+    delete_file_service
 )
 
 router = APIRouter()
@@ -52,6 +53,19 @@ def download_file(
     db: Session = Depends(get_db)
 ):
     return download_file_service(
+        file_id=file_id,
+        db=db
+    )
+
+
+@router.delete(
+    "/files/{file_id}"
+)
+def delete_file(
+    file_id: str,
+    db: Session = Depends(get_db)
+):
+    return delete_file_service(
         file_id=file_id,
         db=db
     )
