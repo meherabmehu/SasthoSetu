@@ -9,7 +9,8 @@ from app.core.dependencies import get_db
 
 from app.modules.files.service import (
     upload_file_service,
-    get_patient_files_service
+    get_patient_files_service,
+    download_file_service
 )
 
 router = APIRouter()
@@ -39,5 +40,18 @@ def get_patient_files(
 ):
     return get_patient_files_service(
         patient_user_id=patient_user_id,
+        db=db
+    )
+
+
+@router.get(
+    "/files/download/{file_id}"
+)
+def download_file(
+    file_id: str,
+    db: Session = Depends(get_db)
+):
+    return download_file_service(
+        file_id=file_id,
         db=db
     )
