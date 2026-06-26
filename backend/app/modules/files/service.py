@@ -65,3 +65,33 @@ def upload_file_service(
         "message": "File uploaded successfully",
         "file_name": file.filename
     }
+
+
+def get_patient_files_service(
+    patient_user_id: str,
+    db: Session
+):
+
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.user_id == patient_user_id
+        )
+        .first()
+    )
+
+    if not patient:
+        raise HTTPException(
+            status_code=404,
+            detail="Patient not found"
+        )
+
+    files = (
+        db.query(FileRecord)
+        .filter(
+            FileRecord.patient_id == patient.id
+        )
+        .all()
+    )
+
+    return files

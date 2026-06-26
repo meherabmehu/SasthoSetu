@@ -8,7 +8,8 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_db
 
 from app.modules.files.service import (
-    upload_file_service
+    upload_file_service,
+    get_patient_files_service
 )
 
 router = APIRouter()
@@ -25,5 +26,18 @@ def upload_file(
     return upload_file_service(
         patient_user_id=patient_user_id,
         file=file,
+        db=db
+    )
+
+
+@router.get(
+    "/files/{patient_user_id}"
+)
+def get_patient_files(
+    patient_user_id: str,
+    db: Session = Depends(get_db)
+):
+    return get_patient_files_service(
+        patient_user_id=patient_user_id,
         db=db
     )
