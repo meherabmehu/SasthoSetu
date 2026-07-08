@@ -9,4 +9,5 @@ class SymptomResponse(BaseModel):
     severity: str
     possible_disease: str
     recommended_specialist: str
+    confidence: int
     recommendation: str
