@@ -9,8 +9,11 @@ from fastapi.security import (
     HTTPBearer,
     HTTPAuthorizationCredentials
 )
+from sqlalchemy.orm import Session
 
 from app.core.config import settings
+from app.core.dependencies import get_db
+from app.models.user import User
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
@@ -39,6 +42,10 @@ def create_access_token(
     expires_minutes: int | None = None,
 ):
     payload = data.copy()
+    identity = payload.get("sub") or payload.get("user_id")
+    if not identity:
+        raise ValueError("Token data must include sub or user_id")
+    payload["sub"] = str(identity)
 
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=(
@@ -65,7 +72,8 @@ def create_access_token(
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(
         security
-    )
+    ),
+    db: Session = Depends(get_db),
 ):
 
     token = credentials.credentials
@@ -78,13 +86,53 @@ def get_current_user(
             algorithms=[settings.jwt_algorithm]
         )
 
-        return payload
+        user_id = payload.get("sub") or payload.get("user_id")
+        if not user_id:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token subject",
+            )
+
+        user = (
+            db.query(User)
+            .filter(User.id == user_id)
+            .first()
+        )
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="User no longer exists",
+            )
+        if not user.is_active:
+            raise HTTPException(
+                status_code=403,
+                detail="User account is disabled",
+            )
+
+        return {
+            "user_id": user.id,
+            "role": user.role,
+        }
 
     except JWTError:
 
         raise HTTPException(
             status_code=401,
             detail="Invalid token"
+        )
+
+
+def require_self_or_admin(
+    target_user_id: str,
+    current_user: dict,
+) -> None:
+    if (
+        current_user.get("user_id") != target_user_id
+        and current_user.get("role") != "ADMIN"
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="You cannot access another user's resource",
         )
 
 

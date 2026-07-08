@@ -16,7 +16,9 @@ from app.modules.doctors.service import (
     verify_doctor_service
 )
 from app.core.security import (
-    require_admin
+    get_current_user,
+    require_admin,
+    require_self_or_admin,
 )
 
 router = APIRouter()
@@ -26,8 +28,10 @@ router = APIRouter()
 def create_doctor_profile(
     user_id: str,
     payload: DoctorCreate,
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    require_self_or_admin(user_id, current_user)
     return create_doctor_profile_service(
         user_id=user_id,
         payload=payload,
