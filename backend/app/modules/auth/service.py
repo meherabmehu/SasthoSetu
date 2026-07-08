@@ -30,6 +30,12 @@ def login_service(
             detail="Invalid credentials"
         )
 
+    if not user.is_active:
+        raise HTTPException(
+            status_code=403,
+            detail="User account is disabled",
+        )
+
     if not verify_password(
         password,
         user.password_hash
@@ -41,6 +47,7 @@ def login_service(
 
     token = create_access_token(
         {
+            "sub": user.id,
             "user_id": user.id,
             "role": user.role
         }
