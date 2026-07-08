@@ -6,6 +6,7 @@ from sqlalchemy import Integer
 from sqlalchemy import Float
 from sqlalchemy import Boolean
 from sqlalchemy import ForeignKey
+from sqlalchemy import false
 
 from app.models.base import Base
 
@@ -59,5 +60,6 @@ class Doctor(Base):
 
     verification_status = Column(
         Boolean,
-        default=False
+        default=False,
+        server_default=false(),
     )

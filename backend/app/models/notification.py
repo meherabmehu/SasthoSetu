@@ -4,6 +4,7 @@ from sqlalchemy import Column
 from sqlalchemy import String
 from sqlalchemy import Boolean
 from sqlalchemy import ForeignKey
+from sqlalchemy import false
 
 from app.models.base import Base
 
@@ -35,5 +36,6 @@ class Notification(Base):
 
     is_read = Column(
         Boolean,
-        default=False
+        default=False,
+        server_default=false(),
     )

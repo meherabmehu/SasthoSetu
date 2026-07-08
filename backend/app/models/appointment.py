@@ -46,5 +46,6 @@ class Appointment(Base):
     status = Column(
         String,
         nullable=False,
-        default="PENDING"
+        default="PENDING",
+        server_default="PENDING",
     )

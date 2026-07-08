@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 
 from app.core.config import settings
-from app.core.database import engine
-from app.models.base import Base
 
 from app.modules.users.routes import router as user_router
 from app.modules.auth.routes import router as auth_router
@@ -50,7 +48,6 @@ from app.modules.files.routes import (
 from app.modules.symptom_checker.routes import (
     router as symptom_checker_router
 )
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title=settings.app_name,
