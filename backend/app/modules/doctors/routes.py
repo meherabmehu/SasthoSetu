@@ -68,7 +68,10 @@ def get_doctors_by_specialization(
     )
 
 
-@router.get("/doctors/pending")
+@router.get(
+    "/doctors/pending",
+    dependencies=[Depends(require_admin)],
+)
 def get_pending_doctors(
     db: Session = Depends(get_db)
 ):
@@ -77,15 +80,6 @@ def get_pending_doctors(
     )
 
 
-@router.patch("/doctors/{doctor_id}/verify")
-def verify_doctor(
-    doctor_id: str,
-    db: Session = Depends(get_db)
-):
-    return verify_doctor_service(
-        doctor_id=doctor_id,
-        db=db
-    )
 @router.patch("/doctors/{doctor_id}/verify")
 def verify_doctor(
     doctor_id: str,
