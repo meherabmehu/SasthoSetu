@@ -4,6 +4,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
+from app.core.security import require_admin
 
 from app.modules.admin.service import (
     get_all_users_service,
@@ -16,7 +17,10 @@ from app.modules.admin.service import (
 router = APIRouter()
 
 
-@router.get("/admin/users")
+@router.get(
+    "/admin/users",
+    dependencies=[Depends(require_admin)],
+)
 def get_all_users(
     db: Session = Depends(get_db)
 ):
@@ -26,7 +30,8 @@ def get_all_users(
 
 
 @router.get(
-    "/admin/users/{user_id}"
+    "/admin/users/{user_id}",
+    dependencies=[Depends(require_admin)],
 )
 def get_user_by_id(
     user_id: str,
@@ -39,7 +44,8 @@ def get_user_by_id(
 
 
 @router.patch(
-    "/admin/users/{user_id}/disable"
+    "/admin/users/{user_id}/disable",
+    dependencies=[Depends(require_admin)],
 )
 def disable_user(
     user_id: str,
@@ -52,7 +58,8 @@ def disable_user(
 
 
 @router.patch(
-    "/admin/users/{user_id}/enable"
+    "/admin/users/{user_id}/enable",
+    dependencies=[Depends(require_admin)],
 )
 def enable_user(
     user_id: str,
@@ -65,7 +72,8 @@ def enable_user(
 
 
 @router.delete(
-    "/admin/users/{user_id}"
+    "/admin/users/{user_id}",
+    dependencies=[Depends(require_admin)],
 )
 def delete_user(
     user_id: str,
