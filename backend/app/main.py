@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.core.config import settings
 from app.core.database import engine
 from app.models.base import Base
 
@@ -52,8 +53,9 @@ from app.modules.symptom_checker.routes import (
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="SasthoSetu API",
-    version="1.0.0"
+    title=settings.app_name,
+    version=settings.app_version,
+    debug=settings.debug,
 )
 
 app.include_router(

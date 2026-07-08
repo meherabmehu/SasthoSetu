@@ -1,8 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from dotenv import load_dotenv
 
 from fastapi import HTTPException
 from fastapi import Depends
@@ -11,12 +10,7 @@ from fastapi.security import (
     HTTPAuthorizationCredentials
 )
 
-import os
-
-load_dotenv()
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+from app.core.config import settings
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
@@ -42,22 +36,29 @@ def verify_password(
 
 def create_access_token(
     data: dict,
-    expires_minutes: int = 60
+    expires_minutes: int | None = None,
 ):
     payload = data.copy()
 
-    expire = datetime.utcnow() + timedelta(
-        minutes=expires_minutes
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=(
+            expires_minutes
+            if expires_minutes is not None
+            else settings.access_token_expire_minutes
+        )
     )
 
     payload.update(
-        {"exp": expire}
+        {
+            "exp": expire,
+            "iat": datetime.now(timezone.utc),
+        }
     )
 
     return jwt.encode(
         payload,
-        SECRET_KEY,
-        algorithm=ALGORITHM
+        settings.secret_key,
+        algorithm=settings.jwt_algorithm
     )
 
 
@@ -73,8 +74,8 @@ def get_current_user(
 
         payload = jwt.decode(
             token,
-            SECRET_KEY,
-            algorithms=[ALGORITHM]
+            settings.secret_key,
+            algorithms=[settings.jwt_algorithm]
         )
 
         return payload
@@ -93,7 +94,7 @@ def require_admin(
     )
 ):
 
-    if current_user["role"] != "ADMIN":
+    if current_user.get("role") != "ADMIN":
 
         raise HTTPException(
             status_code=403,
@@ -101,13 +102,15 @@ def require_admin(
         )
 
     return current_user
+
+
 def require_doctor(
     current_user=Depends(
         get_current_user
     )
 ):
 
-    if current_user["role"] != "DOCTOR":
+    if current_user.get("role") != "DOCTOR":
 
         raise HTTPException(
             status_code=403,
