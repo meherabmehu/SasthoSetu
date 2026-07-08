@@ -4,6 +4,7 @@ from sqlalchemy import Column
 from sqlalchemy import String
 from sqlalchemy import Boolean
 from sqlalchemy import ForeignKey
+from sqlalchemy import false
 
 from app.models.base import Base
 
@@ -40,5 +41,6 @@ class DoctorAvailability(Base):
 
     is_booked = Column(
         Boolean,
-        default=False
+        default=False,
+        server_default=false(),
     )
