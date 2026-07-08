@@ -1,74 +1,89 @@
-DISEASE_RULES = [
+SEVERITY_PRIORITY = {
+    "SELF_CARE": 1,
+    "TELECONSULT": 2,
+    "GP_VISIT": 3,
+    "SPECIALIST": 4,
+    "EMERGENCY": 5,
+}
 
+
+# Safety rules are evaluated before condition rules. These rules are deliberately
+# conservative and must not be replaced by a probabilistic model.
+EMERGENCY_RULES = [
     {
-        "name": "Possible Heart or Lung Emergency",
-        "symptoms": [
-            "chest pain",
-            "shortness of breath",
-            "বুকে ব্যথা",
-            "শ্বাসকষ্ট"
-        ],
-        "match": "any",
-        "severity": "EMERGENCY",
-        "doctor": "Emergency Medicine",
-        "recommendation":
-            "Go to the nearest hospital immediately."
+        "code": "CARDIO_RESPIRATORY_DISTRESS",
+        "english": ["chest pain", "shortness of breath"],
+        "bangla": ["বুকে ব্যথা", "শ্বাসকষ্ট"],
+        "match": "all",
+        "condition": "Possible heart or lung emergency",
+        "specialty": "Emergency Medicine",
+        "advice": "Call emergency services or go to the nearest emergency department now.",
     },
-
     {
-        "name": "Possible Dengue",
-        "symptoms": [
-            "fever",
-            "body pain",
-            "জ্বর",
-            "শরীর ব্যথা"
-        ],
+        "code": "ALTERED_CONSCIOUSNESS",
+        "english": ["unconscious", "not responding", "altered consciousness"],
+        "bangla": ["অজ্ঞান", "সাড়া দিচ্ছে না", "চেতনা নেই"],
+        "match": "any",
+        "condition": "Altered consciousness",
+        "specialty": "Emergency Medicine",
+        "advice": "Call emergency services immediately. Do not give food or drink.",
+    },
+    {
+        "code": "SEVERE_BLEEDING",
+        "english": ["severe bleeding", "heavy bleeding", "bleeding won't stop"],
+        "bangla": ["প্রচণ্ড রক্তপাত", "অতিরিক্ত রক্তপাত", "রক্তপাত বন্ধ হচ্ছে না"],
+        "match": "any",
+        "condition": "Severe bleeding",
+        "specialty": "Emergency Medicine",
+        "advice": "Apply firm pressure if safe and seek emergency care immediately.",
+    },
+    {
+        "code": "MENINGITIS_WARNING",
+        "english": ["high fever", "stiff neck"],
+        "bangla": ["তীব্র জ্বর", "ঘাড় শক্ত"],
+        "match": "all",
+        "condition": "Possible serious infection",
+        "specialty": "Emergency Medicine",
+        "advice": "Seek emergency medical assessment immediately.",
+    },
+]
+
+
+CONDITION_RULES = [
+    {
+        "english": ["fever", "body pain"],
+        "bangla": ["জ্বর", "শরীর ব্যথা"],
         "match": "all",
         "severity": "SPECIALIST",
-        "doctor": "Medicine Specialist",
-        "recommendation":
-            "Get a CBC test and consult a physician immediately."
+        "condition": "Possible dengue or another febrile illness",
+        "specialty": "Internal Medicine",
+        "advice": "Arrange an urgent medical consultation. Testing may be needed.",
     },
-
     {
-        "name": "Viral Fever",
-        "symptoms": [
-            "fever",
-            "জ্বর"
-        ],
+        "english": ["fever"],
+        "bangla": ["জ্বর"],
         "match": "any",
-        "severity": "CONSULT_DOCTOR",
-        "doctor": "General Physician",
-        "recommendation":
-            "Drink plenty of fluids and consult a doctor if fever persists."
+        "severity": "GP_VISIT",
+        "condition": "Fever requiring assessment",
+        "specialty": "General Physician",
+        "advice": "Stay hydrated and consult a doctor if fever persists or worsens.",
     },
-
     {
-        "name": "Common Cold",
-        "symptoms": [
-            "cough",
-            "কাশি",
-            "sore throat",
-            "গলা ব্যথা"
-        ],
+        "english": ["cough", "sore throat", "runny nose"],
+        "bangla": ["কাশি", "গলা ব্যথা", "নাক দিয়ে পানি"],
         "match": "any",
         "severity": "SELF_CARE",
-        "doctor": "General Physician",
-        "recommendation":
-            "Take rest, drink warm fluids and monitor your symptoms."
+        "condition": "Possible upper respiratory infection",
+        "specialty": "General Physician",
+        "advice": "Rest, drink fluids, and monitor symptoms. Consult a doctor if they worsen.",
     },
-
     {
-        "name": "Tension Headache",
-        "symptoms": [
-            "headache",
-            "মাথা ব্যথা"
-        ],
+        "english": ["headache"],
+        "bangla": ["মাথা ব্যথা", "মাথাব্যথা"],
         "match": "any",
         "severity": "SELF_CARE",
-        "doctor": "General Physician",
-        "recommendation":
-            "Rest well, stay hydrated and consult a doctor if pain continues."
-    }
-
+        "condition": "Headache",
+        "specialty": "General Physician",
+        "advice": "Rest and stay hydrated. Seek care for severe, sudden, or persistent pain.",
+    },
 ]
