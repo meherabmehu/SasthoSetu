@@ -48,6 +48,10 @@ from app.modules.files.routes import (
 from app.modules.symptom_checker.routes import (
     router as symptom_checker_router
 )
+from app.models.ai_feedback import AIFeedback
+from app.modules.ai.routes import (
+    router as ai_router
+)
 
 app = FastAPI(
     title=settings.app_name,
@@ -127,6 +131,11 @@ app.include_router(
     symptom_checker_router,
     prefix="/api/v1",
     tags=["AI Health Assistant"]
+)
+app.include_router(
+    ai_router,
+    prefix="/api/v1",
+    tags=["BanglaMed-AI"]
 )
 @app.get("/")
 def root():
