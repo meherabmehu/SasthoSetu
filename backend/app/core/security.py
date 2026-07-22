@@ -1,68 +1,168 @@
-# -*- coding: utf-8 -*-
-"""Security: password hashing, JWT issue/verify, role-based dependencies."""
-from __future__ import annotations
-
 from datetime import datetime, timedelta, timezone
-from typing import Optional
 
-import bcrypt
-import jwt
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from jose import jwt, JWTError
+from passlib.context import CryptContext
+
+from fastapi import HTTPException
+from fastapi import Depends
+from fastapi.security import (
+    HTTPBearer,
+    HTTPAuthorizationCredentials
+)
 from sqlalchemy.orm import Session
 
-from .config import get_settings
-from .database import get_db
+from app.core.config import settings
+from app.core.dependencies import get_db
+from app.models.user import User
 
-settings = get_settings()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/auth/login")
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto"
+)
 
-
-def hash_password(plain: str) -> str:
-    return bcrypt.hashpw(plain.encode()[:72], bcrypt.gensalt()).decode()
-
-
-def verify_password(plain: str, hashed: str) -> bool:
-    try:
-        return bcrypt.checkpw(plain.encode()[:72], hashed.encode())
-    except ValueError:
-        return False
+security = HTTPBearer()
 
 
-def create_access_token(sub: str, role: str,
-                        expires_minutes: Optional[int] = None) -> str:
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+
+def verify_password(
+    plain_password: str,
+    hashed_password: str,
+):
+    return pwd_context.verify(
+        plain_password,
+        hashed_password
+    )
+
+
+def create_access_token(
+    data: dict,
+    expires_minutes: int | None = None,
+):
+    payload = data.copy()
+    identity = payload.get("sub") or payload.get("user_id")
+    if not identity:
+        raise ValueError("Token data must include sub or user_id")
+    payload["sub"] = str(identity)
+
     expire = datetime.now(timezone.utc) + timedelta(
-        minutes=expires_minutes or settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    payload = {"sub": sub, "role": role, "exp": expire}
-    return jwt.encode(payload, settings.JWT_SECRET,
-                      algorithm=settings.JWT_ALGORITHM)
+        minutes=(
+            expires_minutes
+            if expires_minutes is not None
+            else settings.access_token_expire_minutes
+        )
+    )
+
+    payload.update(
+        {
+            "exp": expire,
+            "iat": datetime.now(timezone.utc),
+        }
+    )
+
+    return jwt.encode(
+        payload,
+        settings.secret_key,
+        algorithm=settings.jwt_algorithm
+    )
 
 
-def decode_token(token: str) -> dict:
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(
+        security
+    ),
+    db: Session = Depends(get_db),
+):
+
+    token = credentials.credentials
+
     try:
-        return jwt.decode(token, settings.JWT_SECRET,
-                          algorithms=[settings.JWT_ALGORITHM])
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token")
+
+        payload = jwt.decode(
+            token,
+            settings.secret_key,
+            algorithms=[settings.jwt_algorithm]
+        )
+
+        user_id = payload.get("sub") or payload.get("user_id")
+        if not user_id:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid token subject",
+            )
+
+        user = (
+            db.query(User)
+            .filter(User.id == user_id)
+            .first()
+        )
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="User no longer exists",
+            )
+        if not user.is_active:
+            raise HTTPException(
+                status_code=403,
+                detail="User account is disabled",
+            )
+
+        return {
+            "user_id": user.id,
+            "role": user.role,
+        }
+
+    except JWTError:
+
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
 
 
-def get_current_user(token: str = Depends(oauth2_scheme),
-                     db: Session = Depends(get_db)):
-    from ..models.models import User  # local import avoids circularity
-    payload = decode_token(token)
-    user = db.query(User).filter(User.id == payload.get("sub")).first()
-    if not user or not user.is_active:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
-                            "User not found or inactive")
-    return user
+def require_self_or_admin(
+    target_user_id: str,
+    current_user: dict,
+) -> None:
+    if (
+        current_user.get("user_id") != target_user_id
+        and current_user.get("role") != "ADMIN"
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="You cannot access another user's resource",
+        )
 
 
-def require_roles(*roles: str):
-    def guard(user=Depends(get_current_user)):
-        if user.role not in roles:
-            raise HTTPException(status.HTTP_403_FORBIDDEN,
-                                f"Requires role: {', '.join(roles)}")
-        return user
-    return guard
+def require_admin(
+    current_user=Depends(
+        get_current_user
+    )
+):
+
+    if current_user.get("role") != "ADMIN":
+
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+
+    return current_user
+
+
+def require_doctor(
+    current_user=Depends(
+        get_current_user
+    )
+):
+
+    if current_user.get("role") != "DOCTOR":
+
+        raise HTTPException(
+            status_code=403,
+            detail="Doctor access required"
+        )
+
+    return current_user
