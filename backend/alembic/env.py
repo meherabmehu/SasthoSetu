@@ -4,6 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from app.core.config import settings
+from app.models.ai_feedback import AIFeedback
 from app.models.appointment import Appointment
 from app.models.base import Base
 from app.models.doctor import Doctor
@@ -18,6 +19,7 @@ from app.models.user import User
 
 # Imports above register every model with Base.metadata for autogeneration.
 _MODELS = (
+    AIFeedback,
     Appointment,
     Doctor,
     DoctorAvailability,
