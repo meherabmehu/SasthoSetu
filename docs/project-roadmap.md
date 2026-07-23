@@ -15,11 +15,17 @@ Already present:
 - Prescriptions, medical records, patient history, notifications, and files
 - Admin statistics and user management
 - Safety-first bilingual triage API (`POST /api/v1/triage`)
+- BanglaMed-AI: multilingual ML triage, drug-interaction screening, hospital
+  surge forecasting, population surveillance, and a feedback-loop table
+  (`app/ai/`, `ml/`, `docs/model_cards/`) - advances Phase 1 and Phase 8
+- A Bangla-first single-file demo frontend (`frontend/index.html`) exercising
+  the triage endpoints
 
 Known platform-wide gaps:
 
-- No frontend applications
-- No database migration history
+- No patient/doctor/admin web applications (Phase 2)
+- Hospital is not yet a first-class relational model (Phase 4); the surge
+  forecaster currently references hospitals by code from static seed data
 - Incomplete resource ownership and role authorization
 - Limited automated coverage outside triage
 - No hospitals, facilities, labs, pharmacies, payments, or teleconsultation
@@ -57,7 +63,7 @@ Done when:
 Done when:
 
 - A patient can register, create a profile, submit symptoms, receive a safe
-  pathway, find a doctor, book a slot, and track the appointment end to end.
+pathway, find a doctor, book a slot, and track the appointment end to end.
 
 ## Phase 2 — Patient and doctor web applications
 
@@ -84,7 +90,7 @@ Done when:
 Done when:
 
 - A verified doctor can complete a consultation and issue a verifiable
-  prescription that appears in the patient's longitudinal history.
+prescription that appears in the patient's longitudinal history.
 
 ## Phase 4 — Hospitals and real-time capacity
 
@@ -97,7 +103,7 @@ Done when:
 Done when:
 
 - Authorized hospital staff can maintain capacity and patients can find an
-  appropriate available facility without seeing stale or unauthorized data.
+appropriate available facility without seeing stale or unauthorized data.
 
 ## Phase 5 — Labs and pharmacies
 
@@ -110,7 +116,7 @@ Done when:
 Done when:
 
 - A prescription or lab order can be fulfilled by a verified provider and the
-  result is visible to the patient and authorized clinician.
+result is visible to the patient and authorized clinician.
 
 ## Phase 6 — Payments and commercial operations
 
@@ -126,7 +132,7 @@ Done when:
 ## Phase 7 — Interoperability and rural access
 
 - FHIR R4 mapping for Patient, Practitioner, Encounter, Observation,
-  MedicationRequest, and DiagnosticReport
+MedicationRequest, and DiagnosticReport
 - Consent registry and patient identity matching
 - FHIR import/export and facility connector
 - Offline-capable PWA with encrypted local queue and conflict handling
@@ -136,7 +142,7 @@ Done when:
 Done when:
 
 - Core care access survives intermittent connectivity and records can be
-  exchanged through tested FHIR resources with explicit patient consent.
+exchanged through tested FHIR resources with explicit patient consent.
 
 ## Phase 8 — Intelligence, safety, and governance
 
@@ -149,7 +155,7 @@ Done when:
 Done when:
 
 - Every AI output is versioned, explainable, auditable, clinically governed,
-  and safely falls back when confidence or service availability is inadequate.
+and safely falls back when confidence or service availability is inadequate.
 
 ## Phase 9 — Production readiness
 
@@ -163,7 +169,7 @@ Done when:
 Done when:
 
 - Release, rollback, backup restoration, incident response, and critical user
-  journeys have all been rehearsed in a production-like environment.
+journeys have all been rehearsed in a production-like environment.
 
 ## Delivery rule
 
