@@ -1,0 +1,52 @@
+[
+  {
+    "hospital_id": "H001",
+    "name": "Dhaka Medical College Hospital",
+    "area": "Shahbag",
+    "lat": 23.7258,
+    "lng": 90.3973,
+    "emergency": true,
+    "icu_beds": 40,
+    "general_beds": 320
+  },
+  {
+    "hospital_id": "H002",
+    "name": "Square Hospital",
+    "area": "Panthapath",
+    "lat": 23.7526,
+    "lng": 90.381,
+    "emergency": true,
+    "icu_beds": 30,
+    "general_beds": 220
+  },
+  {
+    "hospital_id": "H003",
+    "name": "Ibn Sina Hospital Dhanmondi",
+    "area": "Dhanmondi",
+    "lat": 23.7461,
+    "lng": 90.3742,
+    "emergency": true,
+    "icu_beds": 15,
+    "general_beds": 150
+  },
+  {
+    "hospital_id": "H004",
+    "name": "Labaid Specialized Hospital",
+    "area": "Dhanmondi",
+    "lat": 23.7398,
+    "lng": 90.3854,
+    "emergency": true,
+    "icu_beds": 20,
+    "general_beds": 180
+  },
+  {
+    "hospital_id": "H005",
+    "name": "United Hospital",
+    "area": "Gulshan",
+    "lat": 23.8041,
+    "lng": 90.4152,
+    "emergency": true,
+    "icu_beds": 22,
+    "general_beds": 160
+  }
+]

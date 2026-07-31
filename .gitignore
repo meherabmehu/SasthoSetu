@@ -20,4 +20,5 @@ backend/venv/
 
 # OS Files
 .DS_Store
-Thumbs.db
+Thumbs.db*.sqlite3
+backend/*.db

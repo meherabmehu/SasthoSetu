@@ -1,0 +1,1328 @@
+[
+  {
+    "doctor_id": "D001",
+    "name": "Dr. Arif Islam",
+    "sex": "F",
+    "specialty": "Gynaecology & Obstetrics",
+    "bmdc_reg_no": "A-39116",
+    "bmdc_verified": true,
+    "hospital_id": "H005",
+    "hospital_name": "United Hospital",
+    "lat": 23.800467,
+    "lng": 90.413023,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.8,
+    "experience_years": 15,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D002",
+    "name": "Dr. Nusrat Khan",
+    "sex": "F",
+    "specialty": "Neurology",
+    "bmdc_reg_no": "A-76566",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.737476,
+    "lng": 90.383536,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.8,
+    "experience_years": 26,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  },
+  {
+    "doctor_id": "D003",
+    "name": "Dr. Rafiq Chowdhury",
+    "sex": "F",
+    "specialty": "Endocrinology",
+    "bmdc_reg_no": "A-58785",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.754077,
+    "lng": 90.383743,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.7,
+    "experience_years": 15,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D004",
+    "name": "Dr. Arif Mia",
+    "sex": "M",
+    "specialty": "Cardiology",
+    "bmdc_reg_no": "A-71245",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.723501,
+    "lng": 90.397294,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.9,
+    "experience_years": 20,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D005",
+    "name": "Dr. Arif Akter",
+    "sex": "F",
+    "specialty": "Pulmonology",
+    "bmdc_reg_no": "A-77447",
+    "bmdc_verified": true,
+    "hospital_id": "H005",
+    "hospital_name": "United Hospital",
+    "lat": 23.801855,
+    "lng": 90.41918,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.8,
+    "experience_years": 7,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  },
+  {
+    "doctor_id": "D006",
+    "name": "Dr. Rafiq Akter",
+    "sex": "M",
+    "specialty": "Gastroenterology",
+    "bmdc_reg_no": "A-91348",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.740033,
+    "lng": 90.389169,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.8,
+    "experience_years": 20,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D007",
+    "name": "Dr. Farhana Akter",
+    "sex": "M",
+    "specialty": "Nephrology",
+    "bmdc_reg_no": "A-50730",
+    "bmdc_verified": true,
+    "hospital_id": "H003",
+    "hospital_name": "Ibn Sina Hospital Dhanmondi",
+    "lat": 23.74573,
+    "lng": 90.377831,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.9,
+    "experience_years": 6,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D008",
+    "name": "Dr. Mahmud Khan",
+    "sex": "M",
+    "specialty": "Dentistry",
+    "bmdc_reg_no": "A-51174",
+    "bmdc_verified": true,
+    "hospital_id": "H005",
+    "hospital_name": "United Hospital",
+    "lat": 23.804415,
+    "lng": 90.417429,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.3,
+    "experience_years": 6,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D009",
+    "name": "Dr. Karim Islam",
+    "sex": "M",
+    "specialty": "Paediatrics",
+    "bmdc_reg_no": "A-40322",
+    "bmdc_verified": true,
+    "hospital_id": "H003",
+    "hospital_name": "Ibn Sina Hospital Dhanmondi",
+    "lat": 23.742785,
+    "lng": 90.374088,
+    "consult_fee_bdt": 500,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.8,
+    "experience_years": 24,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D010",
+    "name": "Dr. Imran Begum",
+    "sex": "M",
+    "specialty": "Gastroenterology",
+    "bmdc_reg_no": "A-85461",
+    "bmdc_verified": true,
+    "hospital_id": "H005",
+    "hospital_name": "United Hospital",
+    "lat": 23.807815,
+    "lng": 90.418631,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.0,
+    "experience_years": 24,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D011",
+    "name": "Dr. Ayesha Islam",
+    "sex": "F",
+    "specialty": "Cardiology",
+    "bmdc_reg_no": "A-59451",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.736312,
+    "lng": 90.381568,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.7,
+    "experience_years": 23,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D012",
+    "name": "Dr. Karim Karim",
+    "sex": "M",
+    "specialty": "Gynaecology & Obstetrics",
+    "bmdc_reg_no": "A-73309",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.749167,
+    "lng": 90.378904,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.6,
+    "experience_years": 21,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D013",
+    "name": "Dr. Taslima Islam",
+    "sex": "F",
+    "specialty": "ENT",
+    "bmdc_reg_no": "A-42363",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.749375,
+    "lng": 90.380448,
+    "consult_fee_bdt": 800,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn"
+    ],
+    "rating": 3.7,
+    "experience_years": 23,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D014",
+    "name": "Dr. Papia Khan",
+    "sex": "F",
+    "specialty": "Urology",
+    "bmdc_reg_no": "A-44322",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.723789,
+    "lng": 90.394822,
+    "consult_fee_bdt": 800,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.2,
+    "experience_years": 30,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D015",
+    "name": "Dr. Karim Sarkar",
+    "sex": "M",
+    "specialty": "Orthopedics",
+    "bmdc_reg_no": "A-31934",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.743552,
+    "lng": 90.388811,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.3,
+    "experience_years": 30,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D016",
+    "name": "Dr. Rafiq Ahmed",
+    "sex": "M",
+    "specialty": "Emergency",
+    "bmdc_reg_no": "A-81173",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.723922,
+    "lng": 90.399573,
+    "consult_fee_bdt": 800,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.6,
+    "experience_years": 28,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D017",
+    "name": "Dr. Farhana Islam",
+    "sex": "M",
+    "specialty": "General Medicine",
+    "bmdc_reg_no": "A-37665",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.753233,
+    "lng": 90.381338,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.3,
+    "experience_years": 30,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  },
+  {
+    "doctor_id": "D018",
+    "name": "Dr. Nusrat Hossain",
+    "sex": "M",
+    "specialty": "Gastroenterology",
+    "bmdc_reg_no": "A-38907",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.727202,
+    "lng": 90.395182,
+    "consult_fee_bdt": 500,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.4,
+    "experience_years": 4,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D019",
+    "name": "Dr. Imran Islam",
+    "sex": "F",
+    "specialty": "Ophthalmology",
+    "bmdc_reg_no": "A-71180",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.737709,
+    "lng": 90.384566,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.9,
+    "experience_years": 5,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D020",
+    "name": "Dr. Fatema Begum",
+    "sex": "M",
+    "specialty": "General Medicine",
+    "bmdc_reg_no": "A-57938",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.739847,
+    "lng": 90.38246,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.1,
+    "experience_years": 8,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D021",
+    "name": "Dr. Rumana Bhuiyan",
+    "sex": "F",
+    "specialty": "Orthopedics",
+    "bmdc_reg_no": "A-99329",
+    "bmdc_verified": true,
+    "hospital_id": "H005",
+    "hospital_name": "United Hospital",
+    "lat": 23.800163,
+    "lng": 90.417737,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.8,
+    "experience_years": 11,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D022",
+    "name": "Dr. Imran Chowdhury",
+    "sex": "M",
+    "specialty": "Cardiology",
+    "bmdc_reg_no": "A-57607",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.727541,
+    "lng": 90.394929,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.0,
+    "experience_years": 30,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D023",
+    "name": "Dr. Imran Ahmed",
+    "sex": "F",
+    "specialty": "ENT",
+    "bmdc_reg_no": "A-30464",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.724468,
+    "lng": 90.394347,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.6,
+    "experience_years": 20,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D024",
+    "name": "Dr. Selim Rahman",
+    "sex": "M",
+    "specialty": "Neurology",
+    "bmdc_reg_no": "A-34722",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.728477,
+    "lng": 90.39796,
+    "consult_fee_bdt": 600,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.1,
+    "experience_years": 28,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D025",
+    "name": "Dr. Shirin Islam",
+    "sex": "M",
+    "specialty": "Dermatology",
+    "bmdc_reg_no": "A-43473",
+    "bmdc_verified": true,
+    "hospital_id": "H003",
+    "hospital_name": "Ibn Sina Hospital Dhanmondi",
+    "lat": 23.744929,
+    "lng": 90.374679,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.8,
+    "experience_years": 10,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  },
+  {
+    "doctor_id": "D026",
+    "name": "Dr. Rahim Rahman",
+    "sex": "F",
+    "specialty": "Neurology",
+    "bmdc_reg_no": "A-73540",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.754859,
+    "lng": 90.380294,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.0,
+    "experience_years": 28,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D027",
+    "name": "Dr. Nasrin Islam",
+    "sex": "M",
+    "specialty": "General Medicine",
+    "bmdc_reg_no": "A-56158",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.742333,
+    "lng": 90.385082,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn"
+    ],
+    "rating": 3.9,
+    "experience_years": 24,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  },
+  {
+    "doctor_id": "D028",
+    "name": "Dr. Imran Karim",
+    "sex": "F",
+    "specialty": "Neurology",
+    "bmdc_reg_no": "A-39099",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.743535,
+    "lng": 90.383633,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.8,
+    "experience_years": 13,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D029",
+    "name": "Dr. Nusrat Talukder",
+    "sex": "F",
+    "specialty": "Psychiatry",
+    "bmdc_reg_no": "A-64795",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.722106,
+    "lng": 90.398073,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.4,
+    "experience_years": 19,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D030",
+    "name": "Dr. Imran Ahmed",
+    "sex": "M",
+    "specialty": "Gastroenterology",
+    "bmdc_reg_no": "A-87154",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.735814,
+    "lng": 90.388805,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.6,
+    "experience_years": 9,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D031",
+    "name": "Dr. Shirin Khan",
+    "sex": "M",
+    "specialty": "Gynaecology & Obstetrics",
+    "bmdc_reg_no": "A-71145",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.741107,
+    "lng": 90.382397,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.1,
+    "experience_years": 25,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D032",
+    "name": "Dr. Tanvir Akter",
+    "sex": "M",
+    "specialty": "Paediatrics",
+    "bmdc_reg_no": "A-79695",
+    "bmdc_verified": true,
+    "hospital_id": "H005",
+    "hospital_name": "United Hospital",
+    "lat": 23.805519,
+    "lng": 90.418422,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.8,
+    "experience_years": 12,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D033",
+    "name": "Dr. Arif Talukder",
+    "sex": "F",
+    "specialty": "Orthopedics",
+    "bmdc_reg_no": "A-72237",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.75232,
+    "lng": 90.380537,
+    "consult_fee_bdt": 600,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.9,
+    "experience_years": 26,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  },
+  {
+    "doctor_id": "D034",
+    "name": "Dr. Jahid Sarkar",
+    "sex": "F",
+    "specialty": "Cardiology",
+    "bmdc_reg_no": "A-73933",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.722547,
+    "lng": 90.400916,
+    "consult_fee_bdt": 600,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.9,
+    "experience_years": 3,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D035",
+    "name": "Dr. Rumana Karim",
+    "sex": "F",
+    "specialty": "Dermatology",
+    "bmdc_reg_no": "A-39545",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.752243,
+    "lng": 90.384089,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.3,
+    "experience_years": 10,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  },
+  {
+    "doctor_id": "D036",
+    "name": "Dr. Monir Akter",
+    "sex": "M",
+    "specialty": "Gynaecology & Obstetrics",
+    "bmdc_reg_no": "A-58683",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.723207,
+    "lng": 90.400964,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.9,
+    "experience_years": 6,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D037",
+    "name": "Dr. Shirin Begum",
+    "sex": "F",
+    "specialty": "Endocrinology",
+    "bmdc_reg_no": "A-71588",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.7562,
+    "lng": 90.384131,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.2,
+    "experience_years": 20,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D038",
+    "name": "Dr. Habib Chowdhury",
+    "sex": "F",
+    "specialty": "Cardiology",
+    "bmdc_reg_no": "A-62406",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.755319,
+    "lng": 90.379218,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.0,
+    "experience_years": 5,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D039",
+    "name": "Dr. Shakil Khan",
+    "sex": "F",
+    "specialty": "Ophthalmology",
+    "bmdc_reg_no": "A-40561",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.749707,
+    "lng": 90.37885,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.2,
+    "experience_years": 13,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D040",
+    "name": "Dr. Tanvir Karim",
+    "sex": "M",
+    "specialty": "Dentistry",
+    "bmdc_reg_no": "A-85069",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.738916,
+    "lng": 90.387558,
+    "consult_fee_bdt": 1200,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.4,
+    "experience_years": 18,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D041",
+    "name": "Dr. Monir Akter",
+    "sex": "F",
+    "specialty": "General Medicine",
+    "bmdc_reg_no": "A-84921",
+    "bmdc_verified": true,
+    "hospital_id": "H003",
+    "hospital_name": "Ibn Sina Hospital Dhanmondi",
+    "lat": 23.746406,
+    "lng": 90.376077,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 3.9,
+    "experience_years": 16,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D042",
+    "name": "Dr. Shakil Sarkar",
+    "sex": "F",
+    "specialty": "Orthopedics",
+    "bmdc_reg_no": "A-82994",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.727593,
+    "lng": 90.400024,
+    "consult_fee_bdt": 600,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.9,
+    "experience_years": 21,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D043",
+    "name": "Dr. Mahmud Karim",
+    "sex": "F",
+    "specialty": "Dermatology",
+    "bmdc_reg_no": "A-90515",
+    "bmdc_verified": true,
+    "hospital_id": "H001",
+    "hospital_name": "Dhaka Medical College Hospital",
+    "lat": 23.723254,
+    "lng": 90.395381,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.7,
+    "experience_years": 15,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D044",
+    "name": "Dr. Fatema Uddin",
+    "sex": "F",
+    "specialty": "General Medicine",
+    "bmdc_reg_no": "A-32540",
+    "bmdc_verified": true,
+    "hospital_id": "H004",
+    "hospital_name": "Labaid Specialized Hospital",
+    "lat": 23.741792,
+    "lng": 90.381817,
+    "consult_fee_bdt": 700,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.9,
+    "experience_years": 4,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D045",
+    "name": "Dr. Rahim Talukder",
+    "sex": "M",
+    "specialty": "Paediatrics",
+    "bmdc_reg_no": "A-49973",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.750508,
+    "lng": 90.380788,
+    "consult_fee_bdt": 500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.6,
+    "experience_years": 27,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D046",
+    "name": "Dr. Monir Karim",
+    "sex": "M",
+    "specialty": "Urology",
+    "bmdc_reg_no": "A-51465",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.756318,
+    "lng": 90.377865,
+    "consult_fee_bdt": 500,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.9,
+    "experience_years": 15,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D047",
+    "name": "Dr. Arif Mia",
+    "sex": "M",
+    "specialty": "General Medicine",
+    "bmdc_reg_no": "A-61830",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.749415,
+    "lng": 90.38318,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn"
+    ],
+    "rating": 4.7,
+    "experience_years": 21,
+    "available_slots": [
+      "09:00",
+      "10:00",
+      "11:00",
+      "17:00",
+      "18:00"
+    ]
+  },
+  {
+    "doctor_id": "D048",
+    "name": "Dr. Shirin Khan",
+    "sex": "F",
+    "specialty": "Nephrology",
+    "bmdc_reg_no": "A-39038",
+    "bmdc_verified": true,
+    "hospital_id": "H003",
+    "hospital_name": "Ibn Sina Hospital Dhanmondi",
+    "lat": 23.746148,
+    "lng": 90.37293,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.2,
+    "experience_years": 14,
+    "available_slots": [
+      "11:00",
+      "12:00",
+      "19:00",
+      "20:00",
+      "21:00"
+    ]
+  },
+  {
+    "doctor_id": "D049",
+    "name": "Dr. Nusrat Mia",
+    "sex": "F",
+    "specialty": "General Medicine",
+    "bmdc_reg_no": "A-98386",
+    "bmdc_verified": true,
+    "hospital_id": "H002",
+    "hospital_name": "Square Hospital",
+    "lat": 23.756324,
+    "lng": 90.379161,
+    "consult_fee_bdt": 1500,
+    "teleconsult_enabled": false,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.3,
+    "experience_years": 29,
+    "available_slots": [
+      "08:00",
+      "09:00",
+      "16:00",
+      "17:00"
+    ]
+  },
+  {
+    "doctor_id": "D050",
+    "name": "Dr. Fatema Chowdhury",
+    "sex": "M",
+    "specialty": "Pulmonology",
+    "bmdc_reg_no": "A-89087",
+    "bmdc_verified": true,
+    "hospital_id": "H003",
+    "hospital_name": "Ibn Sina Hospital Dhanmondi",
+    "lat": 23.744051,
+    "lng": 90.373918,
+    "consult_fee_bdt": 1000,
+    "teleconsult_enabled": true,
+    "languages": [
+      "bn",
+      "en"
+    ],
+    "rating": 4.3,
+    "experience_years": 13,
+    "available_slots": [
+      "10:00",
+      "11:00",
+      "18:00",
+      "19:00",
+      "20:00"
+    ]
+  }
+]

@@ -45,12 +45,13 @@ def normalize(text: str) -> str:
 # --------------------------------------------------------------------------
 # Surface-form index (built once at import)
 # --------------------------------------------------------------------------
-def _build_surface_index() -> list[tuple[str, str]]:
-    pairs: list[tuple[str, str]] = []
+def _build_surface_index() -> list[tuple[str, str, int]]:
+    pairs: list[tuple[str, str, int]] = []
     for canonical, entry in SYMPTOMS.items():
+        level = entry.get("level", 0)
         for lang in ("bn", "bl", "en"):
             for form in entry[lang]:
-                pairs.append((normalize(form), canonical))
+                pairs.append((normalize(form), canonical, level))
     # longest first so "তীব্র জ্বর" wins over "জ্বর"
     pairs.sort(key=lambda p: len(p[0]), reverse=True)
     return pairs
@@ -58,7 +59,21 @@ def _build_surface_index() -> list[tuple[str, str]]:
 
 _SURFACE_INDEX = _build_surface_index()
 
-_NEGATION_MARKERS = ["নেই", "নাই", "হয়নি", "হয় নি", "নেi", "nei", "nai", "no ", "not "]
+# Bangla negation particles follow the symptom ("জ্বর নেই"); English negation
+# precedes it ("no fever"). They are matched in different windows accordingly.
+_NEG_AFTER = ["নেই", "নাই", "হয়নি", "হয় নি", "nei", "nai"]
+_NEG_BEFORE = ["no", "not", "without", "denies", "na"]
+
+# Phrases where a negation token intensifies rather than negates the symptom.
+# "bleeding will not stop" is more severe, not absent - treating it as a
+# negation would silently drop a red flag.
+_NEG_EXEMPT = [
+    "not stop", "not stopping", "wont stop", "won't stop", "not stopped",
+    "cannot stop", "can't stop", "cant stop", "not controlled",
+    "not responding", "not breathing", "cannot breathe", "can't breathe",
+    "cant breathe", "not moving", "not waking", "not conscious",
+    "bondho hocche na", "bondho hoy na", "থামছে না", "বন্ধ হচ্ছে না",
+]
 
 _DUR_UNIT_DAYS = {
     "দিন": 1, "din": 1, "day": 1, "days": 1,
@@ -101,23 +116,56 @@ class ExtractionResult:
         }
 
 
+def _is_negated(norm: str, start: int, end: int) -> bool:
+    """Decide whether the symptom span at [start:end) is negated."""
+    after = norm[end: end + 18]
+    before = norm[max(0, start - 22): start]
+
+    context = (before + " " + norm[start:end] + " " + after).strip()
+    if any(phrase in context for phrase in _NEG_EXEMPT):
+        return False
+
+    if any(re.search(r"(^|\s)" + re.escape(m) + r"(\s|$)", after) for m in _NEG_AFTER):
+        return True
+
+    before_tokens = before.split()
+    if before_tokens and before_tokens[-3:]:
+        if any(tok in _NEG_BEFORE for tok in before_tokens[-3:]):
+            return True
+    return False
+
+
 def _find_symptoms(norm: str) -> tuple[list[str], list[str]]:
+    """Match symptom surface forms, resolving overlaps in favour of acuity.
+
+    Longer surface forms are tried first, but when two candidate matches
+    overlap the higher-acuity symptom wins. This prevents a generic low-level
+    match (for example "বমি") from consuming the span of a red-flag symptom
+    (for example "রক্ত বমি").
+    """
+    spans: list[tuple[int, int, str, int]] = []  # start, end, canonical, level
+    for surface, canonical, level in _SURFACE_INDEX:
+        if not surface:
+            continue
+        start = norm.find(surface)
+        while start != -1:
+            spans.append((start, start + len(surface), canonical, level))
+            start = norm.find(surface, start + 1)
+
+    # Prefer higher acuity, then longer match, then earlier position.
+    spans.sort(key=lambda s: (-s[3], -(s[1] - s[0]), s[0]))
+
+    taken: list[tuple[int, int]] = []
     found: list[str] = []
     negated: list[str] = []
-    consumed = norm
-    for surface, canonical in _SURFACE_INDEX:
-        idx = consumed.find(surface)
-        if idx == -1:
+    for start, end, canonical, _level in spans:
+        if any(start < t_end and end > t_start for t_start, t_end in taken):
             continue
-        # negation: marker within 12 chars after the surface form
-        window = consumed[idx + len(surface): idx + len(surface) + 14]
-        is_neg = any(window.strip().startswith(m.strip()) or m.strip() in window
-                     for m in _NEGATION_MARKERS)
-        target = negated if is_neg else found
+        taken.append((start, end))
+        target = negated if _is_negated(norm, start, end) else found
         if canonical not in target:
             target.append(canonical)
-        # blank out the matched span so shorter forms don't re-match inside it
-        consumed = consumed[:idx] + (" " * len(surface)) + consumed[idx + len(surface):]
+
     found = [s for s in found if s not in negated]
     return found, negated
 

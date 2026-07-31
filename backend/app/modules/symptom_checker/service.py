@@ -1,8 +1,25 @@
-import unicodedata
+# -*- coding: utf-8 -*-
+"""Deterministic bilingual triage service.
 
+Pipeline:
+
+    raw note -> lexicon entity extraction -> red-flag safety check
+             -> condition rules -> triage response
+
+Symptom recognition uses the shared BanglaMed-AI lexicon, so Bangla
+("শ্বাস নিতে কষ্ট"), Banglish ("shash nite koshto") and English
+("breathing difficulty") phrasings of the same complaint all resolve to the
+same canonical symptom. Emergency escalation comes from the single red-flag
+table in ``app.ai.safety`` and can only raise severity, never lower it.
+"""
+from typing import Optional
+
+from app.ai.extraction import extract
+from app.ai.lexicon import SYMPTOMS
+from app.ai.safety import check_red_flags
 from app.modules.symptom_checker.rules import (
     CONDITION_RULES,
-    EMERGENCY_RULES,
+    LEVEL_TO_SEVERITY,
     SEVERITY_PRIORITY,
 )
 from app.schemas.symptom_checker import SymptomResponse
@@ -14,118 +31,168 @@ CLINICAL_DISCLAIMER = (
     "or worsening, seek care from a qualified healthcare professional."
 )
 
+CLINICAL_DISCLAIMER_BN = (
+    "এই ফলাফল সিদ্ধান্ত-সহায়ক তথ্য, কোনো রোগ নির্ণয় নয়। উপসর্গ তীব্র হলে বা "
+    "বাড়তে থাকলে দ্রুত রেজিস্টার্ড চিকিৎসকের পরামর্শ নিন।"
+)
 
-def _normalize(text: str) -> str:
-    return " ".join(unicodedata.normalize("NFKC", text).casefold().split())
+EMERGENCY_ADVICE = (
+    "Go to the nearest hospital emergency department now, or call an ambulance."
+)
+EMERGENCY_ADVICE_BN = (
+    "এখনই নিকটস্থ হাসপাতালের জরুরি বিভাগে যান অথবা অ্যাম্বুলেন্স ডাকুন।"
+)
 
-
-def _keyword_groups(rule: dict, language: str) -> list[list[str]]:
-    if language == "bn":
-        return [[keyword] for keyword in rule["bangla"]]
-    if language == "en":
-        return [[keyword] for keyword in rule["english"]]
-
-    group_count = max(len(rule["bangla"]), len(rule["english"]))
-    groups = []
-    for index in range(group_count):
-        alternatives = []
-        if index < len(rule["bangla"]):
-            alternatives.append(rule["bangla"][index])
-        if index < len(rule["english"]):
-            alternatives.append(rule["english"][index])
-        groups.append(alternatives)
-    return groups
+FEVER_EMERGENCY_TEMP_C = 40.0
 
 
-def _matched_keywords(text: str, groups: list[list[str]]) -> list[str]:
-    matched = []
-    for alternatives in groups:
-        match = next(
-            (
-                keyword
-                for keyword in alternatives
-                if _normalize(keyword) in text
-            ),
-            None,
-        )
-        if match:
-            matched.append(match)
+def _readable(symptom_id: str) -> str:
+    """Human-readable label for a canonical symptom id."""
+    entry = SYMPTOMS.get(symptom_id)
+    if entry and entry["en"]:
+        return entry["en"][0]
+    return symptom_id.replace("_", " ")
+
+
+def _specialty_for(symptom_ids: list[str]) -> str:
+    """Highest-acuity symptom decides the specialty."""
+    ranked = sorted(
+        symptom_ids,
+        key=lambda s: SYMPTOMS[s]["level"] if s in SYMPTOMS else 0,
+        reverse=True,
+    )
+    for symptom_id in ranked:
+        entry = SYMPTOMS.get(symptom_id)
+        if entry:
+            return entry["specialty"]
+    return "General Physician"
+
+
+def _rule_matches(rule: dict, found: set) -> list[str]:
+    matched = [s for s in rule["symptoms"] if s in found]
+    if rule["match"] == "all":
+        return matched if len(matched) == len(rule["symptoms"]) else []
     return matched
 
 
-def _rule_matches(rule: dict, matched: list[str], group_count: int) -> bool:
-    if rule["match"] == "all":
-        return group_count > 0 and len(matched) == group_count
-    return bool(matched)
-
-
-def _confidence(rule: dict, matched_count: int, keyword_count: int) -> int:
-    if keyword_count == 0:
+def _confidence(rule: dict, matched_count: int) -> int:
+    total = len(rule["symptoms"])
+    if total == 0:
         return 0
-    coverage = matched_count / keyword_count
+    coverage = matched_count / total
     if rule["match"] == "all":
         return min(95, round(75 + (20 * coverage)))
     return min(90, round(55 + (35 * coverage)))
 
 
+def _baseline_from_lexicon(found: list[str]) -> Optional[int]:
+    """Fallback severity: the highest base level among recognised symptoms."""
+    levels = [SYMPTOMS[s]["level"] for s in found if s in SYMPTOMS]
+    return max(levels) if levels else None
+
+
 def triage_symptoms(request: TriageRequest) -> TriageResponse:
-    text = _normalize(request.symptoms)
+    result = extract(request.symptoms)
+    age = request.age_years if request.age_years is not None else result.age
+    found = result.symptoms
+    found_set = set(found)
 
-    for rule in EMERGENCY_RULES:
-        groups = _keyword_groups(rule, request.language)
-        matched = _matched_keywords(text, groups)
-        if _rule_matches(rule, matched, len(groups)):
-            return TriageResponse(
-                triage_level=TriageLevel.EMERGENCY,
-                possible_condition=rule["condition"],
-                recommended_specialty=rule["specialty"],
-                confidence=99,
-                matched_symptoms=matched,
-                safety_flags=[rule["code"]],
-                advice=rule["advice"],
-                disclaimer=CLINICAL_DISCLAIMER,
-            )
+    # ---- Safety layer: red flags always win -----------------------------
+    flags = check_red_flags(found, age)
 
-    candidates = []
-    for rule in CONDITION_RULES:
-        groups = _keyword_groups(rule, request.language)
-        matched = _matched_keywords(text, groups)
-        if _rule_matches(rule, matched, len(groups)):
-            candidates.append(
-                (
-                    SEVERITY_PRIORITY[rule["severity"]],
-                    len(matched),
-                    rule,
-                    matched,
-                    len(groups),
-                )
-            )
+    if (
+        request.temperature_c is not None
+        and request.temperature_c >= FEVER_EMERGENCY_TEMP_C
+    ):
+        flags = flags + [
+            {
+                "flag": "hyperpyrexia",
+                "en": "Measured temperature at or above 40°C",
+                "bn": "মাপা তাপমাত্রা ৪০ ডিগ্রি সেলসিয়াস বা তার বেশি",
+            }
+        ]
 
-    if not candidates:
+    if flags:
         return TriageResponse(
-            triage_level=TriageLevel.TELECONSULT,
-            possible_condition="Symptoms need clinical review",
-            recommended_specialty="General Physician",
-            confidence=0,
-            matched_symptoms=[],
-            safety_flags=[],
-            advice="Book a consultation for a proper clinical assessment.",
+            triage_level=TriageLevel.EMERGENCY,
+            possible_condition=flags[0]["en"],
+            possible_condition_bn=flags[0]["bn"],
+            recommended_specialty="Emergency Medicine",
+            confidence=99,
+            matched_symptoms=[_readable(s) for s in found],
+            safety_flags=[f["flag"] for f in flags],
+            advice=EMERGENCY_ADVICE,
+            advice_bn=EMERGENCY_ADVICE_BN,
             disclaimer=CLINICAL_DISCLAIMER,
+            disclaimer_bn=CLINICAL_DISCLAIMER_BN,
         )
 
-    _, _, rule, matched, keyword_count = max(
-        candidates,
-        key=lambda candidate: (candidate[0], candidate[1]),
-    )
+    # ---- Condition rules -------------------------------------------------
+    candidates = []
+    for rule in CONDITION_RULES:
+        matched = _rule_matches(rule, found_set)
+        if matched:
+            candidates.append((SEVERITY_PRIORITY[rule["severity"]], len(matched), rule, matched))
+
+    if candidates:
+        _, _, rule, matched = max(candidates, key=lambda c: (c[0], c[1]))
+        severity = rule["severity"]
+
+        # A recognised symptom with a higher base acuity than the matched rule
+        # escalates the outcome; triage never under-calls a known symptom.
+        baseline = _baseline_from_lexicon(found)
+        if baseline and baseline > SEVERITY_PRIORITY[severity]:
+            severity = LEVEL_TO_SEVERITY[baseline]
+
+        return TriageResponse(
+            triage_level=TriageLevel(severity),
+            possible_condition=rule["condition"],
+            possible_condition_bn=rule["condition_bn"],
+            recommended_specialty=(
+                _specialty_for(found)
+                if severity != rule["severity"]
+                else rule["specialty"]
+            ),
+            confidence=_confidence(rule, len(matched)),
+            matched_symptoms=[_readable(s) for s in found],
+            safety_flags=[],
+            advice=rule["advice"],
+            advice_bn=rule["advice_bn"],
+            disclaimer=CLINICAL_DISCLAIMER,
+            disclaimer_bn=CLINICAL_DISCLAIMER_BN,
+        )
+
+    # ---- Recognised symptoms but no rule: use lexicon acuity -------------
+    baseline = _baseline_from_lexicon(found)
+    if baseline:
+        severity = LEVEL_TO_SEVERITY[baseline]
+        return TriageResponse(
+            triage_level=TriageLevel(severity),
+            possible_condition="Symptoms require clinical assessment",
+            possible_condition_bn="উপসর্গগুলোর জন্য চিকিৎসকের মূল্যায়ন প্রয়োজন",
+            recommended_specialty=_specialty_for(found),
+            confidence=60,
+            matched_symptoms=[_readable(s) for s in found],
+            safety_flags=[],
+            advice="Book a consultation with the recommended specialty.",
+            advice_bn="প্রস্তাবিত বিভাগের চিকিৎসকের সাথে পরামর্শের জন্য বুকিং দিন।",
+            disclaimer=CLINICAL_DISCLAIMER,
+            disclaimer_bn=CLINICAL_DISCLAIMER_BN,
+        )
+
+    # ---- Nothing recognised: safe fallback -------------------------------
     return TriageResponse(
-        triage_level=TriageLevel(rule["severity"]),
-        possible_condition=rule["condition"],
-        recommended_specialty=rule["specialty"],
-        confidence=_confidence(rule, len(matched), keyword_count),
-        matched_symptoms=matched,
+        triage_level=TriageLevel.TELECONSULT,
+        possible_condition="Symptoms need clinical review",
+        possible_condition_bn="উপসর্গগুলোর জন্য চিকিৎসকের পর্যালোচনা প্রয়োজন",
+        recommended_specialty="General Physician",
+        confidence=0,
+        matched_symptoms=[],
         safety_flags=[],
-        advice=rule["advice"],
+        advice="Book a consultation for a proper clinical assessment.",
+        advice_bn="সঠিক মূল্যায়নের জন্য একজন চিকিৎসকের পরামর্শ নিন।",
         disclaimer=CLINICAL_DISCLAIMER,
+        disclaimer_bn=CLINICAL_DISCLAIMER_BN,
     )
 
 
