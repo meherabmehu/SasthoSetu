@@ -1,0 +1,14 @@
+.git
+.github
+**/__pycache__
+**/*.pyc
+.venv
+venv
+*.db
+*.sqlite3
+.env
+data
+backend/app/ai/artifacts
+.ruff_cache
+.pytest_cache
+node_modules

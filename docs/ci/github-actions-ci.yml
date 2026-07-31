@@ -1,0 +1,157 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.13"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install linters
+        run: pip install ruff==0.8.4
+
+      - name: Ruff
+        run: ruff check backend ml scripts tools
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install uvicorn
+
+      # The AI services load generated datasets and trained artifacts. Building
+      # them here is what keeps the pipeline honest: if a generator or training
+      # script breaks, CI fails rather than the endpoints failing in production.
+      - name: Build datasets and train models
+        run: python ml/prepare_all.py
+
+      - name: Run migrations against a clean database
+        working-directory: backend
+        env:
+          DATABASE_URL: sqlite:///./ci.db
+          SECRET_KEY: ci-secret-key-at-least-32-characters-long
+        run: alembic upgrade head
+
+      - name: Test suite
+        working-directory: backend
+        env:
+          APP_ENV: test
+          DATABASE_URL: sqlite:///./test.db
+          SECRET_KEY: ci-secret-key-at-least-32-characters-long
+        run: python -m unittest discover -s tests -v
+
+      - name: Upload model metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-metrics
+          path: |
+            backend/app/ai/artifacts/*.json
+            backend/app/ai/artifacts/*.csv
+          if-no-files-found: ignore
+
+  smoke:
+    name: Smoke test
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install uvicorn
+
+      - name: Build datasets and train models
+        run: python ml/prepare_all.py
+
+      - name: Prepare database
+        working-directory: backend
+        env:
+          DATABASE_URL: sqlite:///./smoke.db
+          SECRET_KEY: ci-secret-key-at-least-32-characters-long
+        run: alembic upgrade head
+
+      - name: Seed reference data
+        env:
+          DATABASE_URL: sqlite:///./backend/smoke.db
+          SECRET_KEY: ci-secret-key-at-least-32-characters-long
+        run: python scripts/seed_database.py
+
+      - name: Start the API
+        working-directory: backend
+        env:
+          DATABASE_URL: sqlite:///./smoke.db
+          SECRET_KEY: ci-secret-key-at-least-32-characters-long
+        run: |
+          python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8000/health > /dev/null; then
+              echo "API is up"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "API failed to start"
+          exit 1
+
+      # A red flag reaching the wrong triage level is the one defect class that
+      # must never ship, so it is asserted against a running server too.
+      - name: Verify emergency triage over HTTP
+        run: |
+          RESPONSE=$(curl -fsS -X POST http://127.0.0.1:8000/api/v1/triage \
+            -H 'Content-Type: application/json' \
+            -d '{"symptoms":"বুকে ব্যথা, শ্বাস নিতে কষ্ট","age_years":50}')
+          echo "$RESPONSE"
+          echo "$RESPONSE" | grep -q '"triage_level":"EMERGENCY"'
+
+      - name: Verify the AI triage endpoint serves
+        run: |
+          curl -fsS -X POST http://127.0.0.1:8000/api/v1/ai/triage-ml \
+            -H 'Content-Type: application/json' \
+            -d '{"symptoms":"তিন দিন ধরে জ্বর ও কাশি","age_years":30}' | grep -q severity_level
+
+      - name: Verify surge forecasting serves
+        run: curl -fsS http://127.0.0.1:8000/api/v1/hospitals/H001/surge-forecast | grep -q forecast
+
+      - name: Verify drug interaction screening serves
+        run: |
+          curl -fsS -X POST http://127.0.0.1:8000/api/v1/ai/drug-check \
+            -H 'Content-Type: application/json' \
+            -d '{"drugs":["Warfin","Ecosprin"]}' | grep -q '"highest_severity":"major"'
+
+      - name: Verify FHIR conformance endpoint
+        run: curl -fsS http://127.0.0.1:8000/api/v1/fhir/metadata | grep -q '4.0.1'

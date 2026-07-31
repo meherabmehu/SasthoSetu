@@ -1,0 +1,45 @@
+[tool.ruff]
+# Matches the line length already used throughout the codebase.
+line-length = 100
+target-version = "py311"
+
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "backend/alembic/versions",
+    "data",
+]
+
+[tool.ruff.lint]
+# Correctness and clarity rules only. Stylistic reformatting is deliberately
+# not enforced: the existing code has a consistent hand-written layout, and
+# rewriting it wholesale would bury real changes in noise.
+select = [
+    "E4",   # import placement
+    "E7",   # statement-level mistakes
+    "E9",   # syntax and IO errors
+    "F",    # pyflakes: undefined names, unused imports
+    "B",    # bugbear: likely bugs
+    "C4",   # comprehension misuse
+]
+
+ignore = [
+    "B008",  # FastAPI dependency defaults are the documented idiom
+    "B904",  # explicit `from` on re-raise is not the house style here
+    "E741",  # single-character names are fine in short numeric expressions
+    # SQLAlchemy column comparisons must use `== False` / `== True` to build a
+    # SQL expression; the suggested rewrite evaluates in Python and silently
+    # produces the wrong query.
+    "E712",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Test modules set environment variables before importing the application, so
+# imports legitimately follow executable statements.
+"backend/tests/*" = ["E402"]
+# Pipeline scripts extend sys.path before importing the application package.
+"ml/*" = ["E402"]
+"scripts/*" = ["E402"]
+"backend/app/ai/lexicon.py" = ["E402"]

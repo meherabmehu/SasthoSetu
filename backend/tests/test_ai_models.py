@@ -198,6 +198,60 @@ class TriageModelTests(unittest.TestCase):
                 self.assertEqual(5, self.triage(note, age=age)["severity_level"])
 
 
+class DegradedModeTests(unittest.TestCase):
+    """Behaviour when the generated artifacts are absent.
+
+    A bare clone must still serve the safety-critical paths, and must never
+    disclose server filesystem paths in an error response.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        from fastapi.testclient import TestClient
+
+        from app.main import app
+
+        cls.client = TestClient(app, raise_server_exceptions=False)
+
+    def test_rule_triage_works_without_any_artifact(self):
+        response = self.client.post(
+            "/api/v1/triage",
+            json={"symptoms": "বুকে ব্যথা, শ্বাস নিতে কষ্ট", "age_years": 50},
+        )
+        self.assertEqual(200, response.status_code)
+        self.assertEqual("EMERGENCY", response.json()["triage_level"])
+
+    def test_errors_never_leak_a_filesystem_path(self):
+        for path, payload in [
+            ("/api/v1/ai/triage-ml", {"symptoms": "জ্বর", "age_years": 30}),
+            ("/api/v1/ai/drug-check", {"drugs": ["Napa", "Seclo"]}),
+        ]:
+            with self.subTest(path=path):
+                body = self.client.post(path, json=payload).text
+                self.assertNotIn("/home/", body)
+                self.assertNotIn("/app/", body)
+                self.assertNotIn(".joblib'", body)
+
+        for path in [
+            "/api/v1/hospitals/H001/surge-forecast",
+            "/api/v1/population/surveillance",
+        ]:
+            with self.subTest(path=path):
+                body = self.client.get(path).text
+                self.assertNotIn("/home/", body)
+                self.assertNotIn("/app/", body)
+                self.assertNotIn("Errno", body)
+
+    def test_missing_artifacts_report_503_not_404(self):
+        """503 says 'not built yet'; 404 would wrongly imply 'no such hospital'."""
+        if MODEL_FILE.exists():
+            self.skipTest("artifacts are present")
+        response = self.client.post(
+            "/api/v1/ai/triage-ml", json={"symptoms": "জ্বর", "age_years": 30}
+        )
+        self.assertEqual(503, response.status_code)
+
+
 @unittest.skipUnless(METRICS_FILE.exists(), "triage metrics not built")
 class ModelQualityGateTests(unittest.TestCase):
     """Guard against a retrain silently regressing model quality."""

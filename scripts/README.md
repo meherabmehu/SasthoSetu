@@ -21,11 +21,20 @@ produces:
 - `data/surveillance/{weekly_surveillance,injected_outbreaks}.csv`
 - `backend/app/ai/artifacts/*` - trained triage + surge models and metrics
 
-Generated datasets and model artifacts are **not committed**. They are rebuilt
-from these scripts, which are the source of truth. A fresh clone must run
-`ml/prepare_all.py` (or let CI run it) before the AI endpoints will serve;
-until then those endpoints return `503` with the command to run, rather than
-failing obscurely.
+What is and is not committed:
+
+- **Committed** - the small, human-reviewable reference data:
+  `data/seed/*.json` and `data/drugs/*.csv`. These are curated content that
+  deserves review in a diff, and keeping them tracked means drug-interaction
+  screening works straight from a clone.
+- **Not committed** - the large generated corpora (`data/triage`,
+  `data/surge`, `data/surveillance`) and the trained model artifacts
+  (`backend/app/ai/artifacts/`). These are rebuilt from the scripts above,
+  which are the source of truth.
+
+A fresh clone must therefore run `ml/prepare_all.py` (or let CI run it) before
+the ML endpoints will serve. Until then those endpoints return `503` naming the
+command to run, rather than failing obscurely.
 
 Individual steps can be run on their own, in this order:
 

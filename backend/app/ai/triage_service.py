@@ -87,14 +87,13 @@ def triage(notes: str, age: Optional[int] = None,
         "safety_flags": flags,
         "entities": ents.to_dict(),
         "level_probabilities": {int(c): round(float(p), 3)
-                                for c, p in zip(classes, proba)},
+                                for c, p in zip(classes, proba, strict=True)},
         "disclaimer": DISCLAIMER,
         "model_version": MODEL_VERSION,
     }
 
 
 if __name__ == "__main__":
-    import json
     for note in [
         "বুকে ব্যথা, শ্বাস নিতে কষ্ট, দুই দিন ধরে জ্বর",
         "amar 3 din dhore halka kashi r shordi",

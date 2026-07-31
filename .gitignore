@@ -27,3 +27,6 @@ backend/*.db
 data/triage/*.csv
 data/surge/*.csv
 data/surveillance/*.csv
+
+# Trained model artifacts (binary, rebuilt by ml/prepare_all.py)
+backend/app/ai/artifacts/

@@ -32,7 +32,14 @@ def ml_triage_service(notes: str, age: int | None = None):
 def surge_forecast_service(hospital_code: str):
     try:
         return surge_service.forecast(hospital_code.upper())
-    except (ValueError, FileNotFoundError) as exc:
+    except FileNotFoundError:
+        # Never surface the filesystem path: it discloses server layout and
+        # tells the caller nothing they can act on.
+        raise HTTPException(
+            status_code=503,
+            detail="Surge model artifact missing - run ml/train_surge_model.py"
+        )
+    except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
 
 
@@ -41,7 +48,12 @@ def surveillance_service_query(district: str | None, disease: str | None,
     try:
         return surveillance_service.surveillance(
             district=district, disease=disease, weeks=min(weeks, 60))
-    except (ValueError, FileNotFoundError) as exc:
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=503,
+            detail="Surveillance dataset missing - run ml/generate_surveillance.py"
+        )
+    except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc))
 
 
