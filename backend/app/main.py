@@ -66,6 +66,9 @@ from app.modules.payments.routes import (
 from app.modules.fhir.routes import (
     router as fhir_router
 )
+from app.modules.rural.routes import (
+    router as rural_router
+)
 from app.modules.ai.routes import (
     router as ai_router
 )
@@ -210,6 +213,11 @@ app.include_router(
     fhir_router,
     prefix="/api/v1",
     tags=["FHIR Interoperability"]
+)
+app.include_router(
+    rural_router,
+    prefix="/api/v1",
+    tags=["Rural Access"]
 )
 app.include_router(
     ai_router,
