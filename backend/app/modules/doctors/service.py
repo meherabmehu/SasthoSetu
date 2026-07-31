@@ -77,6 +77,33 @@ def get_all_doctors_service(
     return db.query(Doctor).all()
 
 
+def get_my_doctor_profile_service(
+    current_user: dict,
+    db: Session
+):
+    """Return the signed-in doctor's own profile.
+
+    The portal needs the doctor row id, which is not the user id; without this
+    it would have to download the whole directory to find one record.
+    """
+
+    doctor = (
+        db.query(Doctor)
+        .filter(
+            Doctor.user_id == current_user.get("user_id")
+        )
+        .first()
+    )
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor profile not found"
+        )
+
+    return doctor
+
+
 def get_doctor_by_id_service(
     doctor_id: str,
     db: Session

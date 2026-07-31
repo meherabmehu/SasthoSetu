@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>ডাক্তার ড্যাশবোর্ড · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 id="title">ডাক্তার ড্যাশবোর্ড</h1>
+      <p class="muted" id="who"></p>
+    </div>
+
+    <div class="metric-grid" id="metrics"></div>
+
+    <h2 class="mt-4" style="margin-top:2rem" id="queueTitle">আজকের রোগী</h2>
+    <div class="list" id="queue" aria-live="polite"></div>
+  </div>
+</main>
+
+<div id="workspace"></div>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatDate, skeletonList, emptyState, errorState,
+  toast, setBusy, requireAuth, severityChip,
+} from './assets/js/ui.js';
+
+bootstrap('doctor.html');
+if (!requireAuth('DOCTOR', 'ADMIN')) throw new Error('unauthorised');
+
+const BN = i18n.lang === 'bn';
+document.getElementById('title').textContent = BN ? 'ডাক্তার ড্যাশবোর্ড' : 'Doctor dashboard';
+document.getElementById('queueTitle').textContent = BN ? 'রোগীর তালিকা' : 'Patient queue';
+document.getElementById('who').textContent = session.user?.user_id
+  ? (BN ? 'স্বাগতম' : 'Welcome') : '';
+
+let doctorId = null;
+
+const STATUS_LABEL = {
+  bn: { PENDING: 'অপেক্ষমাণ', CONFIRMED: 'নিশ্চিত', IN_PROGRESS: 'চলছে',
+        COMPLETED: 'সম্পন্ন', CANCELLED: 'বাতিল' },
+  en: { PENDING: 'Pending', CONFIRMED: 'Confirmed', IN_PROGRESS: 'In progress',
+        COMPLETED: 'Completed', CANCELLED: 'Cancelled' },
+};
+const label = (s) => (STATUS_LABEL[i18n.lang] || STATUS_LABEL.bn)[s] || s;
+
+async function resolveDoctor() {
+  // The dashboard needs the doctor row id, which is distinct from the user id.
+  const profile = await api.get('/doctors/me', { cache: true });
+  return profile?.id || null;
+}
+
+function metric(value, text) {
+  return `<div class="metric">
+    <div class="metric-value">${escapeHtml(String(value))}</div>
+    <div class="metric-label">${escapeHtml(text)}</div>
+  </div>`;
+}
+
+function queueCard(item) {
+  const actionable = !['COMPLETED', 'CANCELLED', 'REJECTED'].includes(item.status);
+  return `<article class="list-item">
+    <div class="flex-1">
+      <h4>${escapeHtml(formatDate(item.appointment_date))} · ${escapeHtml(item.appointment_time)}</h4>
+      <div class="list-meta"><span>${escapeHtml(item.reason || '')}</span></div>
+    </div>
+    <div style="text-align:right">
+      <span class="badge">${escapeHtml(label(item.status))}</span>
+      ${actionable ? `<button class="btn btn-sm mt-4 openBtn"
+        data-id="${escapeHtml(item.id)}">
+        ${BN ? 'কনসালটেশন শুরু' : 'Start consultation'}</button>` : ''}
+    </div>
+  </article>`;
+}
+
+async function load() {
+  const queueEl = document.getElementById('queue');
+  queueEl.innerHTML = skeletonList(3);
+  try {
+    doctorId = await resolveDoctor();
+    if (!doctorId) {
+      queueEl.innerHTML = errorState(
+        BN ? 'ডাক্তার প্রোফাইল পাওয়া যায়নি।' : 'Doctor profile not found.'
+      );
+      return;
+    }
+
+    const items = await api.get(`/appointments/doctor/${doctorId}`, { cache: true });
+    const rows = Array.isArray(items) ? items : items.items || [];
+
+    const pending = rows.filter((r) => ['PENDING', 'CONFIRMED'].includes(r.status)).length;
+    const done = rows.filter((r) => r.status === 'COMPLETED').length;
+
+    document.getElementById('metrics').innerHTML =
+      metric(rows.length, BN ? 'মোট অ্যাপয়েন্টমেন্ট' : 'Total appointments') +
+      metric(pending, BN ? 'অপেক্ষমাণ' : 'Awaiting') +
+      metric(done, BN ? 'সম্পন্ন' : 'Completed');
+
+    queueEl.innerHTML = rows.length
+      ? rows.map(queueCard).join('')
+      : emptyState('appointment.none', '📋');
+  } catch (error) {
+    queueEl.innerHTML = errorState(error.message);
+  }
+}
+
+document.getElementById('queue').addEventListener('click', (event) => {
+  const button = event.target.closest('.openBtn');
+  if (button) openConsultation(button.dataset.id);
+});
+
+async function openConsultation(appointmentId) {
+  const host = document.getElementById('workspace');
+  host.innerHTML = `<div class="modal-backdrop"><div class="card modal-card">
+    <div class="skeleton" style="height:120px"></div></div></div>`;
+
+  let consultation;
+  try {
+    consultation = await api.post('/consultations', { appointment_id: appointmentId });
+  } catch (error) {
+    host.innerHTML = '';
+    toast(error.message, 'danger');
+    return;
+  }
+
+  host.innerHTML = `
+    <div class="modal-backdrop" id="backdrop">
+      <div class="card modal-card" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+        <div class="row-between">
+          <h3 id="cTitle">${BN ? 'কনসালটেশন' : 'Consultation'}</h3>
+          <button class="btn btn-ghost btn-sm" id="closeBtn"
+            aria-label="${escapeHtml(i18n.t('action.close'))}">✕</button>
+        </div>
+
+        <form id="notesForm">
+          <div class="field">
+            <label class="label" for="complaint">${BN ? 'প্রধান সমস্যা' : 'Chief complaint'}</label>
+            <textarea id="complaint" class="textarea" style="min-height:70px">${escapeHtml(consultation.chief_complaint || '')}</textarea>
+          </div>
+          <div class="field">
+            <label class="label" for="exam">${BN ? 'পরীক্ষার নোট' : 'Examination notes'}</label>
+            <textarea id="exam" class="textarea" style="min-height:70px"></textarea>
+          </div>
+          <div class="field">
+            <label class="label" for="diagnosis">${BN ? 'রোগ নির্ণয়' : 'Diagnosis'} *</label>
+            <input id="diagnosis" class="input" required maxlength="300">
+          </div>
+          <div class="field">
+            <label class="label" for="advice">${BN ? 'পরামর্শ' : 'Advice'}</label>
+            <textarea id="advice" class="textarea" style="min-height:70px"></textarea>
+          </div>
+          <button class="btn btn-secondary btn-block" type="submit" id="saveBtn">
+            ${escapeHtml(i18n.t('action.save'))}</button>
+        </form>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:1.25rem 0">
+
+        <h4>${escapeHtml(i18n.t('prescription.title'))}</h4>
+        <div id="rxItems"></div>
+        <button class="btn btn-secondary btn-sm" type="button" id="addItem">
+          + ${escapeHtml(i18n.t('prescription.medicine'))}</button>
+        <div id="interactionWarning"></div>
+        <button class="btn btn-block mt-4" type="button" id="issueBtn">
+          ${BN ? 'প্রেসক্রিপশন দিন' : 'Issue prescription'}</button>
+
+        <button class="btn btn-block mt-4" type="button" id="closeConsultBtn"
+          style="background:var(--success)">
+          ${BN ? 'কনসালটেশন শেষ করুন' : 'Complete consultation'}</button>
+        <p class="hint">${BN
+          ? 'শেষ করার পর নোট আর পরিবর্তন করা যাবে না।'
+          : 'Notes cannot be edited once the consultation is completed.'}</p>
+      </div>
+    </div>`;
+
+  const close = () => { host.innerHTML = ''; load(); };
+  document.getElementById('closeBtn').addEventListener('click', close);
+  document.getElementById('backdrop').addEventListener('click', (e) => {
+    if (e.target.id === 'backdrop') close();
+  });
+
+  const rxItems = document.getElementById('rxItems');
+  let itemIndex = 0;
+
+  function addItem() {
+    const index = itemIndex++;
+    const row = document.createElement('div');
+    row.className = 'card';
+    row.style.marginBottom = '.5rem';
+    row.innerHTML = `
+      <div class="grid-2">
+        <div class="field mb-0">
+          <label class="label" for="med${index}">${escapeHtml(i18n.t('prescription.medicine'))}</label>
+          <input id="med${index}" class="input rx-med" placeholder="Napa 500">
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="freq${index}">${escapeHtml(i18n.t('prescription.frequency'))}</label>
+          <input id="freq${index}" class="input rx-freq" placeholder="1+1+1">
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="dur${index}">${escapeHtml(i18n.t('prescription.duration'))}</label>
+          <input id="dur${index}" class="input rx-dur" placeholder="5 days">
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button type="button" class="btn btn-ghost btn-sm removeItem">✕</button>
+        </div>
+      </div>`;
+    rxItems.appendChild(row);
+    row.querySelector('.removeItem').addEventListener('click', () => {
+      row.remove();
+      checkInteractions();
+    });
+    row.querySelector('.rx-med').addEventListener('blur', checkInteractions);
+  }
+
+  document.getElementById('addItem').addEventListener('click', addItem);
+  addItem();
+
+  /* Interactions are screened while the doctor is still typing, so a clash is
+     visible before the prescription is signed rather than after. */
+  async function checkInteractions() {
+    const drugs = Array.from(document.querySelectorAll('.rx-med'))
+      .map((input) => input.value.trim())
+      .filter(Boolean);
+    const host = document.getElementById('interactionWarning');
+    if (drugs.length < 2) { host.innerHTML = ''; return; }
+
+    try {
+      const report = await api.post('/ai/drug-check', { drugs });
+      const flagged = report.flagged_interactions || [];
+      host.innerHTML = flagged.length
+        ? `<div class="alert alert-warning mt-4"><div>
+            <strong>${BN ? 'সতর্কতা' : 'Interaction warning'}</strong>
+            <ul style="margin:.4rem 0 0;padding-left:1.2rem">
+              ${flagged.map((f) => `<li><b>${escapeHtml(f.severity)}</b>:
+                ${escapeHtml(f.effect)}</li>`).join('')}
+            </ul></div></div>`
+        : `<div class="alert alert-success mt-4"><div>
+            ${BN ? 'কোনো মিথস্ক্রিয়া পাওয়া যায়নি' : 'No interactions found'}</div></div>`;
+    } catch {
+      host.innerHTML = '';
+    }
+  }
+
+  document.getElementById('notesForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = document.getElementById('saveBtn');
+    setBusy(button, true);
+    try {
+      await api.patch(`/consultations/${consultation.id}`, {
+        chief_complaint: document.getElementById('complaint').value,
+        examination_notes: document.getElementById('exam').value,
+        diagnosis: document.getElementById('diagnosis').value,
+        advice: document.getElementById('advice').value,
+      });
+      toast(i18n.t('status.saved'), 'success');
+    } catch (error) {
+      toast(error.message, 'danger');
+    } finally {
+      setBusy(button, false);
+    }
+  });
+
+  document.getElementById('issueBtn').addEventListener('click', async () => {
+    const items = Array.from(rxItems.children).map((row) => ({
+      medicine_name: row.querySelector('.rx-med').value.trim(),
+      frequency: row.querySelector('.rx-freq').value.trim(),
+      duration: row.querySelector('.rx-dur').value.trim(),
+    })).filter((item) => item.medicine_name && item.frequency && item.duration);
+
+    if (!items.length) {
+      toast(BN ? 'অন্তত একটি ওষুধ দিন' : 'Add at least one complete medicine', 'danger');
+      return;
+    }
+
+    const button = document.getElementById('issueBtn');
+    setBusy(button, true);
+    try {
+      const rx = await api.post('/prescriptions/issue', {
+        consultation_id: consultation.id,
+        diagnosis: document.getElementById('diagnosis').value || undefined,
+        advice: document.getElementById('advice').value || undefined,
+        items,
+      });
+      toast(`${escapeHtml(i18n.t('prescription.code'))}: ${rx.verification_code}`, 'success');
+      window.open(`verify.html?code=${encodeURIComponent(rx.verification_code)}`, '_blank');
+    } catch (error) {
+      toast(error.message, 'danger');
+    } finally {
+      setBusy(button, false);
+    }
+  });
+
+  document.getElementById('closeConsultBtn').addEventListener('click', async () => {
+    const button = document.getElementById('closeConsultBtn');
+    setBusy(button, true);
+    try {
+      await api.patch(`/consultations/${consultation.id}`, {
+        diagnosis: document.getElementById('diagnosis').value,
+      });
+      await api.post(`/consultations/${consultation.id}/close`);
+      toast(i18n.t('status.saved'), 'success');
+      close();
+    } catch (error) {
+      toast(error.message, 'danger');
+      setBusy(button, false);
+    }
+  });
+}
+
+load();
+</script>
+
+<style>
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 250;
+  background: rgba(15, 23, 42, 0.55);
+  display: grid; place-items: center; padding: var(--space-4);
+}
+.modal-card { width: min(620px, 100%); max-height: 92vh; overflow-y: auto; }
+</style>
+</body>
+</html>

@@ -11,6 +11,7 @@ import os
 import unittest
 from pathlib import Path
 
+os.environ["APP_ENV"] = "test"
 os.environ.setdefault("DATABASE_URL", "sqlite:///./test_ai.db")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-at-least-32-characters-long")
 

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>হাসপাতাল · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <a href="hospitals.html" class="btn btn-ghost btn-sm" data-i18n="action.back">ফিরে যান</a>
+    <div id="content" class="mt-4" aria-live="polite"></div>
+    <div id="forecast" class="mt-4"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, skeletonList, errorState, toast, setBusy,
+} from './assets/js/ui.js';
+
+bootstrap('hospitals.html');
+
+const BN = i18n.lang === 'bn';
+const WARD_LABELS = {
+  bn: { general: 'সাধারণ', icu: 'আইসিইউ', emergency: 'জরুরি', hdu: 'এইচডিইউ',
+        maternity: 'মাতৃসদন', paediatric: 'শিশু' },
+  en: { general: 'General', icu: 'ICU', emergency: 'Emergency', hdu: 'HDU',
+        maternity: 'Maternity', paediatric: 'Paediatric' },
+};
+const wardLabel = (t) => (WARD_LABELS[i18n.lang] || WARD_LABELS.bn)[t] || t;
+
+const params = new URLSearchParams(window.location.search);
+const hospitalId = params.get('id');
+const contentEl = document.getElementById('content');
+
+// Only staff and administrators may change capacity; everyone else sees a
+// read-only view of the same data.
+const canEdit = session.hasRole('ADMIN', 'DOCTOR');
+
+function occupancyClass(rate) {
+  if (rate >= 0.9) return 'critical';
+  if (rate >= 0.75) return 'warn';
+  return '';
+}
+
+async function load() {
+  if (!hospitalId) {
+    contentEl.innerHTML = errorState(BN ? 'হাসপাতাল নির্দিষ্ট নয়' : 'No hospital specified');
+    return;
+  }
+  contentEl.innerHTML = skeletonList(2);
+
+  try {
+    const hospital = await api.get(`/hospitals/${encodeURIComponent(hospitalId)}`,
+      { auth: false, cache: true });
+
+    const wards = (hospital.wards || []).map((ward) => {
+      const rate = ward.occupancy_rate || 0;
+      return `<div class="card" style="margin-bottom:.75rem">
+        <div class="row-between">
+          <div>
+            <h4 class="mb-0">${escapeHtml(wardLabel(ward.ward_type))}</h4>
+            <div class="small muted">${escapeHtml(ward.name)}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="bold" style="font-size:1.25rem">
+              ${ward.available_beds} / ${ward.total_beds}</div>
+            <div class="tiny muted">${escapeHtml(i18n.t('hospital.beds'))}</div>
+          </div>
+        </div>
+        <div class="bed-bar" style="margin-top:.5rem" role="img"
+          aria-label="${Math.round(rate * 100)}% ${escapeHtml(i18n.t('hospital.occupancy'))}">
+          <div class="bed-fill ${occupancyClass(rate)}"
+            style="width:${Math.round(rate * 100)}%"></div>
+        </div>
+        ${canEdit ? `<form class="row mt-4 updateForm" data-ward="${escapeHtml(ward.id)}">
+          <input type="number" class="input flex-1 occInput" min="0"
+            max="${ward.total_beds}" value="${ward.occupied_beds}"
+            aria-label="${escapeHtml(wardLabel(ward.ward_type))} occupied beds">
+          <button class="btn btn-sm" type="submit">
+            ${escapeHtml(i18n.t('action.save'))}</button>
+        </form>` : ''}
+      </div>`;
+    }).join('');
+
+    contentEl.innerHTML = `
+      <div class="page-head">
+        <h1>${escapeHtml(hospital.name)}</h1>
+        <p class="muted">${escapeHtml(hospital.area || '')} ${escapeHtml(hospital.district)}
+          ${hospital.phone ? `· <a href="tel:${escapeHtml(hospital.phone)}">${escapeHtml(hospital.phone)}</a>` : ''}
+        </p>
+        <div class="row">
+          ${hospital.has_emergency
+            ? `<span class="badge badge-success">${escapeHtml(i18n.t('hospital.emergency'))}</span>` : ''}
+          <span class="badge badge-info">${escapeHtml(i18n.t('hospital.beds'))}:
+            ${hospital.available_beds} / ${hospital.total_beds}</span>
+        </div>
+      </div>
+      ${wards}`;
+
+    loadForecast(hospital.code);
+  } catch (error) {
+    contentEl.innerHTML = errorState(error.message);
+  }
+}
+
+contentEl.addEventListener('submit', async (event) => {
+  const form = event.target.closest('.updateForm');
+  if (!form) return;
+  event.preventDefault();
+
+  const button = form.querySelector('button');
+  setBusy(button, true);
+  try {
+    await api.patch(`/wards/${form.dataset.ward}/bed-status`, {
+      occupied_beds: Number(form.querySelector('.occInput').value),
+    }, { queueable: true });
+    toast(i18n.t('status.saved'), 'success');
+    load();
+  } catch (error) {
+    toast(error.message, 'danger');
+    setBusy(button, false);
+  }
+});
+
+/* The 48-72 hour forecast is what turns bed data from a record into a
+   planning tool, so it is shown alongside current occupancy. */
+async function loadForecast(code) {
+  if (!code) return;
+  const host = document.getElementById('forecast');
+  try {
+    const data = await api.get(`/hospitals/${encodeURIComponent(code)}/surge-forecast`,
+      { auth: false });
+
+    const wards = (data.wards || []).map((ward) => {
+      const horizons = (ward.forecast || []).map((point) => `
+        <div class="metric" style="border-left-color:${
+          point.surge_alert ? 'var(--danger)' : 'var(--teal-500)'}">
+          <div class="metric-value">${Math.round(point.predicted_occupied)}</div>
+          <div class="metric-label">
+            +${point.hours_ahead}h · ${BN ? 'খালি' : 'free'} ${point.predicted_available}
+            ${point.surge_alert
+              ? `<div style="color:var(--danger);font-weight:700">${
+                  BN ? '⚠ শয্যা সংকটের আশঙ্কা' : '⚠ Surge expected'}</div>`
+              : ''}
+          </div>
+        </div>`).join('');
+
+      return `<div class="card mb-4">
+        <div class="row-between">
+          <h4 class="mb-0">${escapeHtml(wardLabel(ward.ward_type))}</h4>
+          <span class="small muted">${BN ? 'ধারণক্ষমতা' : 'Capacity'} ${ward.capacity} ·
+            ${BN ? 'এখন' : 'now'} ${ward.current_occupied}</span>
+        </div>
+        <div class="metric-grid">${horizons}</div>
+      </div>`;
+    }).join('');
+
+    host.innerHTML = `<h2 style="margin-top:2rem">
+      ${BN ? '৭২ ঘণ্টার শয্যা পূর্বাভাস' : '72-hour bed forecast'}</h2>
+      <p class="hint">${BN
+        ? 'মডেলের পূর্বাভাস — পরিকল্পনার সহায়ক, নিশ্চিত তথ্য নয়।'
+        : 'Model forecast, intended for planning rather than as a guarantee.'}</p>
+      ${wards}`;
+  } catch {
+    // The forecast needs trained artifacts; without them the page still shows
+    // live occupancy, which is the part a patient actually needs.
+    host.innerHTML = '';
+  }
+}
+
+load();
+</script>
+</body>
+</html>

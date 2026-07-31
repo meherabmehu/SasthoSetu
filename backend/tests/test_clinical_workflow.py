@@ -11,6 +11,7 @@ import uuid
 from pathlib import Path
 
 _TMP = tempfile.mkdtemp()
+os.environ["APP_ENV"] = "test"
 os.environ["DATABASE_URL"] = f"sqlite:///{Path(_TMP).as_posix()}/clinical.db"
 os.environ.setdefault("SECRET_KEY", "test-secret-key-at-least-32-characters-long")
 
