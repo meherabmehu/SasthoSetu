@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>লগইন · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="container">
+  <div class="auth-shell">
+    <div class="tabs" role="tablist">
+      <button class="tab" id="tabLogin" role="tab" aria-selected="true"
+        aria-controls="loginPanel" data-i18n="auth.login">লগইন</button>
+      <button class="tab" id="tabRegister" role="tab" aria-selected="false"
+        aria-controls="registerPanel" data-i18n="auth.register">নতুন অ্যাকাউন্ট</button>
+    </div>
+
+    <section class="card" id="loginPanel" role="tabpanel" aria-labelledby="tabLogin">
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label class="label" for="loginEmail" data-i18n="auth.email">ইমেইল</label>
+          <input id="loginEmail" class="input" type="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label class="label" for="loginPassword" data-i18n="auth.password">পাসওয়ার্ড</label>
+          <input id="loginPassword" class="input" type="password" required autocomplete="current-password">
+        </div>
+        <p class="error-text hidden" id="loginError" role="alert"></p>
+        <button class="btn btn-block" id="loginBtn" type="submit" data-i18n="auth.login">লগইন</button>
+      </form>
+    </section>
+
+    <section class="card hidden" id="registerPanel" role="tabpanel" aria-labelledby="tabRegister">
+      <form id="registerForm" novalidate>
+        <div class="field">
+          <label class="label" for="regName" data-i18n="auth.name">পুরো নাম</label>
+          <input id="regName" class="input" required autocomplete="name" minlength="2">
+        </div>
+        <div class="field">
+          <label class="label" for="regEmail" data-i18n="auth.email">ইমেইল</label>
+          <input id="regEmail" class="input" type="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label class="label" for="regPhone" data-i18n="auth.phone">মোবাইল নম্বর</label>
+          <input id="regPhone" class="input" type="tel" required autocomplete="tel"
+            inputmode="numeric" pattern="01[3-9][0-9]{8}" placeholder="01XXXXXXXXX">
+          <p class="hint">01XXXXXXXXX</p>
+        </div>
+        <div class="field">
+          <label class="label" for="regPassword" data-i18n="auth.password">পাসওয়ার্ড</label>
+          <input id="regPassword" class="input" type="password" required
+            minlength="8" autocomplete="new-password">
+        </div>
+        <p class="error-text hidden" id="registerError" role="alert"></p>
+        <button class="btn btn-block" id="registerBtn" type="submit" data-i18n="auth.register">নতুন অ্যাকাউন্ট</button>
+      </form>
+    </section>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { toast, setBusy, escapeHtml } from './assets/js/ui.js';
+
+bootstrap('login.html');
+
+const params = new URLSearchParams(window.location.search);
+const next = params.get('next');
+
+function destinationFor(user) {
+  if (next) return next;
+  if (user?.role === 'DOCTOR') return 'doctor.html';
+  if (user?.role === 'ADMIN') return 'admin.html';
+  return 'index.html';
+}
+
+if (session.isAuthenticated) {
+  window.location.href = destinationFor(session.user);
+}
+
+const tabLogin = document.getElementById('tabLogin');
+const tabRegister = document.getElementById('tabRegister');
+const loginPanel = document.getElementById('loginPanel');
+const registerPanel = document.getElementById('registerPanel');
+
+function selectTab(which) {
+  const isLogin = which === 'login';
+  tabLogin.setAttribute('aria-selected', String(isLogin));
+  tabRegister.setAttribute('aria-selected', String(!isLogin));
+  loginPanel.classList.toggle('hidden', !isLogin);
+  registerPanel.classList.toggle('hidden', isLogin);
+}
+tabLogin.addEventListener('click', () => selectTab('login'));
+tabRegister.addEventListener('click', () => selectTab('register'));
+
+document.getElementById('loginForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = document.getElementById('loginBtn');
+  const errorEl = document.getElementById('loginError');
+  errorEl.classList.add('hidden');
+
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) {
+    errorEl.textContent = i18n.t('auth.invalid');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  setBusy(button, true);
+  try {
+    const user = await api.login(email, password);
+    toast(i18n.t('status.saved'), 'success');
+    window.location.href = destinationFor(user);
+  } catch (error) {
+    errorEl.textContent = error.status === 401 || error.status === 400
+      ? i18n.t('auth.invalid')
+      : error.message;
+    errorEl.classList.remove('hidden');
+  } finally {
+    setBusy(button, false);
+  }
+});
+
+document.getElementById('registerForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = document.getElementById('registerBtn');
+  const errorEl = document.getElementById('registerError');
+  errorEl.classList.add('hidden');
+
+  const payload = {
+    full_name: document.getElementById('regName').value.trim(),
+    email: document.getElementById('regEmail').value.trim(),
+    phone: document.getElementById('regPhone').value.trim(),
+    password: document.getElementById('regPassword').value,
+  };
+
+  if (!/^01[3-9]\d{8}$/.test(payload.phone)) {
+    errorEl.textContent = i18n.lang === 'bn'
+      ? 'সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)'
+      : 'Enter a valid Bangladeshi mobile number (01XXXXXXXXX)';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  if (payload.password.length < 8) {
+    errorEl.textContent = i18n.lang === 'bn'
+      ? 'পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে'
+      : 'Password must be at least 8 characters';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  setBusy(button, true);
+  try {
+    await api.register(payload);
+    const user = await api.login(payload.email, payload.password);
+    toast(i18n.t('status.saved'), 'success');
+    window.location.href = destinationFor(user);
+  } catch (error) {
+    errorEl.textContent = error.message;
+    errorEl.classList.remove('hidden');
+  } finally {
+    setBusy(button, false);
+  }
+});
+</script>
+</body>
+</html>

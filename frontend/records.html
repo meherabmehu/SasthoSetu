@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>আমার রেকর্ড · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="nav.records">আমার রেকর্ড</h1>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-panel="rx"
+        data-i18n="prescription.title">প্রেসক্রিপশন</button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="labs"
+        id="labsTab">ল্যাব রিপোর্ট</button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="triage"
+        data-i18n="triage.history">আগের পরীক্ষা</button>
+    </div>
+
+    <section id="rx" role="tabpanel" aria-live="polite"></section>
+    <section id="labs" role="tabpanel" class="hidden" aria-live="polite"></section>
+    <section id="triage" role="tabpanel" class="hidden" aria-live="polite"></section>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatDate, formatDateTime, formatBdt, skeletonList,
+  emptyState, errorState, severityChip, requireAuth,
+} from './assets/js/ui.js';
+
+bootstrap('records.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+document.getElementById('labsTab').textContent =
+  i18n.lang === 'bn' ? 'ল্যাব রিপোর্ট' : 'Lab reports';
+
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    tabs.forEach((other) => {
+      const selected = other === tab;
+      other.setAttribute('aria-selected', String(selected));
+      document.getElementById(other.dataset.panel).classList.toggle('hidden', !selected);
+    });
+  });
+});
+
+const userId = session.user.user_id;
+
+const STATUS_LABEL = {
+  bn: { ACTIVE: 'সক্রিয়', DISPENSED: 'সরবরাহ হয়েছে', CANCELLED: 'বাতিল',
+        REQUESTED: 'অনুরোধ', ACCEPTED: 'গৃহীত', SAMPLE_COLLECTED: 'নমুনা নেওয়া হয়েছে',
+        PROCESSING: 'পরীক্ষা চলছে', REPORTED: 'রিপোর্ট এসেছে' },
+  en: { ACTIVE: 'Active', DISPENSED: 'Dispensed', CANCELLED: 'Cancelled',
+        REQUESTED: 'Requested', ACCEPTED: 'Accepted', SAMPLE_COLLECTED: 'Sample collected',
+        PROCESSING: 'Processing', REPORTED: 'Reported' },
+};
+
+function label(status) {
+  return (STATUS_LABEL[i18n.lang] || STATUS_LABEL.bn)[status] || status;
+}
+
+async function loadPrescriptions() {
+  const host = document.getElementById('rx');
+  host.innerHTML = skeletonList(2);
+  try {
+    const rows = await api.get(`/prescriptions/records/${userId}`, { cache: true });
+    if (!rows.length) {
+      host.innerHTML = emptyState('prescription.none', '💊');
+      return;
+    }
+    host.innerHTML = `<div class="list">${rows.map((rx) => `
+      <article class="list-item">
+        <div class="flex-1">
+          <h4 class="mono">${escapeHtml(rx.verification_code)}</h4>
+          <div class="list-meta">
+            <span>${escapeHtml(rx.diagnosis || '')}</span>
+            <span>${escapeHtml(rx.doctor?.name || '')}</span>
+            <span>${escapeHtml(formatDate(rx.issued_at))}</span>
+          </div>
+          <div class="small muted mt-4">
+            ${rx.items.map((i) => escapeHtml(i.medicine_name)).join(' · ')}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <span class="badge ${rx.status === 'ACTIVE' ? 'badge-success' : ''}">
+            ${escapeHtml(label(rx.status))}</span>
+          <a class="btn btn-sm mt-4"
+            href="verify.html?code=${encodeURIComponent(rx.verification_code)}">
+            ${escapeHtml(i18n.t('action.view'))}</a>
+        </div>
+      </article>`).join('')}</div>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+async function loadLabs() {
+  const host = document.getElementById('labs');
+  host.innerHTML = skeletonList(2);
+  try {
+    const rows = await api.get(`/lab-orders/patient/${userId}`, { cache: true });
+    if (!rows.length) {
+      host.innerHTML = emptyState('status.none', '🧪');
+      return;
+    }
+    host.innerHTML = `<div class="list">${rows.map((order) => `
+      <article class="list-item">
+        <div class="flex-1">
+          <h4>${escapeHtml(order.test_name || '')}</h4>
+          <div class="list-meta">
+            <span class="mono">${escapeHtml(order.order_code)}</span>
+            <span>${escapeHtml(formatDate(order.created_at))}</span>
+            <span>${formatBdt(order.price_bdt)}</span>
+          </div>
+          ${order.result_summary
+            ? `<div class="alert ${order.is_abnormal ? 'alert-warning' : 'alert-success'} mt-4">
+                 <div>${escapeHtml(order.result_summary)}</div></div>`
+            : ''}
+        </div>
+        <span class="badge ${order.status === 'REPORTED' ? 'badge-success' : 'badge-info'}">
+          ${escapeHtml(label(order.status))}</span>
+      </article>`).join('')}</div>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+async function loadTriage() {
+  const host = document.getElementById('triage');
+  host.innerHTML = skeletonList(2);
+  try {
+    const data = await api.get('/triage/sessions/mine?limit=25', { cache: true });
+    if (!data.items?.length) {
+      host.innerHTML = emptyState('status.none', '🩺');
+      return;
+    }
+    host.innerHTML = `<div class="list">${data.items.map((item) => `
+      <article class="list-item">
+        <div class="flex-1">
+          <h4>${escapeHtml(item.input_text.slice(0, 90))}${item.input_text.length > 90 ? '…' : ''}</h4>
+          <div class="list-meta">
+            <span>${escapeHtml(formatDateTime(item.created_at))}</span>
+            <span>${escapeHtml(item.recommended_specialty || '')}</span>
+            ${item.was_overridden
+              ? `<span class="badge badge-info">${i18n.lang === 'bn'
+                  ? 'ডাক্তার পর্যালোচনা করেছেন' : 'Reviewed by doctor'}</span>`
+              : ''}
+          </div>
+        </div>
+        ${severityChip(item.severity_level)}
+      </article>`).join('')}</div>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+loadPrescriptions();
+loadLabs();
+loadTriage();
+</script>
+</body>
+</html>

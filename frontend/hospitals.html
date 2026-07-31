@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>হাসপাতাল ও শয্যা · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="hospital.title">হাসপাতাল ও শয্যা</h1>
+      <p id="subtitle" class="muted"></p>
+    </div>
+
+    <div class="alert alert-danger hidden" id="emergencyBanner">
+      <div><strong data-i18n="severity.5">জরুরি অবস্থা</strong> —
+        <span data-i18n="emergency.call">জাতীয় জরুরি সেবা ৯৯৯ এ কল করুন</span></div>
+    </div>
+
+    <form class="card" id="filters">
+      <div class="grid">
+        <div class="field mb-0">
+          <label class="label" for="district" id="districtLabel">জেলা</label>
+          <input id="district" class="input" list="districts" placeholder="Dhaka">
+          <datalist id="districts"></datalist>
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="wardType" id="wardLabel">শয্যার ধরন</label>
+          <select id="wardType" class="select"></select>
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button class="btn btn-block" type="submit" data-i18n="action.search">খুঁজুন</button>
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button class="btn btn-secondary btn-block" type="button" id="locateBtn"
+            data-i18n="hospital.useLocation">আমার অবস্থান ব্যবহার করুন</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="list mt-4" id="results" aria-live="polite"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, skeletonList, emptyState, errorState, toast,
+} from './assets/js/ui.js';
+
+bootstrap('hospitals.html');
+
+const DISTRICTS = [
+  'Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal',
+  'Rangpur', 'Mymensingh', 'Cumilla', 'Gazipur', 'Narayanganj', 'Bogura',
+  'Jashore', 'Tangail', 'Dinajpur', 'Cox\u2019s Bazar',
+];
+
+const WARDS = {
+  bn: { '': 'যেকোনো শয্যা', general: 'সাধারণ', icu: 'আইসিইউ',
+        emergency: 'জরুরি', hdu: 'এইচডিইউ', maternity: 'মাতৃসদন',
+        paediatric: 'শিশু' },
+  en: { '': 'Any bed', general: 'General', icu: 'ICU',
+        emergency: 'Emergency', hdu: 'HDU', maternity: 'Maternity',
+        paediatric: 'Paediatric' },
+};
+
+const params = new URLSearchParams(window.location.search);
+const isEmergency = params.get('emergency') === '1';
+
+document.getElementById('subtitle').textContent = i18n.lang === 'bn'
+  ? 'রিয়েল-টাইম শয্যা তথ্য — কোথায় এখন জায়গা আছে দেখুন।'
+  : 'Live bed availability - see where there is space right now.';
+document.getElementById('districtLabel').textContent =
+  i18n.lang === 'bn' ? 'জেলা' : 'District';
+document.getElementById('wardLabel').textContent =
+  i18n.lang === 'bn' ? 'শয্যার ধরন' : 'Bed type';
+
+document.getElementById('districts').innerHTML =
+  DISTRICTS.map((d) => `<option value="${escapeHtml(d)}">`).join('');
+
+const wardLabels = WARDS[i18n.lang] || WARDS.bn;
+document.getElementById('wardType').innerHTML = Object.entries(wardLabels)
+  .map(([value, label]) => `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`)
+  .join('');
+
+if (isEmergency) {
+  document.getElementById('emergencyBanner').classList.remove('hidden');
+  document.getElementById('wardType').value = 'emergency';
+}
+
+let coords = null;
+const resultsEl = document.getElementById('results');
+
+document.getElementById('locateBtn').addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    toast(i18n.t('status.error'), 'danger');
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      coords = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+      toast(i18n.lang === 'bn' ? 'অবস্থান পাওয়া গেছে' : 'Location found', 'success');
+      search();
+    },
+    // Location is a convenience, never a requirement: refusing it still
+    // returns results, just without distance ordering.
+    () => toast(
+      i18n.lang === 'bn'
+        ? 'অবস্থান পাওয়া যায়নি — জেলা দিয়ে খুঁজুন'
+        : 'Location unavailable - search by district instead',
+      'danger'
+    ),
+    { timeout: 8000 }
+  );
+});
+
+function occupancyClass(rate) {
+  if (rate >= 0.9) return 'critical';
+  if (rate >= 0.75) return 'warn';
+  return '';
+}
+
+function hospitalCard(hospital) {
+  const distance = hospital.distance_km !== null && hospital.distance_km !== undefined
+    ? `<span>${escapeHtml(i18n.t('hospital.distance'))}: ${hospital.distance_km} km</span>`
+    : '';
+  const emergency = hospital.has_emergency
+    ? `<span class="badge badge-success">${escapeHtml(i18n.t('hospital.emergency'))}</span>`
+    : '';
+  const phone = hospital.phone
+    ? `<a class="btn btn-sm btn-secondary" href="tel:${escapeHtml(hospital.phone)}">📞</a>`
+    : '';
+
+  return `<article class="list-item">
+    <div class="flex-1">
+      <h4>${escapeHtml(hospital.name)}</h4>
+      <div class="list-meta">
+        <span>${escapeHtml(hospital.area || '')} ${escapeHtml(hospital.district || '')}</span>
+        ${distance}
+      </div>
+      <div class="row mt-4">
+        ${emergency}
+        <span class="badge badge-info">${escapeHtml(i18n.t('hospital.beds'))}:
+          ${hospital.available_beds}</span>
+        <span class="badge">${escapeHtml(i18n.t('hospital.icu'))}:
+          ${hospital.available_icu_beds}</span>
+      </div>
+    </div>
+    <div style="min-width:140px;text-align:right">
+      ${phone}
+      <a class="btn btn-sm" href="hospital-detail.html?id=${encodeURIComponent(hospital.id)}">
+        ${escapeHtml(i18n.t('action.view'))}</a>
+    </div>
+  </article>`;
+}
+
+function listCard(hospital) {
+  const wards = (hospital.wards || [])
+    .map((ward) => {
+      const rate = ward.occupancy_rate || 0;
+      const label = wardLabels[ward.ward_type] || ward.ward_type;
+      return `<div class="field mb-0" style="margin-top:.5rem">
+        <div class="row-between small">
+          <span>${escapeHtml(label)}</span>
+          <span class="bold">${ward.available_beds} / ${ward.total_beds}</span>
+        </div>
+        <div class="bed-bar" role="img"
+          aria-label="${escapeHtml(label)} ${Math.round(rate * 100)}% ${escapeHtml(i18n.t('hospital.occupancy'))}">
+          <div class="bed-fill ${occupancyClass(rate)}" style="width:${Math.round(rate * 100)}%"></div>
+        </div>
+      </div>`;
+    })
+    .join('');
+
+  return `<article class="card">
+    <div class="row-between">
+      <div>
+        <h4 class="mb-0">${escapeHtml(hospital.name)}</h4>
+        <div class="small muted">${escapeHtml(hospital.area || '')} ${escapeHtml(hospital.district)}</div>
+      </div>
+      <span class="badge badge-info">${escapeHtml(i18n.t('hospital.beds'))}: ${hospital.available_beds}</span>
+    </div>
+    ${wards}
+  </article>`;
+}
+
+async function search() {
+  resultsEl.innerHTML = skeletonList(3);
+  const district = document.getElementById('district').value.trim();
+  const wardType = document.getElementById('wardType').value;
+
+  try {
+    if (coords || wardType || isEmergency) {
+      const query = new URLSearchParams();
+      if (coords) {
+        query.set('latitude', coords.latitude);
+        query.set('longitude', coords.longitude);
+      }
+      if (district) query.set('district', district);
+      if (wardType) query.set('ward_type', wardType);
+      if (isEmergency) query.set('emergency', 'true');
+      query.set('limit', '20');
+
+      const results = await api.get(`/hospitals/nearby?${query}`, { auth: false, cache: true });
+      resultsEl.innerHTML = results.length
+        ? results.map(hospitalCard).join('')
+        : emptyState('status.none', '🏥');
+    } else {
+      const query = new URLSearchParams({ limit: '20' });
+      if (district) query.set('district', district);
+      const data = await api.get(`/hospitals?${query}`, { auth: false, cache: true });
+      resultsEl.innerHTML = data.items?.length
+        ? data.items.map(listCard).join('')
+        : emptyState('status.none', '🏥');
+    }
+  } catch (error) {
+    resultsEl.innerHTML = errorState(error.message);
+  }
+}
+
+document.getElementById('filters').addEventListener('submit', (event) => {
+  event.preventDefault();
+  search();
+});
+
+search();
+</script>
+</body>
+</html>
