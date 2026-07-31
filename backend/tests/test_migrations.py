@@ -10,6 +10,7 @@ from app.core.config import BACKEND_DIR
 
 
 EXPECTED_TABLES = {
+    "ai_feedback",
     "alembic_version",
     "appointments",
     "doctor_availability",

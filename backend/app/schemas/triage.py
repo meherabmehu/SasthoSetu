@@ -30,9 +30,12 @@ class TriageRequest(BaseModel):
 class TriageResponse(BaseModel):
     triage_level: TriageLevel
     possible_condition: str
+    possible_condition_bn: str = ""
     recommended_specialty: str
     confidence: int = Field(ge=0, le=100)
     matched_symptoms: list[str]
     safety_flags: list[str]
     advice: str
+    advice_bn: str = ""
     disclaimer: str
+    disclaimer_bn: str = ""
