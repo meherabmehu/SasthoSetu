@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
+import bcrypt
 from jose import jwt, JWTError
-from passlib.context import CryptContext
 
 from fastapi import HTTPException
 from fastapi import Depends
@@ -15,26 +15,38 @@ from app.core.config import settings
 from app.core.dependencies import get_db
 from app.models.user import User
 
-pwd_context = CryptContext(
-    schemes=["bcrypt"],
-    deprecated="auto"
-)
-
 security = HTTPBearer()
+
+# bcrypt operates on at most 72 bytes and raises beyond that. Passwords are
+# truncated to the same boundary on hash and verify so a long passphrase
+# authenticates consistently instead of erroring at the library layer.
+BCRYPT_MAX_BYTES = 72
+
+
+def _password_bytes(password: str) -> bytes:
+    return (password or "").encode("utf-8")[:BCRYPT_MAX_BYTES]
 
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(
+        _password_bytes(password),
+        bcrypt.gensalt(),
+    ).decode("utf-8")
 
 
 def verify_password(
     plain_password: str,
     hashed_password: str,
 ):
-    return pwd_context.verify(
-        plain_password,
-        hashed_password
-    )
+    if not hashed_password:
+        return False
+    try:
+        return bcrypt.checkpw(
+            _password_bytes(plain_password),
+            hashed_password.encode("utf-8"),
+        )
+    except (ValueError, TypeError):
+        return False
 
 
 def create_access_token(

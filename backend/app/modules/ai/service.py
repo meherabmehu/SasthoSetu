@@ -10,7 +10,13 @@ from app.models.ai_feedback import AIFeedback
 
 
 def drug_check_service(drugs: list[str]):
-    return check_interactions(drugs)
+    try:
+        return check_interactions(drugs)
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=503,
+            detail="Drug knowledge base missing - run ml/generate_drug_kb.py"
+        )
 
 
 def ml_triage_service(notes: str, age: int | None = None):

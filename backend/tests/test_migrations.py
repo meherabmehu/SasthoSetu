@@ -13,14 +13,18 @@ EXPECTED_TABLES = {
     "ai_feedback",
     "alembic_version",
     "appointments",
+    "bed_status_history",
     "doctor_availability",
     "doctors",
     "file_records",
     "medical_records",
     "notifications",
     "patients",
+    "hospital_staff",
+    "hospitals",
     "prescriptions",
     "users",
+    "wards",
 }
 
 

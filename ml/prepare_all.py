@@ -10,6 +10,7 @@ of truth. CI runs it before the test suite.
 
 Produces:
     data/seed/{hospitals,doctors}.json
+    data/drugs/{bd_brand_aliases,drug_interactions}.csv
     data/triage/symptom_triage_dataset.csv   (9,000 rows)
     data/surge/{bed_utilization,surge_events}.csv
     data/surveillance/{weekly_surveillance,injected_outbreaks}.csv
@@ -28,6 +29,7 @@ ML = Path(__file__).resolve().parent
 
 STEPS = [
     ("Seed data (hospitals + doctors)", "generate_seed.py"),
+    ("Drug knowledge base (brands + interactions)", "generate_drug_kb.py"),
     ("Triage corpus (9,000 rows)", "generate_triage_dataset.py"),
     ("Bed utilization logs (2 years x 5 hospitals)", "generate_bed_logs.py"),
     ("Surveillance corpus (12 districts x 8 diseases)",
