@@ -20,6 +20,13 @@ from app.models.hospital import (
 from app.models.medical_record import MedicalRecord
 from app.models.notification import Notification
 from app.models.patient import Patient
+from app.models.payment import Payment
+from app.models.provider import (
+    LabOrder,
+    LabTest,
+    PharmacyStock,
+    Provider,
+)
 from app.models.prescription import Prescription
 from app.models.prescription_item import (
     PrescriptionLine,
