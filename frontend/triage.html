@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="SasthoSetu AI symptom check in Bangla and English">
+<meta name="theme-color" content="#1b817d">
+<title>উপসর্গ পরীক্ষা · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="triage.title">উপসর্গ পরীক্ষা</h1>
+      <p data-i18n="triage.subtitle">আপনার সমস্যা বাংলায় লিখুন বা বলুন</p>
+    </div>
+
+    <div class="triage-shell">
+      <section class="card" aria-labelledby="formHeading">
+        <h2 id="formHeading" class="sr-only">Symptom entry</h2>
+
+        <form id="triageForm" novalidate>
+          <div class="field">
+            <label class="label" for="symptoms" data-i18n="triage.symptomsLabel">আপনার উপসর্গ</label>
+            <div class="row" style="align-items:flex-start">
+              <textarea id="symptoms" class="textarea flex-1" required
+                minlength="3" maxlength="2000"
+                aria-describedby="symptomHint symptomError"
+                data-i18n-placeholder="triage.placeholder"
+                placeholder="যেমন: বুকে ব্যথা, শ্বাস নিতে কষ্ট, দুই দিন ধরে জ্বর"></textarea>
+              <button type="button" id="micBtn" class="mic-btn" aria-pressed="false"
+                data-i18n-label="triage.speak" aria-label="কথা বলে বলুন" hidden>🎤</button>
+            </div>
+            <p id="symptomHint" class="hint" data-i18n="triage.subtitle">
+              আপনার সমস্যা বাংলায় লিখুন বা বলুন
+            </p>
+            <p id="symptomError" class="error-text hidden" role="alert"></p>
+          </div>
+
+          <fieldset style="border:none;padding:0;margin:0 0 1rem">
+            <legend class="label" data-i18n="triage.commonLabel">সাধারণ উপসর্গ (ট্যাপ করুন)</legend>
+            <div class="symptom-chips" id="chips"></div>
+          </fieldset>
+
+          <div class="grid-2">
+            <div class="field">
+              <label class="label" for="age" data-i18n="triage.age">বয়স (বছর)</label>
+              <input id="age" class="input" type="number" min="0" max="120" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label class="label" for="temp" data-i18n="triage.temperature">তাপমাত্রা (সে.)</label>
+              <input id="temp" class="input" type="number" min="30" max="45" step="0.1" inputmode="decimal">
+            </div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-block"
+            data-i18n="triage.analyze">পরীক্ষা করুন</button>
+        </form>
+
+        <p class="hint mt-4" data-i18n="disclaimer"></p>
+      </section>
+
+      <section class="result-panel" aria-live="polite" aria-atomic="true">
+        <div id="result"></div>
+      </section>
+    </div>
+
+    <section class="mt-4" id="historySection" hidden>
+      <h2 data-i18n="triage.history">আগের পরীক্ষা</h2>
+      <div class="list" id="history"></div>
+    </section>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import {
+  renderChrome, renderFooter, toast, escapeHtml, severityChip,
+  severityNumber, setBusy, formatDateTime, emptyState,
+} from './assets/js/ui.js';
+
+renderChrome({ active: 'triage.html' });
+
+// Common presentations offered as one-tap chips. This is the difference
+// between usable and unusable for someone who cannot type Bangla quickly, or
+// at all - which is a large share of the people this has to serve.
+const COMMON = [
+  { bn: 'জ্বর', en: 'fever' },
+  { bn: 'কাশি', en: 'cough' },
+  { bn: 'মাথা ব্যথা', en: 'headache' },
+  { bn: 'পেট ব্যথা', en: 'abdominal pain' },
+  { bn: 'বুকে ব্যথা', en: 'chest pain' },
+  { bn: 'শ্বাস নিতে কষ্ট', en: 'difficulty breathing' },
+  { bn: 'বমি', en: 'vomiting' },
+  { bn: 'পাতলা পায়খানা', en: 'diarrhea' },
+  { bn: 'শরীর ব্যথা', en: 'body ache' },
+  { bn: 'মাথা ঘোরা', en: 'dizziness' },
+  { bn: 'গলা ব্যথা', en: 'sore throat' },
+  { bn: 'দুর্বল লাগে', en: 'weakness' },
+];
+
+const symptomsEl = document.getElementById('symptoms');
+const chipsEl = document.getElementById('chips');
+const resultEl = document.getElementById('result');
+const errorEl = document.getElementById('symptomError');
+const form = document.getElementById('triageForm');
+const submitBtn = document.getElementById('submitBtn');
+
+const selected = new Set();
+
+// Bangla display names for the canonical symptom ids the API returns, so a
+// Bangla reader is not shown English identifiers back.
+const SYMPTOM_LABELS_BN = {
+  fever: 'জ্বর', high_fever: 'তীব্র জ্বর', cough: 'কাশি', runny_nose: 'সর্দি',
+  sore_throat: 'গলা ব্যথা', chest_pain: 'বুকে ব্যথা',
+  shortness_of_breath: 'শ্বাসকষ্ট', palpitations: 'বুক ধড়ফড়',
+  heartburn: 'বুক জ্বালাপোড়া', headache: 'মাথাব্যথা',
+  sudden_severe_headache: 'হঠাৎ তীব্র মাথাব্যথা', dizziness: 'মাথা ঘোরা',
+  vomiting: 'বমি', diarrhea: 'পাতলা পায়খানা', abdominal_pain: 'পেট ব্যথা',
+  body_ache: 'শরীর ব্যথা', joint_pain: 'জয়েন্টে ব্যথা', back_pain: 'পিঠে ব্যথা',
+  weakness: 'দুর্বলতা', fatigue: 'ক্লান্তি', insomnia: 'অনিদ্রা',
+  anxiety: 'উদ্বেগ', low_mood: 'মন খারাপ', skin_rash: 'চামড়ায় র‍্যাশ',
+  rash: 'র‍্যাশ', itching: 'চুলকানি', swelling: 'ফোলা',
+  swelling_legs: 'পা ফোলা', blurred_vision: 'ঝাপসা দেখা', eye_pain: 'চোখে ব্যথা',
+  ear_pain: 'কানে ব্যথা', toothache: 'দাঁতে ব্যথা', jaundice: 'জন্ডিস',
+  weight_loss: 'ওজন কমে যাওয়া', night_sweats: 'রাতে ঘাম',
+  burning_urination: 'প্রস্রাবে জ্বালা', frequent_urination: 'ঘন ঘন প্রস্রাব',
+  excessive_thirst: 'অতিরিক্ত পিপাসা', blood_in_urine: 'প্রস্রাবে রক্ত',
+  bloody_stool: 'পায়খানায় রক্ত', blood_vomiting: 'রক্ত বমি',
+  severe_bleeding: 'প্রচণ্ড রক্তপাত', unconscious: 'অজ্ঞান', seizure: 'খিঁচুনি',
+  stiff_neck: 'ঘাড় শক্ত', facial_droop: 'মুখ বেঁকে যাওয়া',
+  slurred_speech: 'কথা জড়ানো', one_sided_numbness: 'এক পাশ অবশ',
+  snake_bite: 'সাপে কামড়', dog_bite: 'কুকুরে কামড়', burn_injury: 'পোড়া',
+  accident_injury: 'দুর্ঘটনায় আঘাত', pregnancy_bleeding: 'গর্ভাবস্থায় রক্তপাত',
+  pregnancy_pain: 'গর্ভাবস্থায় ব্যথা', missed_period: 'মাসিক বন্ধ',
+  high_bp: 'উচ্চ রক্তচাপ', diabetes_symptoms: 'ডায়াবেটিসের লক্ষণ',
+};
+
+// The API may return either the canonical id ("shortness_of_breath") or its
+// readable English form ("shortness of breath") depending on the engine, so
+// both are normalised to the same lookup key.
+function symptomLabel(value) {
+  const key = String(value).trim().toLowerCase().replace(/\s+/g, '_');
+  if (i18n.lang === 'bn' && SYMPTOM_LABELS_BN[key]) return SYMPTOM_LABELS_BN[key];
+  return String(value).replace(/_/g, ' ');
+}
+
+function renderChips() {
+  chipsEl.innerHTML = COMMON.map((item, index) => {
+    const label = i18n.lang === 'bn' ? item.bn : item.en;
+    return `<button type="button" class="chip" data-index="${index}"
+      aria-pressed="${selected.has(index)}">${escapeHtml(label)}</button>`;
+  }).join('');
+}
+
+chipsEl.addEventListener('click', (event) => {
+  const chip = event.target.closest('.chip');
+  if (!chip) return;
+  const index = Number(chip.dataset.index);
+  const item = COMMON[index];
+  const phrase = i18n.lang === 'bn' ? item.bn : item.en;
+
+  if (selected.has(index)) {
+    selected.delete(index);
+    symptomsEl.value = symptomsEl.value
+      .split(/,\s*/)
+      .filter((part) => part.trim() && part.trim() !== phrase)
+      .join(', ');
+  } else {
+    selected.add(index);
+    const current = symptomsEl.value.trim();
+    symptomsEl.value = current ? `${current}, ${phrase}` : phrase;
+  }
+  chip.setAttribute('aria-pressed', String(selected.has(index)));
+});
+
+/* Voice input. Speech recognition is only offered when the browser actually
+   supports it, so the button never appears and then fails silently. */
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (SpeechRecognition) {
+  const micBtn = document.getElementById('micBtn');
+  micBtn.hidden = false;
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = i18n.lang === 'bn' ? 'bn-BD' : 'en-US';
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  let listening = false;
+
+  micBtn.addEventListener('click', () => {
+    if (listening) {
+      recognition.stop();
+      return;
+    }
+    try {
+      recognition.start();
+      listening = true;
+      micBtn.setAttribute('aria-pressed', 'true');
+      toast(i18n.t('triage.listening'));
+    } catch {
+      toast(i18n.t('status.error'), 'danger');
+    }
+  });
+
+  recognition.addEventListener('result', (event) => {
+    const transcript = Array.from(event.results)
+      .map((r) => r[0].transcript)
+      .join(' ');
+    const current = symptomsEl.value.trim();
+    symptomsEl.value = current ? `${current}, ${transcript}` : transcript;
+  });
+  recognition.addEventListener('end', () => {
+    listening = false;
+    micBtn.setAttribute('aria-pressed', 'false');
+  });
+  recognition.addEventListener('error', () => {
+    listening = false;
+    micBtn.setAttribute('aria-pressed', 'false');
+    toast(i18n.t('status.error'), 'danger');
+  });
+}
+
+function renderResult(data) {
+  const level = severityNumber(data.triage_level, data.severity_level);
+  const condition = i18n.pick(data.possible_condition, data.possible_condition_bn);
+  const advice = i18n.pick(data.advice, data.advice_bn);
+  const disclaimer = i18n.pick(data.disclaimer, data.disclaimer_bn);
+
+  const flags = (data.safety_flags || []).length
+    ? `<div class="alert alert-danger mt-4">
+         <div><strong>${escapeHtml(i18n.t('emergency.call'))}</strong></div>
+       </div>`
+    : '';
+
+  const matched = (data.matched_symptoms || []).length
+    ? `<div class="field">
+         <div class="label">${escapeHtml(i18n.t('triage.matched'))}</div>
+         <div class="symptom-chips">
+           ${data.matched_symptoms.map((s) => `<span class="badge">${escapeHtml(symptomLabel(s))}</span>`).join('')}
+         </div>
+       </div>`
+    : '';
+
+  const emergencyAction = level === 5
+    ? `<a class="btn btn-danger btn-block mt-4" href="hospitals.html?emergency=1">
+         ${escapeHtml(i18n.t('triage.findHospital'))}</a>`
+    : '';
+
+  const doctorAction = `<a class="btn ${level === 5 ? 'btn-secondary' : ''} btn-block mt-4"
+      href="doctors.html?session=${encodeURIComponent(data.triage_session_id || '')}&specialty=${encodeURIComponent(data.recommended_specialty || '')}">
+      ${escapeHtml(i18n.t('triage.findDoctor'))}</a>`;
+
+  resultEl.innerHTML = `
+    <div class="card severity-banner severity-${level}">
+      <div class="row-between">
+        ${severityChip(level)}
+        <span class="small muted">${escapeHtml(i18n.t('triage.confidence'))}:
+          ${Number(data.confidence || 0)}%</span>
+      </div>
+      <h3 class="mt-4">${escapeHtml(condition || '')}</h3>
+      <p>${escapeHtml(advice || '')}</p>
+      ${flags}
+    </div>
+
+    <div class="card mt-4">
+      ${matched}
+      <div class="field">
+        <div class="label">${escapeHtml(i18n.t('triage.specialty'))}</div>
+        <div>${escapeHtml(data.recommended_specialty || '-')}</div>
+      </div>
+      ${emergencyAction}
+      ${doctorAction}
+      <p class="hint mt-4">${escapeHtml(disclaimer || i18n.t('disclaimer'))}</p>
+    </div>`;
+
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const text = symptomsEl.value.trim();
+
+  errorEl.classList.add('hidden');
+  symptomsEl.removeAttribute('aria-invalid');
+
+  if (text.length < 3) {
+    errorEl.textContent = i18n.t('triage.emptyInput');
+    errorEl.classList.remove('hidden');
+    symptomsEl.setAttribute('aria-invalid', 'true');
+    symptomsEl.focus();
+    return;
+  }
+
+  const body = { symptoms: text };
+  const age = document.getElementById('age').value;
+  const temp = document.getElementById('temp').value;
+  if (age !== '') body.age_years = Number(age);
+  if (temp !== '') body.temperature_c = Number(temp);
+
+  setBusy(submitBtn, true, i18n.t('triage.analyzing'));
+  resultEl.innerHTML = `<div class="card"><div class="skeleton" style="height:80px"></div></div>`;
+
+  try {
+    const data = await api.post('/triage/sessions', body, { auth: session.isAuthenticated });
+    renderResult(data);
+    if (session.isAuthenticated) loadHistory();
+  } catch (error) {
+    resultEl.innerHTML = `<div class="alert alert-danger">${escapeHtml(error.message)}</div>`;
+  } finally {
+    setBusy(submitBtn, false);
+  }
+});
+
+async function loadHistory() {
+  if (!session.isAuthenticated) return;
+  const section = document.getElementById('historySection');
+  const list = document.getElementById('history');
+  try {
+    const data = await api.get('/triage/sessions/mine?limit=5', { cache: true });
+    if (!data.items?.length) return;
+    section.hidden = false;
+    list.innerHTML = data.items.map((item) => `
+      <div class="list-item">
+        <div>
+          <h4>${escapeHtml(item.input_text.slice(0, 70))}${item.input_text.length > 70 ? '…' : ''}</h4>
+          <div class="list-meta">
+            <span>${escapeHtml(formatDateTime(item.created_at))}</span>
+            <span>${escapeHtml(item.recommended_specialty || '')}</span>
+          </div>
+        </div>
+        ${severityChip(item.severity_level)}
+      </div>`).join('');
+  } catch {
+    // History is supplementary; its absence must not disrupt triage.
+  }
+}
+
+window.addEventListener('languagechange', renderChips);
+renderChips();
+loadHistory();
+renderFooter();
+i18n.apply();
+</script>
+</body>
+</html>
