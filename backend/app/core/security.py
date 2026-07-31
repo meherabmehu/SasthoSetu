@@ -16,6 +16,7 @@ from app.core.dependencies import get_db
 from app.models.user import User
 
 security = HTTPBearer()
+optional_security = HTTPBearer(auto_error=False)
 
 # bcrypt operates on at most 72 bytes and raises beyond that. Passwords are
 # truncated to the same boundary on hash and verify so a long passphrase
@@ -132,6 +133,27 @@ def get_current_user(
             status_code=401,
             detail="Invalid token"
         )
+
+
+def get_optional_user(
+    credentials: HTTPAuthorizationCredentials = Depends(
+        optional_security
+    ),
+    db: Session = Depends(get_db),
+):
+    """Resolve the caller when a token is present, otherwise return None.
+
+    Used by endpoints that must stay reachable without an account - triage in
+    particular, where requiring sign-up during an emergency would be the wrong
+    trade-off.
+    """
+    if credentials is None:
+        return None
+
+    try:
+        return get_current_user(credentials=credentials, db=db)
+    except HTTPException:
+        return None
 
 
 def require_self_or_admin(
