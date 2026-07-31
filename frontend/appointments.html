@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>আমার অ্যাপয়েন্টমেন্ট · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="appointment.mine">আমার অ্যাপয়েন্টমেন্ট</h1>
+    </div>
+    <div class="list" id="list" aria-live="polite"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatDate, skeletonList, emptyState, errorState,
+  toast, requireAuth,
+} from './assets/js/ui.js';
+
+bootstrap('appointments.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+const STATUS = {
+  bn: { PENDING: 'অপেক্ষমাণ', CONFIRMED: 'নিশ্চিত', IN_PROGRESS: 'চলছে',
+        COMPLETED: 'সম্পন্ন', CANCELLED: 'বাতিল', REJECTED: 'প্রত্যাখ্যাত' },
+  en: { PENDING: 'Pending', CONFIRMED: 'Confirmed', IN_PROGRESS: 'In progress',
+        COMPLETED: 'Completed', CANCELLED: 'Cancelled', REJECTED: 'Rejected' },
+};
+
+const BADGE = {
+  PENDING: 'badge-warning', CONFIRMED: 'badge-success',
+  IN_PROGRESS: 'badge-info', COMPLETED: 'badge-success',
+  CANCELLED: 'badge-danger', REJECTED: 'badge-danger',
+};
+
+const listEl = document.getElementById('list');
+
+function statusLabel(status) {
+  return (STATUS[i18n.lang] || STATUS.bn)[status] || status;
+}
+
+function card(item) {
+  const canCancel = ['PENDING', 'CONFIRMED'].includes(item.status);
+  const canPay = item.status === 'PENDING';
+
+  return `<article class="list-item">
+    <div class="flex-1">
+      <h4>${escapeHtml(formatDate(item.appointment_date))} · ${escapeHtml(item.appointment_time)}</h4>
+      <div class="list-meta">
+        <span>${escapeHtml(item.reason || '')}</span>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <span class="badge ${BADGE[item.status] || ''}">${escapeHtml(statusLabel(item.status))}</span>
+      <div class="row mt-4" style="justify-content:flex-end">
+        ${canPay ? `<button class="btn btn-sm payBtn" data-id="${escapeHtml(item.id)}">
+          ${i18n.lang === 'bn' ? 'পেমেন্ট' : 'Pay'}</button>` : ''}
+        ${canCancel ? `<button class="btn btn-sm btn-secondary cancelBtn" data-id="${escapeHtml(item.id)}">
+          ${escapeHtml(i18n.t('action.cancel'))}</button>` : ''}
+      </div>
+    </div>
+  </article>`;
+}
+
+async function load() {
+  listEl.innerHTML = skeletonList(3);
+  try {
+    const items = await api.get(`/appointments/patient/${session.user.user_id}`, { cache: true });
+    const rows = Array.isArray(items) ? items : items.items || [];
+    listEl.innerHTML = rows.length
+      ? rows.map(card).join('')
+      : emptyState('appointment.none', '📅');
+  } catch (error) {
+    listEl.innerHTML = errorState(error.message);
+  }
+}
+
+listEl.addEventListener('click', async (event) => {
+  const cancelBtn = event.target.closest('.cancelBtn');
+  const payBtn = event.target.closest('.payBtn');
+
+  if (cancelBtn) {
+    const confirmed = window.confirm(
+      i18n.lang === 'bn' ? 'অ্যাপয়েন্টমেন্ট বাতিল করবেন?' : 'Cancel this appointment?'
+    );
+    if (!confirmed) return;
+    try {
+      await api.patch(`/appointments/${cancelBtn.dataset.id}/cancel`, {}, { queueable: true });
+      toast(i18n.t('status.saved'), 'success');
+      load();
+    } catch (error) {
+      toast(error.message, 'danger');
+    }
+  }
+
+  if (payBtn) {
+    try {
+      const payment = await api.post('/payments/checkout', {
+        purpose: 'CONSULTATION',
+        method: 'bkash',
+        // A stable key per appointment means a double tap cannot double charge.
+        idempotency_key: `appt-${payBtn.dataset.id}`,
+        appointment_id: payBtn.dataset.id,
+      });
+      toast(
+        `${i18n.lang === 'bn' ? 'পেমেন্ট শুরু হয়েছে' : 'Payment started'}: ${payment.reference}`,
+        'success'
+      );
+      load();
+    } catch (error) {
+      toast(error.message, 'danger');
+    }
+  }
+});
+
+load();
+</script>
+</body>
+</html>

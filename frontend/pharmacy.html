@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>ওষুধ খুঁজুন · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="pharmacy.title">ওষুধ খুঁজুন</h1>
+      <p id="subtitle" class="muted"></p>
+    </div>
+
+    <form class="card" id="searchForm">
+      <div class="grid">
+        <div class="field mb-0">
+          <label class="label" for="medicine" data-i18n="pharmacy.medicine">ওষুধের নাম</label>
+          <input id="medicine" class="input" required minlength="2" placeholder="Napa 500">
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="district" id="districtLabel">জেলা</label>
+          <input id="district" class="input" placeholder="Dhaka">
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button class="btn btn-block" type="submit" data-i18n="action.search">খুঁজুন</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="results" class="mt-4" aria-live="polite"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatBdt, skeletonList, emptyState, errorState,
+} from './assets/js/ui.js';
+
+bootstrap('pharmacy.html');
+
+document.getElementById('subtitle').textContent = i18n.lang === 'bn'
+  ? 'ব্র্যান্ড নাম দিলেও একই উপাদানের সব ওষুধ দেখানো হবে।'
+  : 'Search any brand - every equivalent medicine in stock is shown.';
+document.getElementById('districtLabel').textContent =
+  i18n.lang === 'bn' ? 'জেলা' : 'District';
+
+const resultsEl = document.getElementById('results');
+
+document.getElementById('searchForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const medicine = document.getElementById('medicine').value.trim();
+  const district = document.getElementById('district').value.trim();
+  if (medicine.length < 2) return;
+
+  resultsEl.innerHTML = skeletonList(2);
+  const query = new URLSearchParams({ medicine });
+  if (district) query.set('district', district);
+
+  try {
+    const data = await api.get(`/pharmacies/search?${query}`, { auth: false, cache: true });
+
+    const header = `<div class="alert alert-info">
+      <div><strong>${escapeHtml(data.searched_for)}</strong> →
+        ${escapeHtml(i18n.t('pharmacy.generic'))}:
+        <strong>${escapeHtml(data.resolved_generic)}</strong></div>
+    </div>`;
+
+    if (!data.results.length) {
+      resultsEl.innerHTML = header + emptyState('status.none', '💊');
+      return;
+    }
+
+    const rows = data.results.map((row) => `<tr>
+      <td data-label="${escapeHtml(i18n.t('pharmacy.title'))}">
+        <strong>${escapeHtml(row.provider_name)}</strong>
+        ${row.is_verified ? '<span class="badge badge-success">✔</span>' : ''}
+        <div class="small muted">${escapeHtml(row.area || '')} ${escapeHtml(row.district)}</div>
+      </td>
+      <td data-label="${escapeHtml(i18n.t('prescription.medicine'))}">
+        ${escapeHtml(row.brand_name)}
+        <div class="small muted">${escapeHtml(row.strength || '')}</div>
+      </td>
+      <td data-label="${escapeHtml(i18n.t('pharmacy.price'))}">${formatBdt(row.unit_price_bdt)}</td>
+      <td data-label="${escapeHtml(i18n.t('pharmacy.inStock'))}">${row.quantity_available}</td>
+      <td data-label="">${row.phone
+        ? `<a class="btn btn-sm btn-secondary" href="tel:${escapeHtml(row.phone)}">📞</a>` : ''}</td>
+    </tr>`).join('');
+
+    resultsEl.innerHTML = `${header}
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr>
+              <th>${escapeHtml(i18n.t('pharmacy.title'))}</th>
+              <th>${escapeHtml(i18n.t('prescription.medicine'))}</th>
+              <th>${escapeHtml(i18n.t('pharmacy.price'))}</th>
+              <th>${escapeHtml(i18n.t('pharmacy.inStock'))}</th>
+              <th></th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  } catch (error) {
+    resultsEl.innerHTML = errorState(error.message);
+  }
+});
+</script>
+</body>
+</html>

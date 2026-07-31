@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>ডাক্তার খুঁজুন · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="doctor.find">ডাক্তার খুঁজুন</h1>
+      <p id="contextNote" class="muted"></p>
+    </div>
+
+    <form class="card" id="filters">
+      <div class="grid">
+        <div class="field mb-0">
+          <label class="label" for="specialty" data-i18n="doctor.specialty">বিভাগ</label>
+          <select id="specialty" class="select"></select>
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="maxFee" data-i18n="doctor.fee">সর্বোচ্চ ফি</label>
+          <input id="maxFee" class="input" type="number" min="0" step="50" inputmode="numeric">
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button class="btn btn-block" type="submit" data-i18n="action.search">খুঁজুন</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="list mt-4" id="results" aria-live="polite"></div>
+  </div>
+</main>
+
+<div id="bookingDialog"></div>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatBdt, formatDate, skeletonList, emptyState,
+  errorState, toast, setBusy,
+} from './assets/js/ui.js';
+
+bootstrap('doctors.html');
+
+const SPECIALTIES = [
+  'General Medicine', 'Cardiology', 'Pulmonology', 'Neurology',
+  'Gastroenterology', 'Orthopedics', 'Gynaecology & Obstetrics',
+  'Paediatrics', 'Dermatology', 'ENT', 'Urology', 'Ophthalmology',
+  'Psychiatry', 'Endocrinology', 'Nephrology', 'Dentistry',
+  'Emergency Medicine',
+];
+
+const params = new URLSearchParams(window.location.search);
+const triageSession = params.get('session');
+const presetSpecialty = params.get('specialty');
+
+const specialtySelect = document.getElementById('specialty');
+specialtySelect.innerHTML =
+  `<option value="">${escapeHtml(i18n.lang === 'bn' ? 'সব বিভাগ' : 'All specialties')}</option>` +
+  SPECIALTIES.map((s) => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+if (presetSpecialty) specialtySelect.value = presetSpecialty;
+
+if (triageSession) {
+  document.getElementById('contextNote').textContent = i18n.lang === 'bn'
+    ? 'আপনার উপসর্গ পরীক্ষার ভিত্তিতে ডাক্তার দেখানো হচ্ছে।'
+    : 'Showing doctors matched to your symptom check.';
+}
+
+const resultsEl = document.getElementById('results');
+
+function doctorCard(doctor) {
+  const available = doctor.has_availability;
+  const slot = available
+    ? `${formatDate(doctor.next_available_date)} · ${escapeHtml(doctor.next_available_time)}`
+    : (i18n.lang === 'bn' ? 'সময় নেই' : 'No slots');
+
+  return `<article class="list-item">
+    <div class="flex-1">
+      <h4>${escapeHtml(doctor.name || 'Doctor')}</h4>
+      <div class="list-meta">
+        <span>${escapeHtml(doctor.specialization || '')}</span>
+        <span>${escapeHtml(doctor.experience_years || 0)} ${escapeHtml(i18n.t('doctor.years'))}</span>
+        <span>${escapeHtml(doctor.hospital_name || '')}</span>
+      </div>
+      <div class="row mt-4">
+        <span class="badge badge-success">✔ ${escapeHtml(i18n.t('doctor.verified'))}</span>
+        <span class="badge">${escapeHtml(i18n.t('doctor.fee'))}: ${formatBdt(doctor.consultation_fee)}</span>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="small muted">${escapeHtml(i18n.t('doctor.nextSlot'))}</div>
+      <div class="bold">${slot}</div>
+      <button class="btn btn-sm mt-4 bookBtn" ${available ? '' : 'disabled'}
+        data-doctor="${escapeHtml(doctor.doctor_id)}"
+        data-name="${escapeHtml(doctor.name || '')}"
+        data-date="${escapeHtml(doctor.next_available_date || '')}"
+        data-time="${escapeHtml(doctor.next_available_time || '')}">
+        ${escapeHtml(i18n.t('action.book'))}</button>
+    </div>
+  </article>`;
+}
+
+async function search() {
+  resultsEl.innerHTML = skeletonList(3);
+  const query = new URLSearchParams();
+  if (triageSession) query.set('triage_session_id', triageSession);
+  const specialty = specialtySelect.value;
+  if (specialty) query.set('specialty', specialty);
+  const fee = document.getElementById('maxFee').value;
+  if (fee) query.set('max_fee', fee);
+  query.set('limit', '25');
+
+  try {
+    const doctors = await api.get(`/doctors/match?${query}`, { auth: false, cache: true });
+    resultsEl.innerHTML = doctors.length
+      ? doctors.map(doctorCard).join('')
+      : emptyState('doctor.noneFound', '👨‍⚕️');
+  } catch (error) {
+    resultsEl.innerHTML = errorState(error.message);
+  }
+}
+
+document.getElementById('filters').addEventListener('submit', (event) => {
+  event.preventDefault();
+  search();
+});
+
+resultsEl.addEventListener('click', (event) => {
+  const button = event.target.closest('.bookBtn');
+  if (button) openBooking(button.dataset);
+});
+
+function openBooking(data) {
+  if (!session.isAuthenticated) {
+    toast(i18n.t('auth.needLogin'), 'danger');
+    setTimeout(() => { window.location.href = 'login.html?next=doctors.html'; }, 1000);
+    return;
+  }
+
+  const host = document.getElementById('bookingDialog');
+  host.innerHTML = `
+    <div class="modal-backdrop" id="backdrop">
+      <div class="card modal-card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
+        <h3 id="bookTitle">${escapeHtml(i18n.t('appointment.book'))}</h3>
+        <p class="muted">${escapeHtml(data.name)}</p>
+        <form id="bookForm">
+          <div class="field">
+            <label class="label" for="bDate">${escapeHtml(i18n.t('appointment.date'))}</label>
+            <input id="bDate" class="input" type="date" value="${escapeHtml(data.date)}" required>
+          </div>
+          <div class="field">
+            <label class="label" for="bTime">${escapeHtml(i18n.t('appointment.time'))}</label>
+            <input id="bTime" class="input" type="time" value="${escapeHtml(data.time)}" required>
+          </div>
+          <div class="field">
+            <label class="label" for="bReason">${escapeHtml(i18n.t('appointment.reason'))}</label>
+            <textarea id="bReason" class="textarea" required minlength="5"
+              maxlength="500"></textarea>
+          </div>
+          <p class="error-text hidden" id="bookError" role="alert"></p>
+          <div class="row">
+            <button class="btn flex-1" type="submit" id="confirmBtn">
+              ${escapeHtml(i18n.t('action.book'))}</button>
+            <button class="btn btn-secondary" type="button" id="cancelBtn">
+              ${escapeHtml(i18n.t('action.cancel'))}</button>
+          </div>
+        </form>
+      </div>
+    </div>`;
+
+  const backdrop = document.getElementById('backdrop');
+  const close = () => { host.innerHTML = ''; };
+  document.getElementById('cancelBtn').addEventListener('click', close);
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
+  document.addEventListener('keydown', function onEsc(e) {
+    if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onEsc); }
+  });
+  document.getElementById('bReason').focus();
+
+  document.getElementById('bookForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = document.getElementById('confirmBtn');
+    const errorEl = document.getElementById('bookError');
+    errorEl.classList.add('hidden');
+
+    setBusy(button, true);
+    try {
+      await api.post(`/appointments/${session.user.user_id}`, {
+        doctor_id: data.doctor,
+        appointment_date: document.getElementById('bDate').value,
+        appointment_time: document.getElementById('bTime').value,
+        reason: document.getElementById('bReason').value.trim(),
+      }, { queueable: true });
+
+      toast(i18n.t('appointment.booked'), 'success');
+      close();
+      window.location.href = 'appointments.html';
+    } catch (error) {
+      errorEl.textContent = error.message;
+      errorEl.classList.remove('hidden');
+    } finally {
+      setBusy(button, false);
+    }
+  });
+}
+
+search();
+</script>
+
+<style>
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 250;
+  background: rgba(15, 23, 42, 0.55);
+  display: grid; place-items: center; padding: var(--space-4);
+}
+.modal-card { width: min(460px, 100%); max-height: 90vh; overflow-y: auto; }
+</style>
+</body>
+</html>

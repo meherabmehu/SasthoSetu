@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>প্রেসক্রিপশন যাচাই · সাস্থ্যসেতু</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container" style="max-width:720px">
+    <div class="page-head">
+      <h1 data-i18n="prescription.verify">প্রেসক্রিপশন যাচাই</h1>
+      <p id="subtitle" class="muted"></p>
+    </div>
+
+    <form class="card" id="verifyForm">
+      <div class="field">
+        <label class="label" for="code" data-i18n="prescription.code">যাচাই কোড</label>
+        <input id="code" class="input mono" required minlength="4" maxlength="20"
+          style="text-transform:uppercase;letter-spacing:.15em;font-size:1.25rem"
+          autocomplete="off" placeholder="XXXXXXXXXX">
+        <p class="hint" id="codeHint"></p>
+      </div>
+      <button class="btn btn-block" type="submit" id="verifyBtn"
+        data-i18n="prescription.verify">যাচাই করুন</button>
+    </form>
+
+    <div id="result" class="mt-4" aria-live="assertive"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, formatDate, setBusy, toast } from './assets/js/ui.js';
+
+bootstrap('verify.html');
+
+document.getElementById('subtitle').textContent = i18n.lang === 'bn'
+  ? 'ওষুধ দেওয়ার আগে প্রেসক্রিপশন আসল কিনা নিশ্চিত হয়ে নিন।'
+  : 'Confirm a prescription is genuine before dispensing.';
+document.getElementById('codeHint').textContent = i18n.lang === 'bn'
+  ? 'প্রেসক্রিপশনে ছাপানো ১০ অক্ষরের কোড'
+  : 'The ten-character code printed on the prescription';
+
+const resultEl = document.getElementById('result');
+
+const params = new URLSearchParams(window.location.search);
+if (params.get('code')) {
+  document.getElementById('code').value = params.get('code').toUpperCase();
+}
+
+function renderValid(data) {
+  const rx = data.prescription || {};
+  const items = (rx.items || []).map((item) => `
+    <div class="rx-item">
+      <strong>${escapeHtml(item.medicine_name)} ${escapeHtml(item.strength || '')}</strong>
+      <div class="small muted">${escapeHtml(item.generic_name || '')}</div>
+      <div class="row small mt-4">
+        <span>${escapeHtml(i18n.t('prescription.frequency'))}: <b>${escapeHtml(item.frequency)}</b></span>
+        <span>${escapeHtml(i18n.t('prescription.duration'))}: <b>${escapeHtml(item.duration)}</b></span>
+        <span>${escapeHtml(item.route || '')}</span>
+      </div>
+      ${item.instructions ? `<div class="small muted">${escapeHtml(item.instructions)}</div>` : ''}
+    </div>`).join('');
+
+  const interactions = (data.flagged_interactions || []).length
+    ? `<div class="alert alert-warning mt-4">
+         <div>
+           <strong>${i18n.lang === 'bn' ? 'ওষুধের মিথস্ক্রিয়া' : 'Drug interactions'}</strong>
+           <ul style="margin:.5rem 0 0;padding-left:1.2rem">
+             ${data.flagged_interactions.map((f) => `<li>
+               <b>${escapeHtml(f.severity)}</b>: ${escapeHtml(f.effect)}<br>
+               <span class="small">${escapeHtml(i18n.pick(f.advice?.en, f.advice?.bn) || '')}</span>
+             </li>`).join('')}
+           </ul>
+         </div>
+       </div>`
+    : '';
+
+  const canDispense = session.isAuthenticated;
+
+  resultEl.innerHTML = `
+    <div class="alert alert-success">
+      <div><strong>✔ ${escapeHtml(i18n.t('prescription.valid'))}</strong></div>
+    </div>
+    <div class="rx-sheet mt-4">
+      <div class="rx-head">
+        <div>
+          <div class="small muted">${escapeHtml(i18n.t('prescription.code'))}</div>
+          <div class="rx-code">${escapeHtml(rx.verification_code || '')}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="bold">${escapeHtml(rx.doctor?.name || '')}</div>
+          <div class="small muted">${escapeHtml(rx.doctor?.specialization || '')}</div>
+          <div class="small muted">BMDC: ${escapeHtml(rx.doctor?.bmdc_number || '')}</div>
+        </div>
+      </div>
+      ${rx.diagnosis ? `<p><b>${escapeHtml(rx.diagnosis)}</b></p>` : ''}
+      ${items}
+      ${rx.advice ? `<p class="small muted mt-4">${escapeHtml(rx.advice)}</p>` : ''}
+      <div class="row-between small muted mt-4">
+        <span>${escapeHtml(i18n.t('prescription.issued'))}: ${formatDate(rx.issued_at)}</span>
+        <span>${escapeHtml(i18n.t('prescription.expires'))}: ${formatDate(rx.valid_until)}</span>
+      </div>
+      ${interactions}
+      ${canDispense ? `<button class="btn btn-block mt-4 no-print" id="dispenseBtn"
+        data-code="${escapeHtml(rx.verification_code)}">
+        ${i18n.lang === 'bn' ? 'সরবরাহ নিশ্চিত করুন' : 'Confirm dispensing'}</button>` : ''}
+      <button class="btn btn-secondary btn-block mt-4 no-print" onclick="window.print()">
+        ${escapeHtml(i18n.t('action.print'))}</button>
+    </div>`;
+
+  const dispenseBtn = document.getElementById('dispenseBtn');
+  if (dispenseBtn) {
+    dispenseBtn.addEventListener('click', async () => {
+      setBusy(dispenseBtn, true);
+      try {
+        await api.post('/prescriptions/dispense', {
+          verification_code: dispenseBtn.dataset.code,
+        });
+        toast(i18n.t('status.saved'), 'success');
+        verify(dispenseBtn.dataset.code);
+      } catch (error) {
+        toast(error.message, 'danger');
+        setBusy(dispenseBtn, false);
+      }
+    });
+  }
+}
+
+function renderInvalid(data) {
+  const reason = i18n.pick(data.reason, data.reason_bn);
+  resultEl.innerHTML = `
+    <div class="alert alert-danger">
+      <div>
+        <strong>✕ ${escapeHtml(i18n.t('prescription.invalid'))}</strong>
+        <div>${escapeHtml(reason || '')}</div>
+      </div>
+    </div>`;
+}
+
+async function verify(code) {
+  const button = document.getElementById('verifyBtn');
+  setBusy(button, true);
+  resultEl.innerHTML = '';
+  try {
+    const data = await api.post(
+      '/prescriptions/verify',
+      { verification_code: code },
+      { auth: false }
+    );
+    if (data.is_valid) renderValid(data);
+    else renderInvalid(data);
+  } catch (error) {
+    resultEl.innerHTML = `<div class="alert alert-danger">${escapeHtml(error.message)}</div>`;
+  } finally {
+    setBusy(button, false);
+  }
+}
+
+document.getElementById('verifyForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  const code = document.getElementById('code').value.trim().toUpperCase();
+  if (code.length >= 4) verify(code);
+});
+
+if (params.get('code')) verify(params.get('code').toUpperCase());
+</script>
+</body>
+</html>

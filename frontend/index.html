@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="SasthoSetu - AI-assisted health platform for Bangladesh">
+<meta name="theme-color" content="#1b817d">
+<title>সাস্থ্যসেতু · বাংলাদেশের ডিজিটাল স্বাস্থ্যসেবা</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main">
+  <section class="hero">
+    <div class="container">
+      <h1 id="heroTitle">৩ মিনিটে জানুন আপনার কী করা উচিত</h1>
+      <p id="heroText">
+        উপসর্গ বাংলায় লিখুন বা বলুন। সাস্থ্যসেতু আপনাকে জানাবে ঘরে যত্ন যথেষ্ট,
+        নাকি ডাক্তার দেখাতে হবে, নাকি এখনই হাসপাতালে যেতে হবে।
+      </p>
+      <div class="row mt-4">
+        <a href="triage.html" class="btn btn-secondary" data-i18n="triage.analyze">পরীক্ষা করুন</a>
+        <a href="doctors.html" class="btn btn-secondary" data-i18n="doctor.find">ডাক্তার খুঁজুন</a>
+      </div>
+
+      <div class="stat-strip" id="stats" aria-live="polite">
+        <div class="stat"><div class="stat-value" id="statDoctors">—</div>
+          <div class="stat-label" data-i18n="nav.doctors">ডাক্তার</div></div>
+        <div class="stat"><div class="stat-value" id="statHospitals">—</div>
+          <div class="stat-label" data-i18n="nav.hospitals">হাসপাতাল</div></div>
+        <div class="stat"><div class="stat-value" id="statBeds">—</div>
+          <div class="stat-label" data-i18n="hospital.beds">খালি শয্যা</div></div>
+        <div class="stat"><div class="stat-value">24/7</div>
+          <div class="stat-label" id="statAlways">সবসময় খোলা</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="container">
+      <div class="grid">
+        <a class="card" href="triage.html" style="text-decoration:none;color:inherit">
+          <div style="font-size:2rem" aria-hidden="true">🩺</div>
+          <h3 data-i18n="triage.title">উপসর্গ পরীক্ষা</h3>
+          <p class="muted mb-0" id="c1">বাংলায় উপসর্গ লিখুন, সাথে সাথে পরামর্শ পান।</p>
+        </a>
+        <a class="card" href="doctors.html" style="text-decoration:none;color:inherit">
+          <div style="font-size:2rem" aria-hidden="true">👨‍⚕️</div>
+          <h3 data-i18n="doctor.find">ডাক্তার খুঁজুন</h3>
+          <p class="muted mb-0" id="c2">বিএমডিসি যাচাইকৃত ডাক্তারের সাথে পরামর্শ নিন।</p>
+        </a>
+        <a class="card" href="hospitals.html" style="text-decoration:none;color:inherit">
+          <div style="font-size:2rem" aria-hidden="true">🏥</div>
+          <h3 data-i18n="hospital.title">হাসপাতাল ও শয্যা</h3>
+          <p class="muted mb-0" id="c3">কোন হাসপাতালে এখন শয্যা খালি আছে দেখুন।</p>
+        </a>
+        <a class="card" href="pharmacy.html" style="text-decoration:none;color:inherit">
+          <div style="font-size:2rem" aria-hidden="true">💊</div>
+          <h3 data-i18n="pharmacy.title">ওষুধ খুঁজুন</h3>
+          <p class="muted mb-0" id="c4">কাছের ফার্মেসিতে ওষুধ আছে কিনা দেখুন।</p>
+        </a>
+        <a class="card" href="verify.html" style="text-decoration:none;color:inherit">
+          <div style="font-size:2rem" aria-hidden="true">✅</div>
+          <h3 data-i18n="prescription.verify">প্রেসক্রিপশন যাচাই</h3>
+          <p class="muted mb-0" id="c5">প্রেসক্রিপশন আসল কিনা যাচাই করুন।</p>
+        </a>
+        <a class="card" href="records.html" style="text-decoration:none;color:inherit">
+          <div style="font-size:2rem" aria-hidden="true">📁</div>
+          <h3 data-i18n="nav.records">আমার রেকর্ড</h3>
+          <p class="muted mb-0" id="c6">আপনার সব স্বাস্থ্য তথ্য এক জায়গায়।</p>
+        </a>
+      </div>
+
+      <div class="alert alert-danger mt-4" style="margin-top:2rem">
+        <div>
+          <strong id="emgTitle">জরুরি অবস্থায়:</strong>
+          <span data-i18n="emergency.call">জাতীয় জরুরি সেবা ৯৯৯ এ কল করুন</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+
+bootstrap('index.html');
+
+const COPY = {
+  bn: {
+    heroTitle: '৩ মিনিটে জানুন আপনার কী করা উচিত',
+    heroText: 'উপসর্গ বাংলায় লিখুন বা বলুন। সাস্থ্যসেতু আপনাকে জানাবে ঘরে যত্ন যথেষ্ট, নাকি ডাক্তার দেখাতে হবে, নাকি এখনই হাসপাতালে যেতে হবে।',
+    statAlways: 'সবসময় খোলা',
+    c1: 'বাংলায় উপসর্গ লিখুন, সাথে সাথে পরামর্শ পান।',
+    c2: 'বিএমডিসি যাচাইকৃত ডাক্তারের সাথে পরামর্শ নিন।',
+    c3: 'কোন হাসপাতালে এখন শয্যা খালি আছে দেখুন।',
+    c4: 'কাছের ফার্মেসিতে ওষুধ আছে কিনা দেখুন।',
+    c5: 'প্রেসক্রিপশন আসল কিনা যাচাই করুন।',
+    c6: 'আপনার সব স্বাস্থ্য তথ্য এক জায়গায়।',
+    emgTitle: 'জরুরি অবস্থায়:',
+  },
+  en: {
+    heroTitle: 'Know what to do next, in three minutes',
+    heroText: 'Describe your symptoms in Bangla or English. SasthoSetu tells you whether to care for it at home, see a doctor, or go to hospital now.',
+    statAlways: 'Always open',
+    c1: 'Describe symptoms and get guidance immediately.',
+    c2: 'Consult a BMDC-verified doctor.',
+    c3: 'See which hospitals have beds free right now.',
+    c4: 'Check whether a nearby pharmacy has your medicine.',
+    c5: 'Confirm a prescription is genuine before you pay.',
+    c6: 'All of your health information in one place.',
+    emgTitle: 'In an emergency:',
+  },
+};
+
+function applyCopy() {
+  const copy = COPY[i18n.lang] || COPY.bn;
+  Object.entries(copy).forEach(([id, text]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  });
+}
+applyCopy();
+
+async function loadStats() {
+  try {
+    const hospitals = await api.get('/hospitals?limit=200', { auth: false, cache: true });
+    document.getElementById('statHospitals').textContent = hospitals.total ?? '—';
+    const beds = (hospitals.items || []).reduce((sum, h) => sum + (h.available_beds || 0), 0);
+    document.getElementById('statBeds').textContent = beds.toLocaleString();
+  } catch {
+    // The landing page must still render if the API is unreachable.
+  }
+  try {
+    const doctors = await api.get('/doctors/match?limit=50', { auth: false, cache: true });
+    document.getElementById('statDoctors').textContent = Array.isArray(doctors)
+      ? `${doctors.length}+` : '—';
+  } catch {
+    // Same: a missing statistic is not worth blocking the page for.
+  }
+}
+loadStats();
+</script>
+</body>
+</html>
