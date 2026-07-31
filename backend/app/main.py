@@ -57,6 +57,18 @@ from app.models.hospital import (
 from app.modules.hospitals.routes import (
     router as hospital_router
 )
+from app.models.triage_session import TriageSession
+from app.modules.triage_sessions.routes import (
+    router as triage_session_router
+)
+from app.models.consultation import Consultation, ConsultationMessage
+from app.models.prescription_item import (
+    PrescriptionLine,
+    PrescriptionRecord,
+)
+from app.modules.consultations.routes import (
+    router as consultation_router
+)
 from app.models.ai_feedback import AIFeedback
 from app.modules.ai.routes import (
     router as ai_router
@@ -95,6 +107,13 @@ app.include_router(
     appointment_router,
     prefix="/api/v1",
     tags=["Appointments"]
+)
+# Registered before the legacy prescription router: the static /prescriptions
+# paths here would otherwise be captured by /prescriptions/{doctor_id}.
+app.include_router(
+    consultation_router,
+    prefix="/api/v1",
+    tags=["Consultations"]
 )
 app.include_router(
     prescription_router,
@@ -145,6 +164,11 @@ app.include_router(
     hospital_router,
     prefix="/api/v1",
     tags=["Hospitals"]
+)
+app.include_router(
+    triage_session_router,
+    prefix="/api/v1",
+    tags=["Triage Sessions"]
 )
 app.include_router(
     ai_router,
