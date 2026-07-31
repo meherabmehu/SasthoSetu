@@ -1,6 +1,15 @@
+import logging
+
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
+from app.core.middleware import (
+    RateLimitMiddleware,
+    RequestContextMiddleware,
+    SecurityHeadersMiddleware,
+)
 
 from app.modules.users.routes import router as user_router
 from app.modules.auth.routes import router as auth_router
@@ -90,10 +99,35 @@ from app.modules.ai.routes import (
     router as ai_router
 )
 
+logging.basicConfig(
+    level=logging.DEBUG if settings.debug else logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+)
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     debug=settings.debug,
+    description=(
+        "AI-assisted health platform for Bangladesh: bilingual triage, "
+        "doctor matching, consultations, verifiable prescriptions, hospital "
+        "capacity, labs, pharmacies, payments and FHIR R4 interoperability."
+    ),
+)
+
+# Middleware runs bottom-up, so rate limiting is evaluated before the handler
+# and request logging wraps everything.
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(RequestContextMiddleware)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=list(settings.cors_origins),
+    allow_credentials="*" not in settings.cors_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["X-Request-ID", "X-Response-Time-ms"],
 )
 
 app.include_router(
