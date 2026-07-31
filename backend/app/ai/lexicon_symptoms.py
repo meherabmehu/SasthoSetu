@@ -316,4 +316,47 @@ SYMPTOMS = {
         "en": ["high blood pressure", "bp is high"],
         "specialty": "Cardiology", "level": 3,
     },
+    "fatigue": {
+        "bn": ["খুব ক্লান্ত লাগে", "শরীর দুর্বল লাগে", "কোনো শক্তি পাই না",
+               "ক্লান্তি"],
+        "bl": ["khub klanto lage", "shorir durbol", "energy nai", "klanti"],
+        "en": ["fatigue", "always tired", "feeling exhausted", "no energy"],
+        "specialty": "General Medicine", "level": 2,
+    },
+    "insomnia": {
+        "bn": ["ঘুম হচ্ছে না", "রাতে ঘুম আসে না", "অনিদ্রা"],
+        "bl": ["ghum hocche na", "rate ghum ase na", "onidra"],
+        "en": ["insomnia", "cannot sleep", "trouble sleeping", "sleepless"],
+        "specialty": "Psychiatry", "level": 2,
+    },
+    "anxiety": {
+        "bn": ["খুব দুশ্চিন্তা হয়", "অস্থির লাগে", "মন ছটফট করে", "উদ্বেগ"],
+        "bl": ["khub duschinta", "osthir lage", "tension hocche"],
+        "en": ["anxiety", "feeling anxious", "restless", "panic feeling"],
+        "specialty": "Psychiatry", "level": 2,
+    },
+    "skin_rash": {
+        "bn": ["চামড়ায় র‍্যাশ", "গায়ে দাগ", "চুলকানি সহ র‍্যাশ"],
+        "bl": ["chamray rash", "gaye dag", "rash uthche"],
+        "en": ["skin rash", "rashes on skin", "red spots on skin"],
+        "specialty": "Dermatology", "level": 2,
+    },
+    "swelling": {
+        "bn": ["ফুলে গেছে", "শরীর ফুলে যাচ্ছে", "পানি জমেছে"],
+        "bl": ["fule geche", "shorir fule jacche"],
+        "en": ["swelling", "body swelling", "fluid retention"],
+        "specialty": "Nephrology", "level": 3,
+    },
+    "frequent_urination": {
+        "bn": ["ঘন ঘন প্রস্রাবের বেগ", "বারবার বাথরুমে যেতে হয়"],
+        "bl": ["ghono ghono prosrab hoy", "barbar bathroom"],
+        "en": ["urinating frequently", "passing urine often"],
+        "specialty": "Endocrinology", "level": 3,
+    },
+    "excessive_thirst": {
+        "bn": ["খুব পিপাসা পায়", "সারাক্ষণ পানি খেতে ইচ্ছা করে"],
+        "bl": ["khub pipasa pay", "shobshomoy pani khete iccha"],
+        "en": ["excessive thirst", "always thirsty", "drinking a lot of water"],
+        "specialty": "Endocrinology", "level": 3,
+    },
 }

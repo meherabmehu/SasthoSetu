@@ -21,12 +21,15 @@ from pathlib import Path
 from typing import Optional
 
 import joblib
+import pandas as pd
 
 from .extraction import extract
 from .lexicon import CARE_PATHWAYS, SYMPTOMS, TRIAGE_LABELS
 from .safety import apply_safety_override, check_red_flags
 
 _ART = Path(__file__).resolve().parent / "artifacts"
+
+MODEL_VERSION = "banglamed-triage-v1.1"
 
 DISCLAIMER = {
     "en": ("BanglaMed-AI is a decision-support tool, not a medical diagnosis. "
@@ -62,7 +65,8 @@ def triage(notes: str, age: Optional[int] = None,
     eff_age = age if age is not None else ents.age
 
     model = _model()
-    proba = model.predict_proba([notes])[0]
+    frame = pd.DataFrame([{"text": notes or "", "age": eff_age}])
+    proba = model.predict_proba(frame)[0]
     classes = list(model.classes_)
     ml_level = int(classes[int(proba.argmax())])
     confidence = float(proba.max())
@@ -85,7 +89,7 @@ def triage(notes: str, age: Optional[int] = None,
         "level_probabilities": {int(c): round(float(p), 3)
                                 for c, p in zip(classes, proba)},
         "disclaimer": DISCLAIMER,
-        "model_version": "banglamed-triage-v1.0",
+        "model_version": MODEL_VERSION,
     }
 
 

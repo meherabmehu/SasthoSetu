@@ -22,3 +22,8 @@ backend/venv/
 .DS_Store
 Thumbs.db*.sqlite3
 backend/*.db
+
+# Generated ML datasets (rebuild with ml/prepare_all.py)
+data/triage/*.csv
+data/surge/*.csv
+data/surveillance/*.csv

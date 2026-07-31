@@ -1,0 +1,22 @@
+{
+  "selected_model": "logreg",
+  "validation_macro_f1": {
+    "logreg": 0.9102,
+    "linearsvc": 0.7024,
+    "random_forest": 0.6859
+  },
+  "test_macro_f1": 0.8397,
+  "test_accuracy": 0.8589,
+  "level5_recall": 0.9748,
+  "severe_band_errors": 0,
+  "under_triage_count": 57,
+  "test_size": 900,
+  "labels": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "seed": 42
+}

@@ -22,6 +22,8 @@ _DATA_DIR = Path(os.environ.get("SASTHOSETU_DATA_DIR", _REPO_ROOT / "data"))
 
 _SEVERITY_RANK = {"major": 3, "moderate": 2, "minor": 1}
 
+KNOWLEDGE_BASE_VERSION = "bd-curated-v1.1"
+
 
 @lru_cache(maxsize=1)
 def _aliases() -> dict[str, str]:
@@ -61,6 +63,22 @@ def check_interactions(drugs: list[str]) -> dict:
     """Check all pairs among the given drug names (brands or generics)."""
     normalized = [normalize_drug(d) for d in drugs if d and d.strip()]
     seen_pairs, findings = set(), []
+
+    # Duplicate therapy: two brands of the same generic on one prescription.
+    # Common in Bangladesh where brand-first prescribing hides the overlap.
+    for generic in sorted({g for g in normalized if normalized.count(g) > 1}):
+        findings.append({
+            "drug_a": generic, "drug_b": generic,
+            "severity": "major",
+            "effect": f"Duplicate therapy - {generic} appears more than once",
+            "advice": {
+                "en": ("Two products on this prescription contain the same "
+                       "active ingredient. Remove one before dispensing."),
+                "bn": ("এই প্রেসক্রিপশনের দুটি ওষুধে একই উপাদান রয়েছে। "
+                       "একটি বাদ দিন।"),
+            },
+        })
+
     for a, b in combinations(normalized, 2):
         key = frozenset({a, b})
         if len(key) < 2 or key in seen_pairs:
@@ -81,7 +99,7 @@ def check_interactions(drugs: list[str]) -> dict:
         "normalized_drugs": normalized,
         "flagged_interactions": findings,
         "highest_severity": findings[0]["severity"] if findings else None,
-        "knowledge_base": "curated-demo-v1 (45 pairs, BD brand-aware)",
+        "knowledge_base": KNOWLEDGE_BASE_VERSION,
     }
 
 
