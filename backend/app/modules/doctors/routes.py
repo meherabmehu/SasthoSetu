@@ -9,6 +9,7 @@ from app.schemas.doctor import DoctorCreate
 
 from app.modules.doctors.service import (
     create_doctor_profile_service,
+    get_my_doctor_profile_service,
     get_all_doctors_service,
     get_doctor_by_id_service,
     get_doctors_by_specialization_service,
@@ -22,6 +23,17 @@ from app.core.security import (
 )
 
 router = APIRouter()
+
+
+@router.get("/doctors/me")
+def get_my_doctor_profile(
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    return get_my_doctor_profile_service(
+        current_user=current_user,
+        db=db
+    )
 
 
 @router.post("/doctors/{user_id}")

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>সময়সূচি · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="nav.schedule">সময়সূচি</h1>
+      <p class="muted" id="subtitle"></p>
+    </div>
+
+    <form class="card" id="slotForm">
+      <div class="grid">
+        <div class="field mb-0">
+          <label class="label" for="date" data-i18n="appointment.date">তারিখ</label>
+          <input id="date" class="input" type="date" required>
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="start" id="startLabel">শুরু</label>
+          <input id="start" class="input" type="time" required>
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="end" id="endLabel">শেষ</label>
+          <input id="end" class="input" type="time" required>
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button class="btn btn-block" type="submit" id="addBtn"
+            data-i18n="action.save">সংরক্ষণ</button>
+        </div>
+      </div>
+      <p class="error-text hidden" id="formError" role="alert"></p>
+    </form>
+
+    <div class="mt-4" id="slots" aria-live="polite"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatDate, skeletonList, emptyState, errorState,
+  toast, setBusy, requireAuth,
+} from './assets/js/ui.js';
+
+bootstrap('doctor-schedule.html');
+if (!requireAuth('DOCTOR', 'ADMIN')) throw new Error('unauthorised');
+
+const BN = i18n.lang === 'bn';
+document.getElementById('subtitle').textContent = BN
+  ? 'রোগীরা কেবল আপনার খোলা সময়েই বুক করতে পারবেন।'
+  : 'Patients can only book the slots you publish here.';
+document.getElementById('startLabel').textContent = BN ? 'শুরু' : 'Start';
+document.getElementById('endLabel').textContent = BN ? 'শেষ' : 'End';
+
+// Past dates cannot be booked, so they should not be offerable either.
+document.getElementById('date').min = new Date().toISOString().slice(0, 10);
+
+let doctorId = null;
+
+async function load() {
+  const host = document.getElementById('slots');
+  host.innerHTML = skeletonList(2);
+  try {
+    if (!doctorId) doctorId = (await api.get('/doctors/me', { cache: true })).id;
+    const rows = await api.get(`/doctor-availability/${doctorId}`, { cache: true });
+    const slots = Array.isArray(rows) ? rows : rows.items || [];
+
+    if (!slots.length) {
+      host.innerHTML = emptyState('status.none', '🗓');
+      return;
+    }
+
+    const grouped = slots.reduce((acc, slot) => {
+      (acc[slot.available_date] ||= []).push(slot);
+      return acc;
+    }, {});
+
+    host.innerHTML = Object.entries(grouped)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, items]) => `
+        <div class="card mb-4">
+          <h4>${escapeHtml(formatDate(date))}</h4>
+          <div class="symptom-chips">
+            ${items
+              .sort((a, b) => a.start_time.localeCompare(b.start_time))
+              .map((slot) => `<span class="badge ${slot.is_booked ? 'badge-danger' : 'badge-success'}">
+                ${escapeHtml(slot.start_time)}
+                ${slot.is_booked ? (BN ? ' · বুকড' : ' · booked') : ''}
+              </span>`).join('')}
+          </div>
+        </div>`).join('');
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+document.getElementById('slotForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = document.getElementById('addBtn');
+  const errorEl = document.getElementById('formError');
+  errorEl.classList.add('hidden');
+
+  const date = document.getElementById('date').value;
+  const start = document.getElementById('start').value;
+  const end = document.getElementById('end').value;
+
+  if (end <= start) {
+    errorEl.textContent = BN
+      ? 'শেষ সময় শুরুর পরে হতে হবে'
+      : 'End time must be after the start time';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  setBusy(button, true);
+  try {
+    if (!doctorId) doctorId = (await api.get('/doctors/me')).id;
+    await api.post(`/doctor-availability/${doctorId}`, {
+      available_date: date,
+      start_time: start,
+      end_time: end,
+    }, { queueable: true });
+    toast(i18n.t('status.saved'), 'success');
+    load();
+  } catch (error) {
+    errorEl.textContent = error.message;
+    errorEl.classList.remove('hidden');
+  } finally {
+    setBusy(button, false);
+  }
+});
+
+load();
+</script>
+</body>
+</html>

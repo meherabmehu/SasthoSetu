@@ -118,7 +118,12 @@ app = FastAPI(
 # Middleware runs bottom-up, so rate limiting is evaluated before the handler
 # and request logging wraps everything.
 app.add_middleware(SecurityHeadersMiddleware)
-app.add_middleware(RateLimitMiddleware)
+
+# The whole automated suite shares one client address, so a per-client cap
+# would throttle the tests rather than any real abuse.
+if settings.app_env != "test":
+    app.add_middleware(RateLimitMiddleware)
+
 app.add_middleware(RequestContextMiddleware)
 
 app.add_middleware(

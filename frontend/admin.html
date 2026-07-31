@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>প্রশাসন · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 id="title">প্রশাসন</h1>
+      <p class="muted" id="subtitle"></p>
+    </div>
+
+    <div class="metric-grid" id="metrics"></div>
+
+    <div class="tabs mt-4" role="tablist" style="margin-top:2rem">
+      <button class="tab" role="tab" aria-selected="true" data-panel="pending" id="t1"></button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="capacity" id="t2"></button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="surveillance" id="t3"></button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="finance" id="t4"></button>
+    </div>
+
+    <section id="pending" role="tabpanel" aria-live="polite"></section>
+    <section id="capacity" role="tabpanel" class="hidden" aria-live="polite"></section>
+    <section id="surveillance" role="tabpanel" class="hidden" aria-live="polite"></section>
+    <section id="finance" role="tabpanel" class="hidden" aria-live="polite"></section>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatBdt, skeletonList, emptyState, errorState,
+  toast, requireAuth,
+} from './assets/js/ui.js';
+
+bootstrap('admin.html');
+if (!requireAuth('ADMIN')) throw new Error('unauthorised');
+
+const BN = i18n.lang === 'bn';
+document.getElementById('title').textContent = BN ? 'প্রশাসন' : 'Administration';
+document.getElementById('subtitle').textContent = BN
+  ? 'যাচাই, ধারণক্ষমতা, রোগ নজরদারি ও আর্থিক হিসাব।'
+  : 'Verification, capacity, disease surveillance and settlement.';
+document.getElementById('t1').textContent = BN ? 'যাচাই অপেক্ষমাণ' : 'Pending verification';
+document.getElementById('t2').textContent = BN ? 'শয্যা ধারণক্ষমতা' : 'Bed capacity';
+document.getElementById('t3').textContent = BN ? 'রোগ নজরদারি' : 'Disease surveillance';
+document.getElementById('t4').textContent = BN ? 'আর্থিক হিসাব' : 'Settlement';
+
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    tabs.forEach((other) => {
+      const selected = other === tab;
+      other.setAttribute('aria-selected', String(selected));
+      document.getElementById(other.dataset.panel).classList.toggle('hidden', !selected);
+    });
+  });
+});
+
+// The surveillance feed uses machine-readable disease keys; these are the
+// human labels shown to an operator.
+const DISEASE_LABELS = {
+  bn: { ari: 'শ্বাসতন্ত্রের সংক্রমণ', chikungunya: 'চিকুনগুনিয়া', dengue: 'ডেঙ্গু',
+        diarrheal_disease: 'ডায়রিয়া', hepatitis_a: 'হেপাটাইটিস এ',
+        malaria: 'ম্যালেরিয়া', measles: 'হাম', typhoid: 'টাইফয়েড' },
+  en: { ari: 'Acute respiratory infection', chikungunya: 'Chikungunya',
+        dengue: 'Dengue', diarrheal_disease: 'Diarrhoeal disease',
+        hepatitis_a: 'Hepatitis A', malaria: 'Malaria', measles: 'Measles',
+        typhoid: 'Typhoid' },
+};
+
+function diseaseLabel(key) {
+  const table = DISEASE_LABELS[i18n.lang] || DISEASE_LABELS.bn;
+  return table[key] || String(key).replace(/_/g, ' ');
+}
+
+function metric(value, text, accent) {
+  return `<div class="metric" ${accent ? `style="border-left-color:${accent}"` : ''}>
+    <div class="metric-value">${escapeHtml(String(value))}</div>
+    <div class="metric-label">${escapeHtml(text)}</div>
+  </div>`;
+}
+
+async function loadMetrics() {
+  const host = document.getElementById('metrics');
+  try {
+    const [stats, hospitals] = await Promise.all([
+      api.get('/dashboard/stats').catch(() => null),
+      api.get('/hospitals?limit=200', { cache: true }).catch(() => null),
+    ]);
+
+    const beds = (hospitals?.items || []).reduce((sum, h) => sum + (h.available_beds || 0), 0);
+    const total = (hospitals?.items || []).reduce((sum, h) => sum + (h.total_beds || 0), 0);
+
+    host.innerHTML =
+      metric(stats?.total_users ?? '—', BN ? 'মোট ব্যবহারকারী' : 'Users') +
+      metric(stats?.total_doctors ?? '—', BN ? 'ডাক্তার' : 'Doctors') +
+      metric(hospitals?.total ?? '—', BN ? 'হাসপাতাল' : 'Hospitals') +
+      metric(`${beds} / ${total}`, BN ? 'খালি শয্যা' : 'Beds free') +
+      metric(stats?.total_triage_sessions ?? '—', BN ? 'উপসর্গ পরীক্ষা' : 'Triage checks') +
+      metric(stats?.emergency_triage_sessions ?? '—',
+        BN ? 'জরুরি শনাক্ত' : 'Emergencies flagged', 'var(--danger)') +
+      metric(stats?.total_consultations ?? '—', BN ? 'কনসালটেশন' : 'Consultations') +
+      metric(stats?.signed_prescriptions ?? '—', BN ? 'প্রেসক্রিপশন' : 'Prescriptions');
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+async function loadPending() {
+  const host = document.getElementById('pending');
+  host.innerHTML = skeletonList(2);
+  try {
+    const rows = await api.get('/doctors/pending');
+    const doctors = Array.isArray(rows) ? rows : rows.items || [];
+    if (!doctors.length) {
+      host.innerHTML = emptyState('status.none', '✅');
+      return;
+    }
+    host.innerHTML = `<div class="list">${doctors.map((d) => `
+      <article class="list-item">
+        <div class="flex-1">
+          <h4>${escapeHtml(d.bmdc_number || '')}</h4>
+          <div class="list-meta">
+            <span>${escapeHtml(d.specialization || '')}</span>
+            <span>${escapeHtml(d.hospital_name || '')}</span>
+            <span>${escapeHtml(d.experience_years || 0)} ${escapeHtml(i18n.t('doctor.years'))}</span>
+          </div>
+        </div>
+        <button class="btn btn-sm verifyBtn" data-id="${escapeHtml(d.id)}">
+          ${BN ? 'যাচাই করুন' : 'Verify'}</button>
+      </article>`).join('')}</div>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+document.getElementById('pending').addEventListener('click', async (event) => {
+  const button = event.target.closest('.verifyBtn');
+  if (!button) return;
+  try {
+    await api.patch(`/doctors/${button.dataset.id}/verify`, {});
+    toast(i18n.t('status.saved'), 'success');
+    loadPending();
+    loadMetrics();
+  } catch (error) {
+    toast(error.message, 'danger');
+  }
+});
+
+async function loadCapacity() {
+  const host = document.getElementById('capacity');
+  host.innerHTML = skeletonList(2);
+  try {
+    const data = await api.get('/hospitals?limit=100', { cache: true });
+    if (!data.items?.length) {
+      host.innerHTML = emptyState('status.none', '🏥');
+      return;
+    }
+    const rows = data.items.map((h) => {
+      const used = (h.total_beds || 0) - (h.available_beds || 0);
+      const rate = h.total_beds ? used / h.total_beds : 0;
+      const cls = rate >= 0.9 ? 'critical' : rate >= 0.75 ? 'warn' : '';
+      return `<tr>
+        <td data-label="${BN ? 'হাসপাতাল' : 'Hospital'}"><strong>${escapeHtml(h.name)}</strong>
+          <div class="small muted">${escapeHtml(h.district)}</div></td>
+        <td data-label="${BN ? 'মোট' : 'Total'}">${h.total_beds}</td>
+        <td data-label="${BN ? 'খালি' : 'Free'}">${h.available_beds}</td>
+        <td data-label="${BN ? 'ব্যবহার' : 'Occupancy'}" style="min-width:140px">
+          <div class="bed-bar"><div class="bed-fill ${cls}"
+            style="width:${Math.round(rate * 100)}%"></div></div>
+          <span class="tiny">${Math.round(rate * 100)}%</span></td>
+        <td data-label=""><a class="btn btn-sm btn-secondary"
+          href="hospital-detail.html?id=${encodeURIComponent(h.id)}">
+          ${escapeHtml(i18n.t('action.view'))}</a></td>
+      </tr>`;
+    }).join('');
+
+    host.innerHTML = `<div class="card"><div class="table-wrap"><table class="table">
+      <thead><tr>
+        <th>${BN ? 'হাসপাতাল' : 'Hospital'}</th>
+        <th>${BN ? 'মোট' : 'Total'}</th>
+        <th>${BN ? 'খালি' : 'Free'}</th>
+        <th>${BN ? 'ব্যবহার' : 'Occupancy'}</th>
+        <th></th>
+      </tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+async function loadSurveillance() {
+  const host = document.getElementById('surveillance');
+  host.innerHTML = skeletonList(2);
+  try {
+    const data = await api.get('/population/surveillance?weeks=12');
+    const series = data.series || [];
+    if (!series.length) {
+      host.innerHTML = emptyState('status.none', '📊');
+      return;
+    }
+
+    const cards = series.slice(0, 12).map((entry) => {
+      const points = entry.points || [];
+      const alerts = points.filter((p) => p.is_anomaly);
+      const max = Math.max(1, ...points.map((p) => p.cases || 0));
+
+      // A compact sparkline communicates the trend far faster than a table.
+      const bars = points.map((p) => {
+        const height = Math.round(((p.cases || 0) / max) * 100);
+        return `<div title="${escapeHtml(p.week_ending)}: ${p.cases}"
+          style="flex:1;height:${Math.max(2, height)}%;
+          background:${p.is_anomaly ? 'var(--danger)' : 'var(--teal-400)'};
+          border-radius:2px"></div>`;
+      }).join('');
+
+      return `<article class="card">
+        <div class="row-between">
+          <div>
+            <h4 class="mb-0">${escapeHtml(diseaseLabel(entry.disease))}</h4>
+            <div class="small muted">${escapeHtml(entry.district)}</div>
+          </div>
+          ${alerts.length
+            ? `<span class="badge badge-danger">${alerts.length} ${BN ? 'সতর্কতা' : 'alerts'}</span>`
+            : `<span class="badge badge-success">${BN ? 'স্বাভাবিক' : 'Normal'}</span>`}
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:2px;height:60px;margin-top:.75rem"
+          role="img" aria-label="${escapeHtml(diseaseLabel(entry.disease))} ${escapeHtml(entry.district)} trend">
+          ${bars}
+        </div>
+      </article>`;
+    }).join('');
+
+    host.innerHTML = `<div class="grid">${cards}</div>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+async function loadFinance() {
+  const host = document.getElementById('finance');
+  host.innerHTML = skeletonList(1);
+  try {
+    const report = await api.get('/payments/reconciliation');
+    host.innerHTML = `<div class="metric-grid">
+      ${metric(report.transaction_count, BN ? 'লেনদেন' : 'Transactions')}
+      ${metric(formatBdt(report.gross_collected_bdt), BN ? 'মোট আদায়' : 'Gross collected')}
+      ${metric(formatBdt(report.platform_fees_bdt), BN ? 'প্ল্যাটফর্ম ফি' : 'Platform fees')}
+      ${metric(formatBdt(report.provider_payouts_bdt), BN ? 'প্রদানযোগ্য' : 'Provider payouts')}
+      ${metric(formatBdt(report.refunded_bdt), BN ? 'ফেরত' : 'Refunded')}
+      ${metric(formatBdt(report.net_settlement_bdt), BN ? 'নিট' : 'Net settlement')}
+    </div>
+    <p class="hint mt-4">${BN ? 'কমিশন হার' : 'Commission rate'}:
+      ${(report.commission_rate * 100).toFixed(2)}%</p>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
+loadMetrics();
+loadPending();
+loadCapacity();
+loadSurveillance();
+loadFinance();
+</script>
+</body>
+</html>

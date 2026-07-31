@@ -1,0 +1,54 @@
+{
+  "name": "SasthoSetu — সাস্থ্যসেতু",
+  "short_name": "সাস্থ্যসেতু",
+  "description": "AI-assisted health platform for Bangladesh: bilingual symptom triage, doctor booking, hospital beds, pharmacies and verifiable prescriptions.",
+  "lang": "bn",
+  "dir": "ltr",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f8fafc",
+  "theme_color": "#1b817d",
+  "categories": ["health", "medical"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "উপসর্গ পরীক্ষা",
+      "short_name": "ট্রায়াজ",
+      "description": "Check symptoms now",
+      "url": "triage.html"
+    },
+    {
+      "name": "জরুরি হাসপাতাল",
+      "short_name": "জরুরি",
+      "description": "Find an emergency hospital with a free bed",
+      "url": "hospitals.html?emergency=1"
+    },
+    {
+      "name": "প্রেসক্রিপশন যাচাই",
+      "short_name": "যাচাই",
+      "description": "Verify a prescription",
+      "url": "verify.html"
+    }
+  ]
+}

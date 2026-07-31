@@ -9,6 +9,7 @@ clinical defect, not a cosmetic one.
 import os
 import unittest
 
+os.environ["APP_ENV"] = "test"
 os.environ.setdefault("DATABASE_URL", "sqlite:///./test_triage.db")
 os.environ.setdefault("SECRET_KEY", "test-secret-key-at-least-32-characters-long")
 
