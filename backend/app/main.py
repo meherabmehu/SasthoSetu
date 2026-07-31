@@ -69,6 +69,22 @@ from app.models.prescription_item import (
 from app.modules.consultations.routes import (
     router as consultation_router
 )
+from app.models.provider import (
+    LabOrder,
+    LabTest,
+    PharmacyStock,
+    Provider,
+)
+from app.modules.providers.routes import (
+    router as provider_router
+)
+from app.models.payment import Payment
+from app.modules.payments.routes import (
+    router as payment_router
+)
+from app.modules.fhir.routes import (
+    router as fhir_router
+)
 from app.models.ai_feedback import AIFeedback
 from app.modules.ai.routes import (
     router as ai_router
@@ -169,6 +185,21 @@ app.include_router(
     triage_session_router,
     prefix="/api/v1",
     tags=["Triage Sessions"]
+)
+app.include_router(
+    provider_router,
+    prefix="/api/v1",
+    tags=["Labs & Pharmacies"]
+)
+app.include_router(
+    payment_router,
+    prefix="/api/v1",
+    tags=["Payments"]
+)
+app.include_router(
+    fhir_router,
+    prefix="/api/v1",
+    tags=["FHIR Interoperability"]
 )
 app.include_router(
     ai_router,

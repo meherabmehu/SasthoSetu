@@ -33,6 +33,21 @@ def _boolean(value: str, name: str) -> bool:
     raise ValueError(f"{name} must be true or false")
 
 
+def _rate(value: str, name: str) -> float:
+    try:
+        parsed = float(value)
+    except ValueError as error:
+        raise ValueError(f"{name} must be a number") from error
+    if not 0 <= parsed < 1:
+        raise ValueError(f"{name} must be between 0 and 1")
+    return parsed
+
+
+def _csv(value: str) -> tuple[str, ...]:
+    items = [item.strip() for item in (value or "").split(",") if item.strip()]
+    return tuple(items) or ("*",)
+
+
 @dataclass(frozen=True)
 class Settings:
     app_name: str
@@ -43,6 +58,17 @@ class Settings:
     secret_key: str
     jwt_algorithm: str
     access_token_expire_minutes: int
+    platform_commission_rate: float
+    cors_origins: tuple[str, ...]
+    rate_limit_per_minute: int
+    bkash_api_key: str
+    bkash_api_secret: str
+    nagad_api_key: str
+    nagad_api_secret: str
+    rocket_api_key: str
+    rocket_api_secret: str
+    sslcommerz_api_key: str
+    sslcommerz_api_secret: str
 
     @classmethod
     def from_env(
@@ -84,6 +110,23 @@ class Settings:
                 values.get("ACCESS_TOKEN_EXPIRE_MINUTES", "60"),
                 "ACCESS_TOKEN_EXPIRE_MINUTES",
             ),
+            platform_commission_rate=_rate(
+                values.get("PLATFORM_COMMISSION_RATE", "0.02"),
+                "PLATFORM_COMMISSION_RATE",
+            ),
+            cors_origins=_csv(values.get("CORS_ORIGINS", "*")),
+            rate_limit_per_minute=_positive_int(
+                values.get("RATE_LIMIT_PER_MINUTE", "120"),
+                "RATE_LIMIT_PER_MINUTE",
+            ),
+            bkash_api_key=values.get("BKASH_API_KEY", "").strip(),
+            bkash_api_secret=values.get("BKASH_API_SECRET", "").strip(),
+            nagad_api_key=values.get("NAGAD_API_KEY", "").strip(),
+            nagad_api_secret=values.get("NAGAD_API_SECRET", "").strip(),
+            rocket_api_key=values.get("ROCKET_API_KEY", "").strip(),
+            rocket_api_secret=values.get("ROCKET_API_SECRET", "").strip(),
+            sslcommerz_api_key=values.get("SSLCOMMERZ_API_KEY", "").strip(),
+            sslcommerz_api_secret=values.get("SSLCOMMERZ_API_SECRET", "").strip(),
         )
 
 
