@@ -6,7 +6,6 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.ai.drug_safety import normalize_drug
-from app.models.consultation import Consultation
 from app.models.doctor import Doctor
 from app.models.patient import Patient
 from app.models.provider import LabOrder, LabTest, PharmacyStock, Provider

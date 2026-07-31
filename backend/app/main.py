@@ -2,7 +2,6 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.core.middleware import (
@@ -13,25 +12,19 @@ from app.core.middleware import (
 
 from app.modules.users.routes import router as user_router
 from app.modules.auth.routes import router as auth_router
-from app.models.patient import Patient
 from app.modules.patients.routes import router as patient_router
-from app.models.doctor import Doctor
 from app.modules.doctors.routes import (
     router as doctor_router
 )
-from app.models.appointment import Appointment
 from app.modules.appointments.routes import (
     router as appointment_router
 )
-from app.models.prescription import Prescription
 from app.modules.prescriptions.routes import (
     router as prescription_router
 )
-from app.models.medical_record import MedicalRecord
 from app.modules.medical_records.routes import (
     router as medical_record_router
 )
-from app.models.doctor_availability import DoctorAvailability
 from app.modules.doctor_availability.routes import (
     router as doctor_availability_router
 )
@@ -41,7 +34,6 @@ from app.modules.dashboard.routes import (
 from app.modules.patient_history.routes import (
     router as patient_history_router
 )
-from app.models.notification import Notification
 
 from app.modules.notifications.routes import (
     router as notification_router
@@ -49,7 +41,6 @@ from app.modules.notifications.routes import (
 from app.modules.admin.routes import (
     router as admin_router
 )
-from app.models.file_record import FileRecord
 
 from app.modules.files.routes import (
     router as file_router
@@ -57,44 +48,24 @@ from app.modules.files.routes import (
 from app.modules.symptom_checker.routes import (
     router as symptom_checker_router
 )
-from app.models.hospital import (
-    BedStatusHistory,
-    Hospital,
-    HospitalStaff,
-    Ward,
-)
 from app.modules.hospitals.routes import (
     router as hospital_router
 )
-from app.models.triage_session import TriageSession
 from app.modules.triage_sessions.routes import (
     router as triage_session_router
-)
-from app.models.consultation import Consultation, ConsultationMessage
-from app.models.prescription_item import (
-    PrescriptionLine,
-    PrescriptionRecord,
 )
 from app.modules.consultations.routes import (
     router as consultation_router
 )
-from app.models.provider import (
-    LabOrder,
-    LabTest,
-    PharmacyStock,
-    Provider,
-)
 from app.modules.providers.routes import (
     router as provider_router
 )
-from app.models.payment import Payment
 from app.modules.payments.routes import (
     router as payment_router
 )
 from app.modules.fhir.routes import (
     router as fhir_router
 )
-from app.models.ai_feedback import AIFeedback
 from app.modules.ai.routes import (
     router as ai_router
 )

@@ -293,7 +293,7 @@ def match_doctors_service(
     if user_ids:
         for user in db.query(User).filter(User.id.in_(list(user_ids))).all():
             user_ids[user.id] = user.full_name
-    for doctor, row in zip(doctors, results):
+    for doctor, row in zip(doctors, results, strict=True):
         row["name"] = user_ids.get(doctor.user_id)
 
     results.sort(

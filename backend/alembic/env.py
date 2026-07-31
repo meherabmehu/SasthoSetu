@@ -7,32 +7,13 @@ from app.core.config import settings
 from app.models.ai_feedback import AIFeedback
 from app.models.appointment import Appointment
 from app.models.base import Base
-from app.models.consultation import Consultation, ConsultationMessage
 from app.models.doctor import Doctor
 from app.models.doctor_availability import DoctorAvailability
 from app.models.file_record import FileRecord
-from app.models.hospital import (
-    BedStatusHistory,
-    Hospital,
-    HospitalStaff,
-    Ward,
-)
 from app.models.medical_record import MedicalRecord
 from app.models.notification import Notification
 from app.models.patient import Patient
-from app.models.payment import Payment
-from app.models.provider import (
-    LabOrder,
-    LabTest,
-    PharmacyStock,
-    Provider,
-)
 from app.models.prescription import Prescription
-from app.models.prescription_item import (
-    PrescriptionLine,
-    PrescriptionRecord,
-)
-from app.models.triage_session import TriageSession
 from app.models.user import User
 
 

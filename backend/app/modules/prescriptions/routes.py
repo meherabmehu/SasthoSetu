@@ -13,7 +13,6 @@ from app.modules.prescriptions.service import (
     create_prescription_service
 )
 from app.modules.prescriptions.service import (
-    create_prescription_service,
     get_patient_prescriptions_service,
     get_doctor_prescriptions_service
 )

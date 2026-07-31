@@ -144,4 +144,6 @@ def clinical_feature_matrix(frame) -> np.ndarray:
         texts = [row[0] for row in frame]
         ages = [row[1] for row in frame]
 
-    return np.vstack([_row(text, age) for text, age in zip(texts, ages)])
+    return np.vstack(
+        [_row(text, age) for text, age in zip(texts, ages, strict=False)]
+    )

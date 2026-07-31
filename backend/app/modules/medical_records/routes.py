@@ -13,7 +13,6 @@ from app.modules.medical_records.service import (
     create_medical_record_service
 )
 from app.modules.medical_records.service import (
-    create_medical_record_service,
     get_patient_medical_records_service,
     get_doctor_medical_records_service
 )
