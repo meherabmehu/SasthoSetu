@@ -48,6 +48,15 @@ from app.modules.files.routes import (
 from app.modules.symptom_checker.routes import (
     router as symptom_checker_router
 )
+from app.models.hospital import (
+    BedStatusHistory,
+    Hospital,
+    HospitalStaff,
+    Ward,
+)
+from app.modules.hospitals.routes import (
+    router as hospital_router
+)
 from app.models.ai_feedback import AIFeedback
 from app.modules.ai.routes import (
     router as ai_router
@@ -131,6 +140,11 @@ app.include_router(
     symptom_checker_router,
     prefix="/api/v1",
     tags=["AI Health Assistant"]
+)
+app.include_router(
+    hospital_router,
+    prefix="/api/v1",
+    tags=["Hospitals"]
 )
 app.include_router(
     ai_router,

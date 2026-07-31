@@ -5,28 +5,59 @@ Utility and automation scripts.
 ## AI data & model pipeline
 
 The BanglaMed-AI layer (`backend/app/ai/`) needs generated datasets and
-trained model artifacts. Regenerate everything with:
+trained model artifacts. Build everything with:
 
 ```
 python ml/prepare_all.py
 ```
 
-This is deterministic (seed 42) and produces:
+This is deterministic (seed 42) and takes roughly 1-2 minutes on CPU. It
+produces:
+
 - `data/seed/{hospitals,doctors}.json` - reference data for surge forecasting
+- `data/drugs/{bd_brand_aliases,drug_interactions}.csv` - drug knowledge base
 - `data/triage/symptom_triage_dataset.csv` - 9,000-row triage corpus
 - `data/surge/{bed_utilization,surge_events}.csv`
 - `data/surveillance/{weekly_surveillance,injected_outbreaks}.csv`
-- `backend/app/ai/artifacts/*` - trained triage + surge models
+- `backend/app/ai/artifacts/*` - trained triage + surge models and metrics
 
-The large CSVs are committed gzipped (`*.csv.gz`); the AI services fall back
-to the `.gz` file automatically if the plain CSV isn't present, so a fresh
-clone works without regenerating anything. Run `ml/prepare_all.py` only when
-you want to retrain on fresh/updated data.
+Generated datasets and model artifacts are **not committed**. They are rebuilt
+from these scripts, which are the source of truth. A fresh clone must run
+`ml/prepare_all.py` (or let CI run it) before the AI endpoints will serve;
+until then those endpoints return `503` with the command to run, rather than
+failing obscurely.
+
+Individual steps can be run on their own, in this order:
+
+```
+python ml/generate_seed.py
+python ml/generate_drug_kb.py
+python ml/generate_triage_dataset.py
+python ml/generate_bed_logs.py
+python ml/generate_surveillance.py
+python ml/train_triage_model.py
+python ml/train_surge_model.py
+```
+
+## Retraining from clinician feedback
+
+`POST /api/v1/ai/feedback` records clinician corrections in the `ai_feedback`
+table. To fold them back into the training corpus:
+
+```
+python ml/retrain_from_feedback.py
+```
+
+The script refuses to replace the live artifact if the retrained model scores
+worse than the current one, so feedback can never silently degrade triage.
 
 ## Database seeding
 
-There is currently no hospital/doctor seed script for the relational
-database - `Hospital` is not yet a first-class model (see `docs/
-project-roadmap.md` Phase 4). The BanglaMed-AI surge forecaster references
-hospitals by code (`H001`-`H005`) directly from `data/seed/hospitals.json`,
-independent of the SQL schema, so it works without any DB seeding.
+Populate a database with the reference hospitals, doctors and demo accounts:
+
+```
+python scripts/seed_database.py
+```
+
+Run `alembic upgrade head` first. The script is idempotent - re-running it
+updates existing rows rather than creating duplicates.

@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.patient import Patient
@@ -72,6 +73,59 @@ def create_appointment_service(
             detail="Selected slot not available"
         )
 
+    # Guard against double booking. The availability row is re-read with a
+    # row lock so two concurrent requests for the same slot cannot both pass
+    # the check above and each create an appointment.
+    locked_slot = (
+        db.query(DoctorAvailability)
+        .filter(DoctorAvailability.id == availability.id)
+        .with_for_update()
+        .first()
+    )
+
+    if locked_slot is None or locked_slot.is_booked:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Selected slot was just booked by another patient"
+        )
+
+    clash = (
+        db.query(Appointment)
+        .filter(
+            Appointment.doctor_id == doctor.id,
+            Appointment.appointment_date == str(payload.appointment_date),
+            Appointment.appointment_time == payload.appointment_time,
+            Appointment.status.notin_(["CANCELLED", "REJECTED"]),
+        )
+        .first()
+    )
+
+    if clash:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Doctor already has an appointment in this slot"
+        )
+
+    duplicate = (
+        db.query(Appointment)
+        .filter(
+            Appointment.patient_id == patient.id,
+            Appointment.appointment_date == str(payload.appointment_date),
+            Appointment.appointment_time == payload.appointment_time,
+            Appointment.status.notin_(["CANCELLED", "REJECTED"]),
+        )
+        .first()
+    )
+
+    if duplicate:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="You already have an appointment at this time"
+        )
+
     appointment = Appointment(
         patient_id=patient.id,
         doctor_id=doctor.id,
@@ -83,10 +137,18 @@ def create_appointment_service(
         status="PENDING"
     )
 
-    availability.is_booked = True
+    locked_slot.is_booked = True
 
     db.add(appointment)
-    db.commit()
+
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Selected slot was just booked by another patient"
+        )
 
     create_notification(
         user_id=patient.user_id,
