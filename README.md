@@ -163,7 +163,8 @@ Free to enable with Groq, no credit card. See **[docs/LLM_SETUP.md](docs/LLM_SET
 Left unconfigured, every feature still works.
 
 ```bash
-python scripts/check_llm.py    # verify a key is working
+python scripts/set_llm_key.py gsk_your_key   # configure, one command
+python scripts/check_llm.py                  # verify it works
 ```
 
 ### Learning loop

@@ -42,6 +42,11 @@ import urllib.request
 from dataclasses import replace
 from typing import Optional
 
+# Importing the settings module loads backend/.env into the environment.
+# Without this the values read below come only from the shell, so a key set in
+# the file would be silently ignored.
+from app.core import config as _config  # noqa: F401
+
 from .extraction import ExtractionResult, extract
 from .lexicon import SYMPTOMS
 

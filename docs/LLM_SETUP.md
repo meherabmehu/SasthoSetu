@@ -27,20 +27,48 @@ https://console.groq.com/docs/rate-limits.
 
 ---
 
-## Step 2 — Put the key in your config
+## Step 2 — Set the key with one command
 
-Open **`backend/.env`** in a text editor. This is the file you created in the
-setup guide by copying `.env.example`.
+From the project root, with the virtual environment active:
 
-Find these three lines:
-
-```
-LLM_API_KEY=
-LLM_API_URL=https://api.openai.com/v1/chat/completions
-LLM_MODEL=gpt-4o-mini
+**Windows**
+```powershell
+python scripts\set_llm_key.py gsk_your_actual_key_here
 ```
 
-Replace them with:
+**macOS / Linux**
+```bash
+python3 scripts/set_llm_key.py gsk_your_actual_key_here
+```
+
+That is the whole step. No file to find, no line to edit.
+
+The script writes to `backend/.env`, creating it from the template if needed,
+and adding the language model settings if your file predates them. It works
+out the endpoint and model from the key prefix, so a Groq key is never left
+pointing at OpenAI. Running it again replaces the key rather than adding a
+second line.
+
+To check what is currently set, with the key masked:
+
+```
+python scripts/set_llm_key.py --show
+```
+
+To force a specific provider or model:
+
+```
+python scripts/set_llm_key.py YOUR_KEY --provider openrouter
+python scripts/set_llm_key.py YOUR_KEY --model llama-3.3-70b-versatile
+```
+
+Recognised providers: `groq`, `openrouter`, `gemini`, `openai`, `ollama`.
+
+<details>
+<summary>If you would rather edit the file by hand</summary>
+
+Open `backend/.env` and set these three lines. Note it is `.env`, not
+`.env.example` — the example file is a template that updates overwrite.
 
 ```
 LLM_API_KEY=gsk_your_actual_key_here
@@ -48,13 +76,8 @@ LLM_API_URL=https://api.groq.com/openai/v1/chat/completions
 LLM_MODEL=llama-3.1-8b-instant
 ```
 
-Three points that catch people out:
-
-- Edit `backend/.env`, **not** `backend/.env.example`. The example file is a
-  template that gets overwritten by updates.
-- No quotes around the key, and no space either side of the `=`.
-- The URL must end in `/chat/completions`. Groq's docs give the base URL
-  `https://api.groq.com/openai/v1`; this project needs the full path.
+No quotes around the key and no spaces around the `=`.
+</details>
 
 ---
 
