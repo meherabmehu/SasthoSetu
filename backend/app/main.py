@@ -69,6 +69,12 @@ from app.modules.fhir.routes import (
 from app.modules.rural.routes import (
     router as rural_router
 )
+from app.modules.reviews.routes import (
+    router as review_router
+)
+from app.modules.recommendations.routes import (
+    router as recommendation_router
+)
 from app.modules.ai.routes import (
     router as ai_router
 )
@@ -213,6 +219,16 @@ app.include_router(
     fhir_router,
     prefix="/api/v1",
     tags=["FHIR Interoperability"]
+)
+app.include_router(
+    review_router,
+    prefix="/api/v1",
+    tags=["Reviews"]
+)
+app.include_router(
+    recommendation_router,
+    prefix="/api/v1",
+    tags=["Recommendations"]
 )
 app.include_router(
     rural_router,

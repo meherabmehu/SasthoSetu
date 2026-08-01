@@ -17,6 +17,8 @@ EXPECTED_TABLES = {
     "consultation_messages",
     "consultations",
     "doctor_availability",
+    "doctor_rating_summaries",
+    "doctor_reviews",
     "doctors",
     "file_records",
     "medical_records",

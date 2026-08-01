@@ -4,17 +4,20 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 
 from app.core.config import settings
-from app.models.ai_feedback import AIFeedback
-from app.models.appointment import Appointment
+# Every model module must be imported here or autogenerate will treat its
+# tables as absent from the metadata and propose dropping them. Ordered so
+# that a table is registered before anything referencing it.
 from app.models.base import Base
+from app.models.user import User
+from app.models.patient import Patient
 from app.models.doctor import Doctor
 from app.models.doctor_availability import DoctorAvailability
-from app.models.file_record import FileRecord
-from app.models.medical_record import MedicalRecord
-from app.models.notification import Notification
-from app.models.patient import Patient
+from app.models.appointment import Appointment
 from app.models.prescription import Prescription
-from app.models.user import User
+from app.models.medical_record import MedicalRecord
+from app.models.file_record import FileRecord
+from app.models.notification import Notification
+from app.models.ai_feedback import AIFeedback
 
 
 # Imports above register every model with Base.metadata for autogeneration.

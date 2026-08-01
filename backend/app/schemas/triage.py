@@ -35,6 +35,9 @@ class TriageResponse(BaseModel):
     confidence: int = Field(ge=0, le=100)
     matched_symptoms: list[str]
     safety_flags: list[str]
+    # Ranked possible conditions. Always a list of possibilities, never a
+    # single asserted diagnosis.
+    differential: list[dict] = []
     advice: str
     advice_bn: str = ""
     disclaimer: str

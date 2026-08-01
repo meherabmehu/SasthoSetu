@@ -14,6 +14,8 @@ table in ``app.ai.safety`` and can only raise severity, never lower it.
 """
 from typing import Optional
 
+from app.ai.differential import differential as build_differential
+from app.ai.differential import recommended_specialty
 from app.ai.extraction import extract
 from app.ai.lexicon import SYMPTOMS
 from app.ai.safety import check_red_flags
@@ -97,6 +99,12 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
     found = result.symptoms
     found_set = set(found)
 
+    # Likely conditions, ranked. Independent of the urgency decision below:
+    # urgency stays deterministic, the differential is advisory.
+    conditions = build_differential(
+        found, duration_days=result.duration_days, age=age
+    )
+
     # ---- Safety layer: red flags always win -----------------------------
     flags = check_red_flags(found, age)
 
@@ -121,6 +129,7 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             confidence=99,
             matched_symptoms=[_readable(s) for s in found],
             safety_flags=[f["flag"] for f in flags],
+            differential=conditions,
             advice=EMERGENCY_ADVICE,
             advice_bn=EMERGENCY_ADVICE_BN,
             disclaimer=CLINICAL_DISCLAIMER,
@@ -144,18 +153,32 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         if baseline and baseline > SEVERITY_PRIORITY[severity]:
             severity = LEVEL_TO_SEVERITY[baseline]
 
-        return TriageResponse(
-            triage_level=TriageLevel(severity),
-            possible_condition=rule["condition"],
-            possible_condition_bn=rule["condition_bn"],
-            recommended_specialty=(
+        # A named condition from the differential is more useful to a patient
+        # than a rule label like "Fever requiring assessment", but only when
+        # the differential is actually confident about it.
+        top = conditions[0] if conditions else None
+        use_differential = bool(top and top["likelihood"] >= 0.45)
+
+        condition_en = top["name_en"] if use_differential else rule["condition"]
+        condition_bn = top["name_bn"] if use_differential else rule["condition_bn"]
+
+        referral = recommended_specialty(conditions) if conditions else None
+        if not referral:
+            referral = (
                 _specialty_for(found)
                 if severity != rule["severity"]
                 else rule["specialty"]
-            ),
+            )
+
+        return TriageResponse(
+            triage_level=TriageLevel(severity),
+            possible_condition=condition_en,
+            possible_condition_bn=condition_bn,
+            recommended_specialty=referral,
             confidence=_confidence(rule, len(matched)),
             matched_symptoms=[_readable(s) for s in found],
             safety_flags=[],
+            differential=conditions,
             advice=rule["advice"],
             advice_bn=rule["advice_bn"],
             disclaimer=CLINICAL_DISCLAIMER,
@@ -168,12 +191,23 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         severity = LEVEL_TO_SEVERITY[baseline]
         return TriageResponse(
             triage_level=TriageLevel(severity),
-            possible_condition="Symptoms require clinical assessment",
-            possible_condition_bn="উপসর্গগুলোর জন্য চিকিৎসকের মূল্যায়ন প্রয়োজন",
-            recommended_specialty=_specialty_for(found),
+            possible_condition=(
+                conditions[0]["name_en"]
+                if conditions
+                else "Symptoms require clinical assessment"
+            ),
+            possible_condition_bn=(
+                conditions[0]["name_bn"]
+                if conditions
+                else "উপসর্গগুলোর জন্য চিকিৎসকের মূল্যায়ন প্রয়োজন"
+            ),
+            recommended_specialty=(
+                recommended_specialty(conditions) or _specialty_for(found)
+            ),
             confidence=60,
             matched_symptoms=[_readable(s) for s in found],
             safety_flags=[],
+            differential=conditions,
             advice="Book a consultation with the recommended specialty.",
             advice_bn="প্রস্তাবিত বিভাগের চিকিৎসকের সাথে পরামর্শের জন্য বুকিং দিন।",
             disclaimer=CLINICAL_DISCLAIMER,
