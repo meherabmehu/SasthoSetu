@@ -240,6 +240,21 @@ class _JsonModeRejectingHandler(BaseHTTPRequestHandler):
         pass
 
 
+class UserAgentTests(unittest.TestCase):
+    """A default Python user agent gets blocked by CDN-fronted providers.
+
+    Groq returns 403 error 1010 before the request reaches the API, which is
+    indistinguishable from a bad key unless a real user agent is sent.
+    """
+
+    def test_a_user_agent_is_always_sent(self):
+        from app.ai.llm_extraction import USER_AGENT
+
+        self.assertTrue(USER_AGENT)
+        self.assertNotIn("urllib", USER_AGENT.lower())
+        self.assertNotIn("python", USER_AGENT.lower())
+
+
 class ProviderCompatibilityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

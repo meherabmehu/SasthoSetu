@@ -52,6 +52,10 @@ from .lexicon import SYMPTOMS
 
 logger = logging.getLogger("sasthosetu.llm")
 
+# Sent on every request. Providers fronted by a CDN commonly reject the
+# default Python user agent as suspected automated traffic.
+USER_AGENT = "SasthoSetu/1.0 (+https://sasthosetu.gov.bd)"
+
 # Kept short: triage is a foreground request and a patient describing chest
 # pain must not wait on a slow model. On timeout we fall back to rules.
 REQUEST_TIMEOUT_SECONDS = 6.0
@@ -112,6 +116,37 @@ def _provider_config() -> dict:
     }
 
 
+def _explain(error: urllib.error.HTTPError) -> str:
+    """Turn a provider error into something the reader can act on.
+
+    A bare status code sends people hunting for the wrong problem: a 403 from a
+    CDN and a 401 from the API look equally like "bad key" but need completely
+    different fixes.
+    """
+    try:
+        detail = error.read().decode("utf-8", errors="replace")[:200]
+    except Exception:  # noqa: BLE001 - diagnostics must not raise
+        detail = ""
+
+    hints = {
+        401: "the API key is wrong, incomplete, or not yet active",
+        403: (
+            "the provider refused the request. If the body mentions error 1010 "
+            "the request was blocked before reaching the API, usually by a CDN"
+        ),
+        404: "LLM_API_URL is wrong - it must end in /chat/completions",
+        429: "free quota or rate limit reached - it resets on the provider's schedule",
+    }
+    hint = hints.get(error.code, "")
+
+    parts = [f"HTTP {error.code}"]
+    if hint:
+        parts.append(hint)
+    if detail.strip():
+        parts.append(f"provider said: {detail.strip()}")
+    return " | ".join(parts)
+
+
 def _post(url: str, key: str, payload: dict) -> dict:
     """Send one request and return the decoded body."""
     request = urllib.request.Request(
@@ -120,6 +155,12 @@ def _post(url: str, key: str, payload: dict) -> dict:
         headers={
             "Content-Type": "application/json",
             "Authorization": f"Bearer {key}",
+            # A User-Agent is mandatory in practice. urllib defaults to
+            # "Python-urllib/3.x", which Groq's edge layer rejects outright
+            # with a 403 (error 1010) before the request ever reaches the API,
+            # producing a failure that looks exactly like a bad key.
+            "User-Agent": USER_AGENT,
+            "Accept": "application/json",
             # Some gateways require these; harmless elsewhere.
             "HTTP-Referer": "https://sasthosetu.gov.bd",
             "X-Title": "SasthoSetu",
@@ -170,7 +211,9 @@ def _call_model(text: str) -> Optional[dict]:
             if index == 0 and error.code in (400, 404, 422):
                 logger.info("Provider rejected JSON mode, retrying without it")
                 continue
-            logger.warning("LLM request failed, using rules only: %s", error)
+            logger.warning(
+                "LLM request failed, using rules only: %s", _explain(error)
+            )
             return None
         except (urllib.error.URLError, TimeoutError, OSError) as error:
             logger.warning("LLM request failed, using rules only: %s", error)
