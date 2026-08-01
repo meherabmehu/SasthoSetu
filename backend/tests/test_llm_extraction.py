@@ -240,6 +240,50 @@ class _JsonModeRejectingHandler(BaseHTTPRequestHandler):
         pass
 
 
+class DecisivePhraseTests(unittest.TestCase):
+    """Phrases with only one sensible reading are settled by the rules.
+
+    A small model occasionally picks a plausible neighbour rather than the
+    right identifier. Reporting breathlessness as chest pain sends a
+    respiratory patient to Cardiology, so these phrases are not left to it.
+    """
+
+    def test_breathlessness_is_not_read_as_chest_pain(self):
+        from app.ai.llm_extraction import _decisive_symptoms
+
+        found, displaced = _decisive_symptoms("niswas nite parchi na thik moto")
+        self.assertIn("shortness_of_breath", found)
+        self.assertIn("chest_pain", displaced)
+
+    def test_dizziness_is_not_read_as_headache(self):
+        from app.ai.llm_extraction import _decisive_symptoms
+
+        found, displaced = _decisive_symptoms("matha ta ghurtese")
+        self.assertIn("dizziness", found)
+        self.assertIn("headache", displaced)
+
+    def test_ordinary_text_is_left_to_the_model(self):
+        from app.ai.llm_extraction import _decisive_symptoms
+
+        found, displaced = _decisive_symptoms("বুকে ব্যথা")
+        self.assertEqual([], found)
+        self.assertEqual(set(), displaced)
+
+    def test_a_displaced_symptom_the_rules_found_is_kept(self):
+        """A lexicon match is evidence; a model guess contradicting it is not."""
+        base = extract("বুকে ব্যথা")
+        self.assertIn("chest_pain", base.symptoms)
+
+        merged = merge(base, {"symptoms": ["chest_pain"]})
+        from app.ai.llm_extraction import _decisive_symptoms
+
+        _, displaced = _decisive_symptoms("বুকে ব্যথা আর niswas nite parchi na")
+        # chest_pain is displaced in principle, but the rules saw it directly,
+        # so it must survive and the cardiac combination must still form.
+        self.assertIn("chest_pain", merged.symptoms)
+        self.assertIn("chest_pain", displaced)
+
+
 class UserAgentTests(unittest.TestCase):
     """A default Python user agent gets blocked by CDN-fronted providers.
 
