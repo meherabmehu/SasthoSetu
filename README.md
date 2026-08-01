@@ -147,6 +147,25 @@ synthetic but principled, generated from the same lexicon the runtime uses.
 **Clinical validation is required before real-world deployment**, and the model
 cards say so explicitly.
 
+### Optional: language model understanding
+
+Real patients write "বুকটা যেন কেউ চেপে ধরছে", not the dictionary form
+"বুকে ব্যথা". An optional LLM layer maps colloquial and dialect phrasing onto
+the existing symptom vocabulary — and does nothing else. It returns symptom
+identifiers only; urgency, condition and referral stay with the deterministic
+rules.
+
+The safety contract is enforced in code and covered by tests: the model can
+only **add** symptoms, never remove one the rules matched, cannot invent an
+identifier outside the vocabulary, and falls back silently when unreachable.
+
+Free to enable with Groq, no credit card. See **[docs/LLM_SETUP.md](docs/LLM_SETUP.md)**.
+Left unconfigured, every feature still works.
+
+```bash
+python scripts/check_llm.py    # verify a key is working
+```
+
 ### Learning loop
 
 Clinician overrides feed retraining:

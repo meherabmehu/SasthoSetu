@@ -97,12 +97,32 @@ def _provider_config() -> dict:
     switching provider is a configuration change rather than a code change.
     """
     return {
+        # Groq by default: it has a genuinely free tier and no card
+        # requirement, which matters for a project deployed on a shoestring.
         "url": os.environ.get(
-            "LLM_API_URL", "https://api.openai.com/v1/chat/completions"
+            "LLM_API_URL", "https://api.groq.com/openai/v1/chat/completions"
         ),
         "key": os.environ.get("LLM_API_KEY", ""),
-        "model": os.environ.get("LLM_MODEL", "gpt-4o-mini"),
+        "model": os.environ.get("LLM_MODEL", "llama-3.1-8b-instant"),
     }
+
+
+def _post(url: str, key: str, payload: dict) -> dict:
+    """Send one request and return the decoded body."""
+    request = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {key}",
+            # Some gateways require these; harmless elsewhere.
+            "HTTP-Referer": "https://sasthosetu.gov.bd",
+            "X-Title": "SasthoSetu",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
+        return json.loads(response.read().decode("utf-8"))
 
 
 def _call_model(text: str) -> Optional[dict]:
@@ -114,7 +134,6 @@ def _call_model(text: str) -> Optional[dict]:
     payload = {
         "model": config["model"],
         "temperature": 0,
-        "response_format": {"type": "json_object"},
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {
@@ -127,29 +146,34 @@ def _call_model(text: str) -> Optional[dict]:
         ],
     }
 
-    request = urllib.request.Request(
-        config["url"],
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {config['key']}",
-        },
-        method="POST",
-    )
+    # JSON mode improves reliability but is not universally supported: several
+    # free and self-hosted endpoints reject the field outright. Ask for it,
+    # then retry without it rather than losing the model entirely.
+    attempts = [
+        {**payload, "response_format": {"type": "json_object"}},
+        payload,
+    ]
 
-    try:
-        with urllib.request.urlopen(
-            request, timeout=REQUEST_TIMEOUT_SECONDS
-        ) as response:
-            body = json.loads(response.read().decode("utf-8"))
-        content = body["choices"][0]["message"]["content"]
-        return _parse_json(content)
-    except (urllib.error.URLError, TimeoutError, OSError) as error:
-        logger.warning("LLM request failed, using rules only: %s", error)
-        return None
-    except (KeyError, IndexError, ValueError) as error:
-        logger.warning("LLM response unusable, using rules only: %s", error)
-        return None
+    for index, attempt in enumerate(attempts):
+        try:
+            body = _post(config["url"], config["key"], attempt)
+            content = body["choices"][0]["message"]["content"]
+            return _parse_json(content)
+        except urllib.error.HTTPError as error:
+            # A 400 on the first attempt usually means the provider does not
+            # know response_format, so the plain retry is worth making.
+            if index == 0 and error.code in (400, 404, 422):
+                logger.info("Provider rejected JSON mode, retrying without it")
+                continue
+            logger.warning("LLM request failed, using rules only: %s", error)
+            return None
+        except (urllib.error.URLError, TimeoutError, OSError) as error:
+            logger.warning("LLM request failed, using rules only: %s", error)
+            return None
+        except (KeyError, IndexError, ValueError) as error:
+            logger.warning("LLM response unusable, using rules only: %s", error)
+            return None
+    return None
 
 
 def _parse_json(content: str) -> Optional[dict]:
