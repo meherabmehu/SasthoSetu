@@ -9,6 +9,7 @@ from app.core.middleware import (
     RequestContextMiddleware,
     SecurityHeadersMiddleware,
 )
+from app.core.schema_check import verify_schema
 
 from app.modules.users.routes import router as user_router
 from app.modules.auth.routes import router as auth_router
@@ -240,6 +241,16 @@ app.include_router(
     prefix="/api/v1",
     tags=["BanglaMed-AI"]
 )
+@app.on_event("startup")
+def check_schema_on_startup() -> None:
+    """Warn loudly if the code is ahead of the database.
+
+    Pulling new code without migrating otherwise shows up as an unexplained
+    500 the first time someone uses the affected feature.
+    """
+    verify_schema()
+
+
 @app.get("/")
 def root():
     return {

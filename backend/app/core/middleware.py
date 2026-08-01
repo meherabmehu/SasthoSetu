@@ -13,6 +13,7 @@ from collections import deque
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import OperationalError
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.config import settings
@@ -42,6 +43,34 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         started = time.perf_counter()
         try:
             response = await call_next(request)
+        except OperationalError as error:
+            # Almost always a schema that is behind the code. Say so, rather
+            # than returning a generic 500 that sends the reader into a
+            # SQLAlchemy traceback looking for a bug that is not there.
+            duration_ms = (time.perf_counter() - started) * 1000
+            detail = str(error.orig) if error.orig else str(error)
+            is_missing_table = "no such table" in detail.lower()
+
+            logger.error(
+                "database error on %s %s after %.1fms: %s",
+                request.method,
+                request.url.path,
+                duration_ms,
+                detail,
+                extra={"request_id": request_id},
+            )
+
+            message = (
+                "The database schema is out of date. Run: "
+                "cd backend && alembic upgrade head"
+                if is_missing_table
+                else "A database error occurred."
+            )
+            return JSONResponse(
+                status_code=503 if is_missing_table else 500,
+                content={"detail": message, "request_id": request_id},
+                headers={"X-Request-ID": request_id},
+            )
         except Exception:
             duration_ms = (time.perf_counter() - started) * 1000
             logger.exception(
