@@ -1,6 +1,6 @@
 import unittest
 
-from app.core.config import DEVELOPMENT_SECRET, Settings
+from app.core.config import BACKEND_DIR, DEVELOPMENT_SECRET, Settings
 
 
 BASE_ENV = {
@@ -61,6 +61,32 @@ class SettingsTests(unittest.TestCase):
                     "ACCESS_TOKEN_EXPIRE_MINUTES": "0",
                 }
             )
+
+
+class SqlitePathTests(unittest.TestCase):
+    """A relative SQLite path must mean the same file from any directory.
+
+    Migrations run from ``backend/`` while the seed script runs from the
+    repository root; without anchoring, those two commands would populate
+    different database files and the seed would appear to silently fail.
+    """
+
+    def test_relative_sqlite_path_is_anchored_to_the_backend_directory(self):
+        settings = Settings.from_env({"DATABASE_URL": "sqlite:///./dev.db"})
+        expected = (BACKEND_DIR / "dev.db").resolve()
+        self.assertEqual(f"sqlite:///{expected}", settings.database_url)
+
+    def test_absolute_sqlite_path_is_left_alone(self):
+        url = "sqlite:////var/lib/sasthosetu/app.db"
+        self.assertEqual(url, Settings.from_env({"DATABASE_URL": url}).database_url)
+
+    def test_in_memory_database_is_left_alone(self):
+        url = "sqlite:///:memory:"
+        self.assertEqual(url, Settings.from_env({"DATABASE_URL": url}).database_url)
+
+    def test_postgres_url_is_left_alone(self):
+        url = "postgresql+psycopg2://user:pass@localhost:5432/sasthosetu"
+        self.assertEqual(url, Settings.from_env({"DATABASE_URL": url}).database_url)
 
 
 if __name__ == "__main__":

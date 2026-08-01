@@ -14,6 +14,26 @@ DEVELOPMENT_SECRET = "development-only-secret-change-before-production"
 load_dotenv(ENV_FILE)
 
 
+def _anchor_sqlite_path(url: str) -> str:
+    """Resolve a relative SQLite path against the backend directory.
+
+    ``sqlite:///./dev.db`` is otherwise interpreted relative to whatever
+    directory the process happens to start in, so running migrations from
+    ``backend/`` and the seed script from the repository root would silently
+    create and populate two different database files.
+    """
+    prefix = "sqlite:///"
+    if not url.startswith(prefix):
+        return url
+
+    path = url[len(prefix):]
+    # In-memory databases and absolute paths are already unambiguous.
+    if not path or path.startswith(":memory:") or path.startswith("/"):
+        return url
+
+    return prefix + str((BACKEND_DIR / path).resolve())
+
+
 def _positive_int(value: str, name: str) -> int:
     try:
         parsed = int(value)
@@ -85,6 +105,7 @@ class Settings:
         database_url = values.get("DATABASE_URL", "").strip()
         if not database_url:
             raise ValueError("DATABASE_URL is required")
+        database_url = _anchor_sqlite_path(database_url)
 
         secret_key = values.get("SECRET_KEY", DEVELOPMENT_SECRET).strip()
         if app_env in {"staging", "production"}:

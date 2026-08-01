@@ -46,6 +46,11 @@ natural Bangla, romanised Banglish, English, and English paraphrase.
 
 ## Quick start
 
+**New to the project? Follow [docs/SETUP.md](docs/SETUP.md)** — a step-by-step
+guide from clone to running, with troubleshooting.
+
+The condensed version:
+
 ### Docker (recommended)
 
 ```bash
@@ -60,24 +65,26 @@ models, which takes a minute or two.
 ### Local
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r backend/requirements.txt uvicorn
 
 python ml/prepare_all.py                       # datasets + models (~90s)
 
-cd backend
-cp .env.example .env                           # set DATABASE_URL and SECRET_KEY
-alembic upgrade head
-cd .. && python scripts/seed_database.py       # facilities, doctors, demo logins
+cp backend/.env.example backend/.env           # defaults to SQLite, no edits needed
+cd backend && alembic upgrade head && cd ..
+python scripts/seed_database.py                # facilities, doctors, demo logins
 
-cd backend && uvicorn app.main:app --reload
+cd backend && uvicorn app.main:app --reload    # terminal 1
 ```
 
-Serve the frontend from any static server:
+In a second terminal, serve the frontend:
 
 ```bash
-cd frontend && python -m http.server 5500
+source .venv/bin/activate
+cd frontend && python3 -m http.server 5500     # terminal 2
 ```
+
+Open **http://localhost:5500**.
 
 ### Demo accounts
 
