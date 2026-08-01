@@ -257,13 +257,15 @@ SYMPTOMS = {
         "specialty": "Psychiatry", "level": 2,
     },
     "weight_loss": {
-        "bn": ["ওজন কমে যাচ্ছে", "শুকিয়ে যাচ্ছি"],
+        "bn": ["ওজন কমে যাচ্ছে", "ওজন কমছে", "ওজন কমে গেছে", "শুকিয়ে যাচ্ছি",
+               "শরীর শুকিয়ে যাচ্ছে", "ওজন হ্রাস"],
         "bl": ["ojon kome jacche", "weight loss hocche"],
         "en": ["losing weight", "unexplained weight loss"],
         "specialty": "General Medicine", "level": 3,
     },
     "night_sweats": {
-        "bn": ["রাতে ঘাম হয়", "রাতে ঘেমে যাই"],
+        "bn": ["রাতে ঘাম হয়", "রাতে ঘাম", "রাতে ঘেমে যাই", "রাতে প্রচুর ঘাম",
+               "ঘুমের মধ্যে ঘাম"],
         "bl": ["rate gham hoy"],
         "en": ["night sweats", "sweating at night"],
         "specialty": "Pulmonology", "level": 3,
