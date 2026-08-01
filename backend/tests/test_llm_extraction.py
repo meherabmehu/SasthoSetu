@@ -191,6 +191,65 @@ class HttpIntegrationTests(unittest.TestCase):
             _StubHandler.payload = original
 
 
+class _JsonModeRejectingHandler(BaseHTTPRequestHandler):
+    """A provider that does not understand response_format.
+
+    Several free and self-hosted endpoints behave this way, so the client has
+    to cope rather than silently losing the model.
+    """
+
+    def do_POST(self):
+        body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+        if "response_format" in body:
+            message = json.dumps(
+                {"error": {"message": "Unrecognized request argument"}}
+            ).encode()
+            self.send_response(400)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(message)))
+            self.end_headers()
+            self.wfile.write(message)
+            return
+
+        payload = json.dumps({"symptoms": ["chest_pain"], "negated": []})
+        response = json.dumps(
+            {"choices": [{"message": {"content": payload}}]}
+        ).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(response)))
+        self.end_headers()
+        self.wfile.write(response)
+
+    def log_message(self, *args):
+        pass
+
+
+class ProviderCompatibilityTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.server = HTTPServer(("127.0.0.1", 0), _JsonModeRejectingHandler)
+        cls.port = cls.server.server_address[1]
+        cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+        cls.server.server_close()
+
+    def test_retries_without_json_mode_when_the_provider_rejects_it(self):
+        os.environ["LLM_API_KEY"] = "test-key"
+        os.environ["LLM_API_URL"] = f"http://127.0.0.1:{self.port}"
+        try:
+            result, provenance = extract_with_llm("বুকটা যেন কেউ চেপে ধরছে")
+            self.assertTrue(provenance["llm_used"])
+            self.assertIn("chest_pain", result.symptoms)
+        finally:
+            os.environ.pop("LLM_API_KEY", None)
+            os.environ.pop("LLM_API_URL", None)
+
+
 class SafetyLayerStillGovernsTests(unittest.TestCase):
     """Red flags are decided by rules, on whatever symptoms are present."""
 
