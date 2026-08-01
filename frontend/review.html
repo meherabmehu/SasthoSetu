@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>রিভিউ দিন · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container" style="max-width:720px">
+    <div class="page-head">
+      <h1 data-i18n="review.pending">রিভিউ দেওয়ার অপেক্ষায়</h1>
+      <p class="muted" data-i18n="review.proofNote"></p>
+    </div>
+    <div id="list" aria-live="polite"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatDate, skeletonList, emptyState, errorState,
+  toast, setBusy, requireAuth,
+} from './assets/js/ui.js';
+
+bootstrap('appointments.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+const BN = i18n.lang === 'bn';
+const listEl = document.getElementById('list');
+
+const PROOF_LABELS = {
+  bn: {
+    SIGNED_CONSULTATION: 'স্বাক্ষরিত কনসালটেশন',
+    PRESCRIPTION_DISPENSED: 'প্রেসক্রিপশন সরবরাহ হয়েছে',
+    COMPLETED_APPOINTMENT: 'সম্পন্ন অ্যাপয়েন্টমেন্ট',
+  },
+  en: {
+    SIGNED_CONSULTATION: 'Signed consultation',
+    PRESCRIPTION_DISPENSED: 'Prescription dispensed',
+    COMPLETED_APPOINTMENT: 'Completed appointment',
+  },
+};
+const proofLabel = (p) => (PROOF_LABELS[i18n.lang] || PROOF_LABELS.bn)[p] || p;
+
+/* A star control that is genuinely operable by keyboard and screen reader.
+   Radio inputs rather than clickable spans, because a rating a keyboard user
+   cannot set is a rating they cannot leave. */
+function starField(name, labelKey, required) {
+  const stars = [5, 4, 3, 2, 1].map((value) => `
+    <label class="star-option">
+      <input type="radio" name="${name}" value="${value}" class="sr-only"
+        ${required ? 'required' : ''}>
+      <span aria-hidden="true">★</span>
+      <span class="sr-only">${value}</span>
+    </label>`).join('');
+
+  return `<fieldset class="field" style="border:none;padding:0;margin-bottom:1rem">
+    <legend class="label">${escapeHtml(i18n.t(labelKey))}${required ? ' *' : ''}</legend>
+    <div class="star-row">${stars}</div>
+  </fieldset>`;
+}
+
+function card(item) {
+  return `<article class="card mb-4">
+    <div class="row-between">
+      <div>
+        <h3 class="mb-0">${escapeHtml(item.doctor_name || 'Doctor')}</h3>
+        <div class="small muted">${escapeHtml(item.specialization || '')}</div>
+        <div class="small muted">${escapeHtml(formatDate(item.appointment_date))}</div>
+      </div>
+      <span class="badge badge-success">✔ ${escapeHtml(proofLabel(item.proof_type))}</span>
+    </div>
+
+    <form class="mt-4 reviewForm" data-appointment="${escapeHtml(item.appointment_id)}">
+      ${starField(`rating-${item.appointment_id}`, 'review.rating', true)}
+      ${starField(`explanation-${item.appointment_id}`, 'review.explanation', false)}
+      ${starField(`punctuality-${item.appointment_id}`, 'review.punctuality', false)}
+      ${starField(`respect-${item.appointment_id}`, 'review.respect', false)}
+
+      <div class="field">
+        <label class="label" for="comment-${escapeHtml(item.appointment_id)}"
+          data-i18n="review.comment">আপনার মন্তব্য</label>
+        <textarea id="comment-${escapeHtml(item.appointment_id)}" class="textarea"
+          maxlength="2000" style="min-height:80px"></textarea>
+      </div>
+
+      <p class="error-text hidden" role="alert"></p>
+      <button class="btn btn-block" type="submit"
+        data-i18n="review.submit">রিভিউ জমা দিন</button>
+    </form>
+  </article>`;
+}
+
+async function load() {
+  listEl.innerHTML = skeletonList(2);
+  try {
+    const items = await api.get('/reviews/pending');
+    listEl.innerHTML = items.length
+      ? items.map(card).join('')
+      : emptyState('review.none', '⭐');
+  } catch (error) {
+    listEl.innerHTML = errorState(error.message);
+  }
+}
+
+function readStars(form, prefix, appointmentId) {
+  const checked = form.querySelector(
+    `input[name="${prefix}-${appointmentId}"]:checked`
+  );
+  return checked ? Number(checked.value) : null;
+}
+
+listEl.addEventListener('submit', async (event) => {
+  const form = event.target.closest('.reviewForm');
+  if (!form) return;
+  event.preventDefault();
+
+  const appointmentId = form.dataset.appointment;
+  const button = form.querySelector('button[type="submit"]');
+  const errorEl = form.querySelector('.error-text');
+  errorEl.classList.add('hidden');
+
+  const rating = readStars(form, 'rating', appointmentId);
+  if (!rating) {
+    errorEl.textContent = BN
+      ? 'অনুগ্রহ করে রেটিং দিন'
+      : 'Please select an overall rating';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  setBusy(button, true);
+  try {
+    await api.post('/reviews', {
+      appointment_id: appointmentId,
+      rating,
+      rating_explanation: readStars(form, 'explanation', appointmentId),
+      rating_punctuality: readStars(form, 'punctuality', appointmentId),
+      rating_respect: readStars(form, 'respect', appointmentId),
+      comment: form.querySelector('textarea').value.trim() || null,
+      language: i18n.lang,
+    });
+    toast(i18n.t('review.thanks'), 'success');
+    load();
+  } catch (error) {
+    errorEl.textContent = error.message;
+    errorEl.classList.remove('hidden');
+    setBusy(button, false);
+  }
+});
+
+load();
+</script>
+
+<style>
+/* Stars render right-to-left so that CSS sibling selectors can light up the
+   chosen star and everything before it, which plain left-to-right ordering
+   cannot express without JavaScript. */
+.star-row {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+.star-option {
+  cursor: pointer;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--border-strong);
+  min-width: 44px;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  transition: color var(--transition);
+}
+/* Selected star and all lower ones. */
+.star-option:has(input:checked),
+.star-option:has(input:checked) ~ .star-option { color: #f59e0b; }
+/* Hover preview takes precedence while the pointer is over the row. */
+.star-row:hover .star-option { color: var(--border-strong); }
+.star-row .star-option:hover,
+.star-row .star-option:hover ~ .star-option { color: #fbbf24; }
+
+.star-option:has(input:focus-visible) {
+  outline: 3px solid var(--teal-400);
+  border-radius: var(--radius-sm);
+}
+</style>
+</body>
+</html>

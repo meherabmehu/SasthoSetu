@@ -256,9 +256,59 @@ function renderResult(data) {
          ${escapeHtml(i18n.t('triage.findHospital'))}</a>`
     : '';
 
+  // High-risk results route to the location-aware recommender rather than the
+  // plain directory, so the patient is offered doctors who can actually see
+  // them nearby rather than an alphabetical list.
+  const needsDoctor = level >= 3;
+  const recQuery = new URLSearchParams({
+    specialty: data.recommended_specialty || '',
+    condition: data.differential?.[0]?.condition || '',
+    urgent: level >= 4 ? 'true' : 'false',
+  });
   const doctorAction = `<a class="btn ${level === 5 ? 'btn-secondary' : ''} btn-block mt-4"
-      href="doctors.html?session=${encodeURIComponent(data.triage_session_id || '')}&specialty=${encodeURIComponent(data.recommended_specialty || '')}">
-      ${escapeHtml(i18n.t('triage.findDoctor'))}</a>`;
+      href="${needsDoctor ? 'recommend.html' : 'doctors.html'}?${recQuery}">
+      ${escapeHtml(needsDoctor ? i18n.t('rec.title') : i18n.t('triage.findDoctor'))}</a>`;
+
+  const differential = (data.differential || []).length
+    ? `<div class="card mt-4">
+         <div class="row-between">
+           <h3 class="mb-0">${escapeHtml(i18n.t('triage.differential'))}</h3>
+           <span class="tiny subtle">${escapeHtml(i18n.t('triage.likelihood'))}</span>
+         </div>
+         <div class="stack mt-4">
+           ${data.differential.map((item) => {
+             const pct = Math.round((item.likelihood || 0) * 100);
+             const name = i18n.pick(item.name_en, item.name_bn);
+             const advice = i18n.pick(item.advice_en, item.advice_bn);
+             const symptoms = (item.matched_symptoms || [])
+               .map((s) => escapeHtml(symptomLabel(s))).join(', ');
+             return `<div class="condition-row${item.is_red_flag ? ' condition-urgent' : ''}">
+               <div class="row-between">
+                 <strong>${escapeHtml(name)}</strong>
+                 <span class="bold nowrap">${pct}%</span>
+               </div>
+               <div class="progress" role="img"
+                 aria-label="${escapeHtml(name)} ${pct}%">
+                 <div class="progress-bar${item.is_red_flag ? ' progress-urgent' : ''}"
+                   style="width:${pct}%"></div>
+               </div>
+               ${item.is_red_flag
+                 ? `<div class="tiny bold" style="color:var(--danger);margin-top:.35rem">
+                      ⚠ ${escapeHtml(i18n.t('triage.urgentCare'))}</div>`
+                 : ''}
+               ${symptoms
+                 ? `<div class="tiny subtle" style="margin-top:.25rem">
+                      ${escapeHtml(i18n.t('triage.basedOn'))}: ${symptoms}</div>`
+                 : ''}
+               ${advice
+                 ? `<div class="small" style="margin-top:.35rem">${escapeHtml(advice)}</div>`
+                 : ''}
+             </div>`;
+           }).join('')}
+         </div>
+         <p class="hint mt-4">${escapeHtml(i18n.t('triage.notDiagnosis'))}</p>
+       </div>`
+    : '';
 
   resultEl.innerHTML = `
     <div class="card severity-banner severity-${level}">
@@ -271,6 +321,8 @@ function renderResult(data) {
       <p>${escapeHtml(advice || '')}</p>
       ${flags}
     </div>
+
+    ${differential}
 
     <div class="card mt-4">
       ${matched}

@@ -289,3 +289,18 @@
 }
 .bubble-own { align-self: flex-end; background: var(--teal-600); color: #fff; border-color: var(--teal-600); }
 .bubble-time { display: block; font-size: var(--text-xs); opacity: 0.75; margin-top: var(--space-1); }
+
+/* Differential list. Each row shows the condition, its likelihood and the
+   symptoms behind it, so a suggestion is never presented without its reason. */
+.condition-row {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.condition-row + .condition-row { margin-top: var(--space-2); }
+.condition-urgent {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+.progress-urgent { background: var(--danger); }

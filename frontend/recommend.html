@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>কাছাকাছি সেরা ডাক্তার · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="rec.title">আপনার কাছাকাছি সেরা ডাক্তার</h1>
+      <p class="muted" id="contextNote"></p>
+    </div>
+
+    <div class="alert alert-danger hidden" id="urgentBanner">
+      <div>
+        <strong data-i18n="triage.urgentCare">জরুরি — দ্রুত চিকিৎসা প্রয়োজন</strong>
+        <div class="small" data-i18n="emergency.call">
+          জাতীয় জরুরি সেবা ৯৯৯ এ কল করুন</div>
+      </div>
+    </div>
+
+    <form class="card" id="filters">
+      <div class="grid">
+        <div class="field mb-0">
+          <label class="label" for="specialty" data-i18n="doctor.specialty">বিভাগ</label>
+          <select id="specialty" class="select"></select>
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="district" id="districtLabel">জেলা</label>
+          <input id="district" class="input" list="districts" placeholder="Dhaka">
+          <datalist id="districts"></datalist>
+        </div>
+        <div class="field mb-0">
+          <label class="label" for="maxFee" data-i18n="doctor.fee">সর্বোচ্চ ফি</label>
+          <input id="maxFee" class="input" type="number" min="0" step="100" inputmode="numeric">
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button class="btn btn-block" type="submit" data-i18n="action.search">খুঁজুন</button>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-block mt-4" type="button" id="locateBtn"
+        data-i18n="rec.useLocation">আমার অবস্থান দিয়ে খুঁজুন</button>
+      <p class="hint" id="locationStatus"></p>
+    </form>
+
+    <div class="list mt-4" id="results" aria-live="polite"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatBdt, formatDate, skeletonList, emptyState,
+  errorState, toast,
+} from './assets/js/ui.js';
+
+bootstrap('doctors.html');
+
+const BN = i18n.lang === 'bn';
+const SPECIALTIES = [
+  'General Medicine', 'Cardiology', 'Pulmonology', 'Neurology',
+  'Gastroenterology', 'Orthopedics', 'Gynaecology & Obstetrics',
+  'Paediatrics', 'Dermatology', 'ENT', 'Urology', 'Ophthalmology',
+  'Psychiatry', 'Endocrinology', 'Nephrology', 'Dentistry',
+  'Emergency Medicine', 'Internal Medicine',
+];
+const DISTRICTS = [
+  'Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal',
+  'Rangpur', 'Mymensingh', 'Cumilla', 'Gazipur', 'Narayanganj',
+];
+
+const params = new URLSearchParams(window.location.search);
+const presetSpecialty = params.get('specialty') || '';
+const condition = params.get('condition') || '';
+const urgent = params.get('urgent') === 'true';
+
+document.getElementById('districtLabel').textContent = BN ? 'জেলা' : 'District';
+document.getElementById('districts').innerHTML =
+  DISTRICTS.map((d) => `<option value="${escapeHtml(d)}">`).join('');
+
+const specialtySelect = document.getElementById('specialty');
+specialtySelect.innerHTML =
+  `<option value="">${escapeHtml(BN ? 'সব বিভাগ' : 'All specialties')}</option>` +
+  SPECIALTIES.map((s) => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+if (presetSpecialty) specialtySelect.value = presetSpecialty;
+
+if (urgent) document.getElementById('urgentBanner').classList.remove('hidden');
+
+if (presetSpecialty) {
+  document.getElementById('contextNote').textContent = BN
+    ? `আপনার উপসর্গের ভিত্তিতে ${presetSpecialty} বিভাগের ডাক্তার দেখানো হচ্ছে।`
+    : `Showing ${presetSpecialty} doctors matched to your symptoms.`;
+}
+
+let coords = null;
+const resultsEl = document.getElementById('results');
+const statusEl = document.getElementById('locationStatus');
+
+// An urgent result should not wait for the patient to press a button before
+// finding nearby care, so location is requested immediately in that case.
+if (urgent && navigator.geolocation) requestLocation(true);
+
+document.getElementById('locateBtn').addEventListener('click', () => requestLocation(false));
+
+function requestLocation(silent) {
+  if (!navigator.geolocation) {
+    statusEl.textContent = BN
+      ? 'এই ব্রাউজারে অবস্থান সুবিধা নেই — জেলা দিয়ে খুঁজুন।'
+      : 'Location is unavailable in this browser - search by district instead.';
+    return;
+  }
+  statusEl.textContent = i18n.t('rec.locating');
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      coords = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+      statusEl.textContent = BN
+        ? 'অবস্থান পাওয়া গেছে — দূরত্ব অনুযায়ী সাজানো হয়েছে।'
+        : 'Location found - results are sorted by distance.';
+      search();
+    },
+    () => {
+      // Declining location must never block care: fall back to district.
+      statusEl.textContent = BN
+        ? 'অবস্থান পাওয়া যায়নি — জেলা দিয়ে খুঁজুন।'
+        : 'Location unavailable - search by district instead.';
+      if (!silent) toast(i18n.t('status.error'), 'danger');
+      search();
+    },
+    { timeout: 8000, enableHighAccuracy: false }
+  );
+}
+
+function stars(rating) {
+  if (!rating) return '';
+  const full = Math.round(rating);
+  return `<span aria-hidden="true">${'★'.repeat(full)}${'☆'.repeat(5 - full)}</span>`;
+}
+
+function doctorCard(doctor, index) {
+  const distance = doctor.distance_km !== null && doctor.distance_km !== undefined
+    ? `<span>📍 ${doctor.distance_km} km ${escapeHtml(i18n.t('rec.away'))}</span>`
+    : '';
+
+  const rating = doctor.review_count
+    ? `<div class="row gap-2">
+         <span class="rating-stars">${stars(doctor.bayesian_rating)}</span>
+         <strong>${(doctor.bayesian_rating || 0).toFixed(1)}</strong>
+         <a class="small" href="doctor-profile.html?id=${encodeURIComponent(doctor.doctor_id)}">
+           ${doctor.review_count} ${escapeHtml(i18n.t('rec.reviews'))}</a>
+         ${doctor.verified_review_count
+           ? `<span class="badge badge-success">✔ ${doctor.verified_review_count}
+                ${escapeHtml(i18n.t('rec.verified'))}</span>` : ''}
+       </div>`
+    : `<span class="tiny subtle">${escapeHtml(i18n.t('rec.noReviews'))}</span>`;
+
+  const slot = doctor.has_availability
+    ? `${formatDate(doctor.next_available_date)} · ${escapeHtml(doctor.next_available_time)}`
+    : (BN ? 'সময় নেই' : 'No slots');
+
+  const beds = urgent && doctor.available_emergency_beds
+    ? `<span class="badge badge-info">${escapeHtml(i18n.t('hospital.icu'))}:
+         ${doctor.available_emergency_beds}</span>`
+    : '';
+
+  const b = doctor.score_breakdown || {};
+  return `<article class="list-item">
+    <div class="flex-1">
+      <div class="row gap-2">
+        <span class="rank-badge">${index + 1}</span>
+        <h4 class="mb-0">${escapeHtml(doctor.name || 'Doctor')}</h4>
+      </div>
+      <div class="list-meta">
+        <span>${escapeHtml(doctor.specialization || '')}</span>
+        <span>${escapeHtml(String(doctor.experience_years || 0))} ${escapeHtml(i18n.t('doctor.years'))}</span>
+      </div>
+      <div class="list-meta">
+        <span>🏥 ${escapeHtml(doctor.hospital_name || '')}</span>
+        ${distance}
+      </div>
+      <div class="mt-4">${rating}</div>
+      <div class="row mt-4">
+        <span class="badge">${escapeHtml(i18n.t('doctor.fee'))}: ${formatBdt(doctor.consultation_fee)}</span>
+        ${doctor.has_emergency
+          ? `<span class="badge badge-success">${escapeHtml(i18n.t('hospital.emergency'))}</span>` : ''}
+        ${beds}
+      </div>
+      <details class="mt-4">
+        <summary class="tiny subtle">${escapeHtml(i18n.t('rec.whyRanked'))}</summary>
+        <div class="tiny subtle" style="margin-top:.35rem">
+          ${escapeHtml(i18n.t('doctor.specialty'))} ${Math.round((b.specialty || 0) * 100)}% ·
+          ${escapeHtml(i18n.t('hospital.distance'))} ${Math.round((b.distance || 0) * 100)}% ·
+          ${escapeHtml(i18n.t('review.rating'))} ${Math.round((b.rating || 0) * 100)}% ·
+          ${escapeHtml(i18n.t('doctor.nextSlot'))} ${Math.round((b.availability || 0) * 100)}%
+        </div>
+      </details>
+    </div>
+    <div style="text-align:right;min-width:150px">
+      <div class="small muted">${escapeHtml(i18n.t('doctor.nextSlot'))}</div>
+      <div class="bold">${slot}</div>
+      ${doctor.hospital_phone
+        ? `<a class="btn btn-sm btn-secondary mt-4"
+             href="tel:${escapeHtml(doctor.hospital_phone)}">📞</a>` : ''}
+      <a class="btn btn-sm mt-4"
+        href="doctor-profile.html?id=${encodeURIComponent(doctor.doctor_id)}">
+        ${escapeHtml(i18n.t('action.view'))}</a>
+    </div>
+  </article>`;
+}
+
+async function search() {
+  resultsEl.innerHTML = skeletonList(3);
+  const query = new URLSearchParams();
+  if (specialtySelect.value) query.set('specialty', specialtySelect.value);
+  if (condition) query.set('condition', condition);
+  if (urgent) query.set('urgent', 'true');
+  if (coords) {
+    query.set('latitude', coords.latitude);
+    query.set('longitude', coords.longitude);
+  }
+  const district = document.getElementById('district').value.trim();
+  if (district) query.set('district', district);
+  const fee = document.getElementById('maxFee').value;
+  if (fee) query.set('max_fee', fee);
+  query.set('limit', '20');
+
+  try {
+    const data = await api.get(`/recommendations/doctors?${query}`,
+      { auth: false, cache: true });
+    resultsEl.innerHTML = data.results?.length
+      ? data.results.map(doctorCard).join('')
+      : emptyState('doctor.noneFound', '👨‍⚕️');
+  } catch (error) {
+    resultsEl.innerHTML = errorState(error.message);
+  }
+}
+
+document.getElementById('filters').addEventListener('submit', (event) => {
+  event.preventDefault();
+  search();
+});
+
+search();
+</script>
+
+<style>
+.rank-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--teal-600);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.rating-stars { color: #f59e0b; letter-spacing: 1px; }
+</style>
+</body>
+</html>

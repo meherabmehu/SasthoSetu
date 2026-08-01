@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.models.user import User
 from app.models.doctor import Doctor
+from app.models.review import DoctorRatingSummary
 
 
 def create_doctor_profile_service(
@@ -108,6 +109,12 @@ def get_doctor_by_id_service(
     doctor_id: str,
     db: Session
 ):
+    """Public doctor profile.
+
+    Returns the display name and rating alongside the profile row: a patient
+    choosing a doctor needs the name and reputation, and the bare ORM row
+    carries neither.
+    """
 
     doctor = (
         db.query(Doctor)
@@ -123,7 +130,37 @@ def get_doctor_by_id_service(
             detail="Doctor not found"
         )
 
-    return doctor
+    user = (
+        db.query(User)
+        .filter(
+            User.id == doctor.user_id
+        )
+        .first()
+    )
+
+    summary = (
+        db.query(DoctorRatingSummary)
+        .filter(
+            DoctorRatingSummary.doctor_id == doctor.id
+        )
+        .first()
+    )
+
+    return {
+        "id": doctor.id,
+        "user_id": doctor.user_id,
+        "name": user.full_name if user else None,
+        "bmdc_number": doctor.bmdc_number,
+        "specialization": doctor.specialization,
+        "experience_years": doctor.experience_years,
+        "consultation_fee": doctor.consultation_fee,
+        "hospital_name": doctor.hospital_name,
+        "bio": doctor.bio,
+        "verification_status": bool(doctor.verification_status),
+        "rating": summary.average_rating if summary else None,
+        "bayesian_rating": summary.bayesian_rating if summary else None,
+        "review_count": summary.review_count if summary else 0,
+    }
 
 
 def get_doctors_by_specialization_service(

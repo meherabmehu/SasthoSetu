@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>ডাক্তারের প্রোফাইল · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container" style="max-width:860px">
+    <a href="recommend.html" class="btn btn-ghost btn-sm" data-i18n="action.back">ফিরে যান</a>
+    <div id="profile" class="mt-4" aria-live="polite"></div>
+    <div id="reviews" class="mt-4"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import {
+  escapeHtml, formatBdt, formatDate, skeletonList, emptyState, errorState,
+} from './assets/js/ui.js';
+
+bootstrap('doctors.html');
+
+const BN = i18n.lang === 'bn';
+const doctorId = new URLSearchParams(window.location.search).get('id');
+
+const PROOF_LABELS = {
+  bn: {
+    SIGNED_CONSULTATION: 'স্বাক্ষরিত কনসালটেশন',
+    PRESCRIPTION_DISPENSED: 'প্রেসক্রিপশন সরবরাহ হয়েছে',
+    COMPLETED_APPOINTMENT: 'সম্পন্ন অ্যাপয়েন্টমেন্ট',
+  },
+  en: {
+    SIGNED_CONSULTATION: 'Signed consultation',
+    PRESCRIPTION_DISPENSED: 'Prescription dispensed',
+    COMPLETED_APPOINTMENT: 'Completed appointment',
+  },
+};
+const proofLabel = (p) => (PROOF_LABELS[i18n.lang] || PROOF_LABELS.bn)[p] || p;
+
+function stars(rating) {
+  const full = Math.round(rating || 0);
+  return `${'★'.repeat(full)}${'☆'.repeat(5 - full)}`;
+}
+
+async function load() {
+  if (!doctorId) {
+    document.getElementById('profile').innerHTML =
+      errorState(BN ? 'ডাক্তার নির্দিষ্ট নয়' : 'No doctor specified');
+    return;
+  }
+
+  document.getElementById('profile').innerHTML = skeletonList(1);
+  document.getElementById('reviews').innerHTML = skeletonList(2);
+
+  try {
+    const [doctor, reviews] = await Promise.all([
+      api.get(`/doctors/id/${encodeURIComponent(doctorId)}`, { auth: false, cache: true }),
+      api.get(`/doctors/${encodeURIComponent(doctorId)}/reviews`, { auth: false, cache: true }),
+    ]);
+
+    document.getElementById('profile').innerHTML = `
+      <div class="card">
+        <div class="row-between">
+          <div>
+            <h1 class="mb-0">${escapeHtml(doctor.name || doctor.bmdc_number || 'Doctor')}</h1>
+            <div class="muted">${escapeHtml(doctor.specialization || '')}</div>
+            <div class="small muted">🏥 ${escapeHtml(doctor.hospital_name || '')}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="rating-big">${stars(reviews.bayesian_rating)}</div>
+            <div class="bold" style="font-size:1.5rem">
+              ${(reviews.bayesian_rating || 0).toFixed(1)}</div>
+            <div class="tiny subtle">${reviews.review_count}
+              ${escapeHtml(i18n.t('rec.reviews'))}</div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <span class="badge badge-success">✔ ${escapeHtml(i18n.t('doctor.verified'))}</span>
+          <span class="badge">${escapeHtml(i18n.t('doctor.experience'))}:
+            ${escapeHtml(String(doctor.experience_years || 0))}
+            ${escapeHtml(i18n.t('doctor.years'))}</span>
+          <span class="badge">${escapeHtml(i18n.t('doctor.fee'))}:
+            ${formatBdt(doctor.consultation_fee)}</span>
+        </div>
+        ${doctor.bio ? `<p class="mt-4">${escapeHtml(doctor.bio)}</p>` : ''}
+      </div>`;
+
+    renderReviews(reviews);
+  } catch (error) {
+    document.getElementById('profile').innerHTML = errorState(error.message);
+    document.getElementById('reviews').innerHTML = '';
+  }
+}
+
+function renderReviews(data) {
+  const host = document.getElementById('reviews');
+
+  if (!data.review_count) {
+    host.innerHTML = `<div class="card">${emptyState('rec.noReviews', '⭐')}
+      <p class="hint center">${escapeHtml(i18n.t('review.proofNote'))}</p></div>`;
+    return;
+  }
+
+  // Distribution bars make an unusual rating shape visible: fifty 5s and no
+  // 4s looks different from a genuine spread, and the reader can see it.
+  const maxCount = Math.max(...Object.values(data.rating_distribution));
+  const distribution = [5, 4, 3, 2, 1].map((star) => {
+    const count = data.rating_distribution[String(star)] || 0;
+    const width = maxCount ? Math.round((count / maxCount) * 100) : 0;
+    return `<div class="row gap-2" style="align-items:center">
+      <span class="tiny nowrap" style="width:2.5rem">${star} ★</span>
+      <div class="progress flex-1"><div class="progress-bar" style="width:${width}%"></div></div>
+      <span class="tiny subtle" style="width:2rem;text-align:right">${count}</span>
+    </div>`;
+  }).join('');
+
+  const sub = data.sub_scores || {};
+  const subScores = [
+    ['review.explanation', sub.explanation],
+    ['review.punctuality', sub.punctuality],
+    ['review.respect', sub.respect],
+  ].filter(([, value]) => value !== null && value !== undefined)
+   .map(([key, value]) => `<div class="metric">
+      <div class="metric-value">${Number(value).toFixed(1)}</div>
+      <div class="metric-label">${escapeHtml(i18n.t(key))}</div>
+    </div>`).join('');
+
+  const items = data.items.map((review) => `
+    <article class="list-item">
+      <div class="flex-1">
+        <div class="row gap-2">
+          <span class="rating-stars">${stars(review.rating)}</span>
+          <strong>${escapeHtml(review.patient_name || (BN ? 'রোগী' : 'Patient'))}</strong>
+          <span class="badge badge-success" title="${escapeHtml(proofLabel(review.proof_type))}">
+            ✔ ${escapeHtml(i18n.t('review.verifiedVisit'))}</span>
+        </div>
+        ${review.comment
+          ? `<p class="mb-0 mt-4">${escapeHtml(review.comment)}</p>` : ''}
+        <div class="tiny subtle mt-4">
+          ${escapeHtml(formatDate(review.created_at))} ·
+          ${escapeHtml(proofLabel(review.proof_type))}
+        </div>
+      </div>
+    </article>`).join('');
+
+  host.innerHTML = `
+    <div class="card">
+      <h2>${escapeHtml(i18n.t('rec.reviews'))}</h2>
+      <div class="alert alert-info">
+        <div class="small">✔ ${escapeHtml(i18n.t('review.proofNote'))}</div>
+      </div>
+      <div class="grid-2 mt-4">
+        <div class="stack">${distribution}</div>
+        ${subScores ? `<div class="metric-grid">${subScores}</div>` : '<div></div>'}
+      </div>
+    </div>
+    <div class="list mt-4">${items}</div>`;
+}
+
+load();
+</script>
+
+<style>
+.rating-big { color: #f59e0b; font-size: 1.5rem; letter-spacing: 2px; }
+.rating-stars { color: #f59e0b; letter-spacing: 1px; }
+</style>
+</body>
+</html>
