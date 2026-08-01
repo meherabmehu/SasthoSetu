@@ -256,6 +256,29 @@ To start over with a clean database, delete `backend/dev.db` and repeat steps
 
 ---
 
+---
+
+## Updating to a newer version
+
+**Always run the migration after pulling.** New features usually add database
+tables, and code that expects a table the database does not have will fail at
+the moment you use that feature.
+
+```powershell
+git pull origin main
+pip install -r backend/requirements.txt
+
+cd backend
+alembic upgrade head
+cd ..
+```
+
+If you skip the migration the API logs
+`DATABASE SCHEMA IS OUT OF DATE` at startup and affected pages return
+"The database schema is out of date". Running the command above fixes it; no
+data is lost.
+
+
 ## Running the tests
 
 ```bash
