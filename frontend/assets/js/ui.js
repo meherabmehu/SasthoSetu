@@ -117,7 +117,7 @@ const NAV_BY_ROLE = {
   guest: [
     ['index.html', 'nav.home'],
     ['triage.html', 'nav.triage'],
-    ['doctors.html', 'nav.doctors'],
+    ['recommend.html', 'nav.doctors'],
     ['hospitals.html', 'nav.hospitals'],
     ['pharmacy.html', 'nav.pharmacy'],
     ['verify.html', 'nav.verify'],
@@ -125,8 +125,9 @@ const NAV_BY_ROLE = {
   PATIENT: [
     ['index.html', 'nav.home'],
     ['triage.html', 'nav.triage'],
-    ['doctors.html', 'nav.doctors'],
+    ['recommend.html', 'nav.doctors'],
     ['appointments.html', 'nav.appointments'],
+    ['review.html', 'review.title'],
     ['records.html', 'nav.records'],
     ['hospitals.html', 'nav.hospitals'],
     ['pharmacy.html', 'nav.pharmacy'],
