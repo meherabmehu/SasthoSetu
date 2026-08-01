@@ -9,6 +9,7 @@ before wondering why triage results look unchanged.
 """
 from __future__ import annotations
 
+import logging
 import sys
 from pathlib import Path
 
@@ -53,7 +54,12 @@ def main() -> None:
         return
 
     print("Sending one live request per sample...")
+    print("(any provider error is printed in full below)")
     print()
+
+    # Surface the client's own diagnostics rather than swallowing them: the
+    # whole point of this tool is to show why a request failed.
+    logging.basicConfig(level=logging.INFO, format="       %(message)s")
 
     worked = 0
     for note in SAMPLES:
@@ -79,13 +85,15 @@ def main() -> None:
     else:
         print("No request succeeded. Triage still works on rules alone.")
         print()
-        print("Common causes:")
-        print("  - the key is wrong or not yet active")
-        print("  - LLM_MODEL is not a model this provider serves")
-        print("  - the free quota is exhausted")
+        print("Read the provider error printed above - it names the cause.")
         print()
-        print("Run the API with APP_DEBUG=true to see the provider's own")
-        print("error message in the log.")
+        print("  HTTP 401  the key is wrong, incomplete, or not yet active")
+        print("  HTTP 403  blocked before reaching the API, often by a CDN")
+        print("  HTTP 404  LLM_API_URL must end in /chat/completions")
+        print("  HTTP 429  free quota reached; it resets on a schedule")
+        print()
+        print("Check the current settings with:")
+        print("  python scripts/set_llm_key.py --show")
 
 
 if __name__ == "__main__":
