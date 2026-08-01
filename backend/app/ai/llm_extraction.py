@@ -67,8 +67,23 @@ QUALIFIERS = {"severe", "mild", "intermittent"}
 
 
 def _vocabulary() -> str:
-    """The closed symptom list the model is permitted to choose from."""
-    return ", ".join(sorted(SYMPTOMS))
+    """The closed symptom list, grouped by body system.
+
+    A flat alphabetical list of 57 identifiers is hard for a small model to
+    search reliably: it tends to settle on a familiar-looking neighbour rather
+    than the right one. Grouping by system, with the English gloss attached,
+    measurably reduces confusions such as breathlessness being reported as
+    chest pain.
+    """
+    groups: dict[str, list[str]] = {}
+    for name, entry in sorted(SYMPTOMS.items()):
+        gloss = entry["en"][0] if entry.get("en") else name.replace("_", " ")
+        groups.setdefault(entry["specialty"], []).append(f"{name} ({gloss})")
+
+    return "\n".join(
+        f"  {specialty}: {', '.join(items)}"
+        for specialty, items in sorted(groups.items())
+    )
 
 
 SYSTEM_PROMPT = """You are a clinical text normaliser for a Bangladeshi health \
@@ -77,15 +92,39 @@ platform. You do NOT diagnose, assess severity, or give advice.
 Your only task: read a patient's description in Bangla, romanised Banglish, \
 English or a mix, and map it onto a fixed list of symptom identifiers.
 
-Rules you must follow:
+Rules:
 - Choose ONLY from the allowed identifier list. Never invent an identifier.
-- Map meaning, not words. "বুকটা কেউ চেপে ধরছে" means chest_pain. \
-"শ্বাস নিতে পারছি না" means shortness_of_breath.
+- Map meaning, not words, and list EVERY symptom mentioned - not just one.
+- Pick the identifier that matches the body part and sensation described. Do \
+not substitute a nearby one: breathing difficulty is not chest pain, and \
+dizziness is not headache.
 - If the patient says a symptom is ABSENT, put it in "negated", not "symptoms".
-- Include a symptom only if the patient actually reports it. Do not infer \
-symptoms that would merely be consistent with a suspected illness.
-- Return duration in days if stated, age in years if stated, otherwise null.
+- Report only what the patient states. Never infer a symptom that would merely \
+be consistent with an illness you suspect.
+- Return duration in days and age in years if stated, otherwise null.
 - Respond with JSON only. No explanation, no markdown fence.
+
+Worked examples:
+
+"বুকটা যেন কেউ চেপে ধরছে, ঘামতেছি" (chest feels crushed, sweating)
+{"symptoms": ["chest_pain", "weakness"], "negated": [], "duration_days": null, \
+"age": null, "qualifier": null}
+
+"niswas nite parchi na thik moto" (cannot breathe properly)
+{"symptoms": ["shortness_of_breath"], "negated": [], "duration_days": null, \
+"age": null, "qualifier": null}
+
+"matha ta ghurtese, chokhe ondhokar dekhi" (head spinning, vision going dark)
+{"symptoms": ["dizziness", "blurred_vision"], "negated": [], \
+"duration_days": null, "age": null, "qualifier": null}
+
+"শরীরটা ম্যাজম্যাজ করতেছে, খাইতে ইচ্ছা করে না" (body listless, no appetite)
+{"symptoms": ["fatigue", "weakness"], "negated": [], "duration_days": null, \
+"age": null, "qualifier": null}
+
+"তিন দিন ধরে জ্বর আছে কিন্তু কাশি নেই" (fever three days, no cough)
+{"symptoms": ["fever"], "negated": ["cough"], "duration_days": 3, \
+"age": null, "qualifier": null}
 
 Response shape:
 {"symptoms": ["..."], "negated": ["..."], "duration_days": null, \
@@ -258,6 +297,45 @@ def _validated_int(value, low: int, high: int) -> Optional[int]:
     return number if low <= number <= high else None
 
 
+# Phrases whose meaning is unambiguous enough to assert directly. The model is
+# good at paraphrase but an 8B model occasionally picks a plausible neighbour
+# instead of the right identifier - breathlessness reported as chest pain, for
+# instance, which sends a respiratory patient to Cardiology. Where a phrase
+# admits only one reading, the rules settle it rather than the model.
+# Each entry: phrases, the symptom they state, and the symptoms a model is
+# known to confuse them with. The confusions are displaced, because leaving the
+# wrong reading in place alongside the right one can fabricate a combination
+# neither the patient nor the model reported - breathlessness misread as chest
+# pain, then joined by the corrected breathlessness, becomes a false cardiac
+# emergency.
+DECISIVE_PHRASES = [
+    (("niswas nite parchi na", "nishwas nite parchi na", "শ্বাস নিতে পারছি না",
+      "নিঃশ্বাস নিতে পারছি না", "dom nite parchi na", "দম নিতে পারছি না"),
+     "shortness_of_breath", ("chest_pain",)),
+    (("matha ghurtese", "matha ghurche", "মাথা ঘুরতেছে", "মাথা ঘুরছে",
+      "matha ta ghurtese"), "dizziness", ("headache",)),
+    (("chokhe ondhokar", "চোখে অন্ধকার"), "blurred_vision", ()),
+    (("khaite icche kore na", "খাইতে ইচ্ছা করে না", "খেতে ইচ্ছে করে না"),
+     "fatigue", ()),
+]
+
+
+def _decisive_symptoms(text: str) -> tuple[list[str], set[str]]:
+    """Symptoms a phrase states plainly, and the misreadings they displace."""
+    lowered = (text or "").lower()
+    found: list[str] = []
+    displaced: set[str] = set()
+
+    for phrases, symptom, confusions in DECISIVE_PHRASES:
+        if symptom in SYMPTOMS and any(p in lowered for p in phrases):
+            if symptom not in found:
+                found.append(symptom)
+            displaced.update(confusions)
+
+    # Never displace something the phrase itself asserts.
+    return found, displaced - set(found)
+
+
 def merge(base: ExtractionResult, model_output: dict) -> ExtractionResult:
     """Combine the model's reading with the deterministic result.
 
@@ -333,6 +411,18 @@ def extract_with_llm(text: str) -> tuple[ExtractionResult, dict]:
         return base, provenance
 
     merged = merge(base, model_output)
+
+    # A decisive phrase overrides a model that read it differently.
+    decisive, displaced = _decisive_symptoms(text)
+    for symptom in decisive:
+        if symptom not in merged.symptoms and symptom not in merged.negated_symptoms:
+            merged.symptoms.append(symptom)
+
+    # Drop the model's misreading, but only if the rules did not independently
+    # find it. A lexicon match is evidence; a model guess it contradicts is not.
+    for symptom in displaced:
+        if symptom in merged.symptoms and symptom not in base.symptoms:
+            merged.symptoms.remove(symptom)
 
     provenance["llm_used"] = True
     provenance["llm_added_symptoms"] = [
