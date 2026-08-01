@@ -38,6 +38,8 @@ class TriageResponse(BaseModel):
     # Ranked possible conditions. Always a list of possibilities, never a
     # single asserted diagnosis.
     differential: list[dict] = []
+    # Which layer contributed what: rules alone, or rules plus model.
+    understanding: dict = {}
     advice: str
     advice_bn: str = ""
     disclaimer: str

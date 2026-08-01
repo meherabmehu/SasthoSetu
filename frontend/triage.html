@@ -242,6 +242,18 @@ function renderResult(data) {
        </div>`
     : '';
 
+  // When the language model recognised something the phrase table missed, say
+  // so plainly. A patient should be able to see how their words were read.
+  const added = data.understanding?.llm_added_symptoms || [];
+  const aiNote = added.length
+    ? `<div class="field">
+         <div class="label">${escapeHtml(i18n.t('triage.aiUnderstood'))}</div>
+         <div class="symptom-chips">
+           ${added.map((s) => `<span class="badge badge-info">${escapeHtml(symptomLabel(s))}</span>`).join('')}
+         </div>
+       </div>`
+    : '';
+
   const matched = (data.matched_symptoms || []).length
     ? `<div class="field">
          <div class="label">${escapeHtml(i18n.t('triage.matched'))}</div>
@@ -326,6 +338,7 @@ function renderResult(data) {
 
     <div class="card mt-4">
       ${matched}
+      ${aiNote}
       <div class="field">
         <div class="label">${escapeHtml(i18n.t('triage.specialty'))}</div>
         <div>${escapeHtml(data.recommended_specialty || '-')}</div>

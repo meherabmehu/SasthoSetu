@@ -16,8 +16,8 @@ from typing import Optional
 
 from app.ai.differential import differential as build_differential
 from app.ai.differential import recommended_specialty
-from app.ai.extraction import extract
 from app.ai.lexicon import SYMPTOMS
+from app.ai.llm_extraction import extract_with_llm
 from app.ai.safety import check_red_flags
 from app.modules.symptom_checker.rules import (
     CONDITION_RULES,
@@ -94,7 +94,10 @@ def _baseline_from_lexicon(found: list[str]) -> Optional[int]:
 
 
 def triage_symptoms(request: TriageRequest) -> TriageResponse:
-    result = extract(request.symptoms)
+    # The language model only widens what is understood from the note; every
+    # decision below still runs on the deterministic rules. When it is not
+    # configured or unreachable, this returns the plain rules result.
+    result, provenance = extract_with_llm(request.symptoms)
     age = request.age_years if request.age_years is not None else result.age
     found = result.symptoms
     found_set = set(found)
@@ -134,6 +137,7 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             advice_bn=EMERGENCY_ADVICE_BN,
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
+            understanding=provenance,
         )
 
     # ---- Condition rules -------------------------------------------------
@@ -183,6 +187,7 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             advice_bn=rule["advice_bn"],
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
+            understanding=provenance,
         )
 
     # ---- Recognised symptoms but no rule: use lexicon acuity -------------
@@ -212,6 +217,7 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             advice_bn="প্রস্তাবিত বিভাগের চিকিৎসকের সাথে পরামর্শের জন্য বুকিং দিন।",
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
+            understanding=provenance,
         )
 
     # ---- Nothing recognised: safe fallback -------------------------------
@@ -227,6 +233,7 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         advice_bn="সঠিক মূল্যায়নের জন্য একজন চিকিৎসকের পরামর্শ নিন।",
         disclaimer=CLINICAL_DISCLAIMER,
         disclaimer_bn=CLINICAL_DISCLAIMER_BN,
+        understanding=provenance,
     )
 
 
