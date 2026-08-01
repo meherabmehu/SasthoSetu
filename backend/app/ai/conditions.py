@@ -91,7 +91,13 @@ CONDITIONS = {
         "en": "Possible stroke",
         "bn": "সম্ভাব্য স্ট্রোক",
         "specialty": "Neurology",
-        "required": [],
+        # A focal sign is mandatory. Dizziness and blurred vision are far too
+        # common to raise a stroke alert alone, and a red flag that fires on
+        # ordinary symptoms trains people to ignore it.
+        "required": [
+            "facial_droop", "slurred_speech", "one_sided_numbness",
+            "sudden_severe_headache",
+        ],
         "supporting": {
             "facial_droop": 3.5, "slurred_speech": 3.0,
             "one_sided_numbness": 3.0, "sudden_severe_headache": 1.5,
@@ -410,7 +416,10 @@ CONDITIONS = {
         "en": "Pregnancy emergency",
         "bn": "গর্ভাবস্থার জরুরি অবস্থা",
         "specialty": "Gynaecology & Obstetrics",
-        "required": [],
+        # Requires a pregnancy-specific symptom. Abdominal pain and dizziness
+        # alone must never surface a pregnancy condition, which would be both
+        # clinically wrong and distressing to the reader.
+        "required": ["pregnancy_bleeding", "pregnancy_pain"],
         "supporting": {
             "pregnancy_bleeding": 3.5, "pregnancy_pain": 2.5,
             "abdominal_pain": 1.0, "dizziness": 1.0,
