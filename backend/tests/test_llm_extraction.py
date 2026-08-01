@@ -94,6 +94,21 @@ class MergeSafetyTests(unittest.TestCase):
                 self.assertIn("chest_pain", merged.symptoms)
 
 
+class EnvFileLoadingTests(unittest.TestCase):
+    """A key written to backend/.env must actually be picked up.
+
+    The module reads os.environ, which is only populated from the file if the
+    settings module has been imported. Without that import a key set in the
+    file was silently ignored and the layer looked broken for no visible
+    reason.
+    """
+
+    def test_importing_the_module_loads_the_env_file(self):
+        import sys
+
+        self.assertIn("app.core.config", sys.modules)
+
+
 class DegradedModeTests(unittest.TestCase):
     def test_without_a_key_the_rules_run_alone(self):
         original = os.environ.pop("LLM_API_KEY", None)
