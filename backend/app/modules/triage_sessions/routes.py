@@ -5,7 +5,7 @@ from fastapi import Query
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
-from app.core.security import get_current_user, get_optional_user
+from app.core.security import get_current_user
 
 from app.schemas.clinical import TriageReview
 from app.schemas.triage import TriageRequest
@@ -27,14 +27,14 @@ def create_triage_session(
     engine: str = Query(default="rules", pattern="^(rules|ml)$"),
     latitude: float | None = Query(default=None, ge=-90, le=90),
     longitude: float | None = Query(default=None, ge=-180, le=180),
-    current_user=Depends(get_optional_user),
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Run triage and store the assessment.
+    """Run triage and store the assessment against the signed-in patient.
 
-    Usable anonymously so an unregistered patient in an emergency is never
-    blocked by a sign-up form; the session is linked to the account when one
-    is present.
+    Requires an account so the assessment becomes part of a longitudinal
+    record a clinician can review. Someone in an emergency without an account
+    is still served by the SMS and IVR channels, which stay open.
     """
     return create_triage_session_service(
         payload,
@@ -84,6 +84,7 @@ def match_doctors(
     max_fee: float | None = Query(default=None, ge=0),
     limit: int = Query(default=10, ge=1, le=50),
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return match_doctors_service(
         db,

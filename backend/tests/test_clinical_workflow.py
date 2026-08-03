@@ -151,17 +151,21 @@ class ClinicalTestCase(unittest.TestCase):
 
 class TriageSessionTests(ClinicalTestCase):
     def test_anonymous_triage_is_allowed(self):
+        _, headers = self._patient()
         response = self.client.post(
             "/api/v1/triage/sessions",
             json={"symptoms": "তিন দিন ধরে জ্বর ও কাশি", "age_years": 30},
+            headers=headers,
         )
         self.assertEqual(200, response.status_code, response.text)
         self.assertIn("triage_session_id", response.json())
 
     def test_emergency_triage_is_stored_with_flag(self):
+        _, headers = self._patient()
         response = self.client.post(
             "/api/v1/triage/sessions",
             json={"symptoms": "বুকে ব্যথা, শ্বাস নিতে কষ্ট", "age_years": 55},
+            headers=headers,
         )
         body = response.json()
         self.assertEqual("EMERGENCY", body["triage_level"])
@@ -242,13 +246,16 @@ class TriageSessionTests(ClinicalTestCase):
 class DoctorMatchingTests(ClinicalTestCase):
     def test_match_returns_doctors_for_a_triage_session(self):
         self._doctor("Pulmonology")
+        _, headers = self._patient()
         session = self.client.post(
             "/api/v1/triage/sessions",
             json={"symptoms": "কাশি ও জ্বর তিন দিন", "age_years": 30},
+            headers=headers,
         ).json()
 
         matches = self.client.get(
-            f"/api/v1/doctors/match?triage_session_id={session['triage_session_id']}"
+            f"/api/v1/doctors/match?triage_session_id={session['triage_session_id']}",
+            headers=headers,
         )
         self.assertEqual(200, matches.status_code)
         self.assertTrue(matches.json())
@@ -267,7 +274,9 @@ class DoctorMatchingTests(ClinicalTestCase):
             },
             headers=headers,
         )
-        matches = self.client.get("/api/v1/doctors/match?specialty=Cardiology").json()
+        matches = self.client.get(
+            "/api/v1/doctors/match?specialty=Cardiology", headers=headers
+        ).json()
         session = SessionLocal()
         try:
             doctor = session.query(Doctor).filter(Doctor.user_id == user_id).first()
@@ -278,8 +287,10 @@ class DoctorMatchingTests(ClinicalTestCase):
 
     def test_fee_filter_is_applied(self):
         self._doctor("Dermatology")
+        _, headers = self._patient()
         matches = self.client.get(
-            "/api/v1/doctors/match?specialty=Dermatology&max_fee=100"
+            "/api/v1/doctors/match?specialty=Dermatology&max_fee=100",
+            headers=headers,
         ).json()
         self.assertTrue(all(m["consultation_fee"] <= 100 for m in matches))
 
@@ -539,18 +550,10 @@ class AppointmentIntegrityTests(ClinicalTestCase):
     def test_slot_cannot_be_double_booked(self):
         context = self._booked_appointment("2026-10-01", "09:00")
 
-        _, second_patient_headers = self._patient()
-        session = SessionLocal()
-        try:
-            other_user = (
-                session.query(User)
-                .filter(User.role == "PATIENT")
-                .order_by(User.id.desc())
-                .first()
-            )
-            other_user_id = other_user.id
-        finally:
-            session.close()
+        # Use the patient this test just created. Selecting "the last PATIENT
+        # by id" picked up whichever account another test happened to add,
+        # so the booking was attempted for the wrong person.
+        other_user_id, second_patient_headers = self._patient()
 
         response = self.client.post(
             f"/api/v1/appointments/{other_user_id}",

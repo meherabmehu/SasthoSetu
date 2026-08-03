@@ -135,8 +135,10 @@ class ProviderTestCase(unittest.TestCase):
 
 class ProviderDirectoryTests(ProviderTestCase):
     def test_admin_can_register_and_verify_a_lab(self):
-        provider, _ = self._lab()
-        listing = self.client.get("/api/v1/providers?provider_type=LAB").json()
+        provider, admin_headers = self._lab()
+        listing = self.client.get(
+            "/api/v1/providers?provider_type=LAB", headers=admin_headers
+        ).json()
         self.assertIn(provider["id"], [p["id"] for p in listing["items"]])
 
     def test_patient_cannot_register_a_provider(self):
@@ -296,7 +298,7 @@ class PharmacyStockTests(ProviderTestCase):
         )
 
         # Searching a different paracetamol brand must still find the stock.
-        results = self.client.get("/api/v1/pharmacies/search?medicine=Ace 500").json()
+        results = self.client.get("/api/v1/pharmacies/search?medicine=Ace 500", headers=admin_headers).json()
         self.assertEqual("paracetamol", results["resolved_generic"])
         self.assertTrue(
             any(r["provider_id"] == created["id"] for r in results["results"])

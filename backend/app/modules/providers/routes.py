@@ -55,6 +55,7 @@ def list_providers(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return list_providers_service(
         db,
@@ -91,6 +92,7 @@ def list_lab_tests(
     provider_id: str | None = None,
     search: str | None = None,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return list_lab_tests_service(db, provider_id=provider_id, search=search)
 
@@ -176,5 +178,6 @@ def search_stock(
     medicine: str = Query(min_length=2, max_length=120),
     district: str | None = None,
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return search_stock_service(db, medicine=medicine, district=district)

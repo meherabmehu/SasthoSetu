@@ -199,6 +199,27 @@ class TriageModelTests(unittest.TestCase):
 
 
 class DegradedModeTests(unittest.TestCase):
+    """Triage endpoints now require an account, so these need a token."""
+
+    def _headers(self):
+        import uuid as _uuid
+
+        email = f"deg-{_uuid.uuid4().hex[:8]}@example.com"
+        password = "Passw0rd@123"
+        self.client.post(
+            "/api/v1/users",
+            json={
+                "full_name": "Degraded Mode",
+                "email": email,
+                "phone": f"017{_uuid.uuid4().int % 100000000:08d}",
+                "password": password,
+            },
+        )
+        login = self.client.post(
+            "/api/v1/auth/login", json={"email": email, "password": password}
+        )
+        return {"Authorization": f"Bearer {login.json()['access_token']}"}
+
     """Behaviour when the generated artifacts are absent.
 
     A bare clone must still serve the safety-critical paths, and must never
@@ -217,6 +238,7 @@ class DegradedModeTests(unittest.TestCase):
         response = self.client.post(
             "/api/v1/triage",
             json={"symptoms": "বুকে ব্যথা, শ্বাস নিতে কষ্ট", "age_years": 50},
+            headers=self._headers(),
         )
         self.assertEqual(200, response.status_code)
         self.assertEqual("EMERGENCY", response.json()["triage_level"])

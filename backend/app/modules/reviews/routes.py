@@ -48,6 +48,7 @@ def doctor_reviews(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return list_doctor_reviews_service(doctor_id, db, limit=limit, offset=offset)
 

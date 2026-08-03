@@ -47,6 +47,7 @@ def list_hospitals(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return list_hospitals_service(
         db,
@@ -67,6 +68,7 @@ def find_nearby_hospitals(
     require_bed: bool = True,
     limit: int = Query(default=10, ge=1, le=50),
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     return find_nearby_service(
         db,
@@ -121,6 +123,7 @@ def ward_history(
     ward_id: str,
     limit: int = Query(default=100, ge=1, le=500),
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return ward_history_service(ward_id, db, limit=limit)
 

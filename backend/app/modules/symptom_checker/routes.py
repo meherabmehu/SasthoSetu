@@ -1,4 +1,7 @@
 from fastapi import APIRouter
+from fastapi import Depends
+
+from app.core.security import get_current_user
 
 from app.schemas.symptom_checker import (
     SymptomRequest,
@@ -22,7 +25,10 @@ router = APIRouter()
     response_model=TriageResponse,
     summary="Assess symptoms and recommend the safest care pathway",
 )
-def create_triage(request: TriageRequest) -> TriageResponse:
+def create_triage(
+    request: TriageRequest,
+    current_user=Depends(get_current_user),
+) -> TriageResponse:
     return triage_symptoms(request)
 
 
@@ -32,7 +38,8 @@ def create_triage(request: TriageRequest) -> TriageResponse:
     deprecated=True,
 )
 def analyze_symptoms(
-    request: SymptomRequest
+    request: SymptomRequest,
+    current_user=Depends(get_current_user)
 ):
     return analyze_symptoms_service(
         request.symptoms

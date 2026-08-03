@@ -247,6 +247,7 @@ class ReviewIntegrityTests(ReviewTestCase):
 
     def test_reviewer_name_is_partially_masked(self):
         """Honest feedback should not require broadcasting a full name."""
+        _, headers = self._patient()
         visit = self._completed_visit("2026-12-09")
         self.client.post(
             "/api/v1/reviews",
@@ -254,7 +255,7 @@ class ReviewIntegrityTests(ReviewTestCase):
             headers=visit["patient_headers"],
         )
         listing = self.client.get(
-            f"/api/v1/doctors/{visit['doctor_id']}/reviews"
+            f"/api/v1/doctors/{visit['doctor_id']}/reviews", headers=headers
         ).json()
         name = listing["items"][0]["patient_name"]
         self.assertTrue(name.endswith("."), name)
@@ -263,6 +264,7 @@ class ReviewIntegrityTests(ReviewTestCase):
 class RatingAggregationTests(ReviewTestCase):
     def test_rating_is_shrunk_toward_the_mean_for_few_reviews(self):
         """One five-star review must not produce a perfect public score."""
+        _, headers = self._patient()
         visit = self._completed_visit("2026-12-10")
         self.client.post(
             "/api/v1/reviews",
@@ -270,13 +272,14 @@ class RatingAggregationTests(ReviewTestCase):
             headers=visit["patient_headers"],
         )
         summary = self.client.get(
-            f"/api/v1/doctors/{visit['doctor_id']}/reviews"
+            f"/api/v1/doctors/{visit['doctor_id']}/reviews", headers=headers
         ).json()
         self.assertEqual(5.0, summary["average_rating"])
         self.assertLess(summary["bayesian_rating"], 5.0)
         self.assertGreater(summary["bayesian_rating"], 4.0)
 
     def test_summary_reports_distribution_and_counts(self):
+        _, headers = self._patient()
         visit = self._completed_visit("2026-12-11")
         self.client.post(
             "/api/v1/reviews",
@@ -289,13 +292,14 @@ class RatingAggregationTests(ReviewTestCase):
             headers=visit["patient_headers"],
         )
         summary = self.client.get(
-            f"/api/v1/doctors/{visit['doctor_id']}/reviews"
+            f"/api/v1/doctors/{visit['doctor_id']}/reviews", headers=headers
         ).json()
         self.assertEqual(1, summary["review_count"])
         self.assertEqual(1, summary["rating_distribution"]["3"])
         self.assertEqual(2, summary["sub_scores"]["punctuality"])
 
     def test_hidden_review_stops_counting(self):
+        _, headers = self._patient()
         visit = self._completed_visit("2026-12-12")
         created = self.client.post(
             "/api/v1/reviews",
@@ -312,7 +316,7 @@ class RatingAggregationTests(ReviewTestCase):
         self.assertEqual(200, hidden.status_code, hidden.text)
 
         summary = self.client.get(
-            f"/api/v1/doctors/{visit['doctor_id']}/reviews"
+            f"/api/v1/doctors/{visit['doctor_id']}/reviews", headers=headers
         ).json()
         self.assertEqual(0, summary["review_count"])
 
@@ -354,26 +358,32 @@ class RatingAggregationTests(ReviewTestCase):
 
 class RecommendationTests(ReviewTestCase):
     def test_ranking_prefers_the_matching_specialty(self):
+        _, headers = self._patient()
         self._doctor(specialization="Cardiology")
         self._doctor(specialization="Dermatology")
+        _, headers = self._patient()
         results = self.client.get(
-            "/api/v1/recommendations/doctors?specialty=Cardiology"
+            "/api/v1/recommendations/doctors?specialty=Cardiology", headers=headers
         ).json()["results"]
         self.assertTrue(results)
         self.assertEqual("Cardiology", results[0]["specialization"])
 
     def test_urgent_ranking_reports_its_own_criteria(self):
         self._doctor()
+        _, headers = self._patient()
         body = self.client.get(
-            "/api/v1/recommendations/doctors?specialty=Cardiology&urgent=true"
+            "/api/v1/recommendations/doctors?specialty=Cardiology&urgent=true",
+            headers=headers,
         ).json()
         self.assertTrue(body["urgent"])
         self.assertIn("proximity", body["ranked_by"])
 
     def test_every_result_explains_its_score(self):
+        _, headers = self._patient()
         self._doctor()
+        _, headers = self._patient()
         results = self.client.get(
-            "/api/v1/recommendations/doctors?specialty=Cardiology"
+            "/api/v1/recommendations/doctors?specialty=Cardiology", headers=headers
         ).json()["results"]
         breakdown = results[0]["score_breakdown"]
         for key in ("specialty", "distance", "rating", "availability"):
@@ -381,63 +391,77 @@ class RecommendationTests(ReviewTestCase):
 
     def test_unreviewed_doctors_are_still_recommendable(self):
         """A new doctor with no reviews must not be unrankable."""
+        _, headers = self._patient()
         doctor_id, _ = self._doctor(specialization="Nephrology")
+        _, headers = self._patient()
         results = self.client.get(
-            "/api/v1/recommendations/doctors?specialty=Nephrology"
+            "/api/v1/recommendations/doctors?specialty=Nephrology", headers=headers
         ).json()["results"]
         self.assertIn(doctor_id, [r["doctor_id"] for r in results])
 
     def test_fee_ceiling_is_respected(self):
         self._doctor(specialization="Urology", fee=2500.0)
+        _, headers = self._patient()
         results = self.client.get(
-            "/api/v1/recommendations/doctors?specialty=Urology&max_fee=500"
+            "/api/v1/recommendations/doctors?specialty=Urology&max_fee=500",
+            headers=headers,
         ).json()["results"]
         self.assertTrue(all(r["consultation_fee"] <= 500 for r in results))
 
     def test_distance_is_computed_when_coordinates_are_supplied(self):
         """Doctors are placed via their hospital, so distance needs seed data."""
         self._doctor(hospital="Square Hospital")
+        _, headers = self._patient()
         results = self.client.get(
             "/api/v1/recommendations/doctors"
-            "?specialty=Cardiology&latitude=23.75&longitude=90.39"
+            "?specialty=Cardiology&latitude=23.75&longitude=90.39",
+            headers=headers,
         ).json()["results"]
         self.assertTrue(results)
 
 
 class ConditionIdentificationTests(ReviewTestCase):
     def test_triage_returns_a_ranked_differential(self):
+        _, headers = self._patient()
         body = self.client.post(
             "/api/v1/triage",
             json={"symptoms": "তিন দিন ধরে জ্বর, শরীর ব্যথা, চোখে ব্যথা", "age_years": 30},
+            headers=headers,
         ).json()
         self.assertTrue(body["differential"])
         self.assertIn("likelihood", body["differential"][0])
         self.assertIn("name_bn", body["differential"][0])
 
     def test_dengue_is_identified_from_its_symptom_picture(self):
+        _, headers = self._patient()
         body = self.client.post(
             "/api/v1/triage",
             json={"symptoms": "জ্বর, শরীর ব্যথা, চোখে ব্যথা, র‍্যাশ", "age_years": 28},
+            headers=headers,
         ).json()
         names = [d["condition"] for d in body["differential"]]
         self.assertIn("dengue", names)
 
     def test_prolonged_cough_with_weight_loss_suggests_tuberculosis(self):
+        _, headers = self._patient()
         body = self.client.post(
             "/api/v1/triage",
             json={
                 "symptoms": "এক মাস ধরে কাশি, ওজন কমছে, রাতে ঘাম",
                 "age_years": 40,
             },
+            headers=headers,
         ).json()
         names = [d["condition"] for d in body["differential"]]
         self.assertIn("tuberculosis", names)
 
     def test_cardiac_referral_wins_over_a_likelier_benign_condition(self):
         """Chest pain with breathlessness fits asthma too - cardiac must win."""
+        _, headers = self._patient()
         body = self.client.post(
             "/api/v1/triage",
             json={"symptoms": "বুকে ব্যথা, শ্বাস নিতে কষ্ট", "age_years": 55},
+            headers=headers,
         ).json()
         self.assertEqual("EMERGENCY", body["triage_level"])
         self.assertIn(
@@ -445,9 +469,11 @@ class ConditionIdentificationTests(ReviewTestCase):
         )
 
     def test_differential_is_bilingual(self):
+        _, headers = self._patient()
         body = self.client.post(
             "/api/v1/triage",
             json={"symptoms": "ঘন ঘন প্রস্রাব, অতিরিক্ত পিপাসা", "age_years": 50},
+            headers=headers,
         ).json()
         top = body["differential"][0]
         self.assertTrue(top["name_bn"])
@@ -456,9 +482,11 @@ class ConditionIdentificationTests(ReviewTestCase):
 
     def test_unrecognised_input_yields_no_false_differential(self):
         """Better to return nothing than to invent a condition."""
+        _, headers = self._patient()
         body = self.client.post(
             "/api/v1/triage",
             json={"symptoms": "something vague and unclear", "age_years": 30},
+            headers=headers,
         ).json()
         self.assertEqual([], body["differential"])
 

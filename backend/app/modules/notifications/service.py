@@ -38,7 +38,8 @@ def get_notifications_service(
 
 def mark_notification_read_service(
     notification_id: str,
-    db: Session
+    db: Session,
+    current_user: dict | None = None
 ):
 
     notification = (
@@ -55,6 +56,16 @@ def mark_notification_read_service(
             status_code=404,
             detail="Notification not found"
         )
+
+    # Only the recipient may mark their own notification read. Without this a
+    # caller could walk notification ids and silently clear someone else's.
+    if current_user is not None:
+        is_owner = notification.user_id == current_user.get("user_id")
+        if not is_owner and current_user.get("role") != "ADMIN":
+            raise HTTPException(
+                status_code=403,
+                detail="You cannot modify another user's notification"
+            )
 
     notification.is_read = True
 

@@ -58,9 +58,11 @@ import { api } from './assets/js/api.js';
 import { bootstrap } from './assets/js/page.js';
 import {
   escapeHtml, skeletonList, emptyState, errorState, toast,
+  requireAuth,
 } from './assets/js/ui.js';
 
 bootstrap('hospitals.html');
+if (!requireAuth()) throw new Error('unauthenticated');
 
 const DISTRICTS = [
   'Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal',
