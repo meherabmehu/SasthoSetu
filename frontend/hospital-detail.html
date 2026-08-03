@@ -29,9 +29,11 @@ import { api, session } from './assets/js/api.js';
 import { bootstrap } from './assets/js/page.js';
 import {
   escapeHtml, skeletonList, errorState, toast, setBusy,
+  requireAuth,
 } from './assets/js/ui.js';
 
 bootstrap('hospitals.html');
+if (!requireAuth()) throw new Error('unauthenticated');
 
 const BN = i18n.lang === 'bn';
 const WARD_LABELS = {

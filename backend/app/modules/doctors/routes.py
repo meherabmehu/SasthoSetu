@@ -53,7 +53,8 @@ def create_doctor_profile(
 
 @router.get("/doctors")
 def get_all_doctors(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return get_all_doctors_service(
         db=db
@@ -63,7 +64,8 @@ def get_all_doctors(
 @router.get("/doctors/id/{doctor_id}")
 def get_doctor_by_id(
     doctor_id: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return get_doctor_by_id_service(
         doctor_id=doctor_id,
@@ -76,7 +78,8 @@ def get_doctor_by_id(
 )
 def get_doctors_by_specialization(
     specialization: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return get_doctors_by_specialization_service(
         specialization=specialization,

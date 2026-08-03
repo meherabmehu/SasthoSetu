@@ -24,10 +24,8 @@
         উপসর্গ বাংলায় লিখুন বা বলুন। সাস্থ্যসেতু আপনাকে জানাবে ঘরে যত্ন যথেষ্ট,
         নাকি ডাক্তার দেখাতে হবে, নাকি এখনই হাসপাতালে যেতে হবে।
       </p>
-      <div class="row mt-4">
-        <a href="triage.html" class="btn btn-secondary" data-i18n="triage.analyze">পরীক্ষা করুন</a>
-        <a href="doctors.html" class="btn btn-secondary" data-i18n="doctor.find">ডাক্তার খুঁজুন</a>
-      </div>
+      <div class="row mt-4" id="heroActions"></div>
+      <p class="small" id="signedOutNote" style="color:rgba(255,255,255,.92)"></p>
 
       <div class="stat-strip" id="stats" aria-live="polite">
         <div class="stat"><div class="stat-value" id="statDoctors">—</div>
@@ -89,8 +87,9 @@
 
 <script type="module">
 import { i18n } from './assets/js/i18n.js';
-import { api } from './assets/js/api.js';
+import { api, session } from './assets/js/api.js';
 import { bootstrap } from './assets/js/page.js';
+import { escapeHtml } from './assets/js/ui.js';
 
 bootstrap('index.html');
 
@@ -130,9 +129,45 @@ function applyCopy() {
 }
 applyCopy();
 
+// Feature cards point at login while signed out, so a click never lands on a
+// page that immediately redirects.
+if (!session.isAuthenticated) {
+  document.querySelectorAll('.grid a.card').forEach((card) => {
+    const target = card.getAttribute('href');
+    if (target && target !== 'verify.html') {
+      card.setAttribute('href', `login.html?next=${encodeURIComponent(target)}`);
+    }
+  });
+}
+
+// Every clinical feature needs an account, so an anonymous visitor is offered
+// the way in rather than links that immediately bounce them to a login screen.
+const BN = i18n.lang === 'bn';
+const heroActions = document.getElementById('heroActions');
+const signedOutNote = document.getElementById('signedOutNote');
+
+if (session.isAuthenticated) {
+  heroActions.innerHTML = `
+    <a href="triage.html" class="btn btn-secondary">${escapeHtml(i18n.t('triage.analyze'))}</a>
+    <a href="recommend.html" class="btn btn-secondary">${escapeHtml(i18n.t('doctor.find'))}</a>`;
+} else {
+  heroActions.innerHTML = `
+    <a href="login.html" class="btn btn-secondary">${escapeHtml(i18n.t('auth.login'))}</a>
+    <a href="login.html#register" class="btn btn-secondary">${escapeHtml(i18n.t('auth.register'))}</a>`;
+  signedOutNote.textContent = BN
+    ? 'উপসর্গ পরীক্ষা, ডাক্তার ও ওষুধ খুঁজতে অ্যাকাউন্ট প্রয়োজন। জরুরি অবস্থায় ৯৯৯ এ কল করুন।'
+    : 'An account is needed to check symptoms, find doctors or search medicine. In an emergency call 999.';
+}
+
 async function loadStats() {
+  // Live counts come from endpoints that now require an account. A signed out
+  // visitor sees the invitation to sign in instead of four dashes.
+  if (!session.isAuthenticated) {
+    document.getElementById('stats').classList.add('hidden');
+    return;
+  }
   try {
-    const hospitals = await api.get('/hospitals?limit=200', { auth: false, cache: true });
+    const hospitals = await api.get('/hospitals?limit=200', { cache: true });
     document.getElementById('statHospitals').textContent = hospitals.total ?? '—';
     const beds = (hospitals.items || []).reduce((sum, h) => sum + (h.available_beds || 0), 0);
     document.getElementById('statBeds').textContent = beds.toLocaleString();
@@ -140,7 +175,7 @@ async function loadStats() {
     // The landing page must still render if the API is unreachable.
   }
   try {
-    const doctors = await api.get('/doctors/match?limit=50', { auth: false, cache: true });
+    const doctors = await api.get('/doctors/match?limit=50', { cache: true });
     document.getElementById('statDoctors').textContent = Array.isArray(doctors)
       ? `${doctors.length}+` : '—';
   } catch {

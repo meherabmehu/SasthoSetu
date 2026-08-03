@@ -17,7 +17,9 @@ from app.modules.prescriptions.service import (
     get_doctor_prescriptions_service
 )
 from app.core.security import (
-    require_doctor
+    get_current_user,
+    require_doctor,
+    require_self_or_clinician,
 )
 
 router = APIRouter()
@@ -44,8 +46,10 @@ def create_prescription(
 )
 def get_patient_prescriptions(
     patient_user_id: str,
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    require_self_or_clinician(patient_user_id, current_user)
     return get_patient_prescriptions_service(
         patient_user_id=patient_user_id,
         db=db
@@ -57,6 +61,7 @@ def get_patient_prescriptions(
 )
 def get_doctor_prescriptions(
     doctor_id: str,
+    current_user=Depends(require_doctor),
     db: Session = Depends(get_db)
 ):
     return get_doctor_prescriptions_service(

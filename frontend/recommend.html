@@ -65,9 +65,11 @@ import { bootstrap } from './assets/js/page.js';
 import {
   escapeHtml, formatBdt, formatDate, skeletonList, emptyState,
   errorState, toast,
+  requireAuth,
 } from './assets/js/ui.js';
 
 bootstrap('doctors.html');
+if (!requireAuth()) throw new Error('unauthenticated');
 
 const BN = i18n.lang === 'bn';
 const SPECIALTIES = [

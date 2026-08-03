@@ -108,14 +108,14 @@ class HospitalCrudTests(HospitalTestCase):
     def test_admin_can_create_and_read_hospital(self):
         _, headers = self._admin()
         hospital = self._make_hospital(headers)
-        fetched = self.client.get(f"/api/v1/hospitals/{hospital['id']}")
+        fetched = self.client.get(f"/api/v1/hospitals/{hospital['id']}", headers=headers)
         self.assertEqual(200, fetched.status_code)
         self.assertEqual(hospital["code"], fetched.json()["code"])
 
     def test_hospital_is_addressable_by_code(self):
         _, headers = self._admin()
         hospital = self._make_hospital(headers)
-        fetched = self.client.get(f"/api/v1/hospitals/{hospital['code']}")
+        fetched = self.client.get(f"/api/v1/hospitals/{hospital['code']}", headers=headers)
         self.assertEqual(200, fetched.status_code)
 
     def test_patient_cannot_create_hospital(self):
@@ -157,7 +157,7 @@ class HospitalCrudTests(HospitalTestCase):
         _, headers = self._admin()
         for _ in range(3):
             self._make_hospital(headers)
-        response = self.client.get("/api/v1/hospitals?limit=2&offset=0")
+        response = self.client.get("/api/v1/hospitals?limit=2&offset=0", headers=headers)
         self.assertEqual(200, response.status_code)
         self.assertLessEqual(len(response.json()["items"]), 2)
         self.assertIn("total", response.json())
@@ -223,7 +223,9 @@ class BedCapacityTests(HospitalTestCase):
             json={"occupied_beds": 7},
             headers=headers,
         )
-        history = self.client.get(f"/api/v1/wards/{ward['id']}/history")
+        history = self.client.get(
+            f"/api/v1/wards/{ward['id']}/history", headers=headers
+        )
         self.assertEqual(200, history.status_code)
         self.assertGreaterEqual(len(history.json()), 2)
         self.assertEqual(7, history.json()[0]["occupied_beds"])
@@ -290,7 +292,7 @@ class EmergencyRoutingTests(HospitalTestCase):
         self._make_ward(full["id"], headers, ward_type="icu", total=5, occupied=5)
 
         results = self.client.get(
-            "/api/v1/hospitals/nearby?ward_type=icu&emergency=true"
+            "/api/v1/hospitals/nearby?ward_type=icu&emergency=true", headers=headers
         ).json()
         self.assertNotIn(full["id"], [r["id"] for r in results])
 
@@ -302,7 +304,7 @@ class EmergencyRoutingTests(HospitalTestCase):
         )
 
         results = self.client.get(
-            "/api/v1/hospitals/nearby?ward_type=icu&emergency=true"
+            "/api/v1/hospitals/nearby?ward_type=icu&emergency=true", headers=headers
         ).json()
         matched = [r for r in results if r["id"] == open_hospital["id"]]
         self.assertTrue(matched)
@@ -324,7 +326,8 @@ class EmergencyRoutingTests(HospitalTestCase):
 
         results = self.client.get(
             "/api/v1/hospitals/nearby"
-            "?latitude=23.7500&longitude=90.3900&ward_type=general"
+            "?latitude=23.7500&longitude=90.3900&ward_type=general",
+            headers=headers,
         ).json()
         ids = [r["id"] for r in results]
         self.assertIn(near["id"], ids)
@@ -335,7 +338,7 @@ class EmergencyRoutingTests(HospitalTestCase):
         _, headers = self._admin()
         hospital = self._make_hospital(headers)
         self._make_ward(hospital["id"], headers, ward_type="general", total=4)
-        results = self.client.get("/api/v1/hospitals/nearby?ward_type=general").json()
+        results = self.client.get("/api/v1/hospitals/nearby?ward_type=general", headers=headers).json()
         matched = [r for r in results if r["id"] == hospital["id"]]
         self.assertIsNone(matched[0]["distance_km"])
 

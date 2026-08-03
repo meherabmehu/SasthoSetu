@@ -114,12 +114,10 @@ export function severityChip(level) {
 /* ------------------------------------------------------------------ chrome */
 
 const NAV_BY_ROLE = {
+  // Signed out, only what actually works without an account is offered.
+  // Listing gated pages here would send a visitor straight to a login bounce.
   guest: [
     ['index.html', 'nav.home'],
-    ['triage.html', 'nav.triage'],
-    ['recommend.html', 'nav.doctors'],
-    ['hospitals.html', 'nav.hospitals'],
-    ['pharmacy.html', 'nav.pharmacy'],
     ['verify.html', 'nav.verify'],
   ],
   PATIENT: [

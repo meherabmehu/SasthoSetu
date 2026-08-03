@@ -170,6 +170,27 @@ def require_self_or_admin(
         )
 
 
+def require_self_or_clinician(
+    target_user_id: str,
+    current_user: dict,
+) -> None:
+    """Allow the record's owner, a treating clinician, or an administrator.
+
+    Health records differ from ordinary user resources: a doctor must be able
+    to read a patient's history to treat them safely, so restricting to the
+    owner alone would break the consultation workflow. A patient still cannot
+    read another patient's record.
+    """
+    role = current_user.get("role")
+    if role in ("DOCTOR", "ADMIN"):
+        return
+    if current_user.get("user_id") != target_user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="You cannot access another user's health record",
+        )
+
+
 def require_admin(
     current_user=Depends(
         get_current_user

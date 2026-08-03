@@ -86,9 +86,11 @@ import { api, session } from './assets/js/api.js';
 import {
   renderChrome, renderFooter, toast, escapeHtml, severityChip,
   severityNumber, setBusy, formatDateTime, emptyState,
+  requireAuth,
 } from './assets/js/ui.js';
 
 renderChrome({ active: 'triage.html' });
+if (!requireAuth()) throw new Error('unauthenticated');
 
 // Common presentations offered as one-tap chips. This is the difference
 // between usable and unusable for someone who cannot type Bangla quickly, or

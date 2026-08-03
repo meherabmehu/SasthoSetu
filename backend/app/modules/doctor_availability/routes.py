@@ -4,6 +4,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
+from app.core.security import get_current_user
 
 from app.schemas.doctor_availability import (
     DoctorAvailabilityCreate
@@ -23,7 +24,8 @@ router = APIRouter()
 def create_availability(
     doctor_id: str,
     payload: DoctorAvailabilityCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return create_availability_service(
         doctor_id=doctor_id,
@@ -37,7 +39,8 @@ def create_availability(
 )
 def get_doctor_availability(
     doctor_id: str,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     return get_doctor_availability_service(
         doctor_id=doctor_id,

@@ -51,9 +51,11 @@ import { bootstrap } from './assets/js/page.js';
 import {
   escapeHtml, formatBdt, formatDate, skeletonList, emptyState,
   errorState, toast, setBusy,
+  requireAuth,
 } from './assets/js/ui.js';
 
 bootstrap('doctors.html');
+if (!requireAuth()) throw new Error('unauthenticated');
 
 const SPECIALTIES = [
   'General Medicine', 'Cardiology', 'Pulmonology', 'Neurology',

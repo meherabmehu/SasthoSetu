@@ -4,6 +4,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
+from app.core.security import require_doctor
 
 from app.schemas.appointment import (
     AppointmentCreate
@@ -62,6 +63,7 @@ def get_patient_appointments(
 )
 def get_doctor_appointments(
     doctor_id: str,
+    current_user=Depends(require_doctor),
     db: Session = Depends(get_db)
 ):
     return get_doctor_appointments_service(

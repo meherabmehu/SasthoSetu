@@ -5,6 +5,7 @@ from fastapi import Query
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
+from app.core.security import get_current_user
 
 from app.modules.recommendations.service import recommend_doctors_service
 
@@ -22,6 +23,7 @@ def recommend_doctors(
     max_fee: float | None = Query(default=None, ge=0),
     limit: int = Query(default=10, ge=1, le=50),
     db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     """Rank doctors for a condition near a location, by verified quality.
 
