@@ -11,6 +11,7 @@ Run ``alembic upgrade head`` first.
 from __future__ import annotations
 
 import json
+import random
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -18,12 +19,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
+from app.ai.drug_safety import normalize_drug  # noqa: E402
 from app.core.database import SessionLocal  # noqa: E402
 from app.core.security import hash_password  # noqa: E402
 from app.models.doctor import Doctor  # noqa: E402
 from app.models.doctor_availability import DoctorAvailability  # noqa: E402
 from app.models.hospital import Hospital, Ward  # noqa: E402
 from app.models.patient import Patient  # noqa: E402
+from app.models.provider import (  # noqa: E402
+    LabTest,
+    PharmacyStock,
+    Provider,
+)
 from app.models.user import User  # noqa: E402
 
 SEED_DIR = ROOT / "data" / "seed"
@@ -270,6 +277,195 @@ def seed_demo_accounts(db) -> int:
     return created
 
 
+# Pharmacies and labs across the districts the platform launches in. Real
+# chains, so the directory reads plausibly to a Bangladeshi user.
+PHARMACIES = [
+    ("PH001", "Lazz Pharma", "Dhaka", "Dhanmondi", "01711000001"),
+    ("PH002", "Tamanna Pharmacy", "Dhaka", "Mirpur", "01711000002"),
+    ("PH003", "Wellbeing Pharmacy", "Dhaka", "Gulshan", "01711000003"),
+    ("PH004", "Shastho Pharma", "Dhaka", "Uttara", "01711000004"),
+    ("PH005", "Al-Madina Pharmacy", "Chattogram", "Agrabad", "01711000005"),
+    ("PH006", "Sylhet Medicine Corner", "Sylhet", "Zindabazar", "01711000006"),
+]
+
+LABS = [
+    ("LAB001", "Popular Diagnostic Centre", "Dhaka", "Dhanmondi", "01711000101"),
+    ("LAB002", "Ibn Sina Diagnostic", "Dhaka", "Mirpur", "01711000102"),
+    ("LAB003", "Medinova Medical Services", "Dhaka", "Malibagh", "01711000103"),
+    ("LAB004", "Chevron Clinical Laboratory", "Chattogram", "Panchlaish",
+     "01711000104"),
+]
+
+# Common tests with realistic Bangladeshi private-lab pricing in BDT.
+LAB_CATALOGUE = [
+    ("CBC", "Complete Blood Count", "blood", 400, 24),
+    ("NS1", "Dengue NS1 Antigen", "blood", 800, 24),
+    ("DENGUE-IGG", "Dengue IgG/IgM", "blood", 1200, 24),
+    ("WIDAL", "Widal Test (typhoid)", "blood", 500, 24),
+    ("FBS", "Fasting Blood Sugar", "blood", 200, 6),
+    ("HBA1C", "HbA1c", "blood", 1200, 24),
+    ("LFT", "Liver Function Test", "blood", 1500, 24),
+    ("KFT", "Kidney Function Test", "blood", 1400, 24),
+    ("URINE-RE", "Urine Routine Examination", "urine", 300, 12),
+    ("CXR", "Chest X-Ray", "imaging", 600, 4),
+    ("ECG", "Electrocardiogram", "none", 400, 2),
+    ("SPUTUM-AFB", "Sputum for AFB (TB)", "sputum", 300, 48),
+    ("LIPID", "Lipid Profile", "blood", 1000, 24),
+    ("TSH", "Thyroid Stimulating Hormone", "blood", 900, 24),
+]
+
+# Stocked medicines, chosen to cover the conditions triage actually surfaces:
+# fever, infection, gastric, cardiac, diabetes and asthma.
+STOCK_ITEMS = [
+    ("Napa 500", "500mg", 1.20),
+    ("Ace 500", "500mg", 1.50),
+    ("Napa Extra", "500mg", 2.00),
+    ("Seclo 20", "20mg", 5.00),
+    ("Maxpro 20", "20mg", 7.00),
+    ("Pantonix 20", "20mg", 6.00),
+    ("Alatrol 10", "10mg", 2.50),
+    ("Fexo 120", "120mg", 8.00),
+    ("Monas 10", "10mg", 15.00),
+    ("Zimax 500", "500mg", 35.00),
+    ("Moxacil 500", "500mg", 8.00),
+    ("Ciprocin 500", "500mg", 12.00),
+    ("Flagyl 400", "400mg", 3.50),
+    ("Doxicap 100", "100mg", 4.00),
+    ("Comet 500", "500mg", 3.00),
+    ("Amaryl 2", "2mg", 12.00),
+    ("Atova 10", "10mg", 12.00),
+    ("Ecosprin 75", "75mg", 1.50),
+    ("Amdocal 5", "5mg", 5.00),
+    ("Losartan 50", "50mg", 7.00),
+    ("Indever 10", "10mg", 1.50),
+    ("Thyrox 50", "50mcg", 4.50),
+    ("Ventolin", "100mcg", 320.00),
+    ("Deltasone 5", "5mg", 2.00),
+    ("Emistat 4", "4mg", 6.00),
+    ("Omidon 10", "10mg", 2.00),
+    ("Sedil 5", "5mg", 3.00),
+    ("Tufnil 200", "200mg", 9.00),
+]
+
+
+def _upsert_provider(db, code, name, provider_type, district, area, phone):
+    provider = db.query(Provider).filter(Provider.code == code).first()
+    created = provider is None
+    if created:
+        provider = Provider(code=code)
+        db.add(provider)
+
+    provider.name = name
+    provider.provider_type = provider_type
+    provider.district = district
+    provider.area = area
+    provider.phone = phone
+    # Verified, so ordering and stock search work immediately after seeding.
+    provider.is_verified = True
+    provider.is_active = True
+    db.flush()
+    return provider, created
+
+
+def seed_pharmacies(db) -> int:
+    """Pharmacies with stock, so medicine search returns something."""
+    created = 0
+    rng = random.Random(42)
+
+    for index, (code, name, district, area, phone) in enumerate(PHARMACIES):
+        provider, is_new = _upsert_provider(
+            db, code, name, "PHARMACY", district, area, phone
+        )
+        created += int(is_new)
+
+        # Stock is unique per (generic, strength), and several catalogue
+        # entries share a generic - Napa and Ace are both paracetamol 500mg.
+        # Track what this branch already carries so the first brand wins
+        # rather than the insert failing on the constraint.
+        carried: set[tuple[str, str]] = set()
+
+        # Each pharmacy carries most but not all of the catalogue, so a search
+        # genuinely distinguishes between branches rather than returning an
+        # identical list every time.
+        for item_index, (brand, strength, price) in enumerate(STOCK_ITEMS):
+            if (item_index + index) % 7 == 0:
+                continue
+
+            generic = normalize_drug(brand)
+            key = (generic, strength)
+            if key in carried:
+                continue
+            carried.add(key)
+
+            existing = (
+                db.query(PharmacyStock)
+                .filter(
+                    PharmacyStock.provider_id == provider.id,
+                    PharmacyStock.generic_name == generic,
+                    PharmacyStock.strength == strength,
+                )
+                .first()
+            )
+            if existing:
+                continue
+
+            db.add(
+                PharmacyStock(
+                    provider_id=provider.id,
+                    brand_name=brand,
+                    generic_name=generic,
+                    strength=strength,
+                    # Small per-branch price variation, as in the real market.
+                    unit_price_bdt=round(price * rng.uniform(0.95, 1.15), 2),
+                    quantity_available=rng.randint(20, 500),
+                )
+            )
+
+    return created
+
+
+def seed_labs(db) -> int:
+    """Diagnostic centres with a test catalogue."""
+    created = 0
+    rng = random.Random(7)
+
+    for index, (code, name, district, area, phone) in enumerate(LABS):
+        provider, is_new = _upsert_provider(
+            db, code, name, "LAB", district, area, phone
+        )
+        created += int(is_new)
+
+        for test_index, (test_code, test_name, sample, price, hours) in enumerate(
+            LAB_CATALOGUE
+        ):
+            if (test_index + index) % 8 == 0:
+                continue
+
+            existing = (
+                db.query(LabTest)
+                .filter(
+                    LabTest.provider_id == provider.id,
+                    LabTest.code == test_code,
+                )
+                .first()
+            )
+            if existing:
+                continue
+
+            db.add(
+                LabTest(
+                    provider_id=provider.id,
+                    code=test_code,
+                    name=test_name,
+                    sample_type=sample,
+                    price_bdt=round(price * rng.uniform(0.9, 1.2)),
+                    turnaround_hours=hours,
+                )
+            )
+
+    return created
+
+
 def main() -> None:
     db = SessionLocal()
     try:
@@ -281,13 +477,22 @@ def main() -> None:
         doctors = seed_doctors(db)
         db.commit()
 
+        print("Seeding pharmacies and stock...")
+        pharmacies = seed_pharmacies(db)
+        db.commit()
+
+        print("Seeding diagnostic labs...")
+        labs = seed_labs(db)
+        db.commit()
+
         print("Seeding demo accounts...")
         accounts = seed_demo_accounts(db)
         db.commit()
 
         print(
-            f"\nDone. new hospitals={hospitals} "
-            f"new doctors={doctors} new accounts={accounts}"
+            f"\nDone. new hospitals={hospitals} new doctors={doctors} "
+            f"new pharmacies={pharmacies} new labs={labs} "
+            f"new accounts={accounts}"
         )
         print("\nDemo credentials:")
         for spec in DEMO_ACCOUNTS:
