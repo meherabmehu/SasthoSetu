@@ -126,7 +126,7 @@ async function search() {
   query.set('limit', '25');
 
   try {
-    const doctors = await api.get(`/doctors/match?${query}`, { auth: false, cache: true });
+    const doctors = await api.get(`/doctors/match?${query}`, { cache: true });
     resultsEl.innerHTML = doctors.length
       ? doctors.map(doctorCard).join('')
       : emptyState('doctor.noneFound', '👨‍⚕️');

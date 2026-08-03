@@ -243,7 +243,7 @@ async function search() {
 
   try {
     const data = await api.get(`/recommendations/doctors?${query}`,
-      { auth: false, cache: true });
+      { cache: true });
     resultsEl.innerHTML = data.results?.length
       ? data.results.map(doctorCard).join('')
       : emptyState('doctor.noneFound', '👨‍⚕️');

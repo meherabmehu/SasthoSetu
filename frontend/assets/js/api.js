@@ -73,11 +73,19 @@ export const session = {
   clear() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith(CACHE_PREFIX)) localStorage.removeItem(key);
+    }
   },
 };
 
+/* Cached reads are scoped to the account that fetched them: the same URL
+   returns different rows for different users, and a shared device must not
+   show one patient the previous patient's screen. */
 function cacheKey(path) {
-  return CACHE_PREFIX + path;
+  const user = session.user;
+  const scope = user?.id ?? (session.token ? 'session' : 'guest');
+  return `${CACHE_PREFIX}${scope}.${path}`;
 }
 
 function readCache(path) {

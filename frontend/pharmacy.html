@@ -73,7 +73,7 @@ document.getElementById('searchForm').addEventListener('submit', async (event) =
   if (district) query.set('district', district);
 
   try {
-    const data = await api.get(`/pharmacies/search?${query}`, { auth: false, cache: true });
+    const data = await api.get(`/pharmacies/search?${query}`, { cache: true });
 
     const header = `<div class="alert alert-info">
       <div><strong>${escapeHtml(data.searched_for)}</strong> →

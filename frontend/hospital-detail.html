@@ -67,7 +67,7 @@ async function load() {
 
   try {
     const hospital = await api.get(`/hospitals/${encodeURIComponent(hospitalId)}`,
-      { auth: false, cache: true });
+      { cache: true });
 
     const wards = (hospital.wards || []).map((ward) => {
       const rate = ward.occupancy_rate || 0;
@@ -144,8 +144,7 @@ async function loadForecast(code) {
   if (!code) return;
   const host = document.getElementById('forecast');
   try {
-    const data = await api.get(`/hospitals/${encodeURIComponent(code)}/surge-forecast`,
-      { auth: false });
+    const data = await api.get(`/hospitals/${encodeURIComponent(code)}/surge-forecast`);
 
     const wards = (data.wards || []).map((ward) => {
       const horizons = (ward.forecast || []).map((point) => `

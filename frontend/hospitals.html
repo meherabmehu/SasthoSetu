@@ -219,14 +219,14 @@ async function search() {
       if (isEmergency) query.set('emergency', 'true');
       query.set('limit', '20');
 
-      const results = await api.get(`/hospitals/nearby?${query}`, { auth: false, cache: true });
+      const results = await api.get(`/hospitals/nearby?${query}`, { cache: true });
       resultsEl.innerHTML = results.length
         ? results.map(hospitalCard).join('')
         : emptyState('status.none', '🏥');
     } else {
       const query = new URLSearchParams({ limit: '20' });
       if (district) query.set('district', district);
-      const data = await api.get(`/hospitals?${query}`, { auth: false, cache: true });
+      const data = await api.get(`/hospitals?${query}`, { cache: true });
       resultsEl.innerHTML = data.items?.length
         ? data.items.map(listCard).join('')
         : emptyState('status.none', '🏥');
