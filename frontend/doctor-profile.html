@@ -69,8 +69,8 @@ async function load() {
 
   try {
     const [doctor, reviews] = await Promise.all([
-      api.get(`/doctors/id/${encodeURIComponent(doctorId)}`, { auth: false, cache: true }),
-      api.get(`/doctors/${encodeURIComponent(doctorId)}/reviews`, { auth: false, cache: true }),
+      api.get(`/doctors/id/${encodeURIComponent(doctorId)}`, { cache: true }),
+      api.get(`/doctors/${encodeURIComponent(doctorId)}/reviews`, { cache: true }),
     ]);
 
     document.getElementById('profile').innerHTML = `
