@@ -237,9 +237,19 @@ PowerShell blocks scripts by default. Run once:
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-**Page loads but the symptom check says "ইন্টারনেট সংযোগ নেই"**
-The API is not running or not reachable. Check Terminal 1 is still going, then
-open http://localhost:8000/health — it should show `{"status":"healthy"}`.
+**Page loads but it says "ইন্টারনেট সংযোগ নেই" (no internet connection)**
+
+The browser could not reach the API. Two different causes produce the same
+message, because the browser hides the real reason from the page:
+
+1. *The API is not running.* Check Terminal 1 is still going, then open
+   http://localhost:8000/health — it should show `{"status":"healthy"}`.
+2. *The API refused the browser's origin.* Look at the API terminal: repeated
+   `"OPTIONS /api/v1/... HTTP/1.1" 400 Bad Request` lines mean the request was
+   rejected before it ever ran. In development every `http://localhost:<port>`
+   origin is accepted automatically, so this should not happen — if it does,
+   `APP_ENV` is not `development`, or `CORS_ORIGIN_REGEX` is set to something
+   narrower in your `.env`.
 
 **`Address already in use`**
 Something else has the port. Use a different one:
