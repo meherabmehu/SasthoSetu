@@ -93,6 +93,20 @@ def _baseline_from_lexicon(found: list[str]) -> Optional[int]:
     return max(levels) if levels else None
 
 
+def _headline(conditions: list[dict]) -> Optional[dict]:
+    """The condition to name at the top of the result.
+
+    The differential is ordered so the most time-critical possibility is read
+    first, which is right for the list but wrong for the headline: it made a
+    25% appendicitis the title while a 39% ulcer sat below it. The headline
+    states what is most likely; the ordered list still carries the warning.
+    """
+
+    if not conditions:
+        return None
+    return max(conditions, key=lambda item: item.get("likelihood", 0))
+
+
 def triage_symptoms(request: TriageRequest) -> TriageResponse:
     # The language model only widens what is understood from the note; every
     # decision below still runs on the deterministic rules. When it is not
@@ -194,16 +208,17 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
     baseline = _baseline_from_lexicon(found)
     if baseline:
         severity = LEVEL_TO_SEVERITY[baseline]
+        headline = _headline(conditions)
         return TriageResponse(
             triage_level=TriageLevel(severity),
             possible_condition=(
-                conditions[0]["name_en"]
-                if conditions
+                headline["name_en"]
+                if headline
                 else "Symptoms require clinical assessment"
             ),
             possible_condition_bn=(
-                conditions[0]["name_bn"]
-                if conditions
+                headline["name_bn"]
+                if headline
                 else "উপসর্গগুলোর জন্য চিকিৎসকের মূল্যায়ন প্রয়োজন"
             ),
             recommended_specialty=(

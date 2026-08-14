@@ -161,6 +161,55 @@ class RedFlagMatrixTests(unittest.TestCase):
         self.assertIn("hyperpyrexia", result.safety_flags)
 
 
+class EvidenceThresholdTests(unittest.TestCase):
+    """A serious condition needs more than one everyday symptom.
+
+    "পেট ব্যথা" alone produced a possible-appendicitis headline at 25% while a
+    peptic ulcer sat below it at 39%. Abdominal pain fits appendicitis, an
+    ulcer, typhoid and ordinary indigestion equally well, so naming the
+    surgical one alarms the patient without telling them anything.
+    """
+
+    def test_one_ordinary_symptom_does_not_raise_a_surgical_emergency(self):
+        from app.ai.differential import differential
+
+        keys = [item["condition"] for item in differential(["abdominal_pain"])]
+        self.assertNotIn("appendicitis", keys)
+        self.assertIn("peptic_ulcer", keys)
+
+    def test_a_second_feature_brings_it_back(self):
+        from app.ai.differential import differential
+
+        keys = [
+            item["condition"]
+            for item in differential(["abdominal_pain", "vomiting"])
+        ]
+        self.assertIn("appendicitis", keys)
+
+    def test_a_single_alarming_symptom_still_raises_its_red_flag(self):
+        """Chest pain is not abdominal pain: the symptom itself is the warning."""
+        from app.ai.differential import differential
+
+        keys = [item["condition"] for item in differential(["chest_pain"])]
+        self.assertIn("acute_coronary_syndrome", keys)
+
+        keys = [item["condition"] for item in differential(["shortness_of_breath"])]
+        self.assertIn("asthma_exacerbation", keys)
+
+    def test_the_headline_is_the_most_likely_condition(self):
+        result = run("পেট ব্যথা", age_years=30)
+
+        top = max(result.differential, key=lambda item: item["likelihood"])
+        self.assertEqual(top["name_en"], result.possible_condition)
+
+    def test_the_headline_never_understates_a_red_flag_result(self):
+        """Ordering the headline by likelihood must not soften an emergency."""
+        result = run("বুকে ব্যথা, শ্বাস নিতে কষ্ট", age_years=55)
+
+        self.assertIs(TriageLevel.EMERGENCY, result.triage_level)
+        self.assertEqual("Emergency Medicine", result.recommended_specialty)
+
+
 class TemperatureUnitTests(unittest.TestCase):
     """Thermometers in Bangladesh are marked in Fahrenheit.
 

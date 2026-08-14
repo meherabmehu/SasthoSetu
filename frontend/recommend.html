@@ -111,9 +111,12 @@ let coords = null;
 const resultsEl = document.getElementById('results');
 const statusEl = document.getElementById('locationStatus');
 
-// An urgent result should not wait for the patient to press a button before
-// finding nearby care, so location is requested immediately in that case.
-if (urgent && navigator.geolocation) requestLocation(true);
+// Proximity is the whole point of this page, so location is requested as soon
+// as it opens rather than only for urgent results. Someone sent here for an
+// ordinary complaint still wants the doctor who is twenty minutes away, and
+// asking them to find a button first meant most people never saw a distance
+// at all. Declining is handled quietly below.
+if (navigator.geolocation) requestLocation(true);
 
 document.getElementById('locateBtn').addEventListener('click', () => requestLocation(false));
 

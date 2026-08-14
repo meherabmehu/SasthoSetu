@@ -25,6 +25,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from .conditions import CONDITIONS, SEASONAL_PRIOR
+from .lexicon_symptoms import SYMPTOMS
 
 # Below this share of the top score a candidate is dropped, unless it is a
 # red-flag condition.
@@ -33,6 +34,20 @@ RELATIVE_CUTOFF = 0.25
 # A red-flag condition is always shown once it has any real support, because
 # the cost of omitting it is not symmetric with the cost of listing it.
 RED_FLAG_MIN_SCORE = 1.5
+
+# A serious condition is only raised on the strength of one everyday symptom.
+# "Abdominal pain" alone fits appendicitis, an ulcer, typhoid and ordinary
+# indigestion equally well, so naming the surgical one frightens people for no
+# diagnostic gain. A single *alarming* symptom is different: chest pain on its
+# own is worth raising a cardiac possibility for, because the symptom itself
+# already carries the warning. The lexicon's severity level is what separates
+# the two cases.
+RED_FLAG_MIN_FEATURES = 2
+ALARMING_SYMPTOM_LEVEL = 4
+
+
+def _is_alarming(name: str) -> bool:
+    return SYMPTOMS.get(name, {}).get("level", 0) >= ALARMING_SYMPTOM_LEVEL
 
 MAX_RESULTS = 5
 
@@ -142,9 +157,21 @@ def differential(
     for item in scored:
         relative = item["score"] / top if top else 0.0
         is_significant = relative >= RELATIVE_CUTOFF
-        is_notable_red_flag = item["is_red_flag"] and item["score"] >= RED_FLAG_MIN_SCORE
 
-        if is_significant or is_notable_red_flag:
+        if item["is_red_flag"]:
+            # Serious conditions are held to an evidence bar regardless of how
+            # they scored, unless the single symptom driving them is itself an
+            # alarming one.
+            enough_features = len(item["matched"]) >= RED_FLAG_MIN_FEATURES
+            if not enough_features and not any(
+                _is_alarming(name) for name in item["matched"]
+            ):
+                continue
+            if is_significant or item["score"] >= RED_FLAG_MIN_SCORE:
+                kept.append((item, relative))
+            continue
+
+        if is_significant:
             kept.append((item, relative))
 
     kept = kept[:MAX_RESULTS]
