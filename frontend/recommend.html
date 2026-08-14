@@ -113,42 +113,55 @@ const statusEl = document.getElementById('locationStatus');
 
 // Proximity is the whole point of this page, so location is requested as soon
 // as it opens rather than only for urgent results. Someone sent here for an
-// ordinary complaint still wants the doctor who is twenty minutes away, and
-// asking them to find a button first meant most people never saw a distance
-// at all. Declining is handled quietly below.
-if (navigator.geolocation) requestLocation(true);
+// ordinary complaint still wants the doctor who is twenty minutes away.
+//
+// The first search waits for that answer. Firing one immediately and another
+// once the position arrived sent two requests for the same page and left the
+// list showing distance-less results next to a "locating" message, which read
+// as though the feature had failed.
+const locating = navigator.geolocation
+  ? requestLocation(true)
+  : Promise.resolve();
 
-document.getElementById('locateBtn').addEventListener('click', () => requestLocation(false));
+document.getElementById('locateBtn')
+  .addEventListener('click', () => requestLocation(false).then(search));
 
+/* Resolve the caller's position, updating the status line as it goes.
+   Always resolves — a refused or unavailable position is an ordinary outcome
+   here, not an error, because searching by district still works. */
 function requestLocation(silent) {
-  if (!navigator.geolocation) {
-    statusEl.textContent = BN
-      ? 'এই ব্রাউজারে অবস্থান সুবিধা নেই — জেলা দিয়ে খুঁজুন।'
-      : 'Location is unavailable in this browser - search by district instead.';
-    return;
-  }
-  statusEl.textContent = i18n.t('rec.locating');
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      coords = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
       statusEl.textContent = BN
-        ? 'অবস্থান পাওয়া গেছে — দূরত্ব অনুযায়ী সাজানো হয়েছে।'
-        : 'Location found - results are sorted by distance.';
-      search();
-    },
-    () => {
-      // Declining location must never block care: fall back to district.
-      statusEl.textContent = BN
-        ? 'অবস্থান পাওয়া যায়নি — জেলা দিয়ে খুঁজুন।'
-        : 'Location unavailable - search by district instead.';
-      if (!silent) toast(i18n.t('status.error'), 'danger');
-      search();
-    },
-    { timeout: 8000, enableHighAccuracy: false }
-  );
+        ? 'এই ব্রাউজারে অবস্থান সুবিধা নেই — জেলা দিয়ে খুঁজুন।'
+        : 'Location is unavailable in this browser - search by district instead.';
+      resolve();
+      return;
+    }
+    statusEl.textContent = i18n.t('rec.locating');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        coords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        statusEl.textContent = BN
+          ? 'অবস্থান পাওয়া গেছে — দূরত্ব অনুযায়ী সাজানো হয়েছে।'
+          : 'Location found - results are sorted by distance.';
+        resolve();
+      },
+      () => {
+        // Declining location must never block care: fall back to district.
+        coords = null;
+        statusEl.textContent = BN
+          ? 'অবস্থান পাওয়া যায়নি — জেলা দিয়ে খুঁজুন।'
+          : 'Location unavailable - search by district instead.';
+        if (!silent) toast(i18n.t('status.error'), 'danger');
+        resolve();
+      },
+      { timeout: 8000, enableHighAccuracy: false }
+    );
+  });
 }
 
 function stars(rating) {
@@ -260,7 +273,7 @@ document.getElementById('filters').addEventListener('submit', (event) => {
   search();
 });
 
-search();
+locating.then(search);
 </script>
 
 <style>
