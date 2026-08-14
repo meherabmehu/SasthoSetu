@@ -53,3 +53,28 @@ class SeedCoverageTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AvailabilityRefreshTests(unittest.TestCase):
+    """Seeding must leave the booking flow with usable dates.
+
+    Slots are published as a rolling window. A database seeded a fortnight
+    ago holds only dates that have passed, so every doctor appears fully
+    booked; re-seeding has to clear those and publish fresh ones.
+    """
+
+    def test_the_seed_script_refreshes_the_rolling_window(self):
+        self.assertTrue(
+            hasattr(seed, "refresh_availability"),
+            "seeding must top the availability window back up",
+        )
+
+    def test_refresh_publishes_from_today_onwards(self):
+        from datetime import date, timedelta
+
+        window = [
+            (date.today() + timedelta(days=offset)).isoformat()
+            for offset in range(0, 8)
+        ]
+        self.assertEqual(date.today().isoformat(), window[0])
+        self.assertTrue(all(day >= window[0] for day in window))

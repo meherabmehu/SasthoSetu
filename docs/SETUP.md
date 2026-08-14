@@ -131,6 +131,15 @@ python scripts/seed_database.py
 This creates 5 hospitals, 50 doctors and three login accounts. It prints the
 credentials at the end.
 
+Doctors publish consulting slots as a rolling one-week window, and the seed
+script refreshes it every time it runs. If you return to a database you set up
+a while ago, every doctor will look fully booked because the published dates
+have passed. Republish the window without re-seeding everything else:
+
+```bash
+python scripts/refresh_availability.py
+```
+
 ### 8. Start the two servers
 
 You need **two terminal windows**, both with the virtual environment active.
