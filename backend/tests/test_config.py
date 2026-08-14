@@ -89,5 +89,67 @@ class SqlitePathTests(unittest.TestCase):
         self.assertEqual(url, Settings.from_env({"DATABASE_URL": url}).database_url)
 
 
+class CorsOriginTests(unittest.TestCase):
+    """Local development must not depend on one hard-coded port.
+
+    Serving the frontend from a port that was not in the allowlist produced a
+    CORS preflight rejection, which the page reported as "no internet
+    connection" — a misleading message for a configuration mismatch.
+    """
+
+    def _matches(self, settings, origin):
+        import re
+
+        return bool(
+            settings.cors_origin_regex
+            and re.match(settings.cors_origin_regex, origin)
+        )
+
+    def test_any_loopback_port_is_allowed_in_development(self):
+        settings = Settings.from_env(BASE_ENV)
+
+        for origin in (
+            "http://localhost:5500",
+            "http://localhost:5501",
+            "http://localhost:8080",
+            "http://127.0.0.1:3000",
+            "http://[::1]:5501",
+            "http://localhost",
+        ):
+            with self.subTest(origin=origin):
+                self.assertTrue(self._matches(settings, origin))
+
+    def test_lookalike_hosts_are_rejected(self):
+        settings = Settings.from_env(BASE_ENV)
+
+        for origin in (
+            "http://evil.com",
+            "http://localhost.attacker.net",
+            "https://localhost.evil.com",
+            "http://notlocalhost:5501",
+            "http://127.0.0.1.evil.com",
+        ):
+            with self.subTest(origin=origin):
+                self.assertFalse(self._matches(settings, origin))
+
+    def test_production_has_no_implicit_localhost_allowance(self):
+        settings = Settings.from_env({
+            **BASE_ENV,
+            "APP_ENV": "production",
+            "SECRET_KEY": "x" * 40,
+        })
+        self.assertIsNone(settings.cors_origin_regex)
+
+    def test_an_explicit_regex_always_wins(self):
+        pattern = r"^https://app\.sasthosetu\.gov\.bd$"
+        settings = Settings.from_env({
+            **BASE_ENV,
+            "APP_ENV": "production",
+            "SECRET_KEY": "x" * 40,
+            "CORS_ORIGIN_REGEX": pattern,
+        })
+        self.assertEqual(pattern, settings.cors_origin_regex)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -68,6 +68,25 @@ def _csv(value: str) -> tuple[str, ...]:
     return tuple(items) or ("*",)
 
 
+# Any port on the loopback interface is the developer's own machine. Pinning
+# the allowlist to one port meant that serving the frontend from a different
+# one produced a CORS preflight rejection, which reaches the page as
+# "no internet connection" and sends the reader looking for a network fault.
+_LOCALHOST_ORIGIN_REGEX = r"^http://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$"
+
+
+def _cors_origin_regex(
+    app_env: str,
+    values: Mapping[str, str],
+) -> str | None:
+    explicit = values.get("CORS_ORIGIN_REGEX", "").strip()
+    if explicit:
+        return explicit
+    if app_env in {"development", "test"}:
+        return _LOCALHOST_ORIGIN_REGEX
+    return None
+
+
 @dataclass(frozen=True)
 class Settings:
     app_name: str
@@ -80,6 +99,7 @@ class Settings:
     access_token_expire_minutes: int
     platform_commission_rate: float
     cors_origins: tuple[str, ...]
+    cors_origin_regex: str | None
     rate_limit_per_minute: int
     bkash_api_key: str
     bkash_api_secret: str
@@ -136,6 +156,7 @@ class Settings:
                 "PLATFORM_COMMISSION_RATE",
             ),
             cors_origins=_csv(values.get("CORS_ORIGINS", "*")),
+            cors_origin_regex=_cors_origin_regex(app_env, values),
             rate_limit_per_minute=_positive_int(
                 values.get("RATE_LIMIT_PER_MINUTE", "120"),
                 "RATE_LIMIT_PER_MINUTE",
