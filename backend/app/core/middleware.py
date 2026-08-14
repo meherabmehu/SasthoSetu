@@ -14,6 +14,8 @@ from collections import deque
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import OperationalError
+
+from app.ai.triage_service import ModelArtifactError
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.config import settings
@@ -69,6 +71,24 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
             return JSONResponse(
                 status_code=503 if is_missing_table else 500,
                 content={"detail": message, "request_id": request_id},
+                headers={"X-Request-ID": request_id},
+            )
+        except ModelArtifactError as error:
+            # The trained model is missing or was built against a different
+            # lexicon. This is a setup step the operator has not run, not a
+            # fault in the request, so it is reported as such.
+            duration_ms = (time.perf_counter() - started) * 1000
+            logger.error(
+                "model artifact unusable on %s %s after %.1fms: %s",
+                request.method,
+                request.url.path,
+                duration_ms,
+                error,
+                extra={"request_id": request_id},
+            )
+            return JSONResponse(
+                status_code=503,
+                content={"detail": str(error), "request_id": request_id},
                 headers={"X-Request-ID": request_id},
             )
         except Exception:

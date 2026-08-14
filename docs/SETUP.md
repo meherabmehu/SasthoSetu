@@ -213,6 +213,24 @@ lets you call them directly.
 Try `python` instead. If neither works, Python is not installed or not on your
 PATH — reinstall and tick "Add Python to PATH".
 
+**`ModuleNotFoundError: No module named 'sqlalchemy'`** (or `fastapi`, `pandas`, …)
+
+The virtual environment is not active in this terminal. It has to be activated
+again every time you open a new one — the prompt should start with `(.venv)`.
+
+```powershell
+cd C:\Users\USER\Documents\SasthoSetu
+.venv\Scripts\Activate.ps1
+```
+
+```bash
+cd ~/SasthoSetu && source .venv/bin/activate
+```
+
+This error is not related to the database. The project uses SQLite by default
+and needs no database server; PostgreSQL is optional and commented out in
+`.env`.
+
 **`.venv\Scripts\Activate.ps1 cannot be loaded` (Windows)**
 PowerShell blocks scripts by default. Run once:
 ```powershell
@@ -237,6 +255,23 @@ and reload.
 **`no such table: hospitals`**
 Step 6 was skipped or run from the wrong folder. Run `alembic upgrade head`
 from inside `backend/`, then re-run step 7.
+
+**`The triage model was trained against a different symptom lexicon`**
+The symptom lexicon has grown since the model on your machine was trained, so
+the two no longer line up. Model files are not stored in the repository —
+they are rebuilt locally:
+```bash
+python ml/prepare_all.py
+```
+Takes about 90 seconds. The same applies to
+`Triage model artifact is missing`.
+
+**Every doctor shows no available appointment**
+Consulting slots are published as a rolling one-week window, so a database set
+up a while ago only holds dates that have passed:
+```bash
+python scripts/refresh_availability.py
+```
 
 **AI endpoints return 503**
 Step 4 was skipped. Run `python ml/prepare_all.py` from the project root.
