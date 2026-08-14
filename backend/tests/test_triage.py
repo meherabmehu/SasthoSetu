@@ -197,10 +197,13 @@ class EvidenceThresholdTests(unittest.TestCase):
         self.assertIn("asthma_exacerbation", keys)
 
     def test_the_headline_is_the_most_likely_condition(self):
-        result = run("পেট ব্যথা", age_years=30)
+        # Two symptoms, so conditions may be named at all; the headline must
+        # then be the most likely one rather than the most alarming.
+        result = run("পেট ব্যথা ও বমি", age_years=30)
 
         top = max(result.differential, key=lambda item: item["likelihood"])
         self.assertEqual(top["name_en"], result.possible_condition)
+        self.assertNotEqual("Possible appendicitis", result.possible_condition)
 
     def test_the_headline_never_understates_a_red_flag_result(self):
         """Ordering the headline by likelihood must not soften an emergency."""
@@ -208,6 +211,77 @@ class EvidenceThresholdTests(unittest.TestCase):
 
         self.assertIs(TriageLevel.EMERGENCY, result.triage_level)
         self.assertEqual("Emergency Medicine", result.recommended_specialty)
+
+
+class ThinEvidenceTests(unittest.TestCase):
+    """One ordinary symptom describes common causes, not a named disease.
+
+    Abdominal pain is far more often indigestion than an ulcer, and back pain
+    far more often a strain than anything nameable. Printing "52% peptic
+    ulcer" on that evidence is a false precision that worries people. The rule
+    is general: it applies to every condition, not a hand-picked list.
+    """
+
+    ORDINARY = ["abdominal_pain", "back_pain", "diarrhea", "headache", "cough"]
+
+    def test_a_single_ordinary_symptom_is_underdetermined(self):
+        from app.ai.differential import is_underdetermined
+
+        for symptom in self.ORDINARY:
+            with self.subTest(symptom=symptom):
+                self.assertTrue(is_underdetermined([symptom]))
+
+    def test_a_second_symptom_is_enough_to_name_conditions(self):
+        from app.ai.differential import is_underdetermined
+
+        self.assertFalse(is_underdetermined(["abdominal_pain", "vomiting"]))
+        self.assertFalse(is_underdetermined(["fever", "headache"]))
+
+    def test_a_single_alarming_symptom_is_not_underdetermined(self):
+        from app.ai.differential import is_underdetermined
+
+        self.assertFalse(is_underdetermined(["chest_pain"]))
+        self.assertFalse(is_underdetermined(["shortness_of_breath"]))
+
+    def test_the_result_reports_general_causes_not_a_diagnosis(self):
+        result = run("পেট ব্যথা", age_years=30)
+
+        self.assertTrue(result.is_underdetermined)
+        self.assertNotIn("ulcer", result.possible_condition.lower())
+        self.assertIn("common causes", result.possible_condition.lower())
+
+
+class DoctorNeededTests(unittest.TestCase):
+    """A consultation is offered only when it is warranted.
+
+    Routing every mild complaint to a specialist wastes the patient's money
+    and teaches them to disregard the advice when it matters.
+    """
+
+    def test_a_mild_complaint_does_not_demand_a_doctor(self):
+        for text in ("পেট ব্যথা", "সামান্য মাথা ব্যথা", "হালকা সর্দি কাশি"):
+            with self.subTest(text=text):
+                result = run(text, age_years=30)
+                self.assertFalse(result.needs_doctor)
+                self.assertTrue(result.self_care_note_bn)
+                self.assertTrue(result.self_care_note)
+
+    def test_a_serious_result_still_asks_for_a_doctor(self):
+        for text in (
+            "বুকে ব্যথা, শ্বাস নিতে কষ্ট",
+            "রক্তবমি হচ্ছে",
+            "খিঁচুনি হচ্ছে",
+        ):
+            with self.subTest(text=text):
+                result = run(text, age_years=50)
+                self.assertTrue(result.needs_doctor)
+                self.assertEqual("", result.self_care_note_bn)
+
+    def test_an_emergency_is_never_told_to_stay_home(self):
+        result = run("বুকে ব্যথা, শ্বাস নিতে কষ্ট", age_years=55)
+
+        self.assertIs(TriageLevel.EMERGENCY, result.triage_level)
+        self.assertTrue(result.needs_doctor)
 
 
 class TemperatureUnitTests(unittest.TestCase):
