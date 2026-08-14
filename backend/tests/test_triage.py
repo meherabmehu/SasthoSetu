@@ -161,6 +161,65 @@ class RedFlagMatrixTests(unittest.TestCase):
         self.assertIn("hyperpyrexia", result.safety_flags)
 
 
+class TemperatureUnitTests(unittest.TestCase):
+    """Thermometers in Bangladesh are marked in Fahrenheit.
+
+    The field accepted only Celsius, so the natural reading of "101" was
+    rejected with "Input should be less than or equal to 45" — a message that
+    never mentions a unit and leaves the reader guessing.
+    """
+
+    def test_a_fahrenheit_reading_is_converted(self):
+        from app.schemas.triage import TriageRequest
+
+        self.assertEqual(
+            38.3, TriageRequest(symptoms="জ্বর", temperature_c=101).temperature_c
+        )
+        self.assertEqual(
+            37.0, TriageRequest(symptoms="জ্বর", temperature_c=98.6).temperature_c
+        )
+
+    def test_a_celsius_reading_is_left_alone(self):
+        from app.schemas.triage import TriageRequest
+
+        self.assertEqual(
+            38.5, TriageRequest(symptoms="জ্বর", temperature_c=38.5).temperature_c
+        )
+
+    def test_a_high_fahrenheit_fever_still_escalates(self):
+        # 104 F is 40 C, which is the hyperpyrexia threshold. The conversion
+        # must not lose the escalation.
+        result = run("জ্বর", temperature_c=104)
+        self.assertIs(TriageLevel.EMERGENCY, result.triage_level)
+        self.assertIn("hyperpyrexia", result.safety_flags)
+
+    def test_an_ordinary_fahrenheit_fever_does_not_escalate(self):
+        result = run("জ্বর", temperature_c=101)
+        self.assertIsNot(TriageLevel.EMERGENCY, result.triage_level)
+
+    def test_impossible_readings_are_still_rejected(self):
+        from pydantic import ValidationError
+
+        from app.schemas.triage import TriageRequest
+
+        for value in (200, 50, 10, -5, "abc"):
+            with self.subTest(value=value):
+                with self.assertRaises(ValidationError):
+                    TriageRequest(symptoms="জ্বর", temperature_c=value)
+
+    def test_the_message_names_both_units(self):
+        from pydantic import ValidationError
+
+        from app.schemas.triage import TriageRequest
+
+        with self.assertRaises(ValidationError) as caught:
+            TriageRequest(symptoms="জ্বর", temperature_c=200)
+
+        message = caught.exception.errors()[0]["msg"]
+        self.assertIn("°C", message)
+        self.assertIn("°F", message)
+
+
 class TriageServiceTests(unittest.TestCase):
     def test_cardiorespiratory_combination_is_emergency(self):
         result = run("chest pain and shortness of breath")
