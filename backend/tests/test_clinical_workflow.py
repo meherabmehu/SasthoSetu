@@ -8,6 +8,7 @@ import os
 import tempfile
 import unittest
 import uuid
+from datetime import date, timedelta
 from pathlib import Path
 
 _TMP = tempfile.mkdtemp()
@@ -30,6 +31,17 @@ def unique_email(prefix):
 
 def unique_phone():
     return f"017{uuid.uuid4().int % 100000000:08d}"
+
+
+def _future(days):
+    """A date this many days from today.
+
+    Slot and appointment dates must stay in the future or the booking rules
+    reject them, so they are derived from today rather than written as fixed
+    dates that quietly expire.
+    """
+
+    return (date.today() + timedelta(days=days)).isoformat()
 
 
 class ClinicalTestCase(unittest.TestCase):
@@ -112,7 +124,10 @@ class ClinicalTestCase(unittest.TestCase):
             session.close()
         return user_id, doctor_id, headers
 
-    def _booked_appointment(self, date_text="2026-09-10", time_text="10:00"):
+    def _booked_appointment(self, date_text=None, time_text="10:00"):
+        # Relative to today: a fixed date silently expires and would make the
+        # suite start failing on a date nobody chose.
+        date_text = date_text or (date.today() + timedelta(days=3)).isoformat()
         patient_user_id, patient_headers = self._patient()
         _, doctor_id, doctor_headers = self._doctor()
 
@@ -147,6 +162,71 @@ class ClinicalTestCase(unittest.TestCase):
             "doctor_id": doctor_id,
             "doctor_headers": doctor_headers,
         }
+
+
+class PastSlotTests(ClinicalTestCase):
+    """Availability that has already passed must never be offered or booked.
+
+    Slots were filtered only on is_booked, so a database seeded a fortnight
+    ago kept advertising dates that had gone by, and a patient could book one.
+    """
+
+    def _doctor_with_slot(self, date_text):
+        _, doctor_id, doctor_headers = self._doctor()
+        self.client.post(
+            f"/api/v1/doctor-availability/{doctor_id}",
+            json={
+                "available_date": date_text,
+                "start_time": "10:00",
+                "end_time": "11:00",
+            },
+            headers=doctor_headers,
+        )
+        return doctor_id, doctor_headers
+
+    def test_expired_slots_are_not_listed(self):
+        yesterday = (date.today() - timedelta(days=1)).isoformat()
+        doctor_id, headers = self._doctor_with_slot(yesterday)
+
+        listed = self.client.get(
+            f"/api/v1/doctor-availability/{doctor_id}", headers=headers
+        ).json()
+
+        self.assertEqual(
+            [], [row for row in listed if row["available_date"] == yesterday]
+        )
+
+    def test_todays_slots_are_still_offered(self):
+        today = date.today().isoformat()
+        doctor_id, headers = self._doctor_with_slot(today)
+
+        listed = self.client.get(
+            f"/api/v1/doctor-availability/{doctor_id}", headers=headers
+        ).json()
+
+        self.assertTrue(
+            [row for row in listed if row["available_date"] == today],
+            "a slot later today is still usable",
+        )
+
+    def test_a_past_date_cannot_be_booked(self):
+        yesterday = (date.today() - timedelta(days=1)).isoformat()
+        doctor_id, _ = self._doctor_with_slot(yesterday)
+        patient_user_id, patient_headers = self._patient()
+
+        response = self.client.post(
+            f"/api/v1/appointments/{patient_user_id}",
+            json={
+                "doctor_id": doctor_id,
+                "appointment_date": yesterday,
+                "appointment_time": "10:00",
+                "reason": "booking a date that has passed",
+            },
+            headers=patient_headers,
+        )
+
+        self.assertEqual(400, response.status_code, response.text)
+        self.assertIn("past", response.json()["detail"].lower())
 
 
 class TriageSessionTests(ClinicalTestCase):
@@ -297,7 +377,7 @@ class DoctorMatchingTests(ClinicalTestCase):
 
 class ConsultationTests(ClinicalTestCase):
     def test_doctor_can_run_and_close_a_consultation(self):
-        context = self._booked_appointment("2026-09-11")
+        context = self._booked_appointment(_future(2))
         started = self.client.post(
             "/api/v1/consultations",
             json={"appointment_id": context["appointment_id"]},
@@ -321,7 +401,7 @@ class ConsultationTests(ClinicalTestCase):
         self.assertTrue(closed.json()["is_signed"])
 
     def test_closing_without_a_diagnosis_is_rejected(self):
-        context = self._booked_appointment("2026-09-12")
+        context = self._booked_appointment(_future(3))
         consultation_id = self.client.post(
             "/api/v1/consultations",
             json={"appointment_id": context["appointment_id"]},
@@ -335,7 +415,7 @@ class ConsultationTests(ClinicalTestCase):
         self.assertEqual(400, response.status_code)
 
     def test_signed_consultation_cannot_be_edited(self):
-        context = self._booked_appointment("2026-09-13")
+        context = self._booked_appointment(_future(4))
         consultation_id = self.client.post(
             "/api/v1/consultations",
             json={"appointment_id": context["appointment_id"]},
@@ -359,7 +439,7 @@ class ConsultationTests(ClinicalTestCase):
         self.assertEqual(409, response.status_code)
 
     def test_outsider_cannot_read_a_consultation(self):
-        context = self._booked_appointment("2026-09-14")
+        context = self._booked_appointment(_future(5))
         consultation_id = self.client.post(
             "/api/v1/consultations",
             json={"appointment_id": context["appointment_id"]},
@@ -373,7 +453,7 @@ class ConsultationTests(ClinicalTestCase):
         self.assertEqual(403, response.status_code)
 
     def test_participants_can_exchange_messages(self):
-        context = self._booked_appointment("2026-09-15")
+        context = self._booked_appointment(_future(6))
         consultation_id = self.client.post(
             "/api/v1/consultations",
             json={"appointment_id": context["appointment_id"]},
@@ -400,7 +480,7 @@ class ConsultationTests(ClinicalTestCase):
 
 
 class PrescriptionTests(ClinicalTestCase):
-    def _issue(self, items=None, date_text="2026-09-20"):
+    def _issue(self, items=None, date_text=_future(7)):
         context = self._booked_appointment(date_text)
         consultation_id = self.client.post(
             "/api/v1/consultations",
@@ -447,7 +527,7 @@ class PrescriptionTests(ClinicalTestCase):
         self.assertFalse(verification["is_valid"])
 
     def test_dispensing_is_single_use(self):
-        prescription, context = self._issue(date_text="2026-09-21")
+        prescription, context = self._issue(date_text=_future(8))
         code = prescription["verification_code"]
 
         first = self.client.post(
@@ -471,7 +551,7 @@ class PrescriptionTests(ClinicalTestCase):
         self.assertTrue(after["already_dispensed"])
 
     def test_tampering_with_an_item_invalidates_the_signature(self):
-        prescription, _ = self._issue(date_text="2026-09-22")
+        prescription, _ = self._issue(date_text=_future(9))
 
         from app.models.prescription_item import PrescriptionLine
 
@@ -504,17 +584,17 @@ class PrescriptionTests(ClinicalTestCase):
                     "duration": "10 days",
                 },
             ],
-            date_text="2026-09-23",
+            date_text=_future(10),
         )
         report = prescription["interaction_report"]
         self.assertEqual("major", report["highest_severity"])
 
     def test_generic_name_is_resolved_for_each_item(self):
-        prescription, _ = self._issue(date_text="2026-09-24")
+        prescription, _ = self._issue(date_text=_future(11))
         self.assertEqual("paracetamol", prescription["items"][0]["generic_name"])
 
     def test_cancelled_prescription_cannot_be_dispensed(self):
-        prescription, context = self._issue(date_text="2026-09-25")
+        prescription, context = self._issue(date_text=_future(12))
         self.client.post(
             f"/api/v1/prescriptions/{prescription['id']}/cancel",
             headers=context["doctor_headers"],
@@ -527,7 +607,7 @@ class PrescriptionTests(ClinicalTestCase):
         self.assertTrue(verification["is_cancelled"])
 
     def test_patient_can_list_their_prescriptions(self):
-        prescription, context = self._issue(date_text="2026-09-26")
+        prescription, context = self._issue(date_text=_future(13))
         listing = self.client.get(
             f"/api/v1/prescriptions/records/{context['patient_user_id']}",
             headers=context["patient_headers"],
@@ -537,7 +617,7 @@ class PrescriptionTests(ClinicalTestCase):
         self.assertIn(prescription["verification_code"], codes)
 
     def test_other_patients_cannot_list_prescriptions(self):
-        _, context = self._issue(date_text="2026-09-27")
+        _, context = self._issue(date_text=_future(14))
         _, intruder = self._patient()
         response = self.client.get(
             f"/api/v1/prescriptions/records/{context['patient_user_id']}",
@@ -548,7 +628,7 @@ class PrescriptionTests(ClinicalTestCase):
 
 class AppointmentIntegrityTests(ClinicalTestCase):
     def test_slot_cannot_be_double_booked(self):
-        context = self._booked_appointment("2026-10-01", "09:00")
+        context = self._booked_appointment(_future(15), "09:00")
 
         # Use the patient this test just created. Selecting "the last PATIENT
         # by id" picked up whichever account another test happened to add,
@@ -559,7 +639,7 @@ class AppointmentIntegrityTests(ClinicalTestCase):
             f"/api/v1/appointments/{other_user_id}",
             json={
                 "doctor_id": context["doctor_id"],
-                "appointment_date": "2026-10-01",
+                "appointment_date": _future(15),
                 "appointment_time": "09:00",
                 "reason": "Another patient wants the same slot",
             },

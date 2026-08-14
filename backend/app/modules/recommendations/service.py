@@ -17,6 +17,7 @@ reputation matters more than saving twenty minutes of travel.
 """
 from __future__ import annotations
 
+from datetime import date
 from math import asin, cos, radians, sin, sqrt
 from typing import Optional
 
@@ -164,6 +165,7 @@ def recommend_doctors_service(
             .filter(
                 DoctorAvailability.doctor_id == doctor.id,
                 DoctorAvailability.is_booked.is_(False),
+                DoctorAvailability.available_date >= date.today().isoformat(),
             )
             .order_by(
                 DoctorAvailability.available_date.asc(),

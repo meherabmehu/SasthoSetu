@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import HTTPException
 
 from sqlalchemy.exc import IntegrityError
@@ -66,6 +68,12 @@ def create_appointment_service(
     payload,
     db: Session
 ):
+
+    if payload.appointment_date < date.today():
+        raise HTTPException(
+            status_code=400,
+            detail="Appointment date is in the past"
+        )
 
     patient = (
         db.query(Patient)
@@ -390,6 +398,8 @@ def cancel_appointment_service(
         "message": "Appointment cancelled successfully",
         "status": "CANCELLED"
     }
+
+
 def reschedule_appointment_service(
     appointment_id: str,
     payload,
@@ -412,6 +422,12 @@ def reschedule_appointment_service(
         )
 
     assert_appointment_access(appointment, current_user, db)
+
+    if payload.appointment_date < date.today():
+        raise HTTPException(
+            status_code=400,
+            detail="Appointment date is in the past"
+        )
 
     if appointment.status == "COMPLETED":
         raise HTTPException(
