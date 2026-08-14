@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
@@ -262,6 +264,7 @@ def match_doctors_service(
             .filter(
                 DoctorAvailability.doctor_id == doctor.id,
                 DoctorAvailability.is_booked.is_(False),
+                DoctorAvailability.available_date >= date.today().isoformat(),
             )
             .order_by(
                 DoctorAvailability.available_date.asc(),

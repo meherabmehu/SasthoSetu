@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import HTTPException
 
 from sqlalchemy.orm import Session
@@ -6,6 +8,20 @@ from app.models.doctor import Doctor
 from app.models.doctor_availability import (
     DoctorAvailability
 )
+
+
+def upcoming_slots(query):
+    """Restrict an availability query to today onwards.
+
+    Slots are stored as ISO date strings, so a lexicographic comparison
+    orders them correctly. Without this a doctor's calendar keeps offering
+    dates that have already passed, and the first "next available" slot a
+    patient is shown is one they can never attend.
+    """
+
+    return query.filter(
+        DoctorAvailability.available_date >= date.today().isoformat()
+    )
 
 
 def assert_owns_calendar(
@@ -86,12 +102,18 @@ def get_doctor_availability_service(
 ):
 
     return (
-        db.query(DoctorAvailability)
-        .filter(
-            DoctorAvailability.doctor_id
-            == doctor_id,
-            DoctorAvailability.is_booked
-            == False
+        upcoming_slots(
+            db.query(DoctorAvailability)
+            .filter(
+                DoctorAvailability.doctor_id
+                == doctor_id,
+                DoctorAvailability.is_booked
+                == False
+            )
+        )
+        .order_by(
+            DoctorAvailability.available_date.asc(),
+            DoctorAvailability.start_time.asc()
         )
         .all()
     )

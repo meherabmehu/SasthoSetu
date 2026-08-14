@@ -4,6 +4,7 @@ import os
 import tempfile
 import unittest
 import uuid
+from datetime import date, timedelta
 from pathlib import Path
 
 _TMP = tempfile.mkdtemp()
@@ -28,6 +29,17 @@ def unique_email(prefix):
 
 def unique_phone():
     return f"017{uuid.uuid4().int % 100000000:08d}"
+
+
+def _future(days):
+    """A date this many days from today.
+
+    Slot and appointment dates must stay in the future or the booking rules
+    reject them, so they are derived from today rather than written as fixed
+    dates that quietly expire.
+    """
+
+    return (date.today() + timedelta(days=days)).isoformat()
 
 
 class ProviderTestCase(unittest.TestCase):
@@ -312,7 +324,7 @@ class PaymentTests(ProviderTestCase):
         self.client.post(
             f"/api/v1/doctor-availability/{doctor_id}",
             json={
-                "available_date": "2026-11-05",
+                "available_date": _future(2),
                 "start_time": "10:00",
                 "end_time": "11:00",
             },
@@ -322,7 +334,7 @@ class PaymentTests(ProviderTestCase):
             f"/api/v1/appointments/{patient_user_id}",
             json={
                 "doctor_id": doctor_id,
-                "appointment_date": "2026-11-05",
+                "appointment_date": _future(2),
                 "appointment_time": "10:00",
                 "reason": "Consultation payment test",
             },

@@ -9,6 +9,7 @@ import os
 import tempfile
 import unittest
 import uuid
+from datetime import date, timedelta
 from pathlib import Path
 
 _TMP = tempfile.mkdtemp()
@@ -23,6 +24,17 @@ from app.main import app  # noqa: E402
 from app.models.base import Base  # noqa: E402
 from app.models.doctor import Doctor  # noqa: E402
 from app.models.user import User  # noqa: E402
+
+
+def _future(days):
+    """A date this many days from today.
+
+    Slot and appointment dates must stay in the future or the booking rules
+    reject them, so they are derived from today rather than written as fixed
+    dates that quietly expire.
+    """
+
+    return (date.today() + timedelta(days=days)).isoformat()
 
 
 class ReviewTestCase(unittest.TestCase):
@@ -99,7 +111,7 @@ class ReviewTestCase(unittest.TestCase):
             session.close()
         return doctor_id, headers
 
-    def _completed_visit(self, date_text="2026-12-01", sign=True):
+    def _completed_visit(self, date_text=_future(2), sign=True):
         """Book, attend and (optionally) sign off a full consultation."""
         patient_user_id, patient_headers = self._patient()
         doctor_id, doctor_headers = self._doctor()
@@ -158,7 +170,7 @@ class ReviewIntegrityTests(ReviewTestCase):
     """Every test here is an attempt to game the rating system."""
 
     def test_review_after_a_real_signed_consultation_is_accepted(self):
-        visit = self._completed_visit("2026-12-02")
+        visit = self._completed_visit(_future(3))
         response = self.client.post(
             "/api/v1/reviews",
             json={
@@ -183,7 +195,7 @@ class ReviewIntegrityTests(ReviewTestCase):
         self.assertEqual(404, response.status_code)
 
     def test_a_stranger_cannot_review_someone_elses_visit(self):
-        visit = self._completed_visit("2026-12-03")
+        visit = self._completed_visit(_future(4))
         _, attacker = self._patient()
         response = self.client.post(
             "/api/v1/reviews",
@@ -194,7 +206,7 @@ class ReviewIntegrityTests(ReviewTestCase):
 
     def test_cannot_review_a_visit_that_never_happened(self):
         """Booked but never attended: no proof, so no review."""
-        visit = self._completed_visit("2026-12-04", sign=False)
+        visit = self._completed_visit(_future(5), sign=False)
         response = self.client.post(
             "/api/v1/reviews",
             json={"appointment_id": visit["appointment_id"], "rating": 5},
@@ -205,7 +217,7 @@ class ReviewIntegrityTests(ReviewTestCase):
 
     def test_the_same_visit_cannot_be_reviewed_twice(self):
         """Blocks the simplest review-farming method: repeat submission."""
-        visit = self._completed_visit("2026-12-05")
+        visit = self._completed_visit(_future(6))
         body = {"appointment_id": visit["appointment_id"], "rating": 5}
         first = self.client.post(
             "/api/v1/reviews", json=body, headers=visit["patient_headers"]
@@ -218,7 +230,7 @@ class ReviewIntegrityTests(ReviewTestCase):
         self.assertEqual(409, second.status_code)
 
     def test_anonymous_users_cannot_review(self):
-        visit = self._completed_visit("2026-12-06")
+        visit = self._completed_visit(_future(7))
         response = self.client.post(
             "/api/v1/reviews",
             json={"appointment_id": visit["appointment_id"], "rating": 5},
@@ -226,7 +238,7 @@ class ReviewIntegrityTests(ReviewTestCase):
         self.assertIn(response.status_code, (401, 403))
 
     def test_a_doctor_cannot_review_themselves(self):
-        visit = self._completed_visit("2026-12-07")
+        visit = self._completed_visit(_future(8))
         response = self.client.post(
             "/api/v1/reviews",
             json={"appointment_id": visit["appointment_id"], "rating": 5},
@@ -235,7 +247,7 @@ class ReviewIntegrityTests(ReviewTestCase):
         self.assertEqual(403, response.status_code)
 
     def test_rating_outside_one_to_five_is_rejected(self):
-        visit = self._completed_visit("2026-12-08")
+        visit = self._completed_visit(_future(9))
         for bad in (0, 6, -1, 99):
             with self.subTest(rating=bad):
                 response = self.client.post(
@@ -248,7 +260,7 @@ class ReviewIntegrityTests(ReviewTestCase):
     def test_reviewer_name_is_partially_masked(self):
         """Honest feedback should not require broadcasting a full name."""
         _, headers = self._patient()
-        visit = self._completed_visit("2026-12-09")
+        visit = self._completed_visit(_future(10))
         self.client.post(
             "/api/v1/reviews",
             json={"appointment_id": visit["appointment_id"], "rating": 4},
@@ -265,7 +277,7 @@ class RatingAggregationTests(ReviewTestCase):
     def test_rating_is_shrunk_toward_the_mean_for_few_reviews(self):
         """One five-star review must not produce a perfect public score."""
         _, headers = self._patient()
-        visit = self._completed_visit("2026-12-10")
+        visit = self._completed_visit(_future(11))
         self.client.post(
             "/api/v1/reviews",
             json={"appointment_id": visit["appointment_id"], "rating": 5},
@@ -280,7 +292,7 @@ class RatingAggregationTests(ReviewTestCase):
 
     def test_summary_reports_distribution_and_counts(self):
         _, headers = self._patient()
-        visit = self._completed_visit("2026-12-11")
+        visit = self._completed_visit(_future(12))
         self.client.post(
             "/api/v1/reviews",
             json={
@@ -300,7 +312,7 @@ class RatingAggregationTests(ReviewTestCase):
 
     def test_hidden_review_stops_counting(self):
         _, headers = self._patient()
-        visit = self._completed_visit("2026-12-12")
+        visit = self._completed_visit(_future(13))
         created = self.client.post(
             "/api/v1/reviews",
             json={"appointment_id": visit["appointment_id"], "rating": 1},
@@ -321,7 +333,7 @@ class RatingAggregationTests(ReviewTestCase):
         self.assertEqual(0, summary["review_count"])
 
     def test_only_admins_can_hide_a_review(self):
-        visit = self._completed_visit("2026-12-13")
+        visit = self._completed_visit(_future(14))
         created = self.client.post(
             "/api/v1/reviews",
             json={"appointment_id": visit["appointment_id"], "rating": 2},
@@ -335,7 +347,7 @@ class RatingAggregationTests(ReviewTestCase):
         self.assertEqual(403, response.status_code)
 
     def test_pending_list_shows_only_unreviewed_attended_visits(self):
-        visit = self._completed_visit("2026-12-14")
+        visit = self._completed_visit(_future(15))
         pending = self.client.get(
             "/api/v1/reviews/pending", headers=visit["patient_headers"]
         ).json()

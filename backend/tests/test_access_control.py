@@ -15,6 +15,7 @@ import os
 import tempfile
 import unittest
 import uuid
+from datetime import date, timedelta
 from pathlib import Path
 
 _TMP = tempfile.mkdtemp()
@@ -29,6 +30,17 @@ from app.main import app  # noqa: E402
 from app.models.base import Base  # noqa: E402
 from app.models.doctor import Doctor  # noqa: E402
 from app.models.user import User  # noqa: E402
+
+
+def _future(days):
+    """A date this many days from today.
+
+    Slot and appointment dates must stay in the future or the booking rules
+    reject them, so they are derived from today rather than written as fixed
+    dates that quietly expire.
+    """
+
+    return (date.today() + timedelta(days=days)).isoformat()
 
 
 class AccessTestCase(unittest.TestCase):
@@ -227,7 +239,7 @@ class AppointmentOwnershipTests(AccessTestCase):
         slot = self.client.post(
             f"/api/v1/doctor-availability/{doctor_id}",
             json={
-                "available_date": "2026-12-01",
+                "available_date": _future(2),
                 "start_time": "10:00",
                 "end_time": "11:00",
             },
@@ -239,7 +251,7 @@ class AppointmentOwnershipTests(AccessTestCase):
             f"/api/v1/appointments/{patient_id}",
             json={
                 "doctor_id": doctor_id,
-                "appointment_date": "2026-12-01",
+                "appointment_date": _future(2),
                 "appointment_time": "10:00",
                 "reason": "routine cardiac review",
             },
@@ -258,7 +270,7 @@ class AppointmentOwnershipTests(AccessTestCase):
             ("GET", f"/api/v1/appointments/patient/{patient_id}", None),
             ("POST", f"/api/v1/appointments/{patient_id}", {
                 "doctor_id": "x",
-                "appointment_date": "2026-12-02",
+                "appointment_date": _future(3),
                 "appointment_time": "10:00",
                 "reason": "booking without an account",
             }),
