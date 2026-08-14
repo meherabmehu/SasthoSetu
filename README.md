@@ -73,6 +73,7 @@ python ml/prepare_all.py                       # datasets + models (~90s)
 cp backend/.env.example backend/.env           # defaults to SQLite, no edits needed
 cd backend && alembic upgrade head && cd ..
 python scripts/seed_database.py                # facilities, doctors, demo logins
+python scripts/refresh_availability.py         # republish the booking window
 
 cd backend && uvicorn app.main:app --reload    # terminal 1
 ```

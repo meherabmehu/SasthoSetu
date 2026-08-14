@@ -33,6 +33,10 @@ from app.models.provider import (  # noqa: E402
 )
 from app.models.user import User  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from refresh_availability import refresh as refresh_availability  # noqa: E402
+
 SEED_DIR = ROOT / "data" / "seed"
 
 # Ward mix applied to each seeded hospital, as a share of its bed count.
@@ -489,10 +493,17 @@ def main() -> None:
         accounts = seed_demo_accounts(db)
         db.commit()
 
+        # Availability is a rolling window. Re-running the seed on an older
+        # database must clear slots that have expired, or every doctor still
+        # looks fully booked.
+        print("Refreshing consulting slots...")
+        new_slots, expired = refresh_availability(days=7)
+
         print(
             f"\nDone. new hospitals={hospitals} new doctors={doctors} "
             f"new pharmacies={pharmacies} new labs={labs} "
-            f"new accounts={accounts}"
+            f"new accounts={accounts} new slots={new_slots} "
+            f"expired slots removed={expired}"
         )
         print("\nDemo credentials:")
         for spec in DEMO_ACCOUNTS:
