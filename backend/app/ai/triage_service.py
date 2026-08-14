@@ -41,9 +41,23 @@ DISCLAIMER = {
 }
 
 
+class ModelArtifactError(RuntimeError):
+    """The trained model is missing or no longer matches the feature set."""
+
+
+_REBUILD_HINT = (
+    "Run 'python ml/prepare_all.py' from the project root to rebuild it."
+)
+
+
 @lru_cache(maxsize=1)
 def _model():
-    return joblib.load(_ART / "triage_model.joblib")
+    path = _ART / "triage_model.joblib"
+    if not path.exists():
+        raise ModelArtifactError(
+            f"Triage model artifact is missing at {path}. {_REBUILD_HINT}"
+        )
+    return joblib.load(path)
 
 
 def _specialties(symptoms: list[str], flags: list[dict]) -> list[str]:
@@ -66,7 +80,19 @@ def triage(notes: str, age: Optional[int] = None,
 
     model = _model()
     frame = pd.DataFrame([{"text": notes or "", "age": eff_age}])
-    proba = model.predict_proba(frame)[0]
+
+    try:
+        proba = model.predict_proba(frame)[0]
+    except ValueError as exc:
+        # The structured feature block is derived from the symptom lexicon, so
+        # adding a symptom changes its width and a model trained before that
+        # change can no longer score a request. Saying so plainly beats a
+        # stack trace about StandardScaler.
+        raise ModelArtifactError(
+            "The triage model was trained against a different symptom "
+            f"lexicon and can no longer score requests ({exc}). "
+            + _REBUILD_HINT
+        ) from exc
     classes = list(model.classes_)
     ml_level = int(classes[int(proba.argmax())])
     confidence = float(proba.max())

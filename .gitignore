@@ -4,7 +4,9 @@ __pycache__/
 
 # Virtual Environment
 venv/
+.venv/
 backend/venv/
+backend/.venv/
 
 # Environment Variables
 .env
@@ -20,7 +22,10 @@ backend/venv/
 
 # OS Files
 .DS_Store
-Thumbs.db*.sqlite3
+Thumbs.db
+
+# Databases
+*.sqlite3
 backend/*.db
 
 # Generated ML datasets (rebuild with ml/prepare_all.py)

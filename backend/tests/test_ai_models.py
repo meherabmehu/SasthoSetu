@@ -8,6 +8,7 @@ not been built, which keeps a fresh clone runnable before the pipeline runs.
 """
 import json
 import os
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -295,3 +296,51 @@ class ModelQualityGateTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ModelArtifactErrorTests(unittest.TestCase):
+    """A stale or missing model must explain itself.
+
+    The structured feature block is derived from the symptom lexicon, so
+    adding a symptom widens it and a model trained before that change cannot
+    score a request. That surfaced as a ValueError about StandardScaler,
+    which tells the reader nothing about what to do.
+    """
+
+    def test_a_missing_artifact_names_the_rebuild_command(self):
+        from app.ai import triage_service
+
+        triage_service._model.cache_clear()
+        original = triage_service._ART
+        try:
+            triage_service._ART = Path(tempfile.mkdtemp())
+            with self.assertRaises(triage_service.ModelArtifactError) as caught:
+                triage_service._model()
+        finally:
+            triage_service._ART = original
+            triage_service._model.cache_clear()
+
+        self.assertIn("ml/prepare_all.py", str(caught.exception))
+
+    def test_a_stale_artifact_is_reported_as_a_rebuild_not_a_crash(self):
+        from app.ai import triage_service
+
+        class StaleModel:
+            def predict_proba(self, frame):
+                raise ValueError(
+                    "X has 88 features, but StandardScaler is expecting 89"
+                )
+
+        triage_service._model.cache_clear()
+        original = triage_service._model
+        try:
+            triage_service._model = lambda: StaleModel()
+            with self.assertRaises(triage_service.ModelArtifactError) as caught:
+                triage_service.triage("বুকে ব্যথা", 50)
+        finally:
+            triage_service._model = original
+            triage_service._model.cache_clear()
+
+        message = str(caught.exception)
+        self.assertIn("lexicon", message)
+        self.assertIn("ml/prepare_all.py", message)
