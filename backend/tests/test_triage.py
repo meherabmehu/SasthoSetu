@@ -92,6 +92,35 @@ RED_FLAG_MATRIX = [
         "snake bite",
         ["সাপে কামড়েছে", "shape kamor", "snake bite"],
     ),
+    # Phrasings that a real user typed and the matcher missed.
+    (
+        "haematemesis written as one word",
+        ["রক্তবমি হচ্ছে", "roktobomi hocche", "বমিতে রক্ত"],
+    ),
+    (
+        "meningism without a reported fever",
+        [
+            "প্রচণ্ড মাথাব্যথা এবং ঘাড় শক্ত",
+            "তীব্র মাথাব্যথা ও ঘাড় শক্ত",
+            "stiff neck and severe headache",
+        ],
+    ),
+    (
+        "cardiac chest pain with sweating",
+        [
+            "bukey betha, ghamtesi",
+            "বুকে ব্যথা আর ঘামছি",
+            "chest pain and cold sweat",
+        ],
+    ),
+    (
+        "cannot breathe",
+        [
+            "niswas nite parchi na",
+            "শ্বাস নিতে পারছি না",
+            "shash nite parchi na",
+        ],
+    ),
 ]
 
 
@@ -170,6 +199,40 @@ class TriageServiceTests(unittest.TestCase):
         result = run("জ্বর নেই কিন্তু হালকা কাশি আছে")
         self.assertIsNot(TriageLevel.EMERGENCY, result.triage_level)
         self.assertNotIn("fever", result.matched_symptoms)
+
+    def test_absence_and_inability_are_told_apart(self):
+        """"হচ্ছে না" reports absence; "পারছি না" reports an inability.
+
+        Both end in the same particle, so treating every trailing "না" as a
+        negation would discard someone saying they cannot breathe.
+        """
+        from app.ai.extraction import extract
+
+        absent = [
+            "শ্বাস নিতে কষ্ট হচ্ছে না",
+            "বমি হচ্ছে না",
+            "জ্বর হচ্ছে না",
+            "শ্বাসকষ্ট নেই",
+        ]
+        for text in absent:
+            with self.subTest(text=text):
+                self.assertEqual([], extract(text).symptoms)
+
+        present = {
+            "শ্বাস নিতে পারছি না": "shortness_of_breath",
+            "দম নিতে পারছি না": "shortness_of_breath",
+            "রক্ত বন্ধ হচ্ছে না": "severe_bleeding",
+        }
+        for text, symptom in present.items():
+            with self.subTest(text=text):
+                self.assertIn(symptom, extract(text).symptoms)
+
+    def test_dizziness_is_recognised_in_common_phrasings(self):
+        from app.ai.extraction import extract
+
+        for text in ("মাথা ঘুরছে", "মাথা ঘোরা", "matha ta ghurtese"):
+            with self.subTest(text=text):
+                self.assertIn("dizziness", extract(text).symptoms)
 
     def test_response_is_bilingual(self):
         result = run("বুকে ব্যথা, শ্বাস নিতে কষ্ট")

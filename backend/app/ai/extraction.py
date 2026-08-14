@@ -61,7 +61,11 @@ _SURFACE_INDEX = _build_surface_index()
 
 # Bangla negation particles follow the symptom ("জ্বর নেই"); English negation
 # precedes it ("no fever"). They are matched in different windows accordingly.
-_NEG_AFTER = ["নেই", "নাই", "হয়নি", "হয় নি", "nei", "nai"]
+# "না" is listed on its own because the symptom's own surface form often
+# already absorbs the verb ("বমি হচ্ছে"), leaving only the particle behind.
+# The exemption list is consulted first, so "পারছি না" still intensifies.
+_NEG_AFTER = ["নেই", "নাই", "হয়নি", "হয় নি", "nei", "nai",
+              "না", "হচ্ছে না", "হচ্ছেনা", "হয় না", "hocche na", "hoy na"]
 _NEG_BEFORE = ["no", "not", "without", "denies", "na"]
 
 # Phrases where a negation token intensifies rather than negates the symptom.
@@ -73,6 +77,10 @@ _NEG_EXEMPT = [
     "not responding", "not breathing", "cannot breathe", "can't breathe",
     "cant breathe", "not moving", "not waking", "not conscious",
     "bondho hocche na", "bondho hoy na", "থামছে না", "বন্ধ হচ্ছে না",
+    # "cannot" reports an inability, which makes the symptom worse rather
+    # than absent: "শ্বাস নিতে পারছি না" is someone who cannot breathe.
+    "পারছি না", "পারছে না", "পারছেনা", "parchi na", "parche na",
+    "আটকে যাচ্ছে", "atke jacche",
 ]
 
 _DUR_UNIT_DAYS = {
