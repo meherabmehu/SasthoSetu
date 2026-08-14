@@ -238,11 +238,10 @@ def get_patient_appointments_service(
         .first()
     )
 
+    # A patient who has not filled in their profile yet simply has no
+    # bookings; that is an empty list, not a missing page.
     if not patient:
-        raise HTTPException(
-            status_code=404,
-            detail="Patient profile not found"
-        )
+        return []
 
     appointments = (
         db.query(Appointment)

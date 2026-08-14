@@ -610,12 +610,14 @@ def list_patient_prescriptions_service(patient_user_id: str, current_user, db: S
     patient = (
         db.query(Patient).filter(Patient.user_id == patient_user_id).first()
     )
-    if not patient:
-        raise HTTPException(status_code=404, detail="Patient profile not found")
-
     role = current_user.get("role")
     if role not in ("ADMIN", "DOCTOR") and current_user.get("user_id") != patient_user_id:
         raise HTTPException(status_code=403, detail="Not authorised")
+
+    # A patient who has not filled in their profile yet simply has no
+    # records; that is an empty history, not a missing page.
+    if not patient:
+        return []
 
     records = (
         db.query(PrescriptionRecord)
