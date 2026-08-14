@@ -5,6 +5,9 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
 from app.core.security import get_current_user
+from app.modules.doctor_availability.service import (
+    assert_owns_calendar
+)
 
 from app.schemas.doctor_availability import (
     DoctorAvailabilityCreate
@@ -27,6 +30,7 @@ def create_availability(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user)
 ):
+    assert_owns_calendar(doctor_id, current_user, db)
     return create_availability_service(
         doctor_id=doctor_id,
         payload=payload,

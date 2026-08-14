@@ -25,7 +25,10 @@ router = APIRouter()
 
 
 @router.post("/ai/drug-check")
-def drug_check(payload: DrugCheckRequest):
+def drug_check(
+    payload: DrugCheckRequest,
+    current_user=Depends(get_current_user),
+):
     return drug_check_service(payload.drugs)
 
 
@@ -34,17 +37,26 @@ def drug_check(payload: DrugCheckRequest):
     summary="Multilingual ML triage (bn/banglish/en) with red-flag safety "
             "override - complements the rule-based /triage endpoint",
 )
-def triage_ml(request: TriageRequest):
+def triage_ml(
+    request: TriageRequest,
+    current_user=Depends(get_current_user),
+):
     return ml_triage_service(request.symptoms, age=request.age_years)
 
 
 @router.get("/hospitals/{hospital_code}/surge-forecast")
-def surge_forecast(hospital_code: str):
+def surge_forecast(
+    hospital_code: str,
+    current_user=Depends(get_current_user),
+):
     return surge_forecast_service(hospital_code)
 
 
 @router.get("/population/surveillance")
-def population_surveillance(query: SurveillanceQuery = Depends()):
+def population_surveillance(
+    query: SurveillanceQuery = Depends(),
+    current_user=Depends(get_current_user),
+):
     return surveillance_service_query(
         query.district, query.disease, query.weeks)
 

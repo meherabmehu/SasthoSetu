@@ -4,7 +4,12 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
-from app.core.security import require_doctor
+from app.core.security import (
+    get_current_user,
+    require_doctor,
+    require_self_or_admin,
+    require_self_or_clinician,
+)
 
 from app.schemas.appointment import (
     AppointmentCreate
@@ -36,8 +41,10 @@ router = APIRouter()
 def create_appointment(
     patient_user_id: str,
     payload: AppointmentCreate,
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    require_self_or_admin(patient_user_id, current_user)
     return create_appointment_service(
         patient_user_id=patient_user_id,
         payload=payload,
@@ -50,8 +57,10 @@ def create_appointment(
 )
 def get_patient_appointments(
     patient_user_id: str,
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    require_self_or_clinician(patient_user_id, current_user)
     return get_patient_appointments_service(
         patient_user_id=patient_user_id,
         db=db
@@ -78,12 +87,14 @@ def get_doctor_appointments(
 def update_appointment_status(
     appointment_id: str,
     payload: AppointmentStatusUpdate,
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return update_appointment_status_service(
         appointment_id=appointment_id,
         status=payload.status,
-        db=db
+        db=db,
+        current_user=current_user
     )
 
 
@@ -92,11 +103,13 @@ def update_appointment_status(
 )
 def cancel_appointment(
     appointment_id: str,
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return cancel_appointment_service(
         appointment_id=appointment_id,
-        db=db
+        db=db,
+        current_user=current_user
     )
 
 
@@ -106,10 +119,12 @@ def cancel_appointment(
 def reschedule_appointment(
     appointment_id: str,
     payload: AppointmentReschedule,
+    current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return reschedule_appointment_service(
         appointment_id=appointment_id,
         payload=payload,
-        db=db
+        db=db,
+        current_user=current_user
     )
