@@ -362,6 +362,29 @@ class PublicSurfaceTests(AccessTestCase):
         self.assertEqual(200, self.client.get("/health").status_code)
 
 
+class NewAccountTests(AccessTestCase):
+    """A freshly registered account can open every page it is offered.
+
+    Registration creates a user but not a patient record, and the history
+    endpoints resolved the caller through that record. A new user therefore
+    met a 404 on their own appointments and prescriptions instead of an
+    empty list.
+    """
+
+    def test_a_new_account_sees_empty_history_not_an_error(self):
+        user_id, headers = self._account("PATIENT")
+
+        for path in (
+            f"/api/v1/appointments/patient/{user_id}",
+            f"/api/v1/prescriptions/records/{user_id}",
+            f"/api/v1/lab-orders/patient/{user_id}",
+        ):
+            with self.subTest(path=path):
+                response = self.client.get(path, headers=headers)
+                self.assertEqual(200, response.status_code, response.text)
+                self.assertEqual([], response.json())
+
+
 class NoUnguardedRouteTests(AccessTestCase):
     """Every route must be guarded unless it is on the public list.
 

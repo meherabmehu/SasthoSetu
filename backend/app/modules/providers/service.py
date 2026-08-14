@@ -352,9 +352,11 @@ def list_patient_orders_service(patient_user_id: str, current_user, db: Session)
     ):
         raise HTTPException(status_code=403, detail="Not authorised")
 
+    # A patient who has not filled in their profile yet simply has no
+    # records; that is an empty history, not a missing page.
     patient = db.query(Patient).filter(Patient.user_id == patient_user_id).first()
     if not patient:
-        raise HTTPException(status_code=404, detail="Patient profile not found")
+        return []
 
     rows = (
         db.query(LabOrder)
