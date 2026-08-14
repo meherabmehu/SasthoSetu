@@ -8,6 +8,41 @@ from app.models.doctor_availability import (
 )
 
 
+def assert_owns_calendar(
+    doctor_id: str,
+    current_user: dict,
+    db: Session
+) -> None:
+    """Only the doctor themselves, or an administrator, may publish slots.
+
+    A consulting calendar is the doctor's own commitment of time; letting any
+    signed-in account write to it would let a stranger invent clinic hours.
+    """
+
+    if current_user.get("role") == "ADMIN":
+        return
+
+    doctor = (
+        db.query(Doctor)
+        .filter(
+            Doctor.id == doctor_id
+        )
+        .first()
+    )
+
+    if not doctor:
+        raise HTTPException(
+            status_code=404,
+            detail="Doctor not found"
+        )
+
+    if doctor.user_id != current_user.get("user_id"):
+        raise HTTPException(
+            status_code=403,
+            detail="You cannot change another doctor's calendar"
+        )
+
+
 def create_availability_service(
     doctor_id: str,
     payload,

@@ -58,7 +58,11 @@ def read_patient(
 
 
 @router.get("/fhir/Practitioner/{doctor_id}")
-def read_practitioner(doctor_id: str, db: Session = Depends(get_db)):
+def read_practitioner(
+    doctor_id: str,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     doctor = db.query(Doctor).filter(Doctor.id == doctor_id).first()
     if not doctor:
         raise HTTPException(status_code=404, detail="Practitioner not found")
@@ -67,7 +71,11 @@ def read_practitioner(doctor_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/fhir/Organization/{hospital_id}")
-def read_organization(hospital_id: str, db: Session = Depends(get_db)):
+def read_organization(
+    hospital_id: str,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     hospital = db.query(Hospital).filter(Hospital.id == hospital_id).first()
     if not hospital:
         hospital = db.query(Hospital).filter(Hospital.code == hospital_id).first()

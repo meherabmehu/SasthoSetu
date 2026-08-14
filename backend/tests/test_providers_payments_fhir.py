@@ -512,8 +512,10 @@ class FhirTests(ProviderTestCase):
         self.assertTrue(body["identifier"])
 
     def test_practitioner_carries_the_bmdc_identifier(self):
-        _, doctor_id, _ = self._doctor()
-        body = self.client.get(f"/api/v1/fhir/Practitioner/{doctor_id}").json()
+        _, doctor_id, headers = self._doctor()
+        body = self.client.get(
+            f"/api/v1/fhir/Practitioner/{doctor_id}", headers=headers
+        ).json()
         self.assertEqual("Practitioner", body["resourceType"])
         self.assertIn("bmdc", body["identifier"][0]["system"])
 

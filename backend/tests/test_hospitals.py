@@ -149,8 +149,12 @@ class HospitalCrudTests(HospitalTestCase):
         self.assertEqual(409, response.status_code)
 
     def test_unknown_hospital_returns_404(self):
+        _, headers = self._admin()
         self.assertEqual(
-            404, self.client.get("/api/v1/hospitals/does-not-exist").status_code
+            404,
+            self.client.get(
+                "/api/v1/hospitals/does-not-exist", headers=headers
+            ).status_code,
         )
 
     def test_list_is_paginated(self):

@@ -27,6 +27,7 @@ from fastapi.testclient import TestClient  # noqa: E402
 from app.core.database import SessionLocal, engine  # noqa: E402
 from app.main import app  # noqa: E402
 from app.models.base import Base  # noqa: E402
+from app.models.doctor import Doctor  # noqa: E402
 from app.models.user import User  # noqa: E402
 
 
@@ -147,6 +148,9 @@ class FeatureGatingTests(AccessTestCase):
         ("GET", "/api/v1/hospitals", None),
         ("GET", "/api/v1/hospitals/nearby", None),
         ("GET", "/api/v1/providers", None),
+        ("POST", "/api/v1/ai/triage-ml", {"symptoms": "chest pain"}),
+        ("POST", "/api/v1/ai/drug-check", {"drugs": ["aspirin", "warfarin"]}),
+        ("GET", "/api/v1/population/surveillance", None),
     ]
 
     def test_gated_endpoints_reject_anonymous_callers(self):
@@ -169,6 +173,142 @@ class FeatureGatingTests(AccessTestCase):
                     else self.client.post(path, json=body, headers=headers)
                 )
                 self.assertNotIn(response.status_code, (401, 403))
+
+
+class AppointmentOwnershipTests(AccessTestCase):
+    """An appointment may only be touched by its patient, doctor or an admin.
+
+    Booking, reading, cancelling and rescheduling were reachable with no token
+    at all, which allowed a stranger to make a booking in a patient's name and
+    to cancel a real one.
+    """
+
+    def _book(self):
+        patient_id, headers = self._account("PATIENT")
+        self.client.post(
+            f"/api/v1/patients/{patient_id}",
+            json={
+                "date_of_birth": "1990-05-05",
+                "gender": "MALE",
+                "blood_group": "O+",
+                "height_cm": 170.0,
+                "weight_kg": 70.0,
+                "emergency_contact": f"017{uuid.uuid4().int % 100000000:08d}",
+                "address": "Dhaka",
+            },
+            headers=headers,
+        )
+
+        doctor_user_id, doctor_headers = self._account("DOCTOR")
+        self.client.post(
+            f"/api/v1/doctors/{doctor_user_id}",
+            json={
+                "bmdc_number": f"BMDC-{uuid.uuid4().hex[:8].upper()}",
+                "specialization": "Cardiology",
+                "experience_years": 5,
+                "consultation_fee": 500.0,
+                "hospital_name": "Test Hospital",
+                "bio": "Cardiologist",
+            },
+            headers=doctor_headers,
+        )
+        session = SessionLocal()
+        try:
+            doctor = (
+                session.query(Doctor)
+                .filter(Doctor.user_id == doctor_user_id)
+                .first()
+            )
+            doctor.verification_status = True
+            session.commit()
+            doctor_id = doctor.id
+        finally:
+            session.close()
+        slot = self.client.post(
+            f"/api/v1/doctor-availability/{doctor_id}",
+            json={
+                "available_date": "2026-12-01",
+                "start_time": "10:00",
+                "end_time": "11:00",
+            },
+            headers=doctor_headers,
+        )
+        self.assertIn(slot.status_code, (200, 201), slot.text)
+
+        booking = self.client.post(
+            f"/api/v1/appointments/{patient_id}",
+            json={
+                "doctor_id": doctor_id,
+                "appointment_date": "2026-12-01",
+                "appointment_time": "10:00",
+                "reason": "routine cardiac review",
+            },
+            headers=headers,
+        )
+        self.assertIn(booking.status_code, (200, 201), booking.text)
+
+        listed = self.client.get(
+            f"/api/v1/appointments/patient/{patient_id}", headers=headers
+        ).json()
+        return patient_id, headers, doctor_headers, listed[-1]["id"]
+
+    def test_anonymous_callers_cannot_reach_appointments(self):
+        patient_id, headers, _, appointment_id = self._book()
+        attempts = [
+            ("GET", f"/api/v1/appointments/patient/{patient_id}", None),
+            ("POST", f"/api/v1/appointments/{patient_id}", {
+                "doctor_id": "x",
+                "appointment_date": "2026-12-02",
+                "appointment_time": "10:00",
+                "reason": "booking without an account",
+            }),
+            ("PATCH", f"/api/v1/appointments/{appointment_id}/cancel", {}),
+            ("PATCH", f"/api/v1/appointments/{appointment_id}/status", {
+                "status": "CONFIRMED"}),
+        ]
+        for method, path, body in attempts:
+            with self.subTest(path=path):
+                response = self.client.request(method, path, json=body)
+                self.assertEqual(401, response.status_code, response.text)
+
+    def test_a_patient_cannot_touch_another_patients_appointment(self):
+        patient_id, _, _, appointment_id = self._book()
+        _, other = self._account("PATIENT")
+
+        self.assertEqual(
+            403,
+            self.client.get(
+                f"/api/v1/appointments/patient/{patient_id}", headers=other
+            ).status_code,
+        )
+        self.assertEqual(
+            403,
+            self.client.patch(
+                f"/api/v1/appointments/{appointment_id}/cancel",
+                json={},
+                headers=other,
+            ).status_code,
+        )
+
+    def test_a_patient_may_cancel_but_not_complete_their_own_appointment(self):
+        _, headers, _, appointment_id = self._book()
+
+        self.assertEqual(
+            403,
+            self.client.patch(
+                f"/api/v1/appointments/{appointment_id}/status",
+                json={"status": "COMPLETED"},
+                headers=headers,
+            ).status_code,
+        )
+        self.assertEqual(
+            200,
+            self.client.patch(
+                f"/api/v1/appointments/{appointment_id}/cancel",
+                json={},
+                headers=headers,
+            ).status_code,
+        )
 
 
 class PublicSurfaceTests(AccessTestCase):
@@ -208,6 +348,65 @@ class PublicSurfaceTests(AccessTestCase):
 
     def test_health_check_stays_open(self):
         self.assertEqual(200, self.client.get("/health").status_code)
+
+
+class NoUnguardedRouteTests(AccessTestCase):
+    """Every route must be guarded unless it is on the public list.
+
+    The gaps found so far were all the same mistake: a route was added without
+    an authentication dependency and nothing failed. This test inverts that,
+    so a new unguarded route breaks the build rather than leaking quietly.
+    """
+
+    PUBLIC = {
+        "/",
+        "/health",
+        "/openapi.json",
+        "/docs",
+        "/docs/oauth2-redirect",
+        "/redoc",
+        "/api/v1/users",
+        "/api/v1/auth/login",
+        "/api/v1/prescriptions/verify",
+        "/api/v1/rural/sms/triage",
+        "/api/v1/rural/ivr/menu",
+        "/api/v1/rural/ivr/select",
+        "/api/v1/fhir/metadata",
+        "/api/v1/payments/methods",
+        "/api/v1/payments/callback",
+    }
+
+    GUARDS = (
+        "get_current_user",
+        "require_admin",
+        "require_doctor",
+        "require_self_or_admin",
+        "require_self_or_clinician",
+        "get_optional_user",
+    )
+
+    def test_every_route_is_guarded_or_deliberately_public(self):
+        import inspect
+
+        unguarded = []
+        for route in app.routes:
+            endpoint = getattr(route, "endpoint", None)
+            path = getattr(route, "path", "")
+            if endpoint is None or path in self.PUBLIC:
+                continue
+            try:
+                source = inspect.getsource(endpoint)
+            except (OSError, TypeError):
+                continue
+            if not any(guard in source for guard in self.GUARDS):
+                unguarded.append(path)
+
+        self.assertEqual(
+            [],
+            sorted(unguarded),
+            "these routes take no authenticated user and are not listed as "
+            "public; add a guard or justify them in PUBLIC",
+        )
 
 
 if __name__ == "__main__":

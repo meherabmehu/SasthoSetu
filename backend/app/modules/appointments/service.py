@@ -12,6 +12,55 @@ from app.modules.notifications.service import (
 )
 
 
+def assert_appointment_access(
+    appointment: Appointment,
+    current_user: dict,
+    db: Session
+) -> None:
+    """Allow the patient who owns the booking, the doctor seeing them, or an
+    administrator.
+
+    An appointment is jointly held: the patient may cancel or reschedule it and
+    the treating doctor must be able to confirm or complete it, but no other
+    account has any business touching it.
+    """
+
+    role = current_user.get("role")
+
+    if role == "ADMIN":
+        return
+
+    user_id = current_user.get("user_id")
+
+    if role == "DOCTOR":
+        doctor = (
+            db.query(Doctor)
+            .filter(
+                Doctor.id == appointment.doctor_id
+            )
+            .first()
+        )
+
+        if doctor and doctor.user_id == user_id:
+            return
+
+    patient = (
+        db.query(Patient)
+        .filter(
+            Patient.id == appointment.patient_id
+        )
+        .first()
+    )
+
+    if patient and patient.user_id == user_id:
+        return
+
+    raise HTTPException(
+        status_code=403,
+        detail="You cannot access another patient's appointment"
+    )
+
+
 def create_appointment_service(
     patient_user_id: str,
     payload,
@@ -231,7 +280,8 @@ def get_doctor_appointments_service(
 def update_appointment_status_service(
     appointment_id: str,
     status: str,
-    db: Session
+    db: Session,
+    current_user: dict
 ):
 
     appointment = (
@@ -246,6 +296,20 @@ def update_appointment_status_service(
         raise HTTPException(
             status_code=404,
             detail="Appointment not found"
+        )
+
+    assert_appointment_access(appointment, current_user, db)
+
+    # Confirming or completing a visit is a clinical assertion about what
+    # happened in the consulting room, so it belongs to the clinic rather than
+    # the patient. A patient withdraws from a booking by cancelling it.
+    if (
+        current_user.get("role") == "PATIENT"
+        and status != "CANCELLED"
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail="Only the clinic can confirm or complete an appointment"
         )
 
     appointment.status = status
@@ -260,7 +324,8 @@ def update_appointment_status_service(
 
 def cancel_appointment_service(
     appointment_id: str,
-    db: Session
+    db: Session,
+    current_user: dict
 ):
 
     appointment = (
@@ -276,6 +341,8 @@ def cancel_appointment_service(
             status_code=404,
             detail="Appointment not found"
         )
+
+    assert_appointment_access(appointment, current_user, db)
 
     availability = (
         db.query(DoctorAvailability)
@@ -326,7 +393,8 @@ def cancel_appointment_service(
 def reschedule_appointment_service(
     appointment_id: str,
     payload,
-    db: Session
+    db: Session,
+    current_user: dict
 ):
 
     appointment = (
@@ -342,6 +410,8 @@ def reschedule_appointment_service(
             status_code=404,
             detail="Appointment not found"
         )
+
+    assert_appointment_access(appointment, current_user, db)
 
     if appointment.status == "COMPLETED":
         raise HTTPException(

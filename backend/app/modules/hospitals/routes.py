@@ -83,7 +83,11 @@ def find_nearby_hospitals(
 
 
 @router.get("/hospitals/{hospital_id}")
-def get_hospital(hospital_id: str, db: Session = Depends(get_db)):
+def get_hospital(
+    hospital_id: str,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     return get_hospital_service(hospital_id, db)
 
 
