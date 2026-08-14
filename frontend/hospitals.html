@@ -106,31 +106,55 @@ if (isEmergency) {
 let coords = null;
 const resultsEl = document.getElementById('results');
 
-document.getElementById('locateBtn').addEventListener('click', () => {
-  if (!navigator.geolocation) {
-    toast(i18n.t('status.error'), 'danger');
-    return;
-  }
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      coords = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-      toast(i18n.lang === 'bn' ? 'অবস্থান পাওয়া গেছে' : 'Location found', 'success');
-      search();
-    },
-    // Location is a convenience, never a requirement: refusing it still
-    // returns results, just without distance ordering.
-    () => toast(
-      i18n.lang === 'bn'
-        ? 'অবস্থান পাওয়া যায়নি — জেলা দিয়ে খুঁজুন'
-        : 'Location unavailable - search by district instead',
-      'danger'
-    ),
-    { timeout: 8000 }
-  );
-});
+/* Resolve the caller's position. Always resolves: refusing location is an
+   ordinary outcome that still returns results, just without distances. */
+function requestLocation(silent) {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      if (!silent) toast(i18n.t('status.error'), 'danger');
+      resolve();
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        coords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        if (!silent) {
+          toast(
+            i18n.lang === 'bn' ? 'অবস্থান পাওয়া গেছে' : 'Location found',
+            'success'
+          );
+        }
+        resolve();
+      },
+      () => {
+        coords = null;
+        if (!silent) {
+          toast(
+            i18n.lang === 'bn'
+              ? 'অবস্থান পাওয়া যায়নি — জেলা দিয়ে খুঁজুন'
+              : 'Location unavailable - search by district instead',
+            'danger'
+          );
+        }
+        resolve();
+      },
+      { timeout: 8000 }
+    );
+  });
+}
+
+document.getElementById('locateBtn')
+  .addEventListener('click', () => requestLocation(false).then(search));
+
+// Which hospital is nearest is the first thing anyone opening this page wants
+// to know, so the position is resolved before the first search rather than
+// after a second request.
+const locating = navigator.geolocation
+  ? requestLocation(true)
+  : Promise.resolve();
 
 function occupancyClass(rate) {
   if (rate >= 0.9) return 'critical';
@@ -241,7 +265,7 @@ document.getElementById('filters').addEventListener('submit', (event) => {
   search();
 });
 
-search();
+locating.then(search);
 </script>
 </body>
 </html>
