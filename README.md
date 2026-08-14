@@ -25,7 +25,7 @@ users rather than an afterthought.
 | Capability | Detail |
 |---|---|
 | **Bilingual triage** | Bangla, Banglish, English and code-switched input. Deterministic red-flag layer plus a calibrated ML classifier |
-| **Clinical safety** | 10 hard-coded red-flag rules that can only escalate. Machine learning never lowers a severity a rule has raised |
+| **Clinical safety** | 11 hard-coded red-flag rules that can only escalate. Machine learning never lowers a severity a rule has raised |
 | **Doctor matching** | Ranked by soonest availability, filtered to BMDC-verified doctors |
 | **Consultations** | Notes, diagnosis, secure messaging; records become append-only once signed |
 | **Prescriptions** | Multi-item, HMAC-signed, single-use dispensing, forgery and expiry detection |
@@ -39,7 +39,7 @@ users rather than an afterthought.
 | **Rural access** | SMS triage, IVR menus, offline CHW batch submission |
 | **Web apps** | Patient, doctor and admin surfaces; installable PWA that works offline |
 
-**149 automated tests.** Every red-flag rule is asserted in four phrasings —
+**234 automated tests.** Every red-flag rule is asserted in four phrasings —
 natural Bangla, romanised Banglish, English, and English paraphrase.
 
 ---
@@ -121,7 +121,7 @@ docs/                Roadmap, API notes, model cards, CI workflow
 
 ```
 raw note (bn / banglish / en / mixed)
-   ↓  entity extraction  — lexicon of 57 symptoms, negation, duration, age
+   ↓  entity extraction  — lexicon of 58 symptoms, negation, duration, age
    ↓  red-flag check     — 10 deterministic rules
    ↓  ML classification  — TF-IDF word + char n-grams + structured features
    ↓  safety override    — escalate only, never downgrade
@@ -137,7 +137,7 @@ auditable and must never regress silently between model versions.
 
 | Model | Task | Performance |
 |---|---|---|
-| Triage classifier | 5-level severity from free text | macro-F1 **0.840**, emergency recall **0.975**, no errors spanning ≥3 bands |
+| Triage classifier | 5-level severity from free text | macro-F1 **0.865**, emergency recall **0.997**, no errors spanning ≥3 bands |
 | Surge forecaster | 24/48/72h bed demand per ward | MAE **≈2.9 beds**, beats naive persistence at every horizon |
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |

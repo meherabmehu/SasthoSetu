@@ -180,7 +180,9 @@ class HttpIntegrationTests(unittest.TestCase):
     def test_colloquial_text_the_lexicon_misses_is_understood(self):
         """The reason this layer exists: real phrasing, not dictionary forms."""
         note = "বুকটা যেন কেউ চেপে ধরছে, ঘামতেছি"
-        self.assertEqual([], extract(note).symptoms)
+        # The rules catch the sweating but not the chest pain, which is
+        # described by metaphor rather than in any dictionary form.
+        self.assertNotIn("chest_pain", extract(note).symptoms)
 
         result, provenance = extract_with_llm(note)
         self.assertTrue(provenance["llm_used"])

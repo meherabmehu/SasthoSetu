@@ -28,7 +28,17 @@ RED_FLAG_RULES = [
         "flag": "possible_cardiac_event",
         "en": "Chest pain together with breathing difficulty — possible cardiac event",
         "bn": "বুকে ব্যথার সাথে শ্বাসকষ্ট — সম্ভাব্য হার্টের জরুরি অবস্থা",
-        "test": lambda s, a: _has(s, "chest_pain", "shortness_of_breath"),
+        "test": lambda s, a: _has(s, "chest_pain", "shortness_of_breath")
+        or _has(s, "chest_pain", "sweating"),
+    },
+    {
+        "flag": "severe_respiratory_distress",
+        "en": "Unable to breathe properly — severe respiratory distress",
+        "bn": "ঠিকমতো শ্বাস নিতে পারছেন না — তীব্র শ্বাসকষ্ট",
+        # Someone reporting they cannot breathe is describing an airway
+        # problem, not a symptom to be scheduled around. On its own this
+        # already warrants immediate care.
+        "test": lambda s, a: _any(s, "shortness_of_breath"),
     },
     {
         "flag": "altered_consciousness",
@@ -44,9 +54,15 @@ RED_FLAG_RULES = [
     },
     {
         "flag": "possible_meningitis",
-        "en": "Fever with stiff neck — possible meningitis",
-        "bn": "জ্বরের সাথে ঘাড় শক্ত — সম্ভাব্য মেনিনজাইটিস",
-        "test": lambda s, a: _any(s, "fever", "high_fever") and "stiff_neck" in s,
+        "en": "Stiff neck with fever or severe headache — possible meningitis",
+        "bn": "ঘাড় শক্ত সাথে জ্বর বা তীব্র মাথাব্যথা — সম্ভাব্য মেনিনজাইটিস",
+        # Requiring fever missed the presentation that arrives without it, or
+        # before it: neck stiffness with a severe headache is meningitis or a
+        # subarachnoid haemorrhage until proven otherwise, and both are
+        # time-critical.
+        "test": lambda s, a: "stiff_neck" in s and _any(
+            s, "fever", "high_fever", "sudden_severe_headache", "headache"
+        ),
     },
     {
         "flag": "possible_stroke",

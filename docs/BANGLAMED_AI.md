@@ -6,7 +6,7 @@ The intelligence layer of SasthoSetu: four services behind `/v1` endpoints.
 Pipeline: **extraction → ML classifier → red-flag safety override**.
 
 - *Extraction* (`app/ai/extraction.py`): pure-stdlib entity extractor over a
-  curated lexicon of ~48 symptoms with Bangla / Banglish / English surface
+  curated lexicon of 58 symptoms with Bangla / Banglish / English surface
   forms; handles negation windows ("জ্বর নেই"), duration in Bangla numerals and
   number-words, qualifiers, and age mentions.
 - *Classifier* (`ml/train_triage_model.py`): TF-IDF word(1-2) + char_wb(2-5)
@@ -14,13 +14,13 @@ Pipeline: **extraction → ML classifier → red-flag safety override**.
   acuity, duration band, age band, red-flag flags) from `app/ai/features.py`,
   calibrated LogisticRegression selected against LinearSVC and RandomForest on
   validation macro-F1. Trained on the 9,000-row generated corpus.
-  Test macro-F1 **0.840**, accuracy 0.859, emergency recall **0.975**, and
+  Test macro-F1 **0.865**, accuracy 0.881, emergency recall **0.997**, and
   **zero** errors spanning three or more severity bands.
 
   The structured block matters: age arrives as a request field rather than in
   the note text, so a text-only model cannot see it. Adding it moved macro-F1
   from 0.52 to 0.84.
-- *Safety* (`app/ai/safety.py`): 10 hard-coded red-flag rules (cardiac combo,
+- *Safety* (`app/ai/safety.py`): 11 hard-coded red-flag rules (cardiac combo,
   FAST stroke signs, obstetric bleeding, infant fever, snakebite, ...) that
   override the model upward to level 5 with confidence 0.98. Safety rules are
   deliberately rule-based: they must be auditable and never regress silently.

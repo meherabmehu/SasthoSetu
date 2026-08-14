@@ -5,8 +5,8 @@ Banglish (romanised), English, and code-switched text.
 
 **Architecture** FeatureUnion[TF-IDF word(1,2), TF-IDF char_wb(2,5),
 structured clinical features] → LogisticRegression (isotonic-calibrated,
-balanced class weights). Selected over LinearSVC (0.706) and RandomForest
-(0.693) on validation macro-F1 (0.908).
+balanced class weights). Selected over LinearSVC (0.737) and RandomForest
+(0.666) on validation macro-F1 (0.914).
 
 The structured block supplies symptom indicators, highest symptom acuity,
 symptom count, qualifier, duration band, age band and red-flag indicators,
@@ -22,9 +22,9 @@ languages: bn 42% / banglish 22% / en 16% / mixed 20%. Generator:
 **Metrics (held-out test, n=900)**
 | metric | value |
 |---|---|
-| macro-F1 | 0.8397 |
-| accuracy | 0.8589 |
-| L5 recall (model alone) | 0.9748 |
+| macro-F1 | 0.8647 |
+| accuracy | 0.8811 |
+| L5 recall (model alone) | 0.9968 |
 | L5 recall (with safety rules) | ~1.0 on rule-covered presentations |
 | errors spanning ≥3 severity bands | 0 |
 
@@ -34,12 +34,12 @@ self-care with an emergency. Remaining error is adjacent-band disagreement.
 Retraining is gated: a new artifact is promoted only if macro-F1 holds within
 0.01 and emergency recall does not fall at all.
 
-**Safety design** 10 rule-based red-flag overrides run *after* the model and
+**Safety design** 11 rule-based red-flag overrides run *after* the model and
 can only raise severity. Confidence is set to 0.98 on override and the
 response carries `safety_override_applied: true`.
 
 **Limitations** Synthetic corpus: real patient text is noisier (typos,
-dialect, mixed scripts). Lexicon covers ~48 symptoms; out-of-lexicon
+dialect, mixed scripts). Lexicon covers 58 symptoms; out-of-lexicon
 complaints fall back to model text features. Not a diagnostic device; outputs
 carry a bilingual disclaimer. Clinical validation is required before any
 real-world triage use.
