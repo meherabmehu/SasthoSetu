@@ -273,25 +273,37 @@ function renderResult(data) {
          ${escapeHtml(i18n.t('triage.findHospital'))}</a>`
     : '';
 
-  // Every result routes to the location-aware recommender rather than the
-  // alphabetical directory. Gating this at level 3 sent the most common
-  // outcomes — a teleconsult or a GP visit — to the plain list, which is
-  // exactly the patient who needs to know which doctor is near them.
+  // A consultation is offered only when the result warrants one. Sending
+  // someone with a mild complaint to a specialist wastes their money and
+  // teaches them to ignore the app when it matters. When no doctor is needed
+  // the reason is stated plainly instead of leaving a bare result.
   const recQuery = new URLSearchParams({
     specialty: data.recommended_specialty || '',
     condition: data.differential?.[0]?.condition || '',
     urgent: level >= 4 ? 'true' : 'false',
   });
-  const doctorAction = `<a class="btn ${level === 5 ? 'btn-secondary' : ''} btn-block mt-4"
-      href="recommend.html?${recQuery}">
-      ${escapeHtml(i18n.t('rec.title'))}</a>`;
+  const selfCareNote = i18n.pick(data.self_care_note, data.self_care_note_bn);
+  const doctorAction = data.needs_doctor === false && selfCareNote
+    ? `<div class="alert alert-success mt-4">
+         <div><strong>${escapeHtml(i18n.t('triage.noDoctorNeeded'))}</strong></div>
+         <div class="mt-2">${escapeHtml(selfCareNote)}</div>
+       </div>
+       <a class="btn btn-secondary btn-block mt-4" href="recommend.html?${recQuery}">
+         ${escapeHtml(i18n.t('triage.seeDoctorAnyway'))}</a>`
+    : `<a class="btn ${level === 5 ? 'btn-secondary' : ''} btn-block mt-4"
+         href="recommend.html?${recQuery}">
+         ${escapeHtml(i18n.t('rec.title'))}</a>`;
 
   const differential = (data.differential || []).length
     ? `<div class="card mt-4">
          <div class="row-between">
-           <h3 class="mb-0">${escapeHtml(i18n.t('triage.differential'))}</h3>
+           <h3 class="mb-0">${escapeHtml(data.is_underdetermined
+             ? i18n.t('triage.commonCauses') : i18n.t('triage.differential'))}</h3>
            <span class="tiny subtle">${escapeHtml(i18n.t('triage.likelihood'))}</span>
          </div>
+         ${data.is_underdetermined
+           ? `<p class="small muted mt-2">${escapeHtml(i18n.t('triage.thinEvidence'))}</p>`
+           : ''}
          <div class="stack mt-4">
            ${data.differential.map((item) => {
              const pct = Math.round((item.likelihood || 0) * 100);

@@ -45,9 +45,32 @@ RED_FLAG_MIN_SCORE = 1.5
 RED_FLAG_MIN_FEATURES = 2
 ALARMING_SYMPTOM_LEVEL = 4
 
+# One ordinary symptom does not identify a disease. Abdominal pain on its own
+# is far more often indigestion than an ulcer, and back pain is far more often
+# a strain than anything named. Below this many matched features the result is
+# reported as a general explanation rather than as candidate diagnoses, so the
+# interface does not print "52% peptic ulcer" on evidence that cannot support
+# it. This applies to every condition, not to a hand-picked list.
+NAMED_CONDITION_MIN_FEATURES = 2
+
 
 def _is_alarming(name: str) -> bool:
     return SYMPTOMS.get(name, {}).get("level", 0) >= ALARMING_SYMPTOM_LEVEL
+
+
+def is_underdetermined(symptoms: list[str] | set) -> bool:
+    """True when the evidence is too thin to name specific conditions.
+
+    A single everyday complaint is the common case in primary care and the
+    honest answer is that it could be any of several ordinary things. An
+    alarming symptom is treated differently: chest pain alone still earns a
+    named cardiac possibility, because the symptom itself carries the warning.
+    """
+
+    names = set(symptoms)
+    if len(names) >= NAMED_CONDITION_MIN_FEATURES:
+        return False
+    return not any(_is_alarming(name) for name in names)
 
 MAX_RESULTS = 5
 

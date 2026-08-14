@@ -15,7 +15,7 @@ table in ``app.ai.safety`` and can only raise severity, never lower it.
 from typing import Optional
 
 from app.ai.differential import differential as build_differential
-from app.ai.differential import recommended_specialty
+from app.ai.differential import is_underdetermined, recommended_specialty
 from app.ai.lexicon import SYMPTOMS
 from app.ai.llm_extraction import extract_with_llm
 from app.ai.safety import check_red_flags
@@ -107,6 +107,31 @@ def _headline(conditions: list[dict]) -> Optional[dict]:
     return max(conditions, key=lambda item: item.get("likelihood", 0))
 
 
+# Severities at which a consultation is genuinely warranted. Below this the
+# honest advice is to watch and rest: telling someone with a mild sore throat
+# to see a specialist wastes their money and teaches them to ignore the app
+# when it does matter.
+_DOCTOR_FROM_SEVERITY = {"GP_VISIT", "SPECIALIST", "EMERGENCY"}
+
+_SELF_CARE_NOTE_EN = (
+    "This does not look like something that needs a doctor right now. "
+    "Rest, drink enough water, and watch how it changes. See a doctor if it "
+    "lasts more than three days, gets worse, or a new symptom appears."
+)
+_SELF_CARE_NOTE_BN = (
+    "এখনই ডাক্তার দেখানোর মতো কিছু মনে হচ্ছে না। বিশ্রাম নিন, পর্যাপ্ত পানি "
+    "পান করুন এবং লক্ষণ কেমন থাকে খেয়াল রাখুন। তিন দিনের বেশি স্থায়ী হলে, "
+    "বাড়তে থাকলে বা নতুন কোনো উপসর্গ দেখা দিলে ডাক্তার দেখান।"
+)
+
+_GENERAL_CAUSE_EN = "Common causes for this symptom"
+_GENERAL_CAUSE_BN = "এই উপসর্গের সাধারণ কারণসমূহ"
+
+
+def _needs_doctor(severity: str) -> bool:
+    return severity in _DOCTOR_FROM_SEVERITY
+
+
 def triage_symptoms(request: TriageRequest) -> TriageResponse:
     # The language model only widens what is understood from the note; every
     # decision below still runs on the deterministic rules. When it is not
@@ -174,8 +199,9 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         # A named condition from the differential is more useful to a patient
         # than a rule label like "Fever requiring assessment", but only when
         # the differential is actually confident about it.
-        top = conditions[0] if conditions else None
-        use_differential = bool(top and top["likelihood"] >= 0.45)
+        thin = is_underdetermined(found)
+        top = _headline(conditions)
+        use_differential = bool(top and top["likelihood"] >= 0.45 and not thin)
 
         condition_en = top["name_en"] if use_differential else rule["condition"]
         condition_bn = top["name_bn"] if use_differential else rule["condition_bn"]
@@ -202,6 +228,14 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
             understanding=provenance,
+            needs_doctor=_needs_doctor(severity),
+            self_care_note=(
+                "" if _needs_doctor(severity) else _SELF_CARE_NOTE_EN
+            ),
+            self_care_note_bn=(
+                "" if _needs_doctor(severity) else _SELF_CARE_NOTE_BN
+            ),
+            is_underdetermined=thin,
         )
 
     # ---- Recognised symptoms but no rule: use lexicon acuity -------------
@@ -209,17 +243,26 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
     if baseline:
         severity = LEVEL_TO_SEVERITY[baseline]
         headline = _headline(conditions)
+        thin = is_underdetermined(found)
         return TriageResponse(
             triage_level=TriageLevel(severity),
             possible_condition=(
-                headline["name_en"]
-                if headline
-                else "Symptoms require clinical assessment"
+                _GENERAL_CAUSE_EN
+                if thin
+                else (
+                    headline["name_en"]
+                    if headline
+                    else "Symptoms require clinical assessment"
+                )
             ),
             possible_condition_bn=(
-                headline["name_bn"]
-                if headline
-                else "উপসর্গগুলোর জন্য চিকিৎসকের মূল্যায়ন প্রয়োজন"
+                _GENERAL_CAUSE_BN
+                if thin
+                else (
+                    headline["name_bn"]
+                    if headline
+                    else "উপসর্গগুলোর জন্য চিকিৎসকের মূল্যায়ন প্রয়োজন"
+                )
             ),
             recommended_specialty=(
                 recommended_specialty(conditions) or _specialty_for(found)
@@ -228,11 +271,27 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             matched_symptoms=[_readable(s) for s in found],
             safety_flags=[],
             differential=conditions,
-            advice="Book a consultation with the recommended specialty.",
-            advice_bn="প্রস্তাবিত বিভাগের চিকিৎসকের সাথে পরামর্শের জন্য বুকিং দিন।",
+            advice=(
+                _SELF_CARE_NOTE_EN
+                if not _needs_doctor(severity)
+                else "Book a consultation with the recommended specialty."
+            ),
+            advice_bn=(
+                _SELF_CARE_NOTE_BN
+                if not _needs_doctor(severity)
+                else "প্রস্তাবিত বিভাগের চিকিৎসকের সাথে পরামর্শের জন্য বুকিং দিন।"
+            ),
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
             understanding=provenance,
+            needs_doctor=_needs_doctor(severity),
+            self_care_note=(
+                "" if _needs_doctor(severity) else _SELF_CARE_NOTE_EN
+            ),
+            self_care_note_bn=(
+                "" if _needs_doctor(severity) else _SELF_CARE_NOTE_BN
+            ),
+            is_underdetermined=thin,
         )
 
     # ---- Nothing recognised: safe fallback -------------------------------

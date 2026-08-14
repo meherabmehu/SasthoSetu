@@ -81,6 +81,16 @@ class TriageResponse(BaseModel):
     differential: list[dict] = []
     # Which layer contributed what: rules alone, or rules plus model.
     understanding: dict = {}
+    # Whether this result actually warrants seeing a doctor. Sending everyone
+    # to a clinic devalues the advice and wastes the visit for people who do
+    # not need one.
+    needs_doctor: bool = True
+    # Shown in place of a doctor recommendation when one is not warranted.
+    self_care_note: str = ""
+    self_care_note_bn: str = ""
+    # True when a single ordinary symptom cannot support naming a condition,
+    # so the interface describes common causes instead of asserting one.
+    is_underdetermined: bool = False
     advice: str
     advice_bn: str = ""
     disclaimer: str
