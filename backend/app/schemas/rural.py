@@ -1,6 +1,8 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
+from app.schemas.triage import to_celsius
 
 
 class SmsInbound(BaseModel):
@@ -29,7 +31,14 @@ class ChwAssessment(BaseModel):
     symptoms: str = Field(min_length=3, max_length=2000)
     language: Literal["bn", "en"] = "bn"
     age_years: int | None = Field(default=None, ge=0, le=120)
-    temperature_c: float | None = Field(default=None, ge=30, le=45)
+    # A health worker in the field reads the same Fahrenheit thermometer as
+    # everyone else, so the same conversion applies here.
+    temperature_c: float | None = None
+
+    @field_validator("temperature_c", mode="before")
+    @classmethod
+    def accept_fahrenheit(cls, value):
+        return to_celsius(value)
     latitude: float | None = Field(default=None, ge=-90, le=90)
     longitude: float | None = Field(default=None, ge=-180, le=180)
     household_id: str | None = Field(default=None, max_length=64)
