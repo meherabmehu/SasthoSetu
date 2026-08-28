@@ -14,7 +14,7 @@ Pipeline: **extraction → ML classifier → red-flag safety override**.
   acuity, duration band, age band, red-flag flags) from `app/ai/features.py`,
   calibrated LogisticRegression selected against LinearSVC and RandomForest on
   validation macro-F1. Trained on the 9,000-row generated corpus.
-  Test macro-F1 **0.865**, accuracy 0.881, emergency recall **0.997**, and
+  Test macro-F1 **0.864**, accuracy 0.887, emergency recall **0.988**, and
   **zero** errors spanning three or more severity bands.
 
   The structured block matters: age arrives as a request field rather than in

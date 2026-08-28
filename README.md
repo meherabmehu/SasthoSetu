@@ -138,7 +138,7 @@ auditable and must never regress silently between model versions.
 
 | Model | Task | Performance |
 |---|---|---|
-| Triage classifier | 5-level severity from free text | macro-F1 **0.865**, emergency recall **0.997**, no errors spanning ≥3 bands |
+| Triage classifier | 5-level severity from free text | macro-F1 **0.864**, emergency recall **0.988**, 1 error spanning ≥3 bands |
 | Surge forecaster | 24/48/72h bed demand per ward | MAE **≈2.9 beds**, beats naive persistence at every horizon |
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |

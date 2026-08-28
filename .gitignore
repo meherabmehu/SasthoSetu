@@ -33,5 +33,9 @@ data/triage/*.csv
 data/surge/*.csv
 data/surveillance/*.csv
 
+# Raw downloads. The derived CSVs in data/real/ are committed; the originals
+# they were built from are large and re-fetchable with ml/fetch_real_data.py.
+data/real/_cache/
+
 # Trained model artifacts (binary, rebuilt by ml/prepare_all.py)
 backend/app/ai/artifacts/

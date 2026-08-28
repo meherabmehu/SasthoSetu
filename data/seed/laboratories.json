@@ -1,0 +1,274 @@
+[
+  {
+    "code": "LABO0001",
+    "name": "Sefa General Hospital & Diagnostic Center",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.773893,
+    "lng": 90.364867
+  },
+  {
+    "code": "LABO0002",
+    "name": "Tek Care Hospital & Digital Diagnostic Center",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.775764,
+    "lng": 90.364753
+  },
+  {
+    "code": "LABO0003",
+    "name": "M/S Joy Medicine & Feed Center (Unit-2)",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.630759,
+    "lng": 91.799692
+  },
+  {
+    "code": "LABO0004",
+    "name": "Turkey Medical Services",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.340168,
+    "lng": 91.788627
+  },
+  {
+    "code": "LABO0005",
+    "name": "Family Medical And Diagnostic Center, Medical Center",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.919,
+    "lng": 90.393112
+  },
+  {
+    "code": "LABO0006",
+    "name": "Sharif Homeo Hall",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.624051,
+    "lng": 91.637924
+  },
+  {
+    "code": "LABO0007",
+    "name": "Dhaka Central Consultation & Diagnostic Center",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.773653,
+    "lng": 90.362141
+  },
+  {
+    "code": "LABO0008",
+    "name": "Bagerhat X-ray And Digital Diagnostic Centre",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.662187,
+    "lng": 89.794618
+  },
+  {
+    "code": "LABO0009",
+    "name": "Uk Physiotherapy and Rehabilitation Center",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.768986,
+    "lng": 90.356283
+  },
+  {
+    "code": "LABO0010",
+    "name": "Dhaka Central Diagnostic & Imaging Center",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.773371,
+    "lng": 90.36177
+  },
+  {
+    "code": "LABO0011",
+    "name": "Dhanbari Health Centre, Medical Centre",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.674174,
+    "lng": 89.95513
+  },
+  {
+    "code": "LABO0012",
+    "name": "Public Health Engineering (Laboratory)",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.896012,
+    "lng": 90.402303
+  },
+  {
+    "code": "LABO0013",
+    "name": "Khandakar Doctors Corner and Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.764502,
+    "lng": 90.36096
+  },
+  {
+    "code": "LABO0014",
+    "name": "Hamdard Laboratories Waqf Bangladesh",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.459728,
+    "lng": 91.180604
+  },
+  {
+    "code": "LABO0015",
+    "name": "DEPP Innovation Lab Bangladesh",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.782924,
+    "lng": 90.41048
+  },
+  {
+    "code": "LABO0016",
+    "name": "Popular Diagnostic Center Ltd.",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.839957,
+    "lng": 90.257305
+  },
+  {
+    "code": "LABO0017",
+    "name": "Takwa Dental care and Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.775383,
+    "lng": 90.350834
+  },
+  {
+    "code": "LABO0018",
+    "name": "First Point Diagnostic Centre",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.771202,
+    "lng": 90.345769
+  },
+  {
+    "code": "LABO0019",
+    "name": "General Dental Surgery 1/A/2",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.773073,
+    "lng": 90.359189
+  },
+  {
+    "code": "LABO0020",
+    "name": "আল মুন ডায়াগনস্টিক সেন্টার",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.661421,
+    "lng": 90.841137
+  },
+  {
+    "code": "LABO0021",
+    "name": "চেকআপ ডায়াগনস্টিক সেন্টার",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.663659,
+    "lng": 90.84205
+  },
+  {
+    "code": "LABO0022",
+    "name": "Bismillah Medical Hall",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.775427,
+    "lng": 90.357545
+  },
+  {
+    "code": "LABO0023",
+    "name": "Phgeo Therapist Centre",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.771004,
+    "lng": 90.353647
+  },
+  {
+    "code": "LABO0024",
+    "name": "Dream Imagine Center",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.745426,
+    "lng": 90.385047
+  },
+  {
+    "code": "LABO0025",
+    "name": "Azad Swakalpa dental",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.763327,
+    "lng": 90.359095
+  },
+  {
+    "code": "LABO0026",
+    "name": "Shopna Medical Hall",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.775318,
+    "lng": 90.357582
+  },
+  {
+    "code": "LABO0027",
+    "name": "Pranti Dental Care",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.765766,
+    "lng": 90.360839
+  },
+  {
+    "code": "LABO0028",
+    "name": "Surjer Hasi Clinic",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.771813,
+    "lng": 90.358132
+  },
+  {
+    "code": "LABO0029",
+    "name": "Dr Md Rezaul Karim",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.763573,
+    "lng": 90.359386
+  },
+  {
+    "code": "LABO0030",
+    "name": "Apon Homio Care",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.775292,
+    "lng": 90.358279
+  },
+  {
+    "code": "LABO0031",
+    "name": "Delowar Pharma",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.775058,
+    "lng": 90.353095
+  },
+  {
+    "code": "LABO0032",
+    "name": "Sheba Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.932054,
+    "lng": 88.853879
+  },
+  {
+    "code": "LABO0033",
+    "name": "Munni X-Ray",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.774102,
+    "lng": 90.36501
+  },
+  {
+    "code": "LABO0034",
+    "name": "Rajib Homeo",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.773632,
+    "lng": 90.357708
+  }
+]

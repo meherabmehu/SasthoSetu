@@ -58,14 +58,44 @@ SLOT_PATTERNS = [
 ]
 
 
+def _hospitals() -> list[dict]:
+    """Attach doctors to the real facility list when it has been built.
+
+    ``ml/build_facility_seed.py`` writes hospitals.json from the OpenStreetMap
+    export. Doctors must be spread across those, or every doctor ends up at one
+    of the five hand-written hospitals and nobody outside Dhaka is reachable.
+    """
+
+    path = OUT / "hospitals.json"
+    if not path.exists():
+        return HOSPITALS
+
+    records = json.loads(path.read_text(encoding="utf-8"))
+    usable = [
+        record for record in records
+        if record.get("lat") and record.get("lng") and record.get("name")
+    ]
+    return usable or HOSPITALS
+
+
 def main(seed: int = 42) -> None:
     rng = random.Random(seed)
     pool = SPECIALTY_POOL[:]
     rng.shuffle(pool)
 
+    hospitals = _hospitals()
+
+    # Spread doctors across districts rather than sampling uniformly, so a
+    # patient outside Dhaka finds someone nearby.
+    by_district: dict[str, list[dict]] = {}
+    for record in hospitals:
+        by_district.setdefault(record.get("district", "Dhaka"), []).append(record)
+    districts = sorted(by_district)
+
     doctors = []
     for i in range(50):
-        h = rng.choice(HOSPITALS)
+        district = districts[i % len(districts)]
+        h = rng.choice(by_district[district])
         sex = rng.choice(["M", "F"])
         title = "Dr." 
         name = f"{title} {rng.choice(FIRST)} {rng.choice(LAST)}"
@@ -89,10 +119,19 @@ def main(seed: int = 42) -> None:
         })
 
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "hospitals.json").write_text(json.dumps(HOSPITALS, indent=2))
-    (OUT / "doctors.json").write_text(json.dumps(doctors, indent=2))
+    # hospitals.json is only written when the real export is absent, so a
+    # rebuild never discards the real facility list.
+    if not (OUT / "hospitals.json").exists():
+        (OUT / "hospitals.json").write_text(
+            json.dumps(HOSPITALS, indent=2, ensure_ascii=False)
+        )
+    (OUT / "doctors.json").write_text(
+        json.dumps(doctors, indent=2, ensure_ascii=False)
+    )
     specs = sorted({d["specialty"] for d in doctors})
-    print(f"hospitals=5 doctors=50 specialties_covered={len(specs)} -> {OUT}")
+    print(f"hospitals={len(hospitals)} doctors=50 "
+          f"specialties_covered={len(specs)} "
+          f"districts={len(districts)} -> {OUT}")
 
 
 if __name__ == "__main__":

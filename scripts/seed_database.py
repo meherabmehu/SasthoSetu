@@ -281,9 +281,34 @@ def seed_demo_accounts(db) -> int:
     return created
 
 
-# Pharmacies and labs across the districts the platform launches in. Real
-# chains, so the directory reads plausibly to a Bangladeshi user.
-PHARMACIES = [
+def _load_facility_seed(filename: str, fallback: list) -> list:
+    """Prefer the real facility list when it has been built.
+
+    ``ml/build_facility_seed.py`` converts the OpenStreetMap health facility
+    export into these files. Until that has been run the hand-written list is
+    used, so a fresh clone still seeds something usable.
+    """
+
+    path = SEED_DIR / filename
+    if not path.exists():
+        return fallback
+
+    records = json.loads(path.read_text(encoding="utf-8"))
+    return [
+        (
+            record["code"],
+            record["name"],
+            record.get("district", "Dhaka"),
+            record.get("area", record.get("district", "Dhaka")),
+            f"01{7 + index % 3}{11000000 + index * 37:08d}"[:11],
+        )
+        for index, record in enumerate(records)
+    ]
+
+
+# Fallback pharmacies and labs, used only when the real facility export has
+# not been built. Real chains, so the directory reads plausibly either way.
+FALLBACK_PHARMACIES = [
     ("PH001", "Lazz Pharma", "Dhaka", "Dhanmondi", "01711000001"),
     ("PH002", "Tamanna Pharmacy", "Dhaka", "Mirpur", "01711000002"),
     ("PH003", "Wellbeing Pharmacy", "Dhaka", "Gulshan", "01711000003"),
@@ -292,13 +317,16 @@ PHARMACIES = [
     ("PH006", "Sylhet Medicine Corner", "Sylhet", "Zindabazar", "01711000006"),
 ]
 
-LABS = [
+FALLBACK_LABS = [
     ("LAB001", "Popular Diagnostic Centre", "Dhaka", "Dhanmondi", "01711000101"),
     ("LAB002", "Ibn Sina Diagnostic", "Dhaka", "Mirpur", "01711000102"),
     ("LAB003", "Medinova Medical Services", "Dhaka", "Malibagh", "01711000103"),
     ("LAB004", "Chevron Clinical Laboratory", "Chattogram", "Panchlaish",
      "01711000104"),
 ]
+
+PHARMACIES = _load_facility_seed("pharmacies.json", FALLBACK_PHARMACIES)
+LABS = _load_facility_seed("laboratories.json", FALLBACK_LABS)
 
 # Common tests with realistic Bangladeshi private-lab pricing in BDT.
 LAB_CATALOGUE = [

@@ -1,0 +1,4506 @@
+[
+  {
+    "code": "PHAR0001",
+    "name": "M/S. Rohid Medicine Corner",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.724449,
+    "lng": 90.398089
+  },
+  {
+    "code": "PHAR0002",
+    "name": "Kurmitola General Hospital Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.819115,
+    "lng": 90.409795
+  },
+  {
+    "code": "PHAR0003",
+    "name": "Satata Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.36279,
+    "lng": 91.783958
+  },
+  {
+    "code": "PHAR0004",
+    "name": "Bar Auliya Pharmacy, Chattagram Community Hospital",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.296728,
+    "lng": 91.866837
+  },
+  {
+    "code": "PHAR0005",
+    "name": "Bandhan Homeo Hall, Hospital",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.708858,
+    "lng": 90.420798
+  },
+  {
+    "code": "PHAR0006",
+    "name": "Royal Multispecialist Hospital &Diagnostic Centre",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.770025,
+    "lng": 90.366252
+  },
+  {
+    "code": "PHAR0007",
+    "name": "Mim Specialized Dental Physiotherapy Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.746182,
+    "lng": 90.428333
+  },
+  {
+    "code": "PHAR0008",
+    "name": "The Renaissance Hospital, Hospital",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.907518,
+    "lng": 89.949935
+  },
+  {
+    "code": "PHAR0009",
+    "name": "Government Hospital",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.812878,
+    "lng": 89.380561
+  },
+  {
+    "code": "PHAR0010",
+    "name": "Al Manar Hospital Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.755821,
+    "lng": 90.363511
+  },
+  {
+    "code": "PHAR0011",
+    "name": "High Care Hospital",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.76978,
+    "lng": 90.367089
+  },
+  {
+    "code": "PHAR0012",
+    "name": "Crescent Hospital",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.770825,
+    "lng": 90.367862
+  },
+  {
+    "code": "PHAR0013",
+    "name": "Arpita Medical Hall",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.296272,
+    "lng": 91.785133
+  },
+  {
+    "code": "PHAR0014",
+    "name": "M/s. Medicine Corner",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.286525,
+    "lng": 91.783324
+  },
+  {
+    "code": "PHAR0015",
+    "name": "Medico Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.332986,
+    "lng": 91.817313
+  },
+  {
+    "code": "PHAR0016",
+    "name": "Towhid Medicine Center",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.695613,
+    "lng": 90.3991
+  },
+  {
+    "code": "PHAR0017",
+    "name": "Best Janani pharmacy in chittagong",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.429215,
+    "lng": 91.818733
+  },
+  {
+    "code": "PHAR0018",
+    "name": "The College Homeopathic Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.722101,
+    "lng": 90.416521
+  },
+  {
+    "code": "PHAR0019",
+    "name": "Siraj Pharmacy And Stationery",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.405159,
+    "lng": 91.859647
+  },
+  {
+    "code": "PHAR0020",
+    "name": "Mia Haji Daulat Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.316543,
+    "lng": 91.856404
+  },
+  {
+    "code": "PHAR0021",
+    "name": "Haji Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.293003,
+    "lng": 91.782481
+  },
+  {
+    "code": "PHAR0022",
+    "name": "M/S Be Alam Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.510193,
+    "lng": 91.839772
+  },
+  {
+    "code": "PHAR0023",
+    "name": "M/s. National Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.333228,
+    "lng": 91.816522
+  },
+  {
+    "code": "PHAR0024",
+    "name": "Mercas Bismillah Poultry Complex",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.685225,
+    "lng": 91.790194
+  },
+  {
+    "code": "PHAR0025",
+    "name": "M/s. Reliever Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.386061,
+    "lng": 91.762098
+  },
+  {
+    "code": "PHAR0026",
+    "name": "Sumaiya Drug House Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.364326,
+    "lng": 91.828011
+  },
+  {
+    "code": "PHAR0027",
+    "name": "Potiya Homeo Hall",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.331041,
+    "lng": 91.849846
+  },
+  {
+    "code": "PHAR0028",
+    "name": "Khagrachari Medico",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.293481,
+    "lng": 91.787132
+  },
+  {
+    "code": "PHAR0029",
+    "name": "Samiya pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.616814,
+    "lng": 91.794545
+  },
+  {
+    "code": "PHAR0030",
+    "name": "Raju medical hall",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.332601,
+    "lng": 91.813836
+  },
+  {
+    "code": "PHAR0031",
+    "name": "Rakib Homeo Center",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.293215,
+    "lng": 91.78804
+  },
+  {
+    "code": "PHAR0032",
+    "name": "Janopriyo Medical Hall",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.326722,
+    "lng": 91.826718
+  },
+  {
+    "code": "PHAR0033",
+    "name": "Noren Musical House",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.331642,
+    "lng": 91.83109
+  },
+  {
+    "code": "PHAR0034",
+    "name": "The Life Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.35869,
+    "lng": 91.787454
+  },
+  {
+    "code": "PHAR0035",
+    "name": "Janaseba Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.503416,
+    "lng": 91.806842
+  },
+  {
+    "code": "PHAR0036",
+    "name": "Manju Homeo is Bandartila",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.286015,
+    "lng": 91.78415
+  },
+  {
+    "code": "PHAR0037",
+    "name": "M/s Iskandar Medical Hall",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.402381,
+    "lng": 91.819254
+  },
+  {
+    "code": "PHAR0038",
+    "name": "Aziz Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.362379,
+    "lng": 91.816408
+  },
+  {
+    "code": "PHAR0039",
+    "name": "M/S. Rupali Medical Store",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.286866,
+    "lng": 91.784404
+  },
+  {
+    "code": "PHAR0040",
+    "name": "New Alankar Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.358522,
+    "lng": 91.783088
+  },
+  {
+    "code": "PHAR0041",
+    "name": "Mohajon Pharmacy",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.531716,
+    "lng": 91.887032
+  },
+  {
+    "code": "PHAR0042",
+    "name": "Muhammad Medico & Hijama Centre",
+    "district": "Chattogram",
+    "area": "Chattogram",
+    "lat": 22.516551,
+    "lng": 91.802173
+  },
+  {
+    "code": "PHAR0043",
+    "name": "Hafisons & Company",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.721629,
+    "lng": 90.416394
+  },
+  {
+    "code": "PHAR0044",
+    "name": "Sepu Medical Hall Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.700981,
+    "lng": 90.396875
+  },
+  {
+    "code": "PHAR0045",
+    "name": "Hazi Rani Medicine Market",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.711103,
+    "lng": 90.403799
+  },
+  {
+    "code": "PHAR0046",
+    "name": "Kamala Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.247448,
+    "lng": 89.034822
+  },
+  {
+    "code": "PHAR0047",
+    "name": "Padma Medicine Corner",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.712048,
+    "lng": 90.403509
+  },
+  {
+    "code": "PHAR0048",
+    "name": "M/s Afser Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.690211,
+    "lng": 90.430957
+  },
+  {
+    "code": "PHAR0049",
+    "name": "Central Homeopathic Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.721594,
+    "lng": 90.416748
+  },
+  {
+    "code": "PHAR0050",
+    "name": "New Marko herbal and pharma medical(নিউ মার্কো হার্বাল এন্ড ফার্মা মেডিকেল)",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.816572,
+    "lng": 90.371261
+  },
+  {
+    "code": "PHAR0051",
+    "name": "Ramin Medicine And General Store",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.741105,
+    "lng": 90.393974
+  },
+  {
+    "code": "PHAR0052",
+    "name": "Adarsha Homeo Hall",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.708482,
+    "lng": 90.427576
+  },
+  {
+    "code": "PHAR0053",
+    "name": "Noor Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.632057,
+    "lng": 90.344801
+  },
+  {
+    "code": "PHAR0054",
+    "name": "Jonoshastha Homeo Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.710866,
+    "lng": 90.433273
+  },
+  {
+    "code": "PHAR0055",
+    "name": "Farjana Pharmacy and Business Point(ফারজানা ফার্মেসী এন্ড বিজনেস পয়েন্ট)",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.828447,
+    "lng": 90.369576
+  },
+  {
+    "code": "PHAR0056",
+    "name": "Hazi.Md.Nurislam Mahmud Sabuj",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.710749,
+    "lng": 90.427356
+  },
+  {
+    "code": "PHAR0057",
+    "name": "Anwara Homeo Medical Centre",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.709755,
+    "lng": 90.434118
+  },
+  {
+    "code": "PHAR0058",
+    "name": "Zazira Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.473263,
+    "lng": 90.266421
+  },
+  {
+    "code": "PHAR0059",
+    "name": "Adarsha bikrampur mishtanno vandar",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.586341,
+    "lng": 90.309551
+  },
+  {
+    "code": "PHAR0060",
+    "name": "Bismillah Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.615759,
+    "lng": 90.332709
+  },
+  {
+    "code": "PHAR0061",
+    "name": "Help pharma health Care Center (হেলপ ফার্মা স্বাস্থ্য সেবা কেন্দ্র)",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.770091,
+    "lng": 90.349741
+  },
+  {
+    "code": "PHAR0062",
+    "name": "Asian Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.695377,
+    "lng": 90.397612
+  },
+  {
+    "code": "PHAR0063",
+    "name": "Ma Pharmecy and Doctor\\'s Chember(মা ফার্মেসি এন্ড ডক্টরস চেম্বার)",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.820059,
+    "lng": 90.375751
+  },
+  {
+    "code": "PHAR0064",
+    "name": "Ayatmedicinesuppliars",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.710985,
+    "lng": 90.403322
+  },
+  {
+    "code": "PHAR0065",
+    "name": "Bismillah Drug",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.711415,
+    "lng": 90.402931
+  },
+  {
+    "code": "PHAR0066",
+    "name": "Baishakhi Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.711179,
+    "lng": 90.423844
+  },
+  {
+    "code": "PHAR0067",
+    "name": "Messrs Bangladesh Medical Store মেসার্স বাংলাদেশ মেডিকেল ষ্টোর",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 25.116256,
+    "lng": 88.937966
+  },
+  {
+    "code": "PHAR0068",
+    "name": "Haque Homeo Hall",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.711607,
+    "lng": 90.423528
+  },
+  {
+    "code": "PHAR0069",
+    "name": "Tanjim Medicine Corner",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.344099,
+    "lng": 89.070116
+  },
+  {
+    "code": "PHAR0070",
+    "name": "M/S The Jamuna Pharmacy",
+    "district": "Dhaka",
+    "area": "Dhaka",
+    "lat": 23.711139,
+    "lng": 90.42442
+  },
+  {
+    "code": "PHAR0071",
+    "name": "Amena Medical center, Medical Center",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.702213,
+    "lng": 90.43647
+  },
+  {
+    "code": "PHAR0072",
+    "name": "Rekha Pharmacy",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.229471,
+    "lng": 90.019187
+  },
+  {
+    "code": "PHAR0073",
+    "name": "New Rog Mukti Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.405738,
+    "lng": 90.281521
+  },
+  {
+    "code": "PHAR0074",
+    "name": "Maliha Poultry Feed - medicine corner",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.457291,
+    "lng": 89.876383
+  },
+  {
+    "code": "PHAR0075",
+    "name": "Dhaka homeopathic International ঢাকা হোমিও ইন্টারন্যাশনাল",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.535094,
+    "lng": 89.283754
+  },
+  {
+    "code": "PHAR0076",
+    "name": "Saudagar Medical Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.998628,
+    "lng": 90.008618
+  },
+  {
+    "code": "PHAR0077",
+    "name": "Rana Pharmacy and Photostat",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.406291,
+    "lng": 88.956256
+  },
+  {
+    "code": "PHAR0078",
+    "name": "Baghoir janata pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.664253,
+    "lng": 90.387894
+  },
+  {
+    "code": "PHAR0079",
+    "name": "Medicine Corner",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.662918,
+    "lng": 90.391062
+  },
+  {
+    "code": "PHAR0080",
+    "name": "Bismillah Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.652669,
+    "lng": 88.942387
+  },
+  {
+    "code": "PHAR0081",
+    "name": "Mamta Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.690141,
+    "lng": 90.400082
+  },
+  {
+    "code": "PHAR0082",
+    "name": "Warim medicine shop",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.664707,
+    "lng": 90.391181
+  },
+  {
+    "code": "PHAR0083",
+    "name": "Ma Moni Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.024858,
+    "lng": 90.098296
+  },
+  {
+    "code": "PHAR0084",
+    "name": "Alhamdulillah Pharmacy And Departmental Store",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.769562,
+    "lng": 88.85367
+  },
+  {
+    "code": "PHAR0085",
+    "name": "Bismillah Medicine Corner And Telecom Center",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.29597,
+    "lng": 90.389083
+  },
+  {
+    "code": "PHAR0086",
+    "name": "Khidmah Homeo And Hijama centre",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.258938,
+    "lng": 90.39871
+  },
+  {
+    "code": "PHAR0087",
+    "name": "Mondol pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.693471,
+    "lng": 88.925142
+  },
+  {
+    "code": "PHAR0088",
+    "name": "Tanjil Medicine And Feed Corner",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.978729,
+    "lng": 90.17712
+  },
+  {
+    "code": "PHAR0089",
+    "name": "Ali Hossain Homeopathic Clinic",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.796131,
+    "lng": 88.957494
+  },
+  {
+    "code": "PHAR0090",
+    "name": "Abdullah Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.469412,
+    "lng": 88.962478
+  },
+  {
+    "code": "PHAR0091",
+    "name": "Noor Veterinary Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.359286,
+    "lng": 90.200819
+  },
+  {
+    "code": "PHAR0092",
+    "name": "Jalchhatra Diagnostic Center and Pharmacy",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.644471,
+    "lng": 90.077765
+  },
+  {
+    "code": "PHAR0093",
+    "name": "Shimul Drug House Pharmacy শিমুল ঔষধ হাউস ফার্মেসী",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.845015,
+    "lng": 89.098277
+  },
+  {
+    "code": "PHAR0094",
+    "name": "Ma Medical Hall",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.696251,
+    "lng": 90.436699
+  },
+  {
+    "code": "PHAR0095",
+    "name": "Shifa Medical Hall",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.70523,
+    "lng": 90.431751
+  },
+  {
+    "code": "PHAR0096",
+    "name": "Gulsan Mustafa Syed Pur Pani Tanki Mart",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.796974,
+    "lng": 88.890703
+  },
+  {
+    "code": "PHAR0097",
+    "name": "Rahmania Homeo Pharmacy রহমানিয়া হোমিও ফার্মেসী",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.230164,
+    "lng": 92.058925
+  },
+  {
+    "code": "PHAR0098",
+    "name": "Seva Medical Hall Phultala Bazar, Medical Center",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.360977,
+    "lng": 89.923323
+  },
+  {
+    "code": "PHAR0099",
+    "name": "Abdullah Esteel And Walksp",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.467709,
+    "lng": 89.87446
+  },
+  {
+    "code": "PHAR0100",
+    "name": "Shad Model Medicine Shop (Veterinary)",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.243659,
+    "lng": 89.912505
+  },
+  {
+    "code": "PHAR0101",
+    "name": "K.Rahman Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.34726,
+    "lng": 89.294222
+  },
+  {
+    "code": "PHAR0102",
+    "name": "SM Homoeopathy Medical Center-2, Medical Center",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.33497,
+    "lng": 89.924432
+  },
+  {
+    "code": "PHAR0103",
+    "name": "The Renaissance Pharmacy",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.907323,
+    "lng": 89.949933
+  },
+  {
+    "code": "PHAR0104",
+    "name": "Maya Medical Hall",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.660063,
+    "lng": 90.35863
+  },
+  {
+    "code": "PHAR0105",
+    "name": "Ray Homeopathic Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.810962,
+    "lng": 89.008752
+  },
+  {
+    "code": "PHAR0106",
+    "name": "World Chemical Industries Ltd.",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.003322,
+    "lng": 90.383323
+  },
+  {
+    "code": "PHAR0107",
+    "name": "Grameen Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.245286,
+    "lng": 89.096273
+  },
+  {
+    "code": "PHAR0108",
+    "name": "Parimal Bakali",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.80232,
+    "lng": 88.676481
+  },
+  {
+    "code": "PHAR0109",
+    "name": "M/s. Hoque Brother's মাইক্রোসফট. হক ব্রাদার'স",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.183111,
+    "lng": 89.59429
+  },
+  {
+    "code": "PHAR0110",
+    "name": "Mashuk Medicine Particle Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.690644,
+    "lng": 90.400866
+  },
+  {
+    "code": "PHAR0111",
+    "name": "Palash Homeopathic Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.916897,
+    "lng": 89.950792
+  },
+  {
+    "code": "PHAR0112",
+    "name": "Al Mani Pharmacy and Medical Center",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.781355,
+    "lng": 88.918643
+  },
+  {
+    "code": "PHAR0113",
+    "name": "Akiz Match Factory Ltd. আকিজ ম্যাচ ফ্যাক্টরি",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.575231,
+    "lng": 90.514928
+  },
+  {
+    "code": "PHAR0114",
+    "name": "Bismilla Homeo complex",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.01136,
+    "lng": 90.320215
+  },
+  {
+    "code": "PHAR0115",
+    "name": "Sourav Homeopathy Hall",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 25.291429,
+    "lng": 89.349611
+  },
+  {
+    "code": "PHAR0116",
+    "name": "Jahanara Medical Hall জাহানারা মেডিকেল হলের",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.744536,
+    "lng": 90.408496
+  },
+  {
+    "code": "PHAR0117",
+    "name": "Janani Homeo Pharmacy",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.993965,
+    "lng": 90.383207
+  },
+  {
+    "code": "PHAR0118",
+    "name": "Ma Medicine And Veterinary Corner",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.243487,
+    "lng": 89.912209
+  },
+  {
+    "code": "PHAR0119",
+    "name": "Liaquat Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.396483,
+    "lng": 90.276156
+  },
+  {
+    "code": "PHAR0120",
+    "name": "Murad Medicine Corner মুরাদ মেডিসিন কর্ণার",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.766014,
+    "lng": 90.393484
+  },
+  {
+    "code": "PHAR0121",
+    "name": "Homeo Arogyo Niketon",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.858471,
+    "lng": 89.344104
+  },
+  {
+    "code": "PHAR0122",
+    "name": "Hamdard Medical And Sales Center",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.780701,
+    "lng": 88.914987
+  },
+  {
+    "code": "PHAR0123",
+    "name": "Homeopathic Pharmacy হোমীওপ্যাথিক ফার্মেসী",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 26.002159,
+    "lng": 89.435033
+  },
+  {
+    "code": "PHAR0124",
+    "name": "Bismillah Homeo Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.475188,
+    "lng": 90.385816
+  },
+  {
+    "code": "PHAR0125",
+    "name": "Proma Medicine Corner প্রমা মেডিসিন কর্নার",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.841406,
+    "lng": 89.347187
+  },
+  {
+    "code": "PHAR0126",
+    "name": "Rampart Power Bangladesh Limited",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.046044,
+    "lng": 90.389973
+  },
+  {
+    "code": "PHAR0127",
+    "name": "Tawheeda Pharmacy and Veterinary",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.114016,
+    "lng": 90.31819
+  },
+  {
+    "code": "PHAR0128",
+    "name": "Messrs Somadhan Surgical and Medical store",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.83551,
+    "lng": 89.374329
+  },
+  {
+    "code": "PHAR0129",
+    "name": "Manikganj Surgical And Pharmacy",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.836272,
+    "lng": 90.016667
+  },
+  {
+    "code": "PHAR0130",
+    "name": "Al-Shifa Homeo Hall",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.997754,
+    "lng": 90.384069
+  },
+  {
+    "code": "PHAR0131",
+    "name": "Sadhona Oushodhaloy",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.993814,
+    "lng": 90.256044
+  },
+  {
+    "code": "PHAR0132",
+    "name": "Dr. Peer Ali Bari, Public medical center",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.040244,
+    "lng": 90.167221
+  },
+  {
+    "code": "PHAR0133",
+    "name": "Momtaj Homoeo Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.25174,
+    "lng": 89.919125
+  },
+  {
+    "code": "PHAR0134",
+    "name": "Lalmoni Homeo Hall",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.028491,
+    "lng": 90.241105
+  },
+  {
+    "code": "PHAR0135",
+    "name": "Health And Hope Model Pharmacy",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.874097,
+    "lng": 89.368782
+  },
+  {
+    "code": "PHAR0136",
+    "name": "S.S Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.409443,
+    "lng": 89.010446
+  },
+  {
+    "code": "PHAR0137",
+    "name": "Bhuiyan Medical Hall ভূইয়া মেডিক্যাল হল",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.259189,
+    "lng": 90.398117
+  },
+  {
+    "code": "PHAR0138",
+    "name": "Shapla Medical Store শাপলা মেডিকেল স্টোর",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 25.056538,
+    "lng": 89.369663
+  },
+  {
+    "code": "PHAR0139",
+    "name": "Moniza Homoeo Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.019495,
+    "lng": 90.013806
+  },
+  {
+    "code": "PHAR0140",
+    "name": "Zibon Homoeo Hall",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.966874,
+    "lng": 90.380335
+  },
+  {
+    "code": "PHAR0141",
+    "name": "S R Homeo Chamber",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.846765,
+    "lng": 89.364798
+  },
+  {
+    "code": "PHAR0142",
+    "name": "Manavata Homeo Service Center",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.061829,
+    "lng": 88.831119
+  },
+  {
+    "code": "PHAR0143",
+    "name": "Hello homoeopathy",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.935571,
+    "lng": 90.27464
+  },
+  {
+    "code": "PHAR0144",
+    "name": "Rohan Medical Store রোহান মেডিকেল স্টোর",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.545742,
+    "lng": 89.165284
+  },
+  {
+    "code": "PHAR0145",
+    "name": "Shilpe Pharmacy O Cikithsaloy",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.875548,
+    "lng": 89.367071
+  },
+  {
+    "code": "PHAR0146",
+    "name": "Jahangir Pharmacy",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.862397,
+    "lng": 89.944561
+  },
+  {
+    "code": "PHAR0147",
+    "name": "Khan pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.198833,
+    "lng": 88.892977
+  },
+  {
+    "code": "PHAR0148",
+    "name": "Haque Medicine Corner হক মেডিসিন কর্নার",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.750288,
+    "lng": 89.230949
+  },
+  {
+    "code": "PHAR0149",
+    "name": "Tania Medical Hall তানিয়া মেডিকেল হলের",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.076126,
+    "lng": 89.609451
+  },
+  {
+    "code": "PHAR0150",
+    "name": "Providing Ayurvedic treatment",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.853329,
+    "lng": 88.656072
+  },
+  {
+    "code": "PHAR0151",
+    "name": "Panna medical hallAndsergical",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.486241,
+    "lng": 89.973913
+  },
+  {
+    "code": "PHAR0152",
+    "name": "Taj Poultry Feed And Medicine",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.275586,
+    "lng": 90.394359
+  },
+  {
+    "code": "PHAR0153",
+    "name": "Alif Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.195289,
+    "lng": 88.903864
+  },
+  {
+    "code": "PHAR0154",
+    "name": "Bismillah Pharmacy বিসমিল্লাহ ফার্মেসী",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.61639,
+    "lng": 90.479267
+  },
+  {
+    "code": "PHAR0155",
+    "name": "Sanjibani Pharmacy (সঞ্জীবনী ফার্মেসি)",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.161859,
+    "lng": 89.214796
+  },
+  {
+    "code": "PHAR0156",
+    "name": "Akashi Medical Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.024668,
+    "lng": 90.169905
+  },
+  {
+    "code": "PHAR0157",
+    "name": "Jabbar Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.404982,
+    "lng": 90.273842
+  },
+  {
+    "code": "PHAR0158",
+    "name": "Jamal Homeo Hall",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.853447,
+    "lng": 89.366373
+  },
+  {
+    "code": "PHAR0159",
+    "name": "Haji Homeo Hall",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.406336,
+    "lng": 90.278896
+  },
+  {
+    "code": "PHAR0160",
+    "name": "Seba Medical hall",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.542975,
+    "lng": 90.29668
+  },
+  {
+    "code": "PHAR0161",
+    "name": "Upsam Pharmacy And Tea Store",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.965999,
+    "lng": 88.841337
+  },
+  {
+    "code": "PHAR0162",
+    "name": "Sheba Homeo Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.764464,
+    "lng": 89.925538
+  },
+  {
+    "code": "PHAR0163",
+    "name": "Mahin Poultry Feed And Medicine Corner",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.242109,
+    "lng": 90.903584
+  },
+  {
+    "code": "PHAR0164",
+    "name": "M/s Modern Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.346375,
+    "lng": 90.301375
+  },
+  {
+    "code": "PHAR0165",
+    "name": "Prottasha pharmacy প্রত্যাশা ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.361568,
+    "lng": 88.615875
+  },
+  {
+    "code": "PHAR0166",
+    "name": "Alhamdulillah medicine shop",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.77763,
+    "lng": 89.931275
+  },
+  {
+    "code": "PHAR0167",
+    "name": "City Medical Store সিটি মেডিকেল স্টোর",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.548238,
+    "lng": 89.16709
+  },
+  {
+    "code": "PHAR0168",
+    "name": "Abdullah Pharmacy আব্দুল্লাহ ফার্মেসী",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 26.132034,
+    "lng": 89.138059
+  },
+  {
+    "code": "PHAR0169",
+    "name": "The Economic Homeo Pharmacy",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 25.134041,
+    "lng": 89.388362
+  },
+  {
+    "code": "PHAR0170",
+    "name": "SEBA Homeo Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.91771,
+    "lng": 89.95143
+  },
+  {
+    "code": "PHAR0171",
+    "name": "Pure Homeo Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.760465,
+    "lng": 90.446643
+  },
+  {
+    "code": "PHAR0172",
+    "name": "Department Public Health Engg. (DPHE)",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.544256,
+    "lng": 89.164726
+  },
+  {
+    "code": "PHAR0173",
+    "name": "Aual Pharmacy and Animal Health Care",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.228346,
+    "lng": 90.132621
+  },
+  {
+    "code": "PHAR0174",
+    "name": "SKF Pharmaceutical Limited",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.01443,
+    "lng": 90.38326
+  },
+  {
+    "code": "PHAR0175",
+    "name": "M/S Jannatul Mawa Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.774355,
+    "lng": 89.224706
+  },
+  {
+    "code": "PHAR0176",
+    "name": "Bishmillah medicine corner",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.276053,
+    "lng": 90.394314
+  },
+  {
+    "code": "PHAR0177",
+    "name": "Rahmania Pharmacy রহমানিয়া ফার্মেসী",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.029818,
+    "lng": 88.471808
+  },
+  {
+    "code": "PHAR0178",
+    "name": "Mithila Model Medicine Sop",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.129697,
+    "lng": 90.043707
+  },
+  {
+    "code": "PHAR0179",
+    "name": "Sondhani Medicine and surgical store",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.831461,
+    "lng": 89.376617
+  },
+  {
+    "code": "PHAR0180",
+    "name": "Seva Homeo Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.021679,
+    "lng": 90.00593
+  },
+  {
+    "code": "PHAR0181",
+    "name": "Biplab Model Medicine Shop",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.48508,
+    "lng": 89.973634
+  },
+  {
+    "code": "PHAR0182",
+    "name": "Zaman Medical Hall জামান মেডিকেল হল",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.220953,
+    "lng": 90.411669
+  },
+  {
+    "code": "PHAR0183",
+    "name": "Bhai Bhai Pharmacy ভাই ভাই ফার্মেসি",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.781404,
+    "lng": 88.281777
+  },
+  {
+    "code": "PHAR0184",
+    "name": "JMI Syringes & Medical Devices Ltd.",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.264078,
+    "lng": 91.30694
+  },
+  {
+    "code": "PHAR0185",
+    "name": "Mymensingh Depot Opsonin Pharma Ltd",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.711478,
+    "lng": 90.410261
+  },
+  {
+    "code": "PHAR0186",
+    "name": "Khan Pharmacy",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.862196,
+    "lng": 89.944633
+  },
+  {
+    "code": "PHAR0187",
+    "name": "Dhap Scientific and Sergical Center",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.762746,
+    "lng": 89.234764
+  },
+  {
+    "code": "PHAR0188",
+    "name": "Joy Medical Hall MC Bazar",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.239743,
+    "lng": 90.403262
+  },
+  {
+    "code": "PHAR0189",
+    "name": "Bashir Medical Hall বশির মেডিকেল হল",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.322408,
+    "lng": 91.281173
+  },
+  {
+    "code": "PHAR0190",
+    "name": "Islamia Pharmacy ইসলামিয়া ফার্মেসি",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.782446,
+    "lng": 88.282481
+  },
+  {
+    "code": "PHAR0191",
+    "name": "Bhai Bhai Sheba Pharmacy",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.956326,
+    "lng": 90.381214
+  },
+  {
+    "code": "PHAR0192",
+    "name": "Rian Model Medicin Shops",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.67776,
+    "lng": 89.952661
+  },
+  {
+    "code": "PHAR0193",
+    "name": "M/s Abdul Motin And Sons",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.055747,
+    "lng": 90.33689
+  },
+  {
+    "code": "PHAR0194",
+    "name": "Tin Bhai Medicine Corner",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.669303,
+    "lng": 90.403219
+  },
+  {
+    "code": "PHAR0195",
+    "name": "Akand Medical Hall, Medical Centre",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.728439,
+    "lng": 90.413937
+  },
+  {
+    "code": "PHAR0196",
+    "name": "Mordan Pharmacy and Harbal Chamber",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.777448,
+    "lng": 92.194536
+  },
+  {
+    "code": "PHAR0197",
+    "name": "Khorshed Medicine Corner",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.061513,
+    "lng": 90.387071
+  },
+  {
+    "code": "PHAR0198",
+    "name": "The Zaman Pharma Limited",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.751073,
+    "lng": 90.405394
+  },
+  {
+    "code": "PHAR0199",
+    "name": "Prabhati Medicine Corner",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.741156,
+    "lng": 90.407298
+  },
+  {
+    "code": "PHAR0200",
+    "name": "Maa Raziya Medical Store",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 25.275919,
+    "lng": 89.354832
+  },
+  {
+    "code": "PHAR0201",
+    "name": "Bhai Bhai Farmacy ভাই ভাই ফার্মেসী",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.766547,
+    "lng": 88.633487
+  },
+  {
+    "code": "PHAR0202",
+    "name": "Saju Masum Medical Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.06691,
+    "lng": 90.03035
+  },
+  {
+    "code": "PHAR0203",
+    "name": "Bonani Medicine and Surgical Plus",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.828589,
+    "lng": 89.353838
+  },
+  {
+    "code": "PHAR0204",
+    "name": "ABC Pharmacy",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.65363,
+    "lng": 89.423902
+  },
+  {
+    "code": "PHAR0205",
+    "name": "General Pharmacy জেনারেল ফার্মেসি",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.878643,
+    "lng": 89.181862
+  },
+  {
+    "code": "PHAR0206",
+    "name": "Islamia Medicine Corner",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 25.04699,
+    "lng": 90.02321
+  },
+  {
+    "code": "PHAR0207",
+    "name": "Government Medical Hall",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.475216,
+    "lng": 90.38517
+  },
+  {
+    "code": "PHAR0208",
+    "name": "Tuhin Homeo Hall তুহিন হোমিও হলের",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.024107,
+    "lng": 89.246607
+  },
+  {
+    "code": "PHAR0209",
+    "name": "Jonota Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.705529,
+    "lng": 90.432494
+  },
+  {
+    "code": "PHAR0210",
+    "name": "M/S MUMU MEDICINE STORE",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.773877,
+    "lng": 88.783775
+  },
+  {
+    "code": "PHAR0211",
+    "name": "Marzia Pharmacy মার্জিয়া ফার্মেসি",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.710438,
+    "lng": 89.260759
+  },
+  {
+    "code": "PHAR0212",
+    "name": "SAAD medical hall, Medical Center",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.257976,
+    "lng": 90.399505
+  },
+  {
+    "code": "PHAR0213",
+    "name": "Shaheen Pharmacies শাহীন ফার্মেসী",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.742484,
+    "lng": 89.233307
+  },
+  {
+    "code": "PHAR0214",
+    "name": "Junayet Medicine Kanar",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.438695,
+    "lng": 89.884769
+  },
+  {
+    "code": "PHAR0215",
+    "name": "M/s Chowdhury Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.778131,
+    "lng": 88.898292
+  },
+  {
+    "code": "PHAR0216",
+    "name": "Chowdhury medical Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.249666,
+    "lng": 89.913679
+  },
+  {
+    "code": "PHAR0217",
+    "name": "Robiul medicine corner",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.01042,
+    "lng": 90.249223
+  },
+  {
+    "code": "PHAR0218",
+    "name": "Bismillah Medical Hall",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.974126,
+    "lng": 90.38063
+  },
+  {
+    "code": "PHAR0219",
+    "name": "MS Sumona Medical Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.059665,
+    "lng": 89.877318
+  },
+  {
+    "code": "PHAR0220",
+    "name": "Mashiur Pharmacy, Medical Center",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.858456,
+    "lng": 88.871814
+  },
+  {
+    "code": "PHAR0221",
+    "name": "The Mukul Medical Hall",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.468964,
+    "lng": 89.532401
+  },
+  {
+    "code": "PHAR0222",
+    "name": "Amena Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.200131,
+    "lng": 88.884769
+  },
+  {
+    "code": "PHAR0223",
+    "name": "Aricha Medicine Market",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.835083,
+    "lng": 89.78093
+  },
+  {
+    "code": "PHAR0224",
+    "name": "Jahanar medical center",
+    "district": "Mymensingh",
+    "area": "Mymensingh",
+    "lat": 24.765484,
+    "lng": 90.450757
+  },
+  {
+    "code": "PHAR0225",
+    "name": "Shaila Pharmacy শায়লা ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.592577,
+    "lng": 88.654484
+  },
+  {
+    "code": "PHAR0226",
+    "name": "Shapown Pharmacy স্বপন ফার্মেসি",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.334577,
+    "lng": 89.924814
+  },
+  {
+    "code": "PHAR0227",
+    "name": "অর্গ্যানন হোমিও ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.410349,
+    "lng": 89.007133
+  },
+  {
+    "code": "PHAR0228",
+    "name": "Chakaria pharmacy চকরিয়া ঔষধালয়",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.763487,
+    "lng": 92.076004
+  },
+  {
+    "code": "PHAR0229",
+    "name": "Public pharmaceutical",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.652104,
+    "lng": 89.424177
+  },
+  {
+    "code": "PHAR0230",
+    "name": "Alhaz Pharmacy আলহাজ্ব ফার্মেসী",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.095556,
+    "lng": 90.117875
+  },
+  {
+    "code": "PHAR0231",
+    "name": "Lab Aid Homeo Complex",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.222734,
+    "lng": 90.411088
+  },
+  {
+    "code": "PHAR0232",
+    "name": "Fariha Pharmacy ফারিহা ফার্মেসি",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.889409,
+    "lng": 89.360125
+  },
+  {
+    "code": "PHAR0233",
+    "name": "Faisal Homeo Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.344587,
+    "lng": 89.343131
+  },
+  {
+    "code": "PHAR0234",
+    "name": "Fahim Medicine Center",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.744059,
+    "lng": 89.397062
+  },
+  {
+    "code": "PHAR0235",
+    "name": "Rahim Medicine Corner",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.767296,
+    "lng": 89.23456
+  },
+  {
+    "code": "PHAR0236",
+    "name": "Al Jihan Medical Hall",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.957323,
+    "lng": 90.379615
+  },
+  {
+    "code": "PHAR0237",
+    "name": "Sohag Homeo Hall সোহাগ হোমিও হল",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.812387,
+    "lng": 89.642607
+  },
+  {
+    "code": "PHAR0238",
+    "name": "Zarif Medicine Corner",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.89088,
+    "lng": 89.8778
+  },
+  {
+    "code": "PHAR0239",
+    "name": "Bulbul Pharmacy বুলবুল ফার্মেসী",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.252269,
+    "lng": 92.06749
+  },
+  {
+    "code": "PHAR0240",
+    "name": "Onanna Agriculture Upohar Bitan",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.04409,
+    "lng": 89.630671
+  },
+  {
+    "code": "PHAR0241",
+    "name": "Makka madina pharmacy",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.031155,
+    "lng": 90.263808
+  },
+  {
+    "code": "PHAR0242",
+    "name": "Monwara model farmacy",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.076821,
+    "lng": 89.88535
+  },
+  {
+    "code": "PHAR0243",
+    "name": "Nur Medical Hall নূর মেডিকেল হল",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.892688,
+    "lng": 91.674201
+  },
+  {
+    "code": "PHAR0244",
+    "name": "Momenshahi Homeo Hall",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.991939,
+    "lng": 90.38186
+  },
+  {
+    "code": "PHAR0245",
+    "name": "Aftab Master Pharmacy",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.298445,
+    "lng": 90.388534
+  },
+  {
+    "code": "PHAR0246",
+    "name": "Zakir Medicine Corner",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 23.929594,
+    "lng": 90.308593
+  },
+  {
+    "code": "PHAR0247",
+    "name": "Nasir Medicine Corner",
+    "district": "Gazipur",
+    "area": "Gazipur",
+    "lat": 24.02777,
+    "lng": 90.386605
+  },
+  {
+    "code": "PHAR0248",
+    "name": "Jobeda Medical Store",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.882239,
+    "lng": 89.363493
+  },
+  {
+    "code": "PHAR0249",
+    "name": "Nahar Medical Supply",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.249716,
+    "lng": 89.913531
+  },
+  {
+    "code": "PHAR0250",
+    "name": "New Siddika Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.741419,
+    "lng": 89.233349
+  },
+  {
+    "code": "PHAR0251",
+    "name": "City Medical and Surgical Plus",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.828499,
+    "lng": 89.354098
+  },
+  {
+    "code": "PHAR0252",
+    "name": "ACME Brahmanbaria Sales Center",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 24.004294,
+    "lng": 91.108046
+  },
+  {
+    "code": "PHAR0253",
+    "name": "M/s. Feroza Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.774836,
+    "lng": 89.224573
+  },
+  {
+    "code": "PHAR0254",
+    "name": "Saju Medicine Corner",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.781007,
+    "lng": 88.917055
+  },
+  {
+    "code": "PHAR0255",
+    "name": "Oadud Pharmacy ওয়াদুদ ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.859326,
+    "lng": 88.443425
+  },
+  {
+    "code": "PHAR0256",
+    "name": "Harekrishna Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.346694,
+    "lng": 89.342914
+  },
+  {
+    "code": "PHAR0257",
+    "name": "Jewel Pharmacy জুয়েল ফার্মেসী",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.298629,
+    "lng": 89.220088
+  },
+  {
+    "code": "PHAR0258",
+    "name": "Bondhon Model Pharma",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.478599,
+    "lng": 89.973743
+  },
+  {
+    "code": "PHAR0259",
+    "name": "Messrs Ayesha Medicine Corner",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.91283,
+    "lng": 91.823997
+  },
+  {
+    "code": "PHAR0260",
+    "name": "Shawon Pharmacy শাওন ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.36148,
+    "lng": 88.627212
+  },
+  {
+    "code": "PHAR0261",
+    "name": "Kholil Pharmacy খলিল ফার্মেসী",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.004656,
+    "lng": 89.422854
+  },
+  {
+    "code": "PHAR0262",
+    "name": "pharAsa Pharmacy আশা ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.631653,
+    "lng": 88.195031
+  },
+  {
+    "code": "PHAR0263",
+    "name": "Khan Optics and Medicine Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.267852,
+    "lng": 89.926601
+  },
+  {
+    "code": "PHAR0264",
+    "name": "Adhunik Surgical Drug Centre",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.9112,
+    "lng": 91.851158
+  },
+  {
+    "code": "PHAR0265",
+    "name": "Polly Medical Halll",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.36166,
+    "lng": 89.927012
+  },
+  {
+    "code": "PHAR0266",
+    "name": "Janata Pharmacy জনতা ফার্মেসী",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.906694,
+    "lng": 91.862032
+  },
+  {
+    "code": "PHAR0267",
+    "name": "Dolon Medical Store",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.322546,
+    "lng": 88.553682
+  },
+  {
+    "code": "PHAR0268",
+    "name": "Sadek Pharmacy সাদেক ফার্মেসি",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.823361,
+    "lng": 89.363947
+  },
+  {
+    "code": "PHAR0269",
+    "name": "Zainab Medical Hall",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.373996,
+    "lng": 89.382421
+  },
+  {
+    "code": "PHAR0270",
+    "name": "Suprovat Drug House",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.846229,
+    "lng": 89.347456
+  },
+  {
+    "code": "PHAR0271",
+    "name": "Koyarpara Govt Primary School",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.257392,
+    "lng": 89.068966
+  },
+  {
+    "code": "PHAR0272",
+    "name": "Sajib Medical Store",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.866215,
+    "lng": 89.37198
+  },
+  {
+    "code": "PHAR0273",
+    "name": "Rasel Medicine Shop",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 25.213353,
+    "lng": 89.376149
+  },
+  {
+    "code": "PHAR0274",
+    "name": "Bepari Medical Hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.835283,
+    "lng": 89.781076
+  },
+  {
+    "code": "PHAR0275",
+    "name": "Javed Pharmacy জাভেদ ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.601846,
+    "lng": 88.250662
+  },
+  {
+    "code": "PHAR0276",
+    "name": "Akota medical store",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.106275,
+    "lng": 88.819595
+  },
+  {
+    "code": "PHAR0277",
+    "name": "Sonia Medical hall",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.851143,
+    "lng": 89.373173
+  },
+  {
+    "code": "PHAR0278",
+    "name": "Tariq Medical Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.45891,
+    "lng": 89.875128
+  },
+  {
+    "code": "PHAR0279",
+    "name": "Life Care pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.638235,
+    "lng": 92.160592
+  },
+  {
+    "code": "PHAR0280",
+    "name": "Shaha Pharmacy সাহা ফার্মেসী",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.998381,
+    "lng": 89.174872
+  },
+  {
+    "code": "PHAR0281",
+    "name": "M/S ALOMGIR MEDICAL",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.804673,
+    "lng": 88.957126
+  },
+  {
+    "code": "PHAR0282",
+    "name": "Jannat Sarjikal and Medicine",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.763729,
+    "lng": 89.233125
+  },
+  {
+    "code": "PHAR0283",
+    "name": "Kajol Pharmacy কাজল ফার্মেসি",
+    "district": "Bogura",
+    "area": "Bogura",
+    "lat": 24.823333,
+    "lng": 89.36378
+  },
+  {
+    "code": "PHAR0284",
+    "name": "Bismillah Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.14105,
+    "lng": 88.703548
+  },
+  {
+    "code": "PHAR0285",
+    "name": "M/S Masud Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.783424,
+    "lng": 88.930446
+  },
+  {
+    "code": "PHAR0286",
+    "name": "Khaja Pharmacy খাজা ফার্মেসী",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.306009,
+    "lng": 89.564612
+  },
+  {
+    "code": "PHAR0287",
+    "name": "Shirazul Islam সিরাজুল ইসলাম",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.911397,
+    "lng": 89.114661
+  },
+  {
+    "code": "PHAR0288",
+    "name": "Akhi Medical Store",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.347663,
+    "lng": 89.343889
+  },
+  {
+    "code": "PHAR0289",
+    "name": "Moonlight Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.932415,
+    "lng": 88.853536
+  },
+  {
+    "code": "PHAR0290",
+    "name": "M/S sorna pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.637789,
+    "lng": 92.160182
+  },
+  {
+    "code": "PHAR0291",
+    "name": "Harun Medical Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.17349,
+    "lng": 90.017809
+  },
+  {
+    "code": "PHAR0292",
+    "name": "Lalon Medical Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.057996,
+    "lng": 89.874988
+  },
+  {
+    "code": "PHAR0293",
+    "name": "Master medical hal",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.403871,
+    "lng": 89.912458
+  },
+  {
+    "code": "PHAR0294",
+    "name": "Bismillah Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.277573,
+    "lng": 88.559444
+  },
+  {
+    "code": "PHAR0295",
+    "name": "Halim Medical Hall",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.399341,
+    "lng": 89.488326
+  },
+  {
+    "code": "PHAR0296",
+    "name": "Priota Bonowzi & Aurvedalaya",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.731058,
+    "lng": 88.169022
+  },
+  {
+    "code": "PHAR0297",
+    "name": "Bismillah Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.25369,
+    "lng": 88.558134
+  },
+  {
+    "code": "PHAR0298",
+    "name": "Maya Pharmacy মায়া ফার্মেসি",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.904218,
+    "lng": 89.119481
+  },
+  {
+    "code": "PHAR0299",
+    "name": "Manik Da Pharmacy",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.846742,
+    "lng": 89.829763
+  },
+  {
+    "code": "PHAR0300",
+    "name": "Town Pharmacy টাউন র্ফামেসি",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 23.008667,
+    "lng": 91.4
+  },
+  {
+    "code": "PHAR0301",
+    "name": "Liza Pharmacy লিজা ফার্মাসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.859303,
+    "lng": 88.444045
+  },
+  {
+    "code": "PHAR0302",
+    "name": "Jugantar Pharmacy",
+    "district": "Tangail",
+    "area": "Tangail",
+    "lat": 24.139722,
+    "lng": 89.900997
+  },
+  {
+    "code": "PHAR0303",
+    "name": "Messrs Khajanchi Drug House",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.913019,
+    "lng": 91.85154
+  },
+  {
+    "code": "PHAR0304",
+    "name": "Suma Pharmacy সোমা ফার্মেসি",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.673522,
+    "lng": 90.51865
+  },
+  {
+    "code": "PHAR0305",
+    "name": "M/S Azad pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.772273,
+    "lng": 88.743719
+  },
+  {
+    "code": "PHAR0306",
+    "name": "Dipa Pharmacy দিপা ফার্মেসি",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.410646,
+    "lng": 88.557968
+  },
+  {
+    "code": "PHAR0307",
+    "name": "Jahangir Pharmacy",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.817145,
+    "lng": 90.046548
+  },
+  {
+    "code": "PHAR0308",
+    "name": "Sumi Pharmacy সুমী ফার্মেসী",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 23.966179,
+    "lng": 89.561986
+  },
+  {
+    "code": "PHAR0309",
+    "name": "J C Pharmacy জে সি ফার্মেসী",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.365937,
+    "lng": 88.643544
+  },
+  {
+    "code": "PHAR0310",
+    "name": "Ruma Medical Hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.845638,
+    "lng": 89.829646
+  },
+  {
+    "code": "PHAR0311",
+    "name": "Bhai Bhai Pharmacy Arjunhar",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.990526,
+    "lng": 88.638337
+  },
+  {
+    "code": "PHAR0312",
+    "name": "Kalaruka Mohammadi Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.912399,
+    "lng": 91.851471
+  },
+  {
+    "code": "PHAR0313",
+    "name": "M/S ABIR PHARMACY",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.70133,
+    "lng": 92.189031
+  },
+  {
+    "code": "PHAR0314",
+    "name": "M/s Sawsti Niketon Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.777684,
+    "lng": 92.19453
+  },
+  {
+    "code": "PHAR0315",
+    "name": "Hasan Medicine and Sergicla",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.761176,
+    "lng": 89.239293
+  },
+  {
+    "code": "PHAR0316",
+    "name": "Bismilla pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.775239,
+    "lng": 88.885017
+  },
+  {
+    "code": "PHAR0317",
+    "name": "Popular Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.927646,
+    "lng": 88.858017
+  },
+  {
+    "code": "PHAR0318",
+    "name": "Jasmine Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.783474,
+    "lng": 88.93013
+  },
+  {
+    "code": "PHAR0319",
+    "name": "Messrs Sharif Medical Hall",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.912041,
+    "lng": 91.85157
+  },
+  {
+    "code": "PHAR0320",
+    "name": "Rashida Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.177446,
+    "lng": 88.636097
+  },
+  {
+    "code": "PHAR0321",
+    "name": "Al-Khidmah Medicine Korner",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.699556,
+    "lng": 90.424435
+  },
+  {
+    "code": "PHAR0322",
+    "name": "Bhai Bhai Torkari Pharmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.900135,
+    "lng": 89.117065
+  },
+  {
+    "code": "PHAR0323",
+    "name": "Niramoy Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.772015,
+    "lng": 89.227624
+  },
+  {
+    "code": "PHAR0324",
+    "name": "Kona Drug House কনা ঔষধালয়",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.340044,
+    "lng": 88.555886
+  },
+  {
+    "code": "PHAR0325",
+    "name": "Sultana Diagonestic Center",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685779,
+    "lng": 90.362355
+  },
+  {
+    "code": "PHAR0326",
+    "name": "Darus Shifa Homeo Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.723935,
+    "lng": 91.754504
+  },
+  {
+    "code": "PHAR0327",
+    "name": "Rokeya Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.57113,
+    "lng": 89.273845
+  },
+  {
+    "code": "PHAR0328",
+    "name": "Sarkar Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.662514,
+    "lng": 89.273835
+  },
+  {
+    "code": "PHAR0329",
+    "name": "Jeevan Pharmacy",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 26.106264,
+    "lng": 88.820962
+  },
+  {
+    "code": "PHAR0330",
+    "name": "মামা-ভাগ্না মেডিসিন মার্ট",
+    "district": "Dinajpur",
+    "area": "Dinajpur",
+    "lat": 25.387166,
+    "lng": 88.988016
+  },
+  {
+    "code": "PHAR0331",
+    "name": "Shofic Health Care Senter",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.69926,
+    "lng": 90.421661
+  },
+  {
+    "code": "PHAR0332",
+    "name": "Jannat Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.721721,
+    "lng": 89.242533
+  },
+  {
+    "code": "PHAR0333",
+    "name": "Majumdar Medicine Corner",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.602838,
+    "lng": 89.836068
+  },
+  {
+    "code": "PHAR0334",
+    "name": "Messrs Jokigonj Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.91217,
+    "lng": 91.851562
+  },
+  {
+    "code": "PHAR0335",
+    "name": "New Shikder Medical Hall",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.999314,
+    "lng": 89.81794
+  },
+  {
+    "code": "PHAR0336",
+    "name": "Rasel Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.31784,
+    "lng": 89.340614
+  },
+  {
+    "code": "PHAR0337",
+    "name": "Laily pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.380287,
+    "lng": 89.326277
+  },
+  {
+    "code": "PHAR0338",
+    "name": "Anik Diagonestics Center",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.589331,
+    "lng": 89.832975
+  },
+  {
+    "code": "PHAR0339",
+    "name": "Arifs Medicine",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.70756,
+    "lng": 89.261365
+  },
+  {
+    "code": "PHAR0340",
+    "name": "The Care Medicine Karnar",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 24.097979,
+    "lng": 91.292341
+  },
+  {
+    "code": "PHAR0341",
+    "name": "Rokeya Diagnostic Centre",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.041237,
+    "lng": 89.632835
+  },
+  {
+    "code": "PHAR0342",
+    "name": "Double Hazi Daowat Khana",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.594416,
+    "lng": 88.260231
+  },
+  {
+    "code": "PHAR0343",
+    "name": "North Bengal Homeo Hall",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.413117,
+    "lng": 88.99697
+  },
+  {
+    "code": "PHAR0344",
+    "name": "Messrs Adhorso Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.372817,
+    "lng": 91.415278
+  },
+  {
+    "code": "PHAR0345",
+    "name": "Matribhumi Medical Hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.604237,
+    "lng": 89.835856
+  },
+  {
+    "code": "PHAR0346",
+    "name": "Rahmania Medical Centre",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.771902,
+    "lng": 91.574305
+  },
+  {
+    "code": "PHAR0347",
+    "name": "শাহপরান মেডিসিন সেন্টার",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.88649,
+    "lng": 91.883827
+  },
+  {
+    "code": "PHAR0348",
+    "name": "D.M. Enterprise Rabbani",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.394556,
+    "lng": 88.684751
+  },
+  {
+    "code": "PHAR0349",
+    "name": "Satabdi Medicine corner",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.602759,
+    "lng": 89.835856
+  },
+  {
+    "code": "PHAR0350",
+    "name": "Bibiana Medicine Center",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.7065,
+    "lng": 91.733558
+  },
+  {
+    "code": "PHAR0351",
+    "name": "Messrs Anowara Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.9121,
+    "lng": 91.851578
+  },
+  {
+    "code": "PHAR0352",
+    "name": "Podma Sarjical & Clinic",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.028939,
+    "lng": 89.396238
+  },
+  {
+    "code": "PHAR0353",
+    "name": "Rana Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.70983,
+    "lng": 89.260269
+  },
+  {
+    "code": "PHAR0354",
+    "name": "Mary Pharmacy",
+    "district": "Rangpur",
+    "area": "Rangpur",
+    "lat": 25.426033,
+    "lng": 89.310387
+  },
+  {
+    "code": "PHAR0355",
+    "name": "Bhuiyan Medicine Corner",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.90988,
+    "lng": 91.843529
+  },
+  {
+    "code": "PHAR0356",
+    "name": "M/S Mayer Doya Pharmacy",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.693597,
+    "lng": 90.514194
+  },
+  {
+    "code": "PHAR0357",
+    "name": "Anisha Medicine Corner",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.860771,
+    "lng": 90.003337
+  },
+  {
+    "code": "PHAR0358",
+    "name": "Shantiniketan Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.777423,
+    "lng": 92.194391
+  },
+  {
+    "code": "PHAR0359",
+    "name": "Bakerganj Medical hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685509,
+    "lng": 90.361692
+  },
+  {
+    "code": "PHAR0360",
+    "name": "Messrs Ridwan Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.910271,
+    "lng": 91.844368
+  },
+  {
+    "code": "PHAR0361",
+    "name": "M/s A Hossain Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762216,
+    "lng": 92.075763
+  },
+  {
+    "code": "PHAR0362",
+    "name": "Rangdhanu Medical hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685237,
+    "lng": 90.361078
+  },
+  {
+    "code": "PHAR0363",
+    "name": "M/s New Ma Moni Medico",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.776906,
+    "lng": 92.194586
+  },
+  {
+    "code": "PHAR0364",
+    "name": "Bismillah Medical Hall",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.335173,
+    "lng": 91.271174
+  },
+  {
+    "code": "PHAR0365",
+    "name": "Messrs Asha Drug House",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.9128,
+    "lng": 91.824051
+  },
+  {
+    "code": "PHAR0366",
+    "name": "মেসার্স যমুনা ফামের্সী",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.408361,
+    "lng": 89.135213
+  },
+  {
+    "code": "PHAR0367",
+    "name": "Messrs Chatok Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.912239,
+    "lng": 91.85144
+  },
+  {
+    "code": "PHAR0368",
+    "name": "Muksudpur Medical Hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.604454,
+    "lng": 89.836139
+  },
+  {
+    "code": "PHAR0369",
+    "name": "Susowma Medicine House",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762378,
+    "lng": 92.075999
+  },
+  {
+    "code": "PHAR0370",
+    "name": "Uposhom Medicine Store",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.69785,
+    "lng": 90.423144
+  },
+  {
+    "code": "PHAR0371",
+    "name": "Jhalakati Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685608,
+    "lng": 90.36193
+  },
+  {
+    "code": "PHAR0372",
+    "name": "Messrs Hamza Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.91268,
+    "lng": 91.851517
+  },
+  {
+    "code": "PHAR0373",
+    "name": "Chowdhury Drug Store",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.912319,
+    "lng": 91.851623
+  },
+  {
+    "code": "PHAR0374",
+    "name": "Islamia Medical Store",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.427212,
+    "lng": 92.180555
+  },
+  {
+    "code": "PHAR0375",
+    "name": "Moyenuddin Drug House",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.58815,
+    "lng": 89.834257
+  },
+  {
+    "code": "PHAR0376",
+    "name": "Jonosheba Drugs House",
+    "district": "Narayanganj",
+    "area": "Narayanganj",
+    "lat": 23.704869,
+    "lng": 90.426734
+  },
+  {
+    "code": "PHAR0377",
+    "name": "Hawladar Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.684911,
+    "lng": 90.360256
+  },
+  {
+    "code": "PHAR0378",
+    "name": "Sarker Madecal center",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.195198,
+    "lng": 88.851262
+  },
+  {
+    "code": "PHAR0379",
+    "name": "Jahan Medicine Center",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.427103,
+    "lng": 92.180748
+  },
+  {
+    "code": "PHAR0380",
+    "name": "Nipa pharmacy Comilla",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.449246,
+    "lng": 91.184313
+  },
+  {
+    "code": "PHAR0381",
+    "name": "Lily and Diji Farmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.918034,
+    "lng": 91.874168
+  },
+  {
+    "code": "PHAR0382",
+    "name": "Hashi Khushi Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.912161,
+    "lng": 91.851593
+  },
+  {
+    "code": "PHAR0383",
+    "name": "MJ PHARMACY",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.711156,
+    "lng": 92.195129
+  },
+  {
+    "code": "PHAR0384",
+    "name": "Jashore Medical Hall",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.167894,
+    "lng": 89.209835
+  },
+  {
+    "code": "PHAR0385",
+    "name": "Muktijuddha Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.344821,
+    "lng": 91.977017
+  },
+  {
+    "code": "PHAR0386",
+    "name": "Kiron Medical Corner",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762214,
+    "lng": 92.075812
+  },
+  {
+    "code": "PHAR0387",
+    "name": "M/S. Jamila Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.803164,
+    "lng": 89.566798
+  },
+  {
+    "code": "PHAR0388",
+    "name": "M/s Santona Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.777278,
+    "lng": 92.194566
+  },
+  {
+    "code": "PHAR0389",
+    "name": "Mayer Choya Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.76216,
+    "lng": 92.07576
+  },
+  {
+    "code": "PHAR0390",
+    "name": "Alam Medicine Corner",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.214027,
+    "lng": 89.696642
+  },
+  {
+    "code": "PHAR0391",
+    "name": "Messers Jarif Medico",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 20.633289,
+    "lng": 92.326479
+  },
+  {
+    "code": "PHAR0392",
+    "name": "Faridpur Drugs House",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588877,
+    "lng": 89.833386
+  },
+  {
+    "code": "PHAR0393",
+    "name": "Singer Kach Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.91189,
+    "lng": 91.85154
+  },
+  {
+    "code": "PHAR0394",
+    "name": "Singhodhuli Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.246755,
+    "lng": 89.062339
+  },
+  {
+    "code": "PHAR0395",
+    "name": "Farhana Medical hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.58879,
+    "lng": 89.833484
+  },
+  {
+    "code": "PHAR0396",
+    "name": "23.541480",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.541502,
+    "lng": 89.165655
+  },
+  {
+    "code": "PHAR0397",
+    "name": "Abu Bakkar Homio Hal",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.044495,
+    "lng": 89.630654
+  },
+  {
+    "code": "PHAR0398",
+    "name": "The Popular Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.372657,
+    "lng": 91.414606
+  },
+  {
+    "code": "PHAR0399",
+    "name": "Health Care Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.91029,
+    "lng": 91.844749
+  },
+  {
+    "code": "PHAR0400",
+    "name": "Progoti Mesical Hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.602981,
+    "lng": 89.836129
+  },
+  {
+    "code": "PHAR0401",
+    "name": "Medi Centre Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.895828,
+    "lng": 91.900172
+  },
+  {
+    "code": "PHAR0402",
+    "name": "Nolsity Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.68604,
+    "lng": 90.363108
+  },
+  {
+    "code": "PHAR0403",
+    "name": "Islamia Drugs House",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588737,
+    "lng": 89.833567
+  },
+  {
+    "code": "PHAR0404",
+    "name": "Shah sultan poultry",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.94765,
+    "lng": 91.481474
+  },
+  {
+    "code": "PHAR0405",
+    "name": "Makkah Medical Hall",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 23.014069,
+    "lng": 91.400619
+  },
+  {
+    "code": "PHAR0406",
+    "name": "Ikbal Medical Store",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762224,
+    "lng": 92.075871
+  },
+  {
+    "code": "PHAR0407",
+    "name": "Ikbal Medical Store",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762224,
+    "lng": 92.075871
+  },
+  {
+    "code": "PHAR0408",
+    "name": "Mohsin Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.684956,
+    "lng": 90.360377
+  },
+  {
+    "code": "PHAR0409",
+    "name": "Es Das Medical Hall",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.493889,
+    "lng": 91.189855
+  },
+  {
+    "code": "PHAR0410",
+    "name": "Janata Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685632,
+    "lng": 90.361989
+  },
+  {
+    "code": "PHAR0411",
+    "name": "Govt Primary School",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.256247,
+    "lng": 89.079003
+  },
+  {
+    "code": "PHAR0412",
+    "name": "Homiopathy Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.039848,
+    "lng": 89.631787
+  },
+  {
+    "code": "PHAR0413",
+    "name": "Halima Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.570265,
+    "lng": 90.13356
+  },
+  {
+    "code": "PHAR0414",
+    "name": "Messrs R.K Pharmacy",
+    "district": "Sylhet",
+    "area": "Sylhet",
+    "lat": 24.910191,
+    "lng": 91.843231
+  },
+  {
+    "code": "PHAR0415",
+    "name": "Ma Medicine Corners",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.214029,
+    "lng": 89.697525
+  },
+  {
+    "code": "PHAR0416",
+    "name": "S Homeo Chikitsaloy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.803163,
+    "lng": 89.566921
+  },
+  {
+    "code": "PHAR0417",
+    "name": "M/s Adorsh Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.778138,
+    "lng": 92.194441
+  },
+  {
+    "code": "PHAR0418",
+    "name": "Farida Medical hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588763,
+    "lng": 89.833531
+  },
+  {
+    "code": "PHAR0419",
+    "name": "Hira Medicine House",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685109,
+    "lng": 90.360745
+  },
+  {
+    "code": "PHAR0420",
+    "name": "Homeopathy pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.037982,
+    "lng": 89.632704
+  },
+  {
+    "code": "PHAR0421",
+    "name": "Majumdar Drug Hosue",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588974,
+    "lng": 89.833299
+  },
+  {
+    "code": "PHAR0422",
+    "name": "Kanika Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.259157,
+    "lng": 90.336196
+  },
+  {
+    "code": "PHAR0423",
+    "name": "Srabon Medical Hall",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.028275,
+    "lng": 89.396007
+  },
+  {
+    "code": "PHAR0424",
+    "name": "Adhunik Dental Care",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588265,
+    "lng": 89.834123
+  },
+  {
+    "code": "PHAR0425",
+    "name": "Fatema Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.302987,
+    "lng": 90.196166
+  },
+  {
+    "code": "PHAR0426",
+    "name": "Seif Medical Corner",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762387,
+    "lng": 92.075653
+  },
+  {
+    "code": "PHAR0427",
+    "name": "Mozzammels Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.87539,
+    "lng": 88.451602
+  },
+  {
+    "code": "PHAR0428",
+    "name": "Salua West Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.239559,
+    "lng": 89.096433
+  },
+  {
+    "code": "PHAR0429",
+    "name": "Al Ehsan Drug House",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127337,
+    "lng": 89.070794
+  },
+  {
+    "code": "PHAR0430",
+    "name": "Kapatakkho Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.237965,
+    "lng": 89.101952
+  },
+  {
+    "code": "PHAR0431",
+    "name": "Arafat Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685472,
+    "lng": 90.361591
+  },
+  {
+    "code": "PHAR0432",
+    "name": "A B Medicine Center",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.77569,
+    "lng": 92.194728
+  },
+  {
+    "code": "PHAR0433",
+    "name": "Biswas Medical Hall",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.1671,
+    "lng": 89.140617
+  },
+  {
+    "code": "PHAR0434",
+    "name": "Huda Homeo Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.030513,
+    "lng": 89.398809
+  },
+  {
+    "code": "PHAR0435",
+    "name": "Betagi Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.686746,
+    "lng": 90.365031
+  },
+  {
+    "code": "PHAR0436",
+    "name": "Molla Medical Hall",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.028357,
+    "lng": 89.396097
+  },
+  {
+    "code": "PHAR0437",
+    "name": "Hasina Drugs House",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588921,
+    "lng": 89.833336
+  },
+  {
+    "code": "PHAR0438",
+    "name": "Nijam Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.684925,
+    "lng": 90.360294
+  },
+  {
+    "code": "PHAR0439",
+    "name": "Akber Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.900079,
+    "lng": 90.304427
+  },
+  {
+    "code": "PHAR0440",
+    "name": "New Sheba Pharmacy",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.589271,
+    "lng": 89.833013
+  },
+  {
+    "code": "PHAR0441",
+    "name": "Madhumati Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.260546,
+    "lng": 89.023904
+  },
+  {
+    "code": "PHAR0442",
+    "name": "M Hossain Pharmacy",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.335202,
+    "lng": 91.270973
+  },
+  {
+    "code": "PHAR0443",
+    "name": "Mocca Medical Hall",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762404,
+    "lng": 92.075948
+  },
+  {
+    "code": "PHAR0444",
+    "name": "ফারিয়া মেডিকেল হল",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 23.123782,
+    "lng": 91.102206
+  },
+  {
+    "code": "PHAR0445",
+    "name": "Bismillah Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.040518,
+    "lng": 89.635345
+  },
+  {
+    "code": "PHAR0446",
+    "name": "Suchuna Drug House",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.54085,
+    "lng": 89.164147
+  },
+  {
+    "code": "PHAR0447",
+    "name": "Jonosheva Pharmacy",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.884922,
+    "lng": 91.538047
+  },
+  {
+    "code": "PHAR0448",
+    "name": "Nirob Medical Hall",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 23.123755,
+    "lng": 91.101675
+  },
+  {
+    "code": "PHAR0449",
+    "name": "Kalam Medical Hall",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762231,
+    "lng": 92.075638
+  },
+  {
+    "code": "PHAR0450",
+    "name": "আল্-ইমরান হোমিও হল",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.560352,
+    "lng": 88.304906
+  },
+  {
+    "code": "PHAR0451",
+    "name": "হাজী তৈয়ব ফার্মেসী",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.6282,
+    "lng": 90.058025
+  },
+  {
+    "code": "PHAR0452",
+    "name": "Bismillah Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.028279,
+    "lng": 89.396099
+  },
+  {
+    "code": "PHAR0453",
+    "name": "Bismillah Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.379898,
+    "lng": 88.564249
+  },
+  {
+    "code": "PHAR0454",
+    "name": "Ekushey Drug House",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.408008,
+    "lng": 89.135301
+  },
+  {
+    "code": "PHAR0455",
+    "name": "Shah Amin Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.760434,
+    "lng": 92.076068
+  },
+  {
+    "code": "PHAR0456",
+    "name": "Chandan Drag House",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.038098,
+    "lng": 89.63268
+  },
+  {
+    "code": "PHAR0457",
+    "name": "Prottasha Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.361199,
+    "lng": 88.617322
+  },
+  {
+    "code": "PHAR0458",
+    "name": "Tuhin Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685739,
+    "lng": 90.362261
+  },
+  {
+    "code": "PHAR0459",
+    "name": "New Palli Pharmacy",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.366862,
+    "lng": 89.661849
+  },
+  {
+    "code": "PHAR0460",
+    "name": "Salamabad Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.042567,
+    "lng": 89.63078
+  },
+  {
+    "code": "PHAR0461",
+    "name": "NAHAR MEDICAL HALL",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.570251,
+    "lng": 90.133672
+  },
+  {
+    "code": "PHAR0462",
+    "name": "Sujon Medical Hall",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.323281,
+    "lng": 90.980207
+  },
+  {
+    "code": "PHAR0463",
+    "name": "New Uttam Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.025885,
+    "lng": 89.246494
+  },
+  {
+    "code": "PHAR0464",
+    "name": "Saleha Drug House",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.359144,
+    "lng": 88.914786
+  },
+  {
+    "code": "PHAR0465",
+    "name": "Aideal Homeo Hall",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.798356,
+    "lng": 89.563171
+  },
+  {
+    "code": "PHAR0466",
+    "name": "Atik Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.686702,
+    "lng": 90.364969
+  },
+  {
+    "code": "PHAR0467",
+    "name": "M/S Arefin Medico",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.429042,
+    "lng": 92.179302
+  },
+  {
+    "code": "PHAR0468",
+    "name": "Gazi Medical Hall",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.029155,
+    "lng": 89.39655
+  },
+  {
+    "code": "PHAR0469",
+    "name": "Kustia Drug House",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127192,
+    "lng": 89.070873
+  },
+  {
+    "code": "PHAR0470",
+    "name": "Jahanara Pharmacy",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.684968,
+    "lng": 90.360404
+  },
+  {
+    "code": "PHAR0471",
+    "name": "Singbari Pharmacy",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.294297,
+    "lng": 90.183101
+  },
+  {
+    "code": "PHAR0472",
+    "name": "Asma Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.68521,
+    "lng": 90.361016
+  },
+  {
+    "code": "PHAR0473",
+    "name": "Binoy Drugs House",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588997,
+    "lng": 89.833279
+  },
+  {
+    "code": "PHAR0474",
+    "name": "Standard Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.898059,
+    "lng": 89.506647
+  },
+  {
+    "code": "PHAR0475",
+    "name": "Boishali Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.777994,
+    "lng": 92.194464
+  },
+  {
+    "code": "PHAR0476",
+    "name": "Kaji Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685688,
+    "lng": 90.362148
+  },
+  {
+    "code": "PHAR0477",
+    "name": "Poli Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685443,
+    "lng": 90.361521
+  },
+  {
+    "code": "PHAR0478",
+    "name": "Muksudpur Medical",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588651,
+    "lng": 89.833677
+  },
+  {
+    "code": "PHAR0479",
+    "name": "Fatema Drug House",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127417,
+    "lng": 89.070831
+  },
+  {
+    "code": "PHAR0480",
+    "name": "M/s Khan Pharmacy",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.450099,
+    "lng": 91.178466
+  },
+  {
+    "code": "PHAR0481",
+    "name": "Howlader Pharmacy",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.36893,
+    "lng": 90.219639
+  },
+  {
+    "code": "PHAR0482",
+    "name": "Arif Medical Hall",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762358,
+    "lng": 92.075578
+  },
+  {
+    "code": "PHAR0483",
+    "name": "Alom Medical Hall",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.445734,
+    "lng": 91.176314
+  },
+  {
+    "code": "PHAR0484",
+    "name": "Parbazar Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.264898,
+    "lng": 89.016494
+  },
+  {
+    "code": "PHAR0485",
+    "name": "Limon Medica Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685882,
+    "lng": 90.362632
+  },
+  {
+    "code": "PHAR0486",
+    "name": "HANEMANN PHARMACY",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.165152,
+    "lng": 89.214027
+  },
+  {
+    "code": "PHAR0487",
+    "name": "Jahid Drugs House",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.589239,
+    "lng": 89.83304
+  },
+  {
+    "code": "PHAR0488",
+    "name": "Binoy Drugs House",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.588899,
+    "lng": 89.833358
+  },
+  {
+    "code": "PHAR0489",
+    "name": "Fatima Drug House",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815292,
+    "lng": 88.743538
+  },
+  {
+    "code": "PHAR0490",
+    "name": "A Rahman Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762373,
+    "lng": 92.075925
+  },
+  {
+    "code": "PHAR0491",
+    "name": "Keya medical hall",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.667815,
+    "lng": 89.789526
+  },
+  {
+    "code": "PHAR0492",
+    "name": "Iran Medical Hall",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.028859,
+    "lng": 89.396279
+  },
+  {
+    "code": "PHAR0493",
+    "name": "Akan Medical Hall",
+    "district": "Barishal",
+    "area": "Barishal",
+    "lat": 22.685408,
+    "lng": 90.361443
+  },
+  {
+    "code": "PHAR0494",
+    "name": "Somadhan Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.37855,
+    "lng": 88.580297
+  },
+  {
+    "code": "PHAR0495",
+    "name": "Bismilla pharmacy",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.371094,
+    "lng": 91.084708
+  },
+  {
+    "code": "PHAR0496",
+    "name": "Shamim Drug House",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127547,
+    "lng": 89.070879
+  },
+  {
+    "code": "PHAR0497",
+    "name": "Manowara Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762385,
+    "lng": 92.075723
+  },
+  {
+    "code": "PHAR0498",
+    "name": "Reshma Drug House",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815198,
+    "lng": 88.743354
+  },
+  {
+    "code": "PHAR0499",
+    "name": "Mahi Medical Hall",
+    "district": "Faridpur",
+    "area": "Faridpur",
+    "lat": 23.860726,
+    "lng": 90.003528
+  },
+  {
+    "code": "PHAR0500",
+    "name": "Ma Durga Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.481243,
+    "lng": 89.706252
+  },
+  {
+    "code": "PHAR0501",
+    "name": "Messrs drug house",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.697406,
+    "lng": 89.074317
+  },
+  {
+    "code": "PHAR0502",
+    "name": "A Rahman Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762373,
+    "lng": 92.075925
+  },
+  {
+    "code": "PHAR0503",
+    "name": "রায়হান ড্রাগ হাউজ",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.995617,
+    "lng": 91.233213
+  },
+  {
+    "code": "PHAR0504",
+    "name": "Omar Madical Hall",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.815676,
+    "lng": 89.562537
+  },
+  {
+    "code": "PHAR0505",
+    "name": "Tarafdar Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.667618,
+    "lng": 89.789698
+  },
+  {
+    "code": "PHAR0506",
+    "name": "Ismayel Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.359215,
+    "lng": 88.914625
+  },
+  {
+    "code": "PHAR0507",
+    "name": "Haque Homeo Hall",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.450908,
+    "lng": 91.178723
+  },
+  {
+    "code": "PHAR0508",
+    "name": "শারিকা আই কেয়ার",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.469322,
+    "lng": 91.137763
+  },
+  {
+    "code": "PHAR0509",
+    "name": "Popular Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762195,
+    "lng": 92.075714
+  },
+  {
+    "code": "PHAR0510",
+    "name": "Sayed Drug House",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815449,
+    "lng": 88.744124
+  },
+  {
+    "code": "PHAR0511",
+    "name": "Jahid Drug House",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127169,
+    "lng": 89.070748
+  },
+  {
+    "code": "PHAR0512",
+    "name": "P quise Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.802163,
+    "lng": 89.562984
+  },
+  {
+    "code": "PHAR0513",
+    "name": "M/s Mim Pharmacy",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.759908,
+    "lng": 92.076333
+  },
+  {
+    "code": "PHAR0514",
+    "name": "Shefaly Pharmacy",
+    "district": "Rajshahi",
+    "area": "Rajshahi",
+    "lat": 24.410643,
+    "lng": 88.969024
+  },
+  {
+    "code": "PHAR0515",
+    "name": "Aziz Medicalhall",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.811916,
+    "lng": 89.560891
+  },
+  {
+    "code": "PHAR0516",
+    "name": "Bismillah Medico",
+    "district": "Cox's Bazar",
+    "area": "Cox's Bazar",
+    "lat": 21.762385,
+    "lng": 92.075774
+  },
+  {
+    "code": "PHAR0517",
+    "name": "Monirul Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.040473,
+    "lng": 89.63576
+  },
+  {
+    "code": "PHAR0518",
+    "name": "Shikder Pharmecy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.040531,
+    "lng": 89.635253
+  },
+  {
+    "code": "PHAR0519",
+    "name": "Nimtala Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.241223,
+    "lng": 89.085067
+  },
+  {
+    "code": "PHAR0520",
+    "name": "Jnanada Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.16763,
+    "lng": 89.141047
+  },
+  {
+    "code": "PHAR0521",
+    "name": "Mamun Drug House",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127454,
+    "lng": 89.07085
+  },
+  {
+    "code": "PHAR0522",
+    "name": "Patwary Pharmacy",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.963451,
+    "lng": 91.056068
+  },
+  {
+    "code": "PHAR0523",
+    "name": "Ma Moni Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.040507,
+    "lng": 89.635509
+  },
+  {
+    "code": "PHAR0524",
+    "name": "Pallabi Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.260789,
+    "lng": 89.023639
+  },
+  {
+    "code": "PHAR0525",
+    "name": "Al Hera Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127433,
+    "lng": 89.070842
+  },
+  {
+    "code": "PHAR0526",
+    "name": "Hasan Drug House",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127159,
+    "lng": 89.070861
+  },
+  {
+    "code": "PHAR0527",
+    "name": "Uzzal Drug House",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.8153,
+    "lng": 88.743605
+  },
+  {
+    "code": "PHAR0528",
+    "name": "Caynika Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.806518,
+    "lng": 89.567456
+  },
+  {
+    "code": "PHAR0529",
+    "name": "Jahir Drug House",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815604,
+    "lng": 88.744454
+  },
+  {
+    "code": "PHAR0530",
+    "name": "Jom Jom Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.040513,
+    "lng": 89.635304
+  },
+  {
+    "code": "PHAR0531",
+    "name": "জাকির মেডিকেল হল",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.335101,
+    "lng": 91.271016
+  },
+  {
+    "code": "PHAR0532",
+    "name": "Madina Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 22.812795,
+    "lng": 89.557151
+  },
+  {
+    "code": "PHAR0533",
+    "name": "সেলিনা হোমিও হল",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.450633,
+    "lng": 91.17861
+  },
+  {
+    "code": "PHAR0534",
+    "name": "Lasmia Pharmacy",
+    "district": "Khulna",
+    "area": "Khulna",
+    "lat": 23.041208,
+    "lng": 89.632865
+  },
+  {
+    "code": "PHAR0535",
+    "name": "Usha Homeo Hall",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.447107,
+    "lng": 91.177333
+  },
+  {
+    "code": "PHAR0536",
+    "name": "পপুলার ফার্মেসী",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.256269,
+    "lng": 91.079059
+  },
+  {
+    "code": "PHAR0537",
+    "name": "Lailee pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.35666,
+    "lng": 88.914369
+  },
+  {
+    "code": "PHAR0538",
+    "name": "Ayesha Pharmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815227,
+    "lng": 88.743415
+  },
+  {
+    "code": "PHAR0539",
+    "name": "Sharif Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.477307,
+    "lng": 89.143399
+  },
+  {
+    "code": "PHAR0540",
+    "name": "Medico Sarjical",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.0282,
+    "lng": 89.395969
+  },
+  {
+    "code": "PHAR0541",
+    "name": "Kakoli Pharmacy",
+    "district": "Comilla",
+    "area": "Comilla",
+    "lat": 23.46657,
+    "lng": 91.168267
+  },
+  {
+    "code": "PHAR0542",
+    "name": "মাসুদ হোমিও হল",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.408268,
+    "lng": 89.135223
+  },
+  {
+    "code": "PHAR0543",
+    "name": "Sumon Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.33177,
+    "lng": 88.986672
+  },
+  {
+    "code": "PHAR0544",
+    "name": "Jabed Phramacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.359119,
+    "lng": 88.914673
+  },
+  {
+    "code": "PHAR0545",
+    "name": "Shifa Pharmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.813818,
+    "lng": 88.626133
+  },
+  {
+    "code": "PHAR0546",
+    "name": "Jibon Pharmacy",
+    "district": "Jashore",
+    "area": "Jashore",
+    "lat": 23.358964,
+    "lng": 88.914741
+  },
+  {
+    "code": "PHAR0547",
+    "name": "Ronju Pharmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.540949,
+    "lng": 89.164496
+  },
+  {
+    "code": "PHAR0548",
+    "name": "Sumon Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127485,
+    "lng": 89.070848
+  },
+  {
+    "code": "PHAR0549",
+    "name": "Nihal Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 23.963972,
+    "lng": 89.543552
+  },
+  {
+    "code": "PHAR0550",
+    "name": "Kabir Pharmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815255,
+    "lng": 88.743479
+  },
+  {
+    "code": "PHAR0551",
+    "name": "Sumon Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127201,
+    "lng": 89.070759
+  },
+  {
+    "code": "PHAR0552",
+    "name": "Kobir Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.12736,
+    "lng": 89.070807
+  },
+  {
+    "code": "PHAR0553",
+    "name": "Kabir Pharmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815317,
+    "lng": 88.743667
+  },
+  {
+    "code": "PHAR0554",
+    "name": "Melon Pharmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815466,
+    "lng": 88.744165
+  },
+  {
+    "code": "PHAR0555",
+    "name": "Aziz Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127513,
+    "lng": 89.07086
+  },
+  {
+    "code": "PHAR0556",
+    "name": "Adil Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127133,
+    "lng": 89.070852
+  },
+  {
+    "code": "PHAR0557",
+    "name": "Himel Phamacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127221,
+    "lng": 89.07089
+  },
+  {
+    "code": "PHAR0558",
+    "name": "Abir Pharmay",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.815152,
+    "lng": 88.743277
+  },
+  {
+    "code": "PHAR0559",
+    "name": "Robi Farmacy",
+    "district": "Kushtia",
+    "area": "Kushtia",
+    "lat": 23.594941,
+    "lng": 88.947039
+  },
+  {
+    "code": "PHAR0560",
+    "name": "D B pharmacy",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.361817,
+    "lng": 91.122951
+  },
+  {
+    "code": "PHAR0561",
+    "name": "Ovi Pharmacy",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 22.305434,
+    "lng": 91.169158
+  },
+  {
+    "code": "PHAR0562",
+    "name": "Ma Pharmacy",
+    "district": "Pabna",
+    "area": "Pabna",
+    "lat": 24.127303,
+    "lng": 89.070779
+  },
+  {
+    "code": "PHAR0563",
+    "name": "Farmacity",
+    "district": "Noakhali",
+    "area": "Noakhali",
+    "lat": 23.107978,
+    "lng": 90.860656
+  }
+]
