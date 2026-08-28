@@ -129,7 +129,7 @@ defects; each needs infrastructure, an external party, or real-world data.
 | Penetration test and security audit | Requires an external assessor |
 | Load and failover testing | Requires a production-like environment |
 | Distributed rate limiting | In-process limiting is correct for one instance and a conservative floor behind several; a shared store is needed once multi-node |
-| Real training corpora | The current corpora are synthetic but principled. Replacing them with de-identified clinical text is the single largest quality improvement available |
+| Real training corpora | The current corpora are synthetic but principled. Replacing them with de-identified clinical text is the single largest quality improvement available. `docs/REAL_DATA.md` records what each component needs and which public sources were verified as usable |
 
 ---
 

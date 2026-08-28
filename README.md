@@ -235,7 +235,9 @@ appointments, consultations, prescriptions, hospitals, labs, pharmacies,
 payments, FHIR, rural access and administration.
 
 See `docs/API.md` for the AI and clinical surface, and `docs/BANGLAMED_AI.md`
-for how each model works.
+for how each model works. Every corpus the models train on is generated rather
+than collected; `docs/REAL_DATA.md` sets out what real data each component
+needs and which public Bangladeshi sources were verified as usable.
 
 ---
 
