@@ -6,6 +6,7 @@ returned an empty list and looked broken. A feature with a page in the
 navigation needs seed data behind it.
 """
 import importlib.util
+import json
 import os
 import sys
 import unittest
@@ -78,3 +79,74 @@ class AvailabilityRefreshTests(unittest.TestCase):
         ]
         self.assertEqual(date.today().isoformat(), window[0])
         self.assertTrue(all(day >= window[0] for day in window))
+
+
+class RealDataTests(unittest.TestCase):
+    """The committed real datasets must stay usable.
+
+    These files are derived from public sources by ml/fetch_real_data.py and
+    are committed so a clone works offline. A silent truncation or a schema
+    change in the derivation would otherwise only show up as a worse model.
+    """
+
+    REAL = Path(__file__).resolve().parents[2] / "data" / "real"
+
+    def test_the_facility_export_is_present_and_populated(self):
+        path = self.REAL / "bd_health_facilities.csv"
+        self.assertTrue(path.exists(), f"{path} is missing")
+
+        import csv
+
+        with path.open(encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
+
+        hospitals = [r for r in rows if r["kind"] == "hospital"]
+        self.assertGreater(len(hospitals), 1000)
+
+        for row in hospitals[:200]:
+            with self.subTest(name=row["name"]):
+                latitude = float(row["latitude"])
+                longitude = float(row["longitude"])
+                # Bangladesh's bounding box. A coordinate outside it means the
+                # export has picked up the wrong columns.
+                self.assertTrue(20.0 <= latitude <= 27.0)
+                self.assertTrue(88.0 <= longitude <= 93.0)
+
+    def test_the_ed_triage_export_carries_labels_and_vitals(self):
+        path = self.REAL / "nhamcs_ed_triage.csv"
+        self.assertTrue(path.exists(), f"{path} is missing")
+
+        import csv
+
+        with path.open(encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
+
+        self.assertGreater(len(rows), 5000)
+
+        levels = {row["severity_level"] for row in rows}
+        self.assertEqual({"1", "2", "3", "4", "5"}, levels)
+
+        # Every row must carry a complaint, or it cannot serve as vocabulary.
+        self.assertTrue(all(row["reason_1"].strip() for row in rows))
+
+        temperatures = [
+            float(row["temperature_c"]) for row in rows
+            if row["temperature_c"].strip()
+        ]
+        self.assertTrue(temperatures)
+        for value in temperatures:
+            self.assertTrue(
+                30.0 <= value <= 45.0,
+                f"{value} C is outside any survivable range — the Fahrenheit "
+                "conversion is wrong",
+            )
+
+    def test_the_seeded_directory_covers_more_than_one_district(self):
+        """A single-district directory cannot serve a national platform."""
+        path = Path(__file__).resolve().parents[2] / "data" / "seed"
+        hospitals = json.loads(
+            (path / "hospitals.json").read_text(encoding="utf-8")
+        )
+        districts = {h.get("district") for h in hospitals}
+        self.assertGreater(len(hospitals), 100)
+        self.assertGreater(len(districts), 5)

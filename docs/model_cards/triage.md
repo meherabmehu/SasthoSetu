@@ -22,11 +22,11 @@ languages: bn 42% / banglish 22% / en 16% / mixed 20%. Generator:
 **Metrics (held-out test, n=900)**
 | metric | value |
 |---|---|
-| macro-F1 | 0.8647 |
-| accuracy | 0.8811 |
-| L5 recall (model alone) | 0.9968 |
+| macro-F1 | 0.8644 |
+| accuracy | 0.8867 |
+| L5 recall (model alone) | 0.9878 |
 | L5 recall (with safety rules) | ~1.0 on rule-covered presentations |
-| errors spanning ≥3 severity bands | 0 |
+| errors spanning ≥3 severity bands | 1 |
 
 No case is misclassified by three or more bands, so the model never confuses
 self-care with an emergency. Remaining error is adjacent-band disagreement.
@@ -39,7 +39,10 @@ can only raise severity. Confidence is set to 0.98 on override and the
 response carries `safety_override_applied: true`.
 
 **Limitations** Synthetic corpus: real patient text is noisier (typos,
-dialect, mixed scripts). Lexicon covers 58 symptoms; out-of-lexicon
+dialect, mixed scripts). The symptom lexicon has been widened against the real
+complaint vocabulary of 9,446 US emergency department visits (NHAMCS 2022),
+raising recognition of real clinical phrasings from 45% to 56% of mentions, but
+the training text itself is still generated. Lexicon covers 58 symptoms; out-of-lexicon
 complaints fall back to model text features. Not a diagnostic device; outputs
 carry a bilingual disclaimer. Clinical validation is required before any
 real-world triage use.

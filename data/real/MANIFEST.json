@@ -1,0 +1,22 @@
+{
+  "bangla_disease_symptoms.csv": {
+    "rows": 767,
+    "bytes": 153335
+  },
+  "bd_dengue_by_division.csv": {
+    "rows": 48,
+    "bytes": 1073
+  },
+  "bd_dengue_monthly.csv": {
+    "rows": 288,
+    "bytes": 3562
+  },
+  "bd_health_facilities.csv": {
+    "rows": 5807,
+    "bytes": 466437
+  },
+  "nhamcs_ed_triage.csv": {
+    "rows": 9446,
+    "bytes": 845634
+  }
+}
