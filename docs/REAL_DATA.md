@@ -44,11 +44,52 @@ rows would allow the synthetic corpus to be retired.
 | [BanglaBioMed](https://aclanthology.org/2022.bionlp-1.31/) | 12,000 tokens, IOB format | Research | Same: entities, no urgency. |
 | [Bangla Medical Entity, Kaggle](https://www.kaggle.com/datasets/tanjimtaharataurpa/bangla-medical-entity-dataset) | 6,895 Bangla medical statements | Kaggle terms | Closest to real patient phrasing found so far. |
 
-**Verdict:** no public dataset carries a clinician-assigned urgency label for
-Bangla free text. This has to be collected. The realistic route is a partner
-hospital's outpatient department: record the complaint in the patient's own
-words at registration, and have the attending doctor tick the urgency band they
-actually assigned. Needs ethics approval and de-identification.
+**Verdict on Bangla:** no public dataset carries a clinician-assigned urgency
+label for Bangla free text. That has to be collected locally — see the
+collection protocol at the end of this document.
+
+### English sources with a real clinician triage label
+
+Bangla is the blocker for *phrasing*, not for *how urgency relates to
+presentation*. That relationship is clinical, not linguistic: chest pain with
+sweating is an emergency in any language. English ED datasets carry exactly the
+label we cannot get in Bangla, and several are open.
+
+| Source | Contents | Access | Verdict |
+|---|---|---|---|
+| [NHAMCS (US CDC)](https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/NHAMCS/) | National ED survey. Per visit: 5-level triage immediacy (`IMMEDR`), up to 3 coded reasons for visit, full vitals, age, sex, arrival mode, diagnoses, disposition | **Fully open. No registration, no DUA.** | **Downloaded and parsed.** 2022 file: 16,025 visits, **10,207 with a triage level 1–5**. Files published for 2011–2022. |
+| [MIMIC-IV-ED](https://physionet.org/content/mimic-iv-ed/2.2/) | 425,000 ED stays. `acuity` (ESI 1–5) assigned by the triage nurse plus **`chiefcomplaint` as free text** | Credentialed: PhysioNet account + CITI training + DUA | The single best match — free-text complaint *and* a nurse-assigned ESI. Free, but approval takes days to weeks. |
+| [MIETIC](https://physionet.org/content/mietic/1.0.0/) | 9,629 structured triage cases from MIMIC-IV, ESI-aligned | Same credentialing | Pre-cleaned; saves the extraction work |
+| [Korean KTAS, Kaggle](https://www.kaggle.com/datasets/ilkeryildiz/emergency-service-triage-application) | 1,267 records, chief complaint text, vitals, **KTAS level validated by three triage experts** | Open | Small but expert-labelled |
+| [Iran ED, Mendeley](https://doi.org/10.17632/vhzyyktrz5.1) | 143,582 ED stays, chief complaint (ICD-10 coded), vitals, triage grade | Open, CC licence | Large; non-Western case mix, closer to Bangladesh |
+
+**NHAMCS, verified by download.** The 2022 file gives this real distribution —
+note it matches what any ED sees, with level 3 dominating:
+
+| Triage level | Visits | Share |
+|---|---|---|
+| 1 Immediate | 139 | 1.4% |
+| 2 Emergent | 1,595 | 15.6% |
+| 3 Urgent | 5,340 | 52.3% |
+| 4 Semi-urgent | 2,826 | 27.7% |
+| 5 Non-urgent | 307 | 3.0% |
+
+Our generated corpus is close to uniform across the five levels. Real triage is
+not: over half of all arrivals are level 3. Training on a uniform corpus teaches
+the model a prior that does not exist in any emergency department.
+
+**How English data would be used.** Not as Bangla training text — translation
+would produce stilted phrasing no patient uses. Two honest uses:
+
+1. **Calibrate the severity prior.** Reweight the synthetic corpus so the level
+   distribution matches NHAMCS rather than being uniform.
+2. **Validate the rules.** Check the red-flag rules and condition weights
+   against tens of thousands of real presentations: does "chest pain + sweating"
+   actually carry the acuity our rules assign it?
+
+The Bangla surface forms still have to come from Bangladeshi patients. What
+English data supplies is the clinical relationship underneath, at a scale no
+local collection will reach for years.
 
 ---
 
@@ -163,11 +204,30 @@ useful than the current synthetic prices.
 | Drug brand→generic | **Yes — several sources, 25k+ entries** | Licence check; DGDA export needs a session |
 | Bangla symptom vocabulary | **Partly — 172 symptoms, 85 diseases** | Structured pairs, not free text |
 | Bed occupancy (daily, per ward) | Aggregated only | Needs a hospital data-sharing agreement |
-| **Symptom text with a clinician urgency label** | **No** | **Must be collected. Ethics approval + clinical partner.** |
+| Triage label ↔ presentation (English) | **Yes — 10,207 rows verified, no registration** | None for NHAMCS; PhysioNet needs CITI training |
+| **Bangla symptom text with a clinician urgency label** | **No** | **Must be collected. Ethics approval + clinical partner.** |
 
-The first three can be done now and would remove most of the synthetic data
-from the system. The last one cannot be bought or downloaded, and it is the one
-that decides whether the triage model is safe to use on real patients.
+The first four can be done now and would remove most of the synthetic data from
+the system. English ED data additionally fixes the severity prior, which is
+currently uniform and therefore wrong.
+
+The last one cannot be bought or downloaded. It is the one that decides whether
+the triage model is safe to use on real Bangladeshi patients, and it is the only
+item on this list that requires a hospital to say yes.
+
+## Collecting the Bangla corpus
+
+The realistic route is a partner hospital's outpatient department:
+
+1. At registration, record the complaint **in the patient's own words** — no
+   rewriting into clinical language, no correcting spelling. Romanised Bangla
+   and code-switching are the signal, not noise.
+2. The attending doctor ticks the urgency band they actually assigned, and the
+   final diagnosis once known.
+3. De-identify before anything leaves the hospital.
+
+3,000–5,000 rows is enough to retire the synthetic corpus. At 30 patients a day
+in one busy OPD, that is roughly four to six months.
 
 ---
 
