@@ -12,7 +12,7 @@ this file now guards against.
 
 ## Current state
 
-**149 automated tests passing. 99 API endpoints. Lint clean.**
+**267 automated tests passing. 112 API endpoints. Lint clean.**
 
 | Phase | Status |
 |---|---|
