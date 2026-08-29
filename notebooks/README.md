@@ -8,6 +8,7 @@ intermediate numbers and change a parameter without editing the pipeline.
 | `01_triage_model.ipynb` | Symptom text → 5-level urgency | macro-F1 0.86, emergency recall 0.99 |
 | `02_skin_lesion_model.ipynb` | Lesion photograph → referral band | malignant recall 0.92, AUC 0.91 |
 | `03_bed_surge_model.ipynb` | Ward occupancy 24/48/72h ahead | MAE 2.7–3.0 beds |
+| `04_medical_imaging_models.ipynb` | Skin conditions, lesions, chest X-ray | urgent recall 0.74, AUC 0.87 |
 
 ## Running them
 
@@ -16,7 +17,7 @@ pip install -r backend/requirements.txt jupyter
 jupyter notebook notebooks/
 ```
 
-The skin notebook downloads about 2.8 GB the first time. The other two run in
+The imaging notebooks download about 4.5 GB the first time. The other two run in
 a couple of minutes.
 
 ## Why they are generated
