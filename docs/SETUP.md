@@ -95,8 +95,19 @@ Takes about a minute.
 python ml/prepare_all.py
 ```
 
-Takes roughly 90 seconds. It generates the training data and trains the triage
-and surge models. You only ever need to do this once.
+Takes roughly 90 seconds. It downloads the real reference data (hospital
+locations, emergency department complaints, dengue counts), generates the
+remaining training corpora, and trains the triage and surge models.
+
+The downloads are cached under `data/real/_cache`, so re-running is fast and
+works offline afterwards.
+
+If this step reports `openpyxl is not installed` or `pypdf is not installed`,
+step 3 was run before those were added to the requirements — re-run it:
+
+```bash
+pip install -r backend/requirements.txt
+```
 
 You should see `All datasets and artifacts ready`.
 
@@ -261,6 +272,12 @@ Then in your browser console on the site, run:
 localStorage.setItem('sasthosetu.apiBase', 'http://localhost:8001/api/v1')
 ```
 and reload.
+
+**`UnicodeEncodeError: 'charmap' codec can't encode characters` (Windows)**
+
+An older copy of the scripts wrote files using the platform default encoding,
+which on Windows is cp1252 and cannot represent Bangla. Every text write now
+names UTF-8 explicitly, so `git pull` resolves it.
 
 **`no such table: hospitals`**
 Step 6 was skipped or run from the wrong folder. Run `alembic upgrade head`

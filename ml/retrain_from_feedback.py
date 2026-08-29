@@ -107,7 +107,7 @@ def collect_corrections(min_rows: int) -> pd.DataFrame:
 def read_metrics() -> dict:
     if not METRICS.exists():
         return {}
-    return json.loads(METRICS.read_text())
+    return json.loads(METRICS.read_text(encoding="utf-8"))
 
 
 def _restore(corpus_backup: Path, model_backup: Path) -> None:

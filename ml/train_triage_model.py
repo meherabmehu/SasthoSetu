@@ -188,7 +188,9 @@ def main() -> None:
         "labels": [1, 2, 3, 4, 5],
         "seed": SEED,
     }
-    (ART / "triage_metrics.json").write_text(json.dumps(metrics, indent=2))
+    (ART / "triage_metrics.json").write_text(
+        json.dumps(metrics, indent=2), encoding="utf-8"
+    )
 
     pd.DataFrame(
         matrix,
