@@ -210,6 +210,16 @@ def seed_doctors(db) -> int:
             doctor.specialization = record["specialty"]
             doctor.consultation_fee = float(record.get("consult_fee_bdt", 800))
             doctor.verification_status = bool(record.get("bmdc_verified", True))
+            # The posting has to be refreshed too. Leaving it stale pinned
+            # every doctor to the five hand-written hospitals even after the
+            # real facility list replaced them, so proximity ranking silently
+            # returned a Dhaka doctor to a patient in Rangpur with no distance.
+            doctor.hospital_name = record.get(
+                "hospital_name", doctor.hospital_name
+            )
+            doctor.experience_years = int(
+                record.get("experience_years", doctor.experience_years)
+            )
 
         for date_text in upcoming:
             for slot in record.get("available_slots", []):

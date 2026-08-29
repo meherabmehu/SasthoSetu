@@ -201,3 +201,39 @@ class PortabilityTests(unittest.TestCase):
         for package in ("openpyxl", "pypdf"):
             with self.subTest(package=package):
                 self.assertIn(package, requirements)
+
+
+class DoctorPostingTests(unittest.TestCase):
+    """Re-seeding must move doctors when the facility list changes.
+
+    The update branch refreshed a doctor's specialty and fee but not their
+    hospital. When the five hand-written hospitals were replaced by the real
+    facility list, every existing doctor stayed pinned to a hospital that was
+    no longer the one they were seeded against — so a patient in Rangpur was
+    recommended a Dhaka doctor, with no distance at all because the hospital
+    lookup missed.
+    """
+
+    def test_the_seed_refreshes_an_existing_doctors_hospital(self):
+        import inspect
+
+        source = inspect.getsource(seed.seed_doctors)
+
+        # The create branch sets it; the update branch has to as well.
+        self.assertGreaterEqual(
+            source.count("hospital_name"), 2,
+            "seed_doctors must update hospital_name on an existing doctor, "
+            "not only when creating one",
+        )
+
+    def test_seeded_doctors_span_many_hospitals(self):
+        doctors = json.loads(
+            (Path(__file__).resolve().parents[2] / "data" / "seed"
+             / "doctors.json").read_text(encoding="utf-8")
+        )
+        hospitals = {d["hospital_name"] for d in doctors}
+        self.assertGreater(
+            len(hospitals), 10,
+            "doctors are clustered on a handful of hospitals, so patients "
+            "outside those cities have nobody nearby",
+        )
