@@ -147,8 +147,7 @@ def main() -> None:
         "logistic_regression": Pipeline([
             ("scale", StandardScaler()),
             ("clf", LogisticRegression(
-                max_iter=2000, class_weight="balanced",
-                multi_class="multinomial", random_state=SEED,
+                max_iter=2000, class_weight="balanced", random_state=SEED,
             )),
         ]),
     }
