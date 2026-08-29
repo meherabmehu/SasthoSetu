@@ -12,15 +12,18 @@ Produces:
     data/real/{nhamcs_ed_triage,bd_health_facilities,bd_dengue_*}.csv
     data/seed/{hospitals,pharmacies,laboratories,doctors}.json
     data/drugs/{bd_brand_aliases,drug_interactions}.csv
-    data/triage/symptom_triage_dataset.csv   (9,000 rows)
+    data/triage/symptom_triage_dataset.csv   (generated + real presentations)
+    data/real/skin/metadata.csv              (HAM10000 labels)
     data/surge/{bed_utilization,surge_events}.csv
     data/surveillance/{weekly_surveillance,injected_outbreaks}.csv
     backend/app/ai/artifacts/{triage_model.joblib, triage_metrics.json,
                               triage_confusion.csv, surge_model.joblib,
-                              surge_metrics.json}
+                              surge_metrics.json, skin_model.joblib,
+                              skin_metrics.json}
 """
 from __future__ import annotations
 
+import argparse
 import subprocess
 import sys
 import time
@@ -34,7 +37,9 @@ STEPS = [
     ("Facility seed from real coordinates", "build_facility_seed.py"),
     ("Seed data (doctors)", "generate_seed.py"),
     ("Drug knowledge base (brands + interactions)", "generate_drug_kb.py"),
-    ("Triage corpus (9,000 rows)", "generate_triage_dataset.py"),
+    ("Bangla notes from real ED presentations", "build_bangla_from_real.py"),
+    ("Triage corpus (generated + real presentations)",
+     "build_triage_corpus.py"),
     ("Bed utilization logs (2 years x 5 hospitals)", "generate_bed_logs.py"),
     ("Surveillance corpus (12 districts x 8 diseases)",
      "generate_surveillance.py"),
@@ -42,13 +47,42 @@ STEPS = [
     ("Train surge forecaster", "train_surge_model.py"),
 ]
 
+# The skin model needs 2.8 GB of dermatoscopic images, which is a long download
+# and a non-commercial licence. It is offered rather than forced: without it
+# the rest of the platform works and the skin page reports itself unavailable.
+OPTIONAL = [
+    ("Skin lesion images (HAM10000, ~2.8 GB)", "fetch_skin_data.py"),
+    ("Train skin lesion classifier", "train_skin_model.py"),
+]
+
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--with-skin", action="store_true",
+        help="also download HAM10000 and train the skin lesion model",
+    )
+    parser.add_argument(
+        "--skip-download", action="store_true",
+        help="use whatever is already cached instead of fetching",
+    )
+    args = parser.parse_args()
+
+    steps = list(STEPS)
+    if args.skip_download:
+        steps = [s for s in steps if s[1] != "fetch_real_data.py"]
+    if args.with_skin:
+        steps = steps + OPTIONAL
+
     t0 = time.time()
-    for label, script in STEPS:
+    for label, script in steps:
         print(f"\n=== {label} -> {script}")
         subprocess.run([sys.executable, str(ML / script)], check=True)
+
     print(f"\nAll datasets and artifacts ready in {time.time() - t0:.0f}s.")
+    if not args.with_skin:
+        print("Skin lesion model not built. Add --with-skin to include it "
+              "(downloads about 2.8 GB).")
 
 
 if __name__ == "__main__":

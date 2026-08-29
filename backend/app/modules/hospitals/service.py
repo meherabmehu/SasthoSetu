@@ -343,6 +343,11 @@ def find_nearby_service(
                 "district": hospital.district,
                 "area": hospital.area,
                 "phone": hospital.phone,
+                # Coordinates are returned so a client can place the facility
+                # on a map. Without them the map page can compute a distance
+                # but cannot draw a pin.
+                "latitude": hospital.latitude,
+                "longitude": hospital.longitude,
                 "distance_km": _distance_km(
                     latitude, longitude, hospital.latitude, hospital.longitude
                 ),

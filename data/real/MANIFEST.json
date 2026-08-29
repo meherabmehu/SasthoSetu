@@ -3,6 +3,10 @@
     "rows": 767,
     "bytes": 153335
   },
+  "bangla_from_nhamcs.csv": {
+    "rows": 12466,
+    "bytes": 1175996
+  },
   "bd_dengue_by_division.csv": {
     "rows": 48,
     "bytes": 1073

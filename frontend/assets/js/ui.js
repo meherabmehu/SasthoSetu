@@ -123,11 +123,13 @@ const NAV_BY_ROLE = {
   PATIENT: [
     ['index.html', 'nav.home'],
     ['triage.html', 'nav.triage'],
+    ['skin.html', 'nav.skin'],
     ['recommend.html', 'nav.doctors'],
     ['appointments.html', 'nav.appointments'],
     ['review.html', 'review.title'],
     ['records.html', 'nav.records'],
     ['hospitals.html', 'nav.hospitals'],
+    ['map.html', 'nav.map'],
     ['pharmacy.html', 'nav.pharmacy'],
   ],
   DOCTOR: [

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>কাছের হাসপাতাল · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<style>
+  /* The map has to be tall enough to be useful on a phone but must not push
+     the list off the screen entirely. */
+  #map { height: 62vh; min-height: 320px; border-radius: var(--radius);
+         z-index: 0; }
+  .map-fallback { padding: 2rem 1rem; text-align: center; }
+  .leaflet-popup-content { margin: .6rem .8rem; font-family: inherit; }
+  .pin-you { background: var(--teal-600); border: 3px solid #fff;
+             border-radius: 50%; box-shadow: 0 0 0 2px var(--teal-600); }
+</style>
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="map.title">কাছের হাসপাতাল — মানচিত্রে</h1>
+      <p class="muted" id="status"></p>
+    </div>
+
+    <form class="card" id="filters">
+      <div class="grid">
+        <div class="field mb-0">
+          <label class="label" for="ward" data-i18n="triage.specialty">বিভাগ</label>
+          <select id="ward" class="input">
+            <option value="">—</option>
+            <option value="emergency">Emergency</option>
+            <option value="icu">ICU</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <label class="row gap-2">
+            <input type="checkbox" id="emergencyOnly">
+            <span data-i18n="map.emergencyOnly">শুধু জরুরি বিভাগ আছে এমন</span>
+          </label>
+        </div>
+        <div class="field mb-0" style="align-self:end">
+          <button class="btn btn-block" type="button" id="locateBtn"
+                  data-i18n="rec.useLocation">আমার অবস্থান দিয়ে খুঁজুন</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="map" class="mt-4" role="application"
+         aria-label="Nearby hospitals map"></div>
+
+    <div id="list" class="mt-4" aria-live="polite"></div>
+  </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, skeletonList, emptyState, errorState,
+         requireAuth } from './assets/js/ui.js';
+
+bootstrap('map.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+const BN = i18n.lang === 'bn';
+const statusEl = document.getElementById('status');
+const listEl = document.getElementById('list');
+
+// Dhaka, used only as the initial view before a real position arrives.
+const FALLBACK = [23.8103, 90.4125];
+
+let map = null;
+let markers = [];
+let youMarker = null;
+let coords = null;
+
+function initMap() {
+  if (typeof L === 'undefined') {
+    // Leaflet is loaded from a CDN. Offline or behind a filter it will not
+    // arrive, and the list below still works, so say so rather than failing.
+    document.getElementById('map').innerHTML =
+      `<div class="map-fallback muted">${escapeHtml(
+        BN ? 'মানচিত্র লোড হয়নি — নিচের তালিকা ব্যবহার করুন।'
+           : 'The map could not load — use the list below.')}</div>`;
+    return false;
+  }
+
+  map = L.map('map', { scrollWheelZoom: false }).setView(FALLBACK, 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap contributors',
+  }).addTo(map);
+  return true;
+}
+
+const hasMap = initMap();
+
+function clearMarkers() {
+  markers.forEach((m) => map.removeLayer(m));
+  markers = [];
+}
+
+function pin(hospital) {
+  const emergency = hospital.has_emergency;
+  const colour = emergency ? '#c0392b' : '#1b817d';
+  return L.divIcon({
+    className: '',
+    html: `<div style="background:${colour};width:16px;height:16px;
+             border-radius:50% 50% 50% 0;transform:rotate(-45deg);
+             border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 16],
+  });
+}
+
+function popupHtml(hospital) {
+  const distance = hospital.distance_km !== null
+    && hospital.distance_km !== undefined
+    ? `<div class="small muted">${hospital.distance_km} km ${escapeHtml(i18n.t('rec.away'))}</div>`
+    : '';
+
+  const beds = hospital.available_beds !== null
+    && hospital.available_beds !== undefined
+    ? `<div class="small">${escapeHtml(i18n.t('hospital.beds'))}: 
+         <strong>${hospital.available_beds}</strong></div>`
+    : '';
+
+  // Opens the device's own map app, which is what people actually navigate
+  // with. geo: is honoured by Android; the OSM link is the desktop fallback.
+  const directions =
+    `<a class="small" target="_blank" rel="noopener"
+        href="https://www.openstreetmap.org/directions?to=${hospital.latitude}%2C${hospital.longitude}">
+       ${escapeHtml(i18n.t('map.directions'))}</a>`;
+
+  return `<strong>${escapeHtml(hospital.name)}</strong>
+    ${distance}${beds}
+    <div class="mt-2">${directions}</div>`;
+}
+
+function render(hospitals) {
+  if (hasMap) {
+    clearMarkers();
+    hospitals.forEach((h) => {
+      if (h.latitude == null || h.longitude == null) return;
+      const marker = L.marker([h.latitude, h.longitude], { icon: pin(h) })
+        .addTo(map)
+        .bindPopup(popupHtml(h));
+      markers.push(marker);
+    });
+
+    const points = markers.map((m) => m.getLatLng());
+    if (coords) points.push(L.latLng(coords.latitude, coords.longitude));
+    if (points.length) {
+      map.fitBounds(L.latLngBounds(points).pad(0.15), { maxZoom: 14 });
+    }
+  }
+
+  listEl.innerHTML = hospitals.length
+    ? hospitals.map((h) => `
+        <article class="card" style="margin-bottom:.6rem">
+          <div class="row-between">
+            <div>
+              <h4 class="mb-0">${escapeHtml(h.name)}</h4>
+              <div class="small muted">${escapeHtml(h.district || '')}
+                ${h.distance_km != null
+                  ? `· ${h.distance_km} km ${escapeHtml(i18n.t('rec.away'))}` : ''}</div>
+            </div>
+            ${h.has_emergency
+              ? `<span class="badge badge-danger">${escapeHtml(i18n.t('hospital.emergency'))}</span>`
+              : ''}
+          </div>
+          <a class="btn btn-secondary btn-sm mt-2"
+             href="hospital-detail.html?id=${encodeURIComponent(h.id)}">
+            ${escapeHtml(i18n.t('action.view'))}</a>
+        </article>`).join('')
+    : emptyState('status.none', '\uD83C\uDFE5');
+}
+
+async function search() {
+  listEl.innerHTML = skeletonList(3);
+
+  const query = new URLSearchParams({ limit: '25' });
+  if (coords) {
+    query.set('latitude', coords.latitude);
+    query.set('longitude', coords.longitude);
+  }
+  const ward = document.getElementById('ward').value;
+  if (ward) query.set('ward_type', ward);
+  if (document.getElementById('emergencyOnly').checked) {
+    query.set('emergency', 'true');
+  }
+
+  try {
+    const results = await api.get(`/hospitals/nearby?${query}`, { cache: true });
+    render(Array.isArray(results) ? results : (results.items || []));
+  } catch (error) {
+    listEl.innerHTML = errorState(error.message);
+  }
+}
+
+function requestLocation(silent) {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      statusEl.textContent = BN
+        ? 'এই ব্রাউজারে অবস্থান সুবিধা নেই।'
+        : 'Location is unavailable in this browser.';
+      resolve();
+      return;
+    }
+    statusEl.textContent = i18n.t('map.locating');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        coords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        statusEl.textContent = BN
+          ? 'অবস্থান পাওয়া গেছে — দূরত্ব অনুযায়ী সাজানো হয়েছে।'
+          : 'Location found — sorted by distance.';
+
+        if (hasMap) {
+          if (youMarker) map.removeLayer(youMarker);
+          youMarker = L.circleMarker(
+            [coords.latitude, coords.longitude],
+            { radius: 8, color: '#1b817d', fillColor: '#1b817d',
+              fillOpacity: 0.9, weight: 3 },
+          ).addTo(map).bindPopup(escapeHtml(i18n.t('map.you')));
+          map.setView([coords.latitude, coords.longitude], 13);
+        }
+        resolve();
+      },
+      () => {
+        // Refusing location must never block the page: the list still works,
+        // just without distances.
+        coords = null;
+        statusEl.textContent = BN
+          ? 'অবস্থান পাওয়া যায়নি — সব হাসপাতাল দেখানো হচ্ছে।'
+          : 'Location unavailable — showing all hospitals.';
+        resolve();
+      },
+      { timeout: 8000, enableHighAccuracy: false },
+    );
+  });
+}
+
+document.getElementById('locateBtn')
+  .addEventListener('click', () => requestLocation(false).then(search));
+document.getElementById('ward').addEventListener('change', search);
+document.getElementById('emergencyOnly').addEventListener('change', search);
+
+// Proximity is the whole point of this page, so the position is resolved
+// before the first search rather than after a second request.
+const locating = navigator.geolocation
+  ? requestLocation(true)
+  : Promise.resolve();
+
+locating.then(search);
+</script>
+</body>
+</html>
