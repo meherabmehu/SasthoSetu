@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>বুকের এক্স-রে · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1 data-i18n="xray.title">বুকের এক্স-রে পরীক্ষা</h1>
+      <p class="muted" data-i18n="xray.subtitle">
+        বুকের এক্স-রে ফিল্মের ছবি দিন — নিউমোনিয়ার লক্ষণ আছে কিনা দেখবে।</p>
+    </div>
+
+    <form class="card" id="skinForm">
+      <div class="field">
+        <label class="label" for="photo" data-i18n="xray.choose">এক্স-রে ফিল্মের ছবি দিন</label>
+        <!-- capture lets a phone open the camera directly, which is how most
+             people here will use this. -->
+        <input id="photo" class="input" type="file"
+               accept="image/jpeg,image/png,image/webp" capture="environment">
+        <p class="tiny subtle mt-2" data-i18n="xray.tips">
+          ফিল্মটি আলোর সামনে ধরে, সোজা করে, পুরো ছবিটি ফ্রেমে রেখে তুলুন।</p>
+      </div>
+
+      <div id="preview" class="mt-4"></div>
+
+      <div class="field mt-4">
+        <label class="label" for="age" data-i18n="triage.age">বয়স (বছর)</label>
+        <input id="age" class="input" type="number" min="0" max="120" inputmode="numeric">
+      </div>
+
+      <p class="error-text hidden" id="skinError" role="alert"></p>
+
+      <button class="btn btn-block" type="submit" id="submitBtn"
+              data-i18n="xray.analyze">পরীক্ষা করুন</button>
+    </form>
+
+    <div id="result" class="mt-4" aria-live="polite"></div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, API_BASE, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, setBusy, requireAuth } from './assets/js/ui.js';
+
+bootstrap('xray.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+const MAX_BYTES = 12 * 1024 * 1024;
+
+const form = document.getElementById('skinForm');
+const photoEl = document.getElementById('photo');
+const previewEl = document.getElementById('preview');
+const errorEl = document.getElementById('skinError');
+const resultEl = document.getElementById('result');
+const submitBtn = document.getElementById('submitBtn');
+
+const BAND_STYLE = {
+  urgent_review: { cls: 'alert-danger', icon: '\u26A0' },
+  doctor_review: { cls: 'alert-warning', icon: '\uD83E\uDE7A' },
+};
+
+photoEl.addEventListener('change', () => {
+  errorEl.classList.add('hidden');
+  previewEl.innerHTML = '';
+  const file = photoEl.files?.[0];
+  if (!file) return;
+
+  if (file.size > MAX_BYTES) {
+    errorEl.textContent = i18n.t('skin.tooBig');
+    errorEl.classList.remove('hidden');
+    photoEl.value = '';
+    return;
+  }
+
+  // Shown at a bounded size so a 12 MP photo does not push the button off
+  // the screen on a small phone.
+  const url = URL.createObjectURL(file);
+  previewEl.innerHTML =
+    `<img src="${url}" alt="" style="max-width:100%;max-height:260px;
+       border-radius:var(--radius);display:block;margin:0 auto">`;
+});
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  errorEl.classList.add('hidden');
+
+  const file = photoEl.files?.[0];
+  if (!file) {
+    errorEl.textContent = i18n.t('xray.needPhoto');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  const body = new FormData();
+  body.append('image', file);
+  const age = document.getElementById('age').value;
+  if (age !== '') body.append('age_years', age);
+
+  setBusy(submitBtn, true, i18n.t('xray.analyzing'));
+  resultEl.innerHTML = `<div class="card"><div class="skeleton" style="height:80px"></div></div>`;
+
+  try {
+    // Sent with fetch rather than the JSON helper because this is multipart.
+    const response = await fetch(`${API_BASE}/ai/xray-check`, {
+      method: 'POST',
+      headers: session.token ? { Authorization: `Bearer ${session.token}` } : {},
+      body,
+    });
+
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
+
+    if (!response.ok) {
+      throw new Error(data?.detail || i18n.t('status.error'));
+    }
+
+    render(data);
+  } catch (error) {
+    resultEl.innerHTML =
+      `<div class="alert alert-danger">${escapeHtml(error.message)}</div>`;
+  } finally {
+    setBusy(submitBtn, false);
+  }
+});
+
+function render(data) {
+  const style = BAND_STYLE[data.band] || BAND_STYLE.doctor_review;
+  const advice = i18n.pick(data.advice, data.advice_bn);
+  const disclaimer = i18n.pick(data.disclaimer, data.disclaimer_bn);
+
+  const causes = (data.findings || []).map((item) => {
+    const pct = Math.round((item.likelihood || 0) * 100);
+    const name = i18n.pick(item.name_en, item.name_bn);
+    return `<div class="row-between" style="padding:.4rem 0">
+        <span>${escapeHtml(name)}</span>
+        <strong>${pct}%</strong>
+      </div>`;
+  }).join('');
+
+  const findDoctor = data.recommended_specialty
+    ? `<a class="btn btn-block mt-4" href="recommend.html?${new URLSearchParams({
+         specialty: data.recommended_specialty,
+         urgent: data.urgent ? 'true' : 'false',
+       })}">${escapeHtml(i18n.t('rec.title'))}</a>`
+    : '';
+
+  resultEl.innerHTML = `
+    <div class="alert ${style.cls}">
+      <div style="font-size:1.6rem" aria-hidden="true">${style.icon}</div>
+      <div class="mt-2"><strong>${escapeHtml(advice)}</strong></div>
+    </div>
+
+    <div class="card mt-4">
+      <h3 class="mb-0">${escapeHtml(i18n.t('xray.findings'))}</h3>
+      <div class="mt-2">${causes}</div>
+      <p class="tiny subtle mt-4">${escapeHtml(disclaimer)}</p>
+    </div>
+
+    ${findDoctor}`;
+
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>
