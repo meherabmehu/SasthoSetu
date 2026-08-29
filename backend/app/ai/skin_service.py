@@ -116,22 +116,71 @@ class SkinModelError(RuntimeError):
 
 @lru_cache(maxsize=1)
 def _bundle() -> dict:
+    """The pigmented-lesion model, trained on HAM10000. Optional."""
     path = _ART / "skin_model.joblib"
     if not path.exists():
         raise SkinModelError(
-            f"The skin lesion model is missing at {path}. Build it with: "
+            f"The pigmented lesion model is missing at {path}. Build it with: "
             "python ml/fetch_skin_data.py && python ml/train_skin_model.py"
         )
     return joblib.load(path)
 
 
-def model_available() -> bool:
-    """Whether the model can be served, without raising if it cannot."""
+@lru_cache(maxsize=1)
+def _general_bundle() -> dict:
+    """The general skin condition model, trained on DermNet.
+
+    This one carries the conditions people here actually present with —
+    ringworm, scabies, eczema, nail fungus — and is trained on ordinary
+    photographs rather than dermatoscope images, so it is the primary model.
+    """
+    path = _ART / "dermnet_model.joblib"
+    if not path.exists():
+        raise SkinModelError(
+            f"The skin condition model is missing at {path}. Build it with: "
+            "python ml/fetch_medical_datasets.py --only dermnet && "
+            "python ml/train_dermnet_model.py"
+        )
+    return joblib.load(path)
+
+
+def _assess_general(features) -> dict | None:
+    """Referral band from the DermNet model, or None if it is not built."""
     try:
-        _bundle()
-    except (SkinModelError, Exception):  # noqa: BLE001
-        return False
-    return True
+        bundle = _general_bundle()
+    except SkinModelError:
+        return None
+
+    model = bundle["model"]
+    urgent_at = bundle.get("urgent_threshold", 0.3)
+    checked_at = bundle.get("checked_threshold", 0.45)
+
+    probabilities = model.predict_proba(features)[0]
+    classes = list(model.classes_)
+    score = dict(zip(classes, (float(p) for p in probabilities), strict=True))
+
+    urgent = score.get("see_doctor_soon", 0.0)
+    checked = urgent + score.get("get_it_checked", 0.0)
+
+    if urgent >= urgent_at:
+        band = "see_doctor_soon"
+    elif checked >= checked_at:
+        band = "get_it_checked"
+    else:
+        band = "watch_it"
+
+    return {"band": band, "scores": score}
+
+
+def model_available() -> bool:
+    """Whether any skin model can be served, without raising if none can."""
+    for loader in (_general_bundle, _bundle):
+        try:
+            loader()
+            return True
+        except Exception:  # noqa: BLE001
+            continue
+    return False
 
 
 def _open(payload: bytes) -> Image.Image:
@@ -153,45 +202,107 @@ def _open(payload: bytes) -> Image.Image:
     return image
 
 
-def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
-    """Assess one photograph and return a referral band with its reasoning."""
-    bundle = _bundle()
-    model = bundle["model"]
-    threshold = bundle.get("referral_threshold", 0.5)
-    referral_classes = set(bundle.get("referral_classes", []))
+BAND_ORDER = ["watch_it", "get_it_checked", "see_doctor_soon"]
 
+
+def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
+    """Assess one photograph and return a referral band with its reasoning.
+
+    Two models may contribute. The DermNet model covers 23 conditions from
+    ordinary photographs and is the primary answer. The HAM10000 model is
+    narrow — pigmented lesions only — but far better evidenced for malignancy,
+    so where it is built and it reads the lesion as concerning, it can raise
+    the band. Neither model can lower what the other raised.
+    """
     image = _open(payload)
     features = extract_features(image).reshape(1, -1)
 
-    probabilities = model.predict_proba(features)[0]
-    classes = list(model.classes_)
+    general = _assess_general(features)
 
-    ranked = sorted(
-        (
-            {
-                "code": code,
-                "name_en": DIAGNOSES.get(code, {}).get("en", code),
-                "name_bn": DIAGNOSES.get(code, {}).get("bn", code),
-                "risk": DIAGNOSES.get(code, {}).get("risk", "unknown"),
-                "likelihood": round(float(probability), 4),
-            }
+    ranked: list[dict] = []
+    concerning = 0.0
+    threshold = 0.5
+    band = None
+
+    try:
+        bundle = _bundle()
+    except SkinModelError:
+        bundle = None
+
+    if bundle is not None:
+        model = bundle["model"]
+        threshold = bundle.get("referral_threshold", 0.5)
+        referral_classes = set(bundle.get("referral_classes", []))
+
+        probabilities = model.predict_proba(features)[0]
+        classes = list(model.classes_)
+
+        ranked = sorted(
+            (
+                {
+                    "code": code,
+                    "name_en": DIAGNOSES.get(code, {}).get("en", code),
+                    "name_bn": DIAGNOSES.get(code, {}).get("bn", code),
+                    "risk": DIAGNOSES.get(code, {}).get("risk", "unknown"),
+                    "likelihood": round(float(probability), 4),
+                }
+                for code, probability in zip(classes, probabilities,
+                                             strict=True)
+            ),
+            key=lambda item: -item["likelihood"],
+        )
+
+        concerning = sum(
+            float(probability)
             for code, probability in zip(classes, probabilities, strict=True)
-        ),
-        key=lambda item: -item["likelihood"],
-    )
+            if code in referral_classes
+        )
 
-    concerning = sum(
-        float(probability)
-        for code, probability in zip(classes, probabilities, strict=True)
-        if code in referral_classes
-    )
+        if concerning >= threshold:
+            band = "see_doctor_soon"
+        elif concerning >= threshold / 2:
+            band = "get_it_checked"
+        else:
+            band = "watch_it"
 
-    if concerning >= threshold:
-        band = "see_doctor_soon"
-    elif concerning >= threshold / 2:
-        band = "get_it_checked"
-    else:
-        band = "watch_it"
+    if general is not None:
+        if not ranked:
+            # Without the pigmented-lesion model there are no named diagnoses
+            # to show, so the bands themselves are reported. A patient still
+            # sees what the assessment was based on rather than a bare verdict.
+            ranked = sorted(
+                (
+                    {
+                        "code": name,
+                        "name_en": BANDS[name]["en"],
+                        "name_bn": BANDS[name]["bn"],
+                        "risk": ("concerning" if name == "see_doctor_soon"
+                                 else "uncertain" if name == "get_it_checked"
+                                 else "reassuring"),
+                        "likelihood": round(float(score), 4),
+                    }
+                    for name, score in general["scores"].items()
+                ),
+                key=lambda item: -item["likelihood"],
+            )
+            concerning = round(
+                float(general["scores"].get("see_doctor_soon", 0.0)), 4
+            )
+
+        if band is None:
+            band = general["band"]
+        else:
+            # Take whichever model is more concerned. A pigmented-lesion model
+            # shown a fungal infection has nothing useful to say, and the
+            # reverse is also true, so the safer reading wins.
+            band = max(band, general["band"], key=BAND_ORDER.index)
+
+    if band is None:
+        raise SkinModelError(
+            "No skin model is built. Build at least one with: "
+            "python ml/fetch_medical_datasets.py --only dermnet && "
+            "python ml/train_dermnet_model.py"
+        )
 
     # Older skin carries a higher baseline risk, so a borderline result in an
     # older patient is nudged towards review rather than away from it.
@@ -207,6 +318,12 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
         "concern_score": round(concerning, 4),
         "referral_threshold": round(float(threshold), 3),
         "differential": ranked[:4],
+        # Which models actually contributed, so a reviewer can tell whether a
+        # band came from the broad model, the pigmented-lesion one, or both.
+        "models": {
+            "general_conditions": general is not None,
+            "pigmented_lesions": bundle is not None,
+        },
         "disclaimer": DISCLAIMER["en"],
         "disclaimer_bn": DISCLAIMER["bn"],
         "model_version": MODEL_VERSION,
