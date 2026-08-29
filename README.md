@@ -39,7 +39,7 @@ users rather than an afterthought.
 | **Rural access** | SMS triage, IVR menus, offline CHW batch submission |
 | **Web apps** | Patient, doctor and admin surfaces; installable PWA that works offline |
 
-**234 automated tests.** Every red-flag rule is asserted in four phrasings —
+**267 automated tests.** Every red-flag rule is asserted in four phrasings —
 natural Bangla, romanised Banglish, English, and English paraphrase.
 
 ---
