@@ -74,6 +74,7 @@ cp backend/.env.example backend/.env           # defaults to SQLite, no edits ne
 cd backend && alembic upgrade head && cd ..
 python scripts/seed_database.py                # facilities, doctors, demo logins
 python scripts/refresh_availability.py         # republish the booking window
+python scripts/check_setup.py                  # verify the database is usable
 
 cd backend && uvicorn app.main:app --reload    # terminal 1
 ```

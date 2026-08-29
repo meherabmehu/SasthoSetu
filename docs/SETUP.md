@@ -151,7 +151,19 @@ have passed. Republish the window without re-seeding everything else:
 python scripts/refresh_availability.py
 ```
 
-### 8. Start the two servers
+### 8. Check it worked
+
+Seeding reports how many rows it *created*, which is zero on every run after
+the first. That is correct, but it says nothing about whether the data is
+right. This inspects the database and tells you:
+
+```bash
+python scripts/check_setup.py
+```
+
+Each line either passes or prints the command that fixes it.
+
+### 9. Start the two servers
 
 You need **two terminal windows**, both with the virtual environment active.
 
@@ -178,7 +190,7 @@ cd frontend
 python -m http.server 5500
 ```
 
-### 9. Open it
+### 10. Open it
 
 **http://localhost:5500**
 
