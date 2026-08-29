@@ -93,8 +93,10 @@ def main() -> None:
     joblib.dump({"models": models, "feature_cols": feat_cols,
                  "lags": LAGS, "horizons": HORIZONS},
                 ART / "surge_model.joblib", compress=3)
-    (ART / "surge_metrics.json").write_text(json.dumps(
-        {"holdout_days": 60, **metrics}, indent=2))
+    (ART / "surge_metrics.json").write_text(
+        json.dumps({"holdout_days": 60, **metrics}, indent=2),
+        encoding="utf-8",
+    )
     print(f"artifacts -> {ART}")
 
 

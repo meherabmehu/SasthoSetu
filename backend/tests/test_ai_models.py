@@ -280,7 +280,7 @@ class ModelQualityGateTests(unittest.TestCase):
     """Guard against a retrain silently regressing model quality."""
 
     def setUp(self):
-        self.metrics = json.loads(METRICS_FILE.read_text())
+        self.metrics = json.loads(METRICS_FILE.read_text(encoding="utf-8"))
 
     def test_macro_f1_above_threshold(self):
         self.assertGreaterEqual(self.metrics["test_macro_f1"], MIN_MACRO_F1)

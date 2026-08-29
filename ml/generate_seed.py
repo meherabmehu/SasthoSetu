@@ -123,10 +123,12 @@ def main(seed: int = 42) -> None:
     # rebuild never discards the real facility list.
     if not (OUT / "hospitals.json").exists():
         (OUT / "hospitals.json").write_text(
-            json.dumps(HOSPITALS, indent=2, ensure_ascii=False)
+            json.dumps(HOSPITALS, indent=2, ensure_ascii=False),
+            encoding="utf-8",
         )
     (OUT / "doctors.json").write_text(
-        json.dumps(doctors, indent=2, ensure_ascii=False)
+        json.dumps(doctors, indent=2, ensure_ascii=False),
+        encoding="utf-8",
     )
     specs = sorted({d["specialty"] for d in doctors})
     print(f"hospitals={len(hospitals)} doctors=50 "

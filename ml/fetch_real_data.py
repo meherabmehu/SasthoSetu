@@ -130,9 +130,12 @@ def _rfv_labels(doc_pdf: bytes) -> dict[str, str]:
     """
     try:
         from pypdf import PdfReader
-    except ImportError:
-        print("  pypdf is not installed; reason codes will stay numeric")
-        return {}
+    except ImportError as error:
+        raise RuntimeError(
+            "pypdf is required to read the survey codebook. Without it every "
+            "reason-for-visit stays a bare number and the export is empty. "
+            "Install it with: pip install -r backend/requirements.txt"
+        ) from error
 
     reader = PdfReader(io.BytesIO(doc_pdf))
     text = "\n".join((page.extract_text() or "") for page in reader.pages)
@@ -216,6 +219,16 @@ def fetch_nhamcs() -> Path:
 
     print(f"  wrote {out.relative_to(ROOT)}: {kept:,} visits "
           f"({skipped:,} without a usable triage level or reason)")
+
+    # An empty or near-empty export means the fixed-width column positions no
+    # longer match the file, which is silent corruption rather than an error.
+    # The 2022 survey yields roughly 9,400 usable visits.
+    if kept < 1000:
+        raise RuntimeError(
+            f"only {kept} usable visits were extracted, expected thousands. "
+            "The column positions in NHAMCS_FIELDS probably no longer match "
+            "this year's file layout — check the survey documentation."
+        )
     return out
 
 
@@ -270,9 +283,11 @@ def fetch_dengue() -> Path:
 
     try:
         import openpyxl
-    except ImportError:
-        print("  openpyxl is not installed; skipping")
-        return REAL / "bd_dengue_monthly.csv"
+    except ImportError as error:
+        raise RuntimeError(
+            "openpyxl is required to read the dengue workbook. Install it "
+            "with: pip install -r backend/requirements.txt"
+        ) from error
 
     book = openpyxl.load_workbook(io.BytesIO(payload), data_only=True)
     REAL.mkdir(parents=True, exist_ok=True)
@@ -312,9 +327,11 @@ def fetch_bangla_symptoms() -> Path:
 
     try:
         import openpyxl
-    except ImportError:
-        print("  openpyxl is not installed; skipping")
-        return REAL / "bangla_disease_symptoms.csv"
+    except ImportError as error:
+        raise RuntimeError(
+            "openpyxl is required to read the Bangla symptom workbook. "
+            "Install it with: pip install -r backend/requirements.txt"
+        ) from error
 
     with zipfile.ZipFile(io.BytesIO(payload)) as zf:
         member = next(n for n in zf.namelist() if n.endswith("dataset.xlsx"))
@@ -373,10 +390,12 @@ def main() -> None:
     for name in wanted:
         try:
             SOURCES[name]()
-        except (urllib.error.URLError, TimeoutError, OSError) as error:
+        except (urllib.error.URLError, TimeoutError, OSError,
+                RuntimeError) as error:
             # A source being unreachable must not stop the others: the caller
             # may be offline or behind a filter, and the cache may already
-            # hold what they need.
+            # hold what they need. A source that failed mid-write is different
+            # — the partial file is removed so nothing downstream reads it.
             print(f"  FAILED {name}: {error}")
             failures.append(name)
 

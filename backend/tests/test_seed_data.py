@@ -150,3 +150,54 @@ class RealDataTests(unittest.TestCase):
         districts = {h.get("district") for h in hospitals}
         self.assertGreater(len(hospitals), 100)
         self.assertGreater(len(districts), 5)
+
+
+class PortabilityTests(unittest.TestCase):
+    """Files must be written the same way on every platform.
+
+    Windows defaults to cp1252, which cannot represent Bangla. Any text write
+    that does not name its encoding therefore works on Linux and CI and then
+    crashes on a Bangladeshi developer's laptop with UnicodeEncodeError.
+    """
+
+    def test_every_text_write_declares_an_encoding(self):
+        import ast
+
+        root = Path(__file__).resolve().parents[2]
+        offenders = []
+
+        for path in root.rglob("*.py"):
+            if any(part in {".venv", "venv", "node_modules"}
+                   for part in path.parts):
+                continue
+            try:
+                tree = ast.parse(path.read_text(encoding="utf-8"))
+            except (SyntaxError, UnicodeDecodeError):
+                continue
+
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Call):
+                    continue
+                attribute = getattr(node.func, "attr", None)
+                if attribute in {"write_text", "read_text"}:
+                    if not any(k.arg == "encoding" for k in node.keywords):
+                        offenders.append(
+                            f"{path.relative_to(root)}:{node.lineno} "
+                            f"{attribute}()"
+                        )
+
+        self.assertEqual(
+            [], sorted(offenders),
+            "these calls will use the platform default encoding and break on "
+            "Windows for any Bangla content",
+        )
+
+    def test_the_workbook_readers_are_declared_dependencies(self):
+        """The real-data fetcher needs these; a silent skip produced 0 rows."""
+        requirements = (
+            Path(__file__).resolve().parents[1] / "requirements.txt"
+        ).read_text(encoding="utf-8").lower()
+
+        for package in ("openpyxl", "pypdf"):
+            with self.subTest(package=package):
+                self.assertIn(package, requirements)
