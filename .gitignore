@@ -43,3 +43,8 @@ backend/app/ai/artifacts/
 # HAM10000 images: 2.8 GB, CC BY-NC (non-commercial), re-fetchable with
 # ml/fetch_skin_data.py. The derived metadata CSV is committed.
 data/real/skin/images/
+
+# Extracted medical images (DermNet, chest X-ray): several GB, re-fetchable
+# with ml/fetch_medical_datasets.py. The label CSVs are committed.
+data/real/imaging/dermnet/
+data/real/imaging/chest_xray/
