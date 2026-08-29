@@ -101,6 +101,52 @@ vocabulary, not for training the triage classifier.
 
 ---
 
+---
+
+## `imaging/dermnet_labels.csv` — 15,557 skin photographs, 23 conditions
+
+**Source:** [Muzmmillcoste/dermnet](https://huggingface.co/datasets/Muzmmillcoste/dermnet)
+on Hugging Face, derived from DermNet.
+
+**Licence:** MIT.
+
+**Contents:** filename, condition, Bangla name, referral band, split. The
+images themselves are extracted to `imaging/dermnet/` and not committed.
+
+**Why this matters more than HAM10000 here.** HAM10000 covers pigmented
+lesions only. The conditions a Bangladeshi clinic actually sees — ringworm and
+other fungal infection (1,300 images), eczema (1,235), nail fungus (1,040),
+scabies, bacterial infection, acne — are absent from it entirely. These are
+also ordinary photographs rather than dermatoscope images, which is much closer
+to what a phone camera produces.
+
+**Caveats.** Web-sourced, so image quality varies and the labels are the site's
+own categories rather than biopsy-confirmed diagnoses. Predominantly
+light-skinned. The mapping from the 23 conditions to three referral bands is a
+clinical judgement made in `ml/fetch_medical_datasets.py` and is the first
+thing a doctor reviewing this project should check.
+
+---
+
+## `imaging/chest_xray_labels.csv` — 5,856 chest films
+
+**Source:** [mmenendezg/pneumonia_x_ray](https://huggingface.co/datasets/mmenendezg/pneumonia_x_ray),
+originally Kermany, Zhang & Goldbaum, Mendeley Data (2018).
+
+**Licence:** CC BY 4.0.
+
+**Contents:** filename, finding (normal or pneumonia), Bangla name, split.
+
+Pneumonia is among the leading causes of death in children under five in
+Bangladesh. Upazila health complexes can take a film; a radiologist to read it
+is often a district away.
+
+**Caveats.** Paediatric films from a single hospital in Guangzhou. Adult films
+and different equipment will look different, and a photograph of a film taken
+on a phone is not the same as the film itself.
+
+---
+
 ## What is still generated
 
 | Corpus | Why it is still synthetic |

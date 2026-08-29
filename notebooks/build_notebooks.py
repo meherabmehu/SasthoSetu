@@ -292,6 +292,141 @@ photograph cannot replace an examination.
     }
 
 
+def imaging_notebook() -> dict:
+    return {
+        "cells": [
+            markdown("""
+# Medical imaging models
+
+Three image models, each answering a different question. All three return a
+**referral band** rather than a diagnosis, because naming a disease to a
+patient from a phone photograph is not defensible — but telling them whether
+to see a doctor is useful and honest.
+
+| Model | Data | Question |
+|---|---|---|
+| Skin conditions | DermNet, 15,557 photographs, 23 conditions | Does this rash need a doctor? |
+| Pigmented lesions | HAM10000, 10,015 dermatoscopic images | Could this mole be cancer? |
+| Chest X-ray | 5,856 paediatric films | Does this film look like pneumonia? |
+
+**Why DermNet matters more here than HAM10000.** HAM10000 is beautifully
+labelled but covers only pigmented lesions. Ringworm, scabies, eczema and nail
+fungus — which is most of what walks into a Bangladeshi clinic — are not in it
+at all, so a model trained only on HAM10000 will confidently call ringworm an
+ordinary mole. DermNet's images are also ordinary photographs rather than
+dermatoscope images, which is much closer to what a phone produces.
+            """),
+            code(SETUP),
+            markdown("""
+## 1. Fetch
+
+About 1.7 GB for DermNet and the chest films, another 2.8 GB if you also want
+HAM10000. Cached, so a re-run is cheap.
+            """),
+            code("""
+subprocess.run([sys.executable, str(ROOT / "ml" / "fetch_medical_datasets.py")], check=True)
+"""),
+            code("""
+import pandas as pd
+
+derm = pd.read_csv(ROOT / "data" / "real" / "imaging" / "dermnet_labels.csv")
+print(f"{len(derm):,} skin photographs, {derm.condition.nunique()} conditions")
+display(derm.groupby("urgency").size())
+display(derm.condition_bn.value_counts().head(10))
+"""),
+            markdown("""
+Note how many of the top conditions are infections and inflammatory rashes.
+That is the clinical reality this tool has to handle.
+            """),
+            markdown("""
+## 2. Train the skin condition model
+            """),
+            code("""
+subprocess.run([sys.executable, str(ROOT / "ml" / "train_dermnet_model.py")], check=True)
+"""),
+            code("""
+metrics = json.loads((ROOT / "backend/app/ai/artifacts/dermnet_metrics.json").read_text())
+print(json.dumps(metrics, indent=2))
+"""),
+            markdown("""
+### Reading these numbers honestly
+
+Macro-F1 around 0.38 is low, and accuracy around 0.43 is little better than
+guessing among three bands. Taken at face value the model looks poor.
+
+The number that decides whether it is *safe* is different: how many genuinely
+urgent cases were told to stay home. Choosing the band by highest probability
+sent 167 of 583 urgent cases home. Deciding by cumulative probability against
+a threshold chosen on the validation split brings that to 18.
+
+The cost of the two errors is not symmetric, so the operating point is not
+where accuracy is highest. It errs towards review, and the interface wording
+reflects that.
+            """),
+            markdown("""
+## 3. Train the chest X-ray screen
+            """),
+            code("""
+subprocess.run([sys.executable, str(ROOT / "ml" / "train_chest_xray_model.py")], check=True)
+"""),
+            code("""
+metrics = json.loads((ROOT / "backend/app/ai/artifacts/chest_xray_metrics.json").read_text())
+print(json.dumps(metrics, indent=2))
+"""),
+            markdown("""
+## 4. Try them
+            """),
+            code("""
+import csv, pathlib
+from app.ai.skin_service import assess_skin_image
+from app.ai.xray_service import assess_chest_xray
+
+imaging = ROOT / "data" / "real" / "imaging"
+rows = list(csv.DictReader(open(imaging / "dermnet_labels.csv")))
+
+for condition in ("Tinea Ringworm Candidiasis and other Fungal Infections",
+                  "Scabies Lyme Disease and other Infestations and Bites",
+                  "Acne and Rosacea Photos"):
+    name = next(r["file"] for r in rows
+                if r["condition"] == condition and r["split"] == "test")
+    result = assess_skin_image((imaging / "dermnet" / name).read_bytes(), age=30)
+    print(f'{condition[:38]:40} -> {result["band"]}')
+"""),
+            code("""
+films = [r for r in csv.DictReader(open(imaging / "chest_xray_labels.csv"))
+         if r["split"] == "test"]
+for finding in ("pneumonia", "normal"):
+    name = next(r["file"] for r in films if r["finding"] == finding)
+    result = assess_chest_xray((imaging / "chest_xray" / name).read_bytes(), age=30)
+    print(f'truth={finding:10} -> {result["band"]:14} '
+          f'score={result["pneumonia_score"]:.3f}')
+"""),
+            markdown("""
+## Limitations, plainly
+
+- **DermNet is web-sourced.** Image quality varies enormously and the labels
+  are the site's own categories, not biopsy-confirmed.
+- **Skin tone.** Both skin datasets are predominantly light-skinned. How these
+  behave on Bangladeshi skin is unvalidated and cannot be assumed.
+- **The chest films are paediatric, from one hospital in China.** Adult films
+  and different equipment will look different.
+- **A photograph of an X-ray is not an X-ray.** Glare, angle and phone
+  processing all degrade the signal.
+
+None of these are fixed by more training. They are fixed by a clinical
+partnership and locally collected data, which is the same precondition that
+applies to every model in this project.
+            """),
+        ],
+        "metadata": {
+            "kernelspec": {"display_name": "Python 3", "language": "python",
+                           "name": "python3"},
+            "language_info": {"name": "python", "version": "3.12"},
+        },
+        "nbformat": 4, "nbformat_minor": 5,
+    }
+
+
 def surge_notebook() -> dict:
     return {
         "cells": [
@@ -355,6 +490,7 @@ def main() -> None:
         "01_triage_model.ipynb": triage_notebook(),
         "02_skin_lesion_model.ipynb": skin_notebook(),
         "03_bed_surge_model.ipynb": surge_notebook(),
+        "04_medical_imaging_models.ipynb": imaging_notebook(),
     }
     for name, content in notebooks.items():
         path = HERE / name
