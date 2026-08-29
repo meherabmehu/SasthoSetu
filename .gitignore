@@ -39,3 +39,7 @@ data/real/_cache/
 
 # Trained model artifacts (binary, rebuilt by ml/prepare_all.py)
 backend/app/ai/artifacts/
+
+# HAM10000 images: 2.8 GB, CC BY-NC (non-commercial), re-fetchable with
+# ml/fetch_skin_data.py. The derived metadata CSV is committed.
+data/real/skin/images/

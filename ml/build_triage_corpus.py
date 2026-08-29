@@ -41,6 +41,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 GENERATED = ROOT / "data" / "triage" / "symptom_triage_dataset.csv"
 REAL = ROOT / "data" / "real" / "nhamcs_ed_triage.csv"
+BANGLA_REAL = ROOT / "data" / "real" / "bangla_from_nhamcs.csv"
 OUT = GENERATED
 
 SEED = 42
@@ -166,6 +167,38 @@ def _load_real(rng: random.Random) -> list[dict]:
     return rows
 
 
+def _load_bangla_real() -> list[dict]:
+    """Bangla and Banglish notes derived from the real ED presentations.
+
+    Built by ml/build_bangla_from_real.py, which routes each recorded English
+    complaint through the symptom lexicon so the Bangla reads the way a patient
+    writes it. Severity is on our scale, derived by the same rules as the rest
+    of the corpus.
+    """
+
+    if not BANGLA_REAL.exists():
+        return []
+
+    rows = []
+    with BANGLA_REAL.open(encoding="utf-8") as fh:
+        for record in csv.DictReader(fh):
+            level = record.get("triage_level", "").strip()
+            if level not in {"1", "2", "3", "4", "5"}:
+                continue
+            rows.append({
+                "text": record["text"],
+                "language": record["language"],
+                "symptoms": record.get("symptoms", ""),
+                "duration_days": "",
+                "qualifier": "",
+                "age": record.get("age", ""),
+                "triage_level": int(level),
+                "split": "",
+                "source": "nhamcs_bangla",
+            })
+    return rows
+
+
 def main() -> None:
     rng = random.Random(SEED)
 
@@ -182,8 +215,17 @@ def main() -> None:
     print(f"  generated rows: {len(generated):,}")
 
     print("\n=== Real emergency department visits")
-    real = _load_real(rng)
-    print(f"  real rows     : {len(real):,}")
+    # The English rows are deliberately NOT trained on. They carry the survey's
+    # own urgency scale, which answers "how fast must this person be seen now
+    # that they are in an emergency department" — not "what should someone at
+    # home do". Training on both scales at once cost 15 points of macro-F1 and
+    # collapsed level-4 recall. They are still used, as vocabulary, by
+    # ml/extend_lexicon_from_real.py.
+    english = _load_real(rng)
+    print(f"  real English (vocabulary only, not trained on): {len(english):,}")
+
+    real = _load_bangla_real()
+    print(f"  real Bangla/Banglish (trained on)             : {len(real):,}")
 
     if not real:
         print("\nNo real rows available; leaving the generated corpus as is.")
