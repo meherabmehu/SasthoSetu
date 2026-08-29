@@ -124,6 +124,7 @@ const NAV_BY_ROLE = {
     ['index.html', 'nav.home'],
     ['triage.html', 'nav.triage'],
     ['skin.html', 'nav.skin'],
+    ['xray.html', 'nav.xray'],
     ['recommend.html', 'nav.doctors'],
     ['appointments.html', 'nav.appointments'],
     ['review.html', 'review.title'],

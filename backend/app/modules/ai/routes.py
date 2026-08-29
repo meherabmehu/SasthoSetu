@@ -23,6 +23,12 @@ from app.ai.skin_service import (
     model_available as skin_model_available,
 )
 
+from app.ai.xray_service import (
+    XrayModelError,
+    assess_chest_xray,
+    model_available as xray_model_available,
+)
+
 from app.modules.ai.service import (
     drug_check_service,
     ml_triage_service,
@@ -117,3 +123,38 @@ async def skin_check(
 )
 def skin_check_status(current_user=Depends(get_current_user)):
     return {"available": skin_model_available()}
+
+
+@router.post(
+    "/ai/xray-check",
+    summary="Screen a chest X-ray for signs of pneumonia",
+)
+async def xray_check(
+    image: UploadFile = File(...),
+    age_years: int | None = Form(default=None),
+    current_user=Depends(get_current_user),
+):
+    """Screen one chest film.
+
+    A screen, not a report. It cannot rule pneumonia out, and the response
+    says so in both languages.
+    """
+    payload = await image.read()
+
+    if not payload:
+        raise HTTPException(status_code=400, detail="No image was uploaded")
+
+    try:
+        return assess_chest_xray(payload, age=age_years)
+    except XrayModelError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+
+
+@router.get(
+    "/ai/xray-check/status",
+    summary="Whether the chest X-ray model is built and servable",
+)
+def xray_check_status(current_user=Depends(get_current_user)):
+    return {"available": xray_model_available()}

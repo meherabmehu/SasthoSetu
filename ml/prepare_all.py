@@ -57,6 +57,7 @@ OPTIONAL = [
      "train_dermnet_model.py"),
     ("Pigmented lesion images (HAM10000, ~2.8 GB)", "fetch_skin_data.py"),
     ("Train pigmented lesion classifier", "train_skin_model.py"),
+    ("Train chest X-ray pneumonia screen", "train_chest_xray_model.py"),
 ]
 
 

@@ -39,7 +39,7 @@ users rather than an afterthought.
 | **Rural access** | SMS triage, IVR menus, offline CHW batch submission |
 | **Web apps** | Patient, doctor and admin surfaces; installable PWA that works offline |
 
-**277 automated tests.** Every red-flag rule is asserted in four phrasings —
+**281 automated tests.** Every red-flag rule is asserted in four phrasings —
 natural Bangla, romanised Banglish, English, and English paraphrase.
 
 ---
@@ -140,7 +140,9 @@ auditable and must never regress silently between model versions.
 | Model | Task | Performance |
 |---|---|---|
 | Triage classifier | 5-level severity from free text | macro-F1 **0.8616**, emergency recall **0.9938**, 1 errors spanning ≥3 bands |
-| Skin lesion classifier | Referral decision from a photograph | malignant recall **0.9187**, macro AUC **0.9098**, trained on 10,015 HAM10000 images |
+| Skin condition classifier | Referral band from a photograph, 23 conditions | urgent recall **0.7427**, 18 of 583 urgent cases dismissed, trained on 15,557 DermNet images |
+| Pigmented lesion classifier | Malignancy screen, dermatoscopic | malignant recall **0.9187**, macro AUC **0.9098**, trained on 10,015 HAM10000 images |
+| Chest X-ray screen | Pneumonia screen from a film photograph | AUC **0.8718**, pneumonia recall **0.9231**, trained on 5,856 films |
 | Surge forecaster | 24/48/72h bed demand per ward | MAE **≈2.9 beds**, beats naive persistence at every horizon |
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |

@@ -209,3 +209,74 @@ class HospitalCoordinateTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ChestXrayTests(unittest.TestCase):
+    """The pneumonia screen must never tell anyone their film is fine."""
+
+    @classmethod
+    def setUpClass(cls):
+        Base.metadata.create_all(bind=engine)
+        cls.client = TestClient(app, raise_server_exceptions=False)
+
+    def _headers(self):
+        email = f"cxr-{uuid.uuid4().hex[:8]}@example.com"
+        password = "Passw0rd@123"
+        self.client.post("/api/v1/users", json={
+            "full_name": "CXR Tester", "email": email,
+            "phone": f"017{uuid.uuid4().int % 100000000:08d}",
+            "password": password,
+        })
+        login = self.client.post(
+            "/api/v1/auth/login", json={"email": email, "password": password}
+        )
+        return {"Authorization": f"Bearer {login.json()['access_token']}"}
+
+    def test_an_anonymous_caller_cannot_upload_a_film(self):
+        response = self.client.post(
+            "/api/v1/ai/xray-check",
+            files={"image": ("f.jpg", _photo(size=(300, 300)), "image/jpeg")},
+        )
+        self.assertEqual(401, response.status_code)
+
+    def test_every_outcome_still_asks_for_a_doctor(self):
+        """A screen that clears a film would be dangerous.
+
+        Both bands route to a clinician; they differ only in how soon. A
+        result that told someone their chest film was fine would be read as
+        reassurance the model cannot justify.
+        """
+        from app.ai.xray_service import BANDS
+
+        for name, band in BANDS.items():
+            with self.subTest(band=name):
+                self.assertTrue(band["bn"])
+                text = (band["en"] + band["bn"]).lower()
+                self.assertTrue(
+                    "doctor" in text or "চিকিৎসক" in text
+                    or "হাসপাতাল" in text,
+                    f"band {name} does not send the patient to anyone",
+                )
+
+    def test_the_disclaimer_says_it_cannot_rule_pneumonia_out(self):
+        from app.ai.xray_service import DISCLAIMER
+
+        self.assertIn("rule", DISCLAIMER["en"].lower())
+        self.assertTrue(DISCLAIMER["bn"])
+
+    def test_a_film_returns_a_review_band(self):
+        response = self.client.post(
+            "/api/v1/ai/xray-check",
+            files={"image": ("f.jpg", _photo(size=(300, 300)), "image/jpeg")},
+            data={"age_years": "4"},
+            headers=self._headers(),
+        )
+
+        if response.status_code == 503:
+            self.skipTest("chest X-ray model not built in this environment")
+
+        self.assertEqual(200, response.status_code, response.text)
+        body = response.json()
+        self.assertIn(body["band"], {"urgent_review", "doctor_review"})
+        self.assertTrue(body["disclaimer_bn"])
+        self.assertTrue(body["findings"])
