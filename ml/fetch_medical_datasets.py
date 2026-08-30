@@ -180,7 +180,14 @@ def _extract(path: Path, out_dir: Path, prefix: str,
     Read one row group at a time. Reading the whole table needs several times
     the file size in RAM, which is what killed this on a small machine.
     """
-    import pyarrow.parquet as pq
+    try:
+        import pyarrow.parquet as pq
+    except ImportError as error:
+        raise RuntimeError(
+            "pyarrow is required to read the image shards. Without it not a "
+            "single image can be unpacked and the label files stay empty. "
+            "Install it with: pip install -r backend/requirements.txt"
+        ) from error
 
     out_dir.mkdir(parents=True, exist_ok=True)
     handle = pq.ParquetFile(path)
