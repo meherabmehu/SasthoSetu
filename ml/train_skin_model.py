@@ -52,6 +52,12 @@ from sklearn.metrics import (
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from runtime import configure_worker_cpus  # noqa: E402
+
+configure_worker_cpus()
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 

@@ -24,10 +24,15 @@ Produces:
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 import time
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from runtime import configure_worker_cpus  # noqa: E402
 
 ML = Path(__file__).resolve().parent
 
@@ -79,10 +84,13 @@ def main() -> None:
     if args.with_skin:
         steps = steps + OPTIONAL
 
+    configure_worker_cpus()
+    env = dict(os.environ)
+
     t0 = time.time()
     for label, script in steps:
         print(f"\n=== {label} -> {script}")
-        subprocess.run([sys.executable, str(ML / script)], check=True)
+        subprocess.run([sys.executable, str(ML / script)], check=True, env=env)
 
     print(f"\nAll datasets and artifacts ready in {time.time() - t0:.0f}s.")
     if not args.with_skin:
