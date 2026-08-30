@@ -37,6 +37,12 @@ from PIL import Image
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import classification_report, f1_score, recall_score
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from runtime import configure_worker_cpus  # noqa: E402
+
+configure_worker_cpus()
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 

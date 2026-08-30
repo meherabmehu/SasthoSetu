@@ -16,6 +16,7 @@ Artifacts -> backend/app/ai/artifacts/
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import joblib
@@ -29,6 +30,12 @@ def _csv(path):
     import pathlib as _pl
     p = _pl.Path(path)
     return p if p.exists() else p.with_name(p.name + ".gz")
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from runtime import configure_worker_cpus  # noqa: E402
+
+configure_worker_cpus()
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "surge" / "bed_utilization.csv"

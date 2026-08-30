@@ -40,6 +40,12 @@ from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.preprocessing import FunctionTransformer, StandardScaler
 from sklearn.svm import LinearSVC
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from runtime import configure_worker_cpus  # noqa: E402
+
+configure_worker_cpus()
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
