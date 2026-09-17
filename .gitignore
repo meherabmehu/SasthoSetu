@@ -48,3 +48,7 @@ data/real/skin/images/
 # with ml/fetch_medical_datasets.py. The label CSVs are committed.
 data/real/imaging/dermnet/
 data/real/imaging/chest_xray/
+
+# Built by scripts/build_frontend.py at deploy time. Committing it would
+# freeze one deployment's API address into the repository.
+frontend/dist/
