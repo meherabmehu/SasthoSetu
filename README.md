@@ -47,7 +47,9 @@ natural Bangla, romanised Banglish, English, and English paraphrase.
 ## Quick start
 
 **New to the project? Follow [docs/SETUP.md](docs/SETUP.md)** — a step-by-step
-guide from clone to running, with troubleshooting.
+guide from clone to running, with troubleshooting. Once it is up,
+[docs/TESTING-GUIDE.md](docs/TESTING-GUIDE.md) walks every feature in turn as
+an admin, a doctor and a patient.
 
 The condensed version:
 
@@ -116,7 +118,7 @@ backend/
 ml/                  Dataset generators, training, retraining
 scripts/             Database seeding
 docker/              Entrypoint and nginx configuration
-docs/                Roadmap, API notes, model cards, CI workflow
+docs/                Roadmap, API notes, model cards, testing guide, CI workflow
 ```
 
 ### Triage pipeline
