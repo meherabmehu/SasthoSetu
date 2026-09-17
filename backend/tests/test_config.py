@@ -21,6 +21,42 @@ class SettingsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "DATABASE_URL is required"):
             Settings.from_env({})
 
+    def test_a_hosting_platform_postgres_url_gets_a_driver(self):
+        """Vercel, Railway and Neon supply URLs SQLAlchemy cannot load.
+
+        They hand out the libpq form. SQLAlchemy reads the scheme as the
+        driver to import: `postgres://` fails outright, and `postgresql://`
+        falls back to a default that need not be the installed one. Since
+        these URLs arrive through an integration rather than being typed,
+        the application has to name the driver itself.
+        """
+        for supplied in (
+            "postgres://user:pw@ep-cool.aws.neon.tech/neondb?sslmode=require",
+            "postgresql://user:pw@ep-cool.aws.neon.tech/neondb?sslmode=require",
+        ):
+            with self.subTest(url=supplied.split("://")[0]):
+                settings = Settings.from_env({"DATABASE_URL": supplied})
+                self.assertTrue(
+                    settings.database_url.startswith(
+                        "postgresql+psycopg2://"),
+                    f"{supplied.split('://')[0]}:// was not given a driver",
+                )
+                # Everything after the scheme must survive untouched, or the
+                # credentials and the sslmode Neon requires are lost.
+                self.assertTrue(
+                    settings.database_url.endswith(
+                        "user:pw@ep-cool.aws.neon.tech/neondb?sslmode=require")
+                )
+
+    def test_an_explicit_driver_is_left_alone(self):
+        for supplied in (
+            "postgresql+psycopg2://user:pw@host/db",
+            "postgresql+asyncpg://user:pw@host/db",
+        ):
+            with self.subTest(url=supplied):
+                settings = Settings.from_env({"DATABASE_URL": supplied})
+                self.assertEqual(supplied, settings.database_url)
+
     def test_production_rejects_development_secret(self):
         with self.assertRaisesRegex(ValueError, "SECRET_KEY"):
             Settings.from_env(
