@@ -30,14 +30,23 @@ SQLite cannot be used. A serverless instance handles one request and is then
 discarded along with its filesystem, so every registration, appointment and
 uploaded file written to a local file would be lost immediately.
 
-Take the connection string and put the driver in it:
+The connection string can be used exactly as the provider gives it. All
+three forms are accepted:
 
 ```
+postgres://user:password@host/dbname?sslmode=require
+postgresql://user:password@host/dbname?sslmode=require
 postgresql+psycopg2://user:password@host/dbname?sslmode=require
 ```
 
-SQLAlchemy needs the `+psycopg2` part. A plain `postgresql://` string, which
-is what these providers hand you, will not work.
+SQLAlchemy reads the scheme as the name of the driver to load, and the first
+two name no driver. The application supplies `psycopg2` itself rather than
+asking anyone to edit a string that an integration may overwrite on the next
+deployment.
+
+The easiest route on Vercel is the Neon integration: **Storage** → **Create
+Database** → **Neon**. It creates the database and sets `DATABASE_URL` on
+the project, so step 2 only needs the remaining two variables.
 
 ### 2. Create the project
 
