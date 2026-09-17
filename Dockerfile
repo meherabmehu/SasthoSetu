@@ -23,6 +23,25 @@ RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install "uvicorn[standard]==0.49.0" "gunicorn==23.0.0"
 
 # ---------------------------------------------------------------------------
+# Build the datasets and train the models while still in the builder, so the
+# runtime image ships ready to serve. Doing this at container start instead
+# would leave the first request after every deploy waiting several minutes,
+# and on a managed host the health check fails long before it finishes.
+#
+# Only the text models are built here. The imaging models need several GB of
+# downloads, so they stay opt-in: without them the skin and X-ray endpoints
+# report themselves unavailable and the rest of the application is unaffected.
+
+FROM builder AS models
+
+WORKDIR /build
+
+COPY ml ./ml
+COPY backend ./backend
+
+RUN /opt/venv/bin/python ml/prepare_all.py
+
+# ---------------------------------------------------------------------------
 
 FROM python:3.13-slim AS runtime
 
@@ -45,6 +64,11 @@ COPY --chown=sasthosetu:sasthosetu ml ./ml
 COPY --chown=sasthosetu:sasthosetu scripts ./scripts
 COPY --chown=sasthosetu:sasthosetu frontend ./frontend
 COPY --chown=sasthosetu:sasthosetu tools ./tools
+
+# Trained models and the seed data they were derived from, seeding included.
+COPY --from=models --chown=sasthosetu:sasthosetu \
+     /build/backend/app/ai/artifacts ./backend/app/ai/artifacts
+COPY --from=models --chown=sasthosetu:sasthosetu /build/data ./data
 COPY --chown=sasthosetu:sasthosetu docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN chmod +x /usr/local/bin/entrypoint.sh \

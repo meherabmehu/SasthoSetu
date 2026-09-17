@@ -7,8 +7,13 @@ venv
 *.db
 *.sqlite3
 .env
+# Both are produced inside the image by ml/prepare_all.py. Sending the local
+# copies would only risk shipping a stale model or a half-downloaded dataset.
 data
 backend/app/ai/artifacts
 .ruff_cache
 .pytest_cache
 node_modules
+
+# Static build output, produced per deployment and not used by the image.
+frontend/dist

@@ -13,7 +13,11 @@ cd /app
 : "${SECRET_KEY:?SECRET_KEY must be set}"
 
 WORKERS="${WEB_CONCURRENCY:-4}"
-BIND="${BIND:-0.0.0.0:8000}"
+
+# Managed hosts (Railway, Render, Fly) assign the port at run time and expect
+# the process to read it from the environment. Falling back to 8000 keeps the
+# compose file and local runs unchanged.
+BIND="${BIND:-0.0.0.0:${PORT:-8000}}"
 
 wait_for_database() {
   # Postgres may still be accepting connections when the app starts, so retry
