@@ -37,8 +37,17 @@ data/surveillance/*.csv
 # they were built from are large and re-fetchable with ml/fetch_real_data.py.
 data/real/_cache/
 
-# Trained model artifacts (binary, rebuilt by ml/prepare_all.py)
-backend/app/ai/artifacts/
+# Trained model artifacts (binary, rebuilt by ml/prepare_all.py).
+# The triage and surge models are the exception: they are 4.2 MB together and
+# a serverless deployment cannot build them at start-up, so they are tracked
+# and refreshed by re-running the pipeline. The imaging models stay out -
+# they are far larger and need several GB of source images.
+backend/app/ai/artifacts/*
+!backend/app/ai/artifacts/triage_model.joblib
+!backend/app/ai/artifacts/triage_metrics.json
+!backend/app/ai/artifacts/triage_confusion.csv
+!backend/app/ai/artifacts/surge_model.joblib
+!backend/app/ai/artifacts/surge_metrics.json
 
 # HAM10000 images: 2.8 GB, CC BY-NC (non-commercial), re-fetchable with
 # ml/fetch_skin_data.py. The derived metadata CSV is committed.
