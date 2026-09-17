@@ -321,6 +321,13 @@ img { max-width: 100%; display: block; }
 .btn-sm { min-height: 36px; padding: var(--space-2) var(--space-3); font-size: var(--text-sm); }
 .btn-block { width: 100%; }
 
+/* On a touch screen there is no cursor to aim with, so the compact variant
+   goes back up to a full finger target. Pointer-coarse rather than a width
+   query: a large tablet is still touched, a narrow desktop window is not. */
+@media (pointer: coarse) {
+  .btn-sm { min-height: 44px; min-width: 44px; }
+}
+
 /* Forms */
 .field { margin-bottom: var(--space-4); }
 .label {
@@ -358,6 +365,29 @@ img { max-width: 100%; display: block; }
 }
 .textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
 .input[aria-invalid="true"] { border-color: var(--danger); }
+
+/* A default checkbox renders around 13px, well under a finger. Enlarging it
+   on touch screens also enlarges its label row, so the whole line becomes
+   the target rather than the box alone. */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--teal-600);
+  cursor: pointer;
+}
+@media (pointer: coarse) {
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  label:has(> input[type="checkbox"]),
+  label:has(> input[type="radio"]) {
+    min-height: 44px;
+    align-items: center;
+    cursor: pointer;
+  }
+}
 
 .error-text {
   color: var(--danger);
