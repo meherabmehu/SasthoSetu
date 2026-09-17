@@ -1,16 +1,16 @@
 {
   "selected_model": "logreg",
   "validation_macro_f1": {
-    "logreg": 0.8823,
-    "linearsvc": 0.7078,
-    "random_forest": 0.65
+    "logreg": 0.9353,
+    "linearsvc": 0.8254,
+    "random_forest": 0.7681
   },
-  "test_macro_f1": 0.8644,
-  "test_accuracy": 0.8867,
-  "level5_recall": 0.9878,
+  "test_macro_f1": 0.8616,
+  "test_accuracy": 0.9105,
+  "level5_recall": 0.9938,
   "severe_band_errors": 1,
-  "under_triage_count": 39,
-  "test_size": 900,
+  "under_triage_count": 125,
+  "test_size": 2146,
   "labels": [
     1,
     2,
