@@ -7,10 +7,17 @@ venv
 *.db
 *.sqlite3
 .env
-# Both are produced inside the image by ml/prepare_all.py. Sending the local
-# copies would only risk shipping a stale model or a half-downloaded dataset.
-data
-backend/app/ai/artifacts
+# The committed seed data and trained models travel with the image so the
+# build does not have to spend twenty minutes reproducing them. Everything
+# here that is not committed is excluded instead, so a half-finished local
+# download or a locally retrained model cannot be shipped by accident.
+data/real/_cache
+data/real/skin/images
+data/real/imaging/dermnet
+data/real/imaging/chest_xray
+data/triage
+data/surge
+data/surveillance
 .ruff_cache
 .pytest_cache
 node_modules
