@@ -23,14 +23,18 @@ RUN python -m venv /opt/venv \
     && /opt/venv/bin/pip install "uvicorn[standard]==0.49.0" "gunicorn==23.0.0"
 
 # ---------------------------------------------------------------------------
-# Build the datasets and train the models while still in the builder, so the
-# runtime image ships ready to serve. Doing this at container start instead
-# would leave the first request after every deploy waiting several minutes,
-# and on a managed host the health check fails long before it finishes.
+# The triage and surge models and the seed data are committed, so the image
+# only has to fall back to training when they are absent - which happens when
+# .dockerignore excluded them, or on a checkout that predates them.
 #
-# Only the text models are built here. The imaging models need several GB of
-# downloads, so they stay opt-in: without them the skin and X-ray endpoints
-# report themselves unavailable and the rest of the application is unaffected.
+# Training here rather than at container start is deliberate: a first request
+# that waits several minutes fails the health check on every managed host.
+# Skipping it when the artifacts are already present keeps the build inside
+# the time limit a free build machine allows.
+#
+# The imaging models are never built here. They need several GB of downloads;
+# without them the skin and X-ray endpoints report themselves unavailable
+# through their /status routes and nothing else is affected.
 
 FROM builder AS models
 
@@ -38,8 +42,15 @@ WORKDIR /build
 
 COPY ml ./ml
 COPY backend ./backend
+COPY data ./data
 
-RUN /opt/venv/bin/python ml/prepare_all.py
+RUN if [ -f backend/app/ai/artifacts/triage_model.joblib ] \
+      && [ -f backend/app/ai/artifacts/surge_model.joblib ]; then \
+        echo "Trained models are present; skipping the training run."; \
+    else \
+        echo "No trained models found; building them."; \
+        /opt/venv/bin/python ml/prepare_all.py; \
+    fi
 
 # ---------------------------------------------------------------------------
 
@@ -74,6 +85,13 @@ COPY --chown=sasthosetu:sasthosetu docker/entrypoint.sh /usr/local/bin/entrypoin
 RUN chmod +x /usr/local/bin/entrypoint.sh \
     && mkdir -p /app/data /app/backend/app/ai/artifacts \
     && chown -R sasthosetu:sasthosetu /app/data /app/backend/app/ai/artifacts
+
+# Stamp the pages with the API address and write them to frontend/dist, which
+# the application serves. A relative path is right here because the container
+# answers both the pages and the API, so they share an origin whatever
+# hostname the platform assigns.
+RUN API_BASE_URL=/api/v1 python scripts/build_frontend.py \
+    && chown -R sasthosetu:sasthosetu /app/frontend/dist
 
 # Runs unprivileged: a container compromise should not also be root.
 USER sasthosetu
