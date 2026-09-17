@@ -115,7 +115,7 @@ backend/
     payments/        Gateway abstraction and adapters
     schemas/         Pydantic request and response models
   alembic/           Migrations
-  tests/             149 tests
+  tests/             294 tests
 ml/                  Dataset generators, training, retraining
 scripts/             Database seeding
 docker/              Entrypoint and nginx configuration
@@ -237,7 +237,7 @@ breathlessness returns `EMERGENCY` over HTTP.
 
 ## API
 
-Interactive documentation at `/docs` once running. 99 endpoints across triage,
+Interactive documentation at `/docs` once running. 116 endpoints across triage,
 appointments, consultations, prescriptions, hospitals, labs, pharmacies,
 payments, FHIR, rural access and administration.
 

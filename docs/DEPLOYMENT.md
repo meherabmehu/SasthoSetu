@@ -1,185 +1,184 @@
 # Deployment
 
-The application is two pieces that deploy separately:
+Two supported shapes. Both are configured in this repository.
 
-| Piece | What it is | Where it goes |
+| | All on Vercel | Container host |
 |---|---|---|
-| `frontend/` | Static HTML, CSS and ES modules | Any CDN or static host (Vercel, Netlify, Cloudflare Pages) |
-| `backend/` | FastAPI, SQLAlchemy, trained models | A host that runs a container and keeps a disk (Railway, Render, Fly.io, a VPS) |
+| Frontend | Vercel CDN | nginx or the same container |
+| API | Vercel Function | Railway, Render, Fly.io, a VPS |
+| Database | Managed Postgres (Neon, Supabase, Vercel Postgres) | Postgres beside the app |
+| Imaging models | Not available | Optional |
+| Setup | One project, one domain, no CORS | Two services to wire together |
 
-## Why the backend is not serverless
-
-Vercel, Netlify Functions and Lambda give each request a fresh, read-only
-container. Four things in this project depend on that not being the case:
-
-- **SQLite writes to a file.** On a serverless host the file is discarded
-  after the request, so every registration and appointment disappears.
-- **Uploaded files are written to `uploads/`** by
-  `backend/app/modules/files/service.py`, with the same outcome.
-- **The models are 4.2 MB of joblib artifacts** that are not in the
-  repository — `.gitignore` excludes them, because they are rebuilt from the
-  datasets. There is nothing to deploy unless they are built first.
-- **scikit-learn, pandas, numpy and scipy are about 283 MB installed**, and
-  loading them costs roughly 190 MB of resident memory per worker. Cold
-  starts are slow enough to be noticeable on every idle request.
-
-The Dockerfile solves all four. Use it.
+Start with Vercel. Move to a container host when the imaging models matter.
 
 ---
 
-## Backend
+## All on Vercel
 
-### Railway
+One project serves the pages and the API from the same domain. `vercel.json`
+rewrites `/api/*`, `/health` and `/docs` to the function in `api/index.py`
+and serves everything else as static files, so the browser only ever talks to
+one origin and no CORS configuration is involved.
 
-1. New Project → Deploy from GitHub → pick this repository.
-2. Add a **PostgreSQL** database to the project.
-3. Set the variables below on the application service.
-4. Deploy. `railway.json` selects the Dockerfile and points the health check
-   at `/health`.
+### 1. A Postgres database
 
-`DATABASE_URL` needs the psycopg2 driver spelled out. Railway exposes its
-Postgres connection string as `DATABASE_URL` on the database service, so
-reference it and prefix the scheme:
+Any managed Postgres works — [Neon](https://neon.tech),
+[Supabase](https://supabase.com) and Vercel Postgres all have a free tier.
+
+SQLite cannot be used. A serverless instance handles one request and is then
+discarded along with its filesystem, so every registration, appointment and
+uploaded file written to a local file would be lost immediately.
+
+Take the connection string and put the driver in it:
+
+```
+postgresql+psycopg2://user:password@host/dbname?sslmode=require
+```
+
+SQLAlchemy needs the `+psycopg2` part. A plain `postgresql://` string, which
+is what these providers hand you, will not work.
+
+### 2. Create the project
+
+Import the repository on Vercel. Leave the framework preset as **Other** —
+there is nothing to detect, and no Node build.
+
+Set one environment variable:
+
+| Variable | Value |
+|---|---|
+| `DATABASE_URL` | the connection string from step 1 |
+| `SECRET_KEY` | 32+ characters, `python -c "import secrets; print(secrets.token_urlsafe(48))"` |
+| `APP_ENV` | `production` |
+
+`API_BASE_URL` is not needed. The build defaults it to `/api/v1`, which keeps
+every preview deployment working on its own hostname.
+
+### 3. Deploy
+
+The build runs `scripts/vercel_build.py`, which applies the database
+migrations and then writes the static pages into `frontend/dist`.
+
+### 4. Seed the reference data
+
+The hospitals, doctors and drug tables are not created by migrations. Run
+this once from your own machine, pointed at the same database:
+
+```powershell
+$env:DATABASE_URL="postgresql+psycopg2://..."
+$env:SECRET_KEY="the same key"
+python scripts/seed_database.py
+python scripts/check_setup.py
+```
+
+### What does not work on Vercel
+
+**The imaging models.** Skin and chest X-ray need several GB of training
+images and produce artifacts far larger than a function bundle allows. Their
+`/status` endpoints report `available: false`, the two pages say so, and
+nothing else is affected. Triage, surge forecasting, the drug checker and
+every clinical workflow are unchanged.
+
+**Cold starts.** scikit-learn, pandas, numpy and scipy are about 311 MB
+installed and take a few seconds to load. The first request after an idle
+period pays that; subsequent ones are fast.
+
+---
+
+## Container host
+
+Use this when you want the imaging models, predictable latency, or a disk.
+
+The `Dockerfile` builds the datasets and trains the text models during the
+image build, so a started container serves AI requests immediately.
+`railway.json` selects it and points the health check at `/health`.
+
+1. Create the service from this repository and add a PostgreSQL instance.
+2. Set the variables below.
+3. Deploy. Migrations are applied by the entrypoint before the server starts.
+
+On Railway the database connection string is composed from the Postgres
+service:
 
 ```
 DATABASE_URL=postgresql+psycopg2://${{Postgres.PGUSER}}:${{Postgres.PGPASSWORD}}@${{Postgres.PGHOST}}:${{Postgres.PGPORT}}/${{Postgres.PGDATABASE}}
 ```
 
-### Render
-
-Create a Web Service, choose **Docker**, add a PostgreSQL instance and set
-the same variables. Health check path `/health`.
-
-### Environment variables
-
 | Variable | Required | Notes |
 |---|---|---|
-| `DATABASE_URL` | yes | `postgresql+psycopg2://...`. SQLite works but does not survive a redeploy. |
-| `SECRET_KEY` | yes | 32+ characters. Generate with `python -c "import secrets; print(secrets.token_urlsafe(48))"`. |
-| `APP_ENV` | yes | `production`. Anything else leaves the permissive localhost CORS rule enabled. |
-| `CORS_ORIGINS` | yes | The frontend's public address, e.g. `https://sasthosetu.vercel.app`. Comma-separated for several. |
-| `WEB_CONCURRENCY` | recommended | Workers. Each holds ~190 MB once the models load, so allow 512 MB per worker. `2` on a 1 GB instance, `1` on 512 MB. |
+| `DATABASE_URL` | yes | `postgresql+psycopg2://...` |
+| `SECRET_KEY` | yes | 32+ characters |
+| `APP_ENV` | yes | `production` |
+| `CORS_ORIGINS` | if the frontend is elsewhere | The frontend's public address. Not needed when the container serves both. |
+| `WEB_CONCURRENCY` | recommended | Each worker holds ~190 MB once the models load. `2` on 1 GB, `1` on 512 MB. |
 | `SEED_ON_START` | optional | `true` loads the 570 hospitals, 50 doctors and drug data on first boot. |
 | `PORT` | automatic | Supplied by the host; the entrypoint binds to it. |
-| `RATE_LIMIT_PER_MINUTE` | optional | Default 120. |
-| `LLM_API_KEY`, `LLM_API_URL`, `LLM_MODEL` | optional | Enables the LLM symptom extractor. See `docs/LLM_SETUP.md`. |
 
-The container applies migrations before it starts serving, so no manual
-migration step is needed.
+To include the imaging models, add `--with-skin` to the `prepare_all.py` call
+in the `models` stage of the Dockerfile and expect a much larger image and a
+much longer build.
 
-### What the image build does
+### Hosting the frontend separately
 
-`Dockerfile` has a `models` stage that runs `ml/prepare_all.py` during the
-build: it fetches the public datasets, assembles the corpora and trains the
-triage and surge models. The artifacts are copied into the runtime image, so
-a started container is immediately able to answer AI requests.
+If the pages are on a CDN and the API is on another domain, build them with
+the API's address and then allow that origin on the API:
 
-Expect the first build to take 10–20 minutes. Later builds reuse the cached
-layer unless `ml/` or `backend/` changes.
-
-The imaging models (skin, chest X-ray) are **not** built. They need several
-GB of downloads and would make the image impractical. Without them
-`/api/v1/ai/skin-check` and `/api/v1/ai/xray-check` report themselves
-unavailable through their `/status` endpoints and the rest of the
-application is unaffected. To include them, add `--with-skin` to the
-`prepare_all.py` call in the `models` stage and expect a much larger image.
-
----
-
-## Frontend
-
-The pages work out of the box during development because they assume the API
-is on port 8000 of the same host. That assumption is wrong once the two are
-on different domains, so the build writes the real address into each page:
-
-```
+```bash
 API_BASE_URL=https://your-api.up.railway.app python scripts/build_frontend.py
 ```
 
-This copies `frontend/` to `frontend/dist/` and inserts
-
-```html
-<meta name="api-base" content="https://your-api.up.railway.app/api/v1">
-```
-
-into all 20 pages. `assets/js/api.js` reads that tag before falling back to
-its own guesswork. The `/api/v1` suffix is added if you leave it off.
-
-### Vercel
-
-1. New Project → import this repository.
-2. Add an environment variable **`API_BASE_URL`** with the backend's public
-   address.
-3. Deploy. `vercel.json` already sets the build command, the output
-   directory and the response headers.
-
-Leave the framework preset as "Other". There is nothing to detect: no
-bundler, no package.json, no Node build.
-
-If `API_BASE_URL` is missing the build fails with an explanation rather than
-publishing pages that quietly cannot reach the API.
-
-### Netlify, Cloudflare Pages, S3
-
-Same idea. Build command `python3 scripts/build_frontend.py`, publish
-directory `frontend/dist`, with `API_BASE_URL` set.
-
----
-
-## Order of operations
-
-The two sides reference each other, so deploy in this order:
-
-1. **Backend first.** It has no dependency on the frontend. Note the public
-   URL it is given.
-2. **Frontend**, with `API_BASE_URL` set to that URL.
-3. **Back to the backend** and set `CORS_ORIGINS` to the frontend's URL, then
-   redeploy.
-
-Skipping step 3 leaves the browser blocking every request: the API replies
+Then set `CORS_ORIGINS` on the API to the frontend's URL and redeploy.
+Skipping that leaves the browser discarding every response: the API answers
 correctly but without an `Access-Control-Allow-Origin` header for that
-origin, and the browser discards the response.
-
----
-
-## Verifying a deployment
-
-```bash
-curl https://your-api.up.railway.app/health
-```
-
-Expect `{"status":"ok"}`.
-
-```bash
-curl -X POST https://your-api.up.railway.app/api/v1/auth/login \
-  -H 'Content-Type: application/json' \
-  -d '{"email":"patient@sasthosetu.gov.bd","password":"Patient@12345"}'
-```
-
-Expect an `access_token`. A 503 mentioning the schema means migrations have
-not run; check the deploy logs. A 401 means the seed data is absent — set
-`SEED_ON_START=true` and redeploy.
-
-Then open the frontend and sign in. If the pages load but every action fails,
-open the browser console: a CORS message means step 3 above was skipped, and
-a request going to `localhost:8000` means `API_BASE_URL` was not set at build
-time.
-
-Change the demo passwords before exposing a deployment publicly. They are
-listed in `docs/TESTING-GUIDE.md` and are seeded by
-`scripts/seed_database.py`.
+origin.
 
 ---
 
 ## Docker Compose
 
-For a single machine that runs everything, including Postgres and nginx:
+For a single machine running everything, including Postgres and nginx:
 
 ```bash
 cp .env.example .env     # set SECRET_KEY and POSTGRES_PASSWORD
 docker compose up -d
 ```
 
-`docker-compose.yml` wires the application to Postgres, waits for it to be
-healthy, applies migrations and serves the frontend through nginx on port
-8080.
+Serves on port 8080.
+
+---
+
+## Verifying a deployment
+
+```bash
+curl https://your-deployment/health
+```
+
+Expect `{"status":"ok"}`.
+
+```bash
+curl -X POST https://your-deployment/api/v1/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"patient@sasthosetu.gov.bd","password":"Patient@12345"}'
+```
+
+Expect an `access_token`.
+
+| Symptom | Cause |
+|---|---|
+| 503 mentioning the schema | Migrations have not run. Check the build log. |
+| 401 on the demo account | Seed data is absent. Run `scripts/seed_database.py` against the deployment database. |
+| Pages load, every action fails | Open the console. A CORS message means the API does not allow the frontend's origin; a request to `localhost:8000` means the pages were built without `API_BASE_URL`. |
+| Skin or X-ray says unavailable | Expected on Vercel. The models are not in the bundle. |
+
+Change the demo passwords before exposing a deployment publicly. They are
+listed in `docs/TESTING-GUIDE.md` and seeded by `scripts/seed_database.py`.
+
+---
+
+## Where the files went
+
+Uploaded medical files are stored in the database, not on disk. A local
+directory does not survive an instance being replaced, and on a serverless
+host that is after every request. Uploads are capped at 10 MB and limited to
+JPEG, PNG, WebP and PDF.
