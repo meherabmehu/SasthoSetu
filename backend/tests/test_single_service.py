@@ -85,22 +85,34 @@ class SingleServiceTests(unittest.TestCase):
 
 class FrontendBuildTests(unittest.TestCase):
     def test_the_build_stamps_every_page_with_a_relative_api_base(self):
-        """A single service shares an origin, so the path form is correct."""
+        """A single service shares an origin, so the path form is correct.
+
+        Run against a copy rather than the working tree: building in place
+        would delete and recreate frontend/dist underneath a developer who
+        is serving it, and leave the tree changed after a test run.
+        """
         import subprocess
         import sys
 
-        out = Path(tempfile.mkdtemp()) / "dist"
-        env = dict(os.environ, API_BASE_URL="/api/v1")
+        workspace = Path(tempfile.mkdtemp())
         try:
+            shutil.copytree(ROOT / "scripts", workspace / "scripts")
+            shutil.copytree(
+                FRONTEND, workspace / "frontend",
+                ignore=shutil.ignore_patterns("dist"),
+            )
+
             result = subprocess.run(
                 [sys.executable, "scripts/build_frontend.py"],
-                cwd=ROOT, env=env, capture_output=True, text=True,
+                cwd=workspace,
+                env=dict(os.environ, API_BASE_URL="/api/v1"),
+                capture_output=True, text=True,
             )
             self.assertEqual(
                 0, result.returncode,
                 f"the frontend build failed: {result.stderr}")
 
-            pages = sorted((FRONTEND / "dist").glob("*.html"))
+            pages = sorted((workspace / "frontend" / "dist").glob("*.html"))
             self.assertGreater(len(pages), 15)
             for page in pages:
                 with self.subTest(page=page.name):
@@ -109,7 +121,7 @@ class FrontendBuildTests(unittest.TestCase):
                         page.read_text(encoding="utf-8"),
                     )
         finally:
-            shutil.rmtree(out.parent, ignore_errors=True)
+            shutil.rmtree(workspace, ignore_errors=True)
 
 
 if __name__ == "__main__":
