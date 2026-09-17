@@ -80,9 +80,17 @@ images and produce artifacts far larger than a function bundle allows. Their
 nothing else is affected. Triage, surge forecasting, the drug checker and
 every clinical workflow are unchanged.
 
-**Cold starts.** scikit-learn, pandas, numpy and scipy are about 311 MB
-installed and take a few seconds to load. The first request after an idle
-period pays that; subsequent ones are fast.
+**Cold starts.** The installed dependencies come to about 423 MB, most of it
+scipy, pandas, scikit-learn and numpy together with their bundled native
+libraries. That is inside Vercel's 500 MB limit for Python functions but not
+by a wide margin, which is why `requirements.txt` at the repository root
+omits the three packages only the data pipeline needs — `pyarrow` alone is
+145 MB. A cold instance loads the models in about a second and answers
+warm requests in milliseconds.
+
+If a future dependency pushes the bundle past the limit, the deploy fails
+with "exceeded the unzipped maximum size". Either drop something or move the
+API to a container host, where the limit does not apply.
 
 ---
 
