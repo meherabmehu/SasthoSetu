@@ -34,6 +34,25 @@ def _anchor_sqlite_path(url: str) -> str:
     return prefix + str((BACKEND_DIR / path).resolve())
 
 
+def _normalise_postgres_driver(url: str) -> str:
+    """Name the driver SQLAlchemy should use for a Postgres URL.
+
+    Hosting platforms hand out ``postgres://`` or ``postgresql://`` - the
+    form libpq and psql accept. SQLAlchemy reads the scheme as the driver to
+    load, finds none named, and either fails outright on ``postgres://`` or
+    reaches for a default that may not be installed.
+
+    The managed integrations (Vercel, Railway, Render, Heroku) inject these
+    URLs into the environment automatically, so requiring the operator to
+    edit them by hand invites a deployment that fails on its first query
+    with an error about dialects rather than about configuration.
+    """
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg2://" + url[len(prefix):]
+    return url
+
+
 def _positive_int(value: str, name: str) -> int:
     try:
         parsed = int(value)
@@ -126,6 +145,7 @@ class Settings:
         if not database_url:
             raise ValueError("DATABASE_URL is required")
         database_url = _anchor_sqlite_path(database_url)
+        database_url = _normalise_postgres_driver(database_url)
 
         secret_key = values.get("SECRET_KEY", DEVELOPMENT_SECRET).strip()
         if app_env in {"staging", "production"}:

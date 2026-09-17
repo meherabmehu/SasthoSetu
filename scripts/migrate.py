@@ -45,9 +45,14 @@ def main() -> int:
     from alembic import command
     from alembic.config import Config
 
+    # Through the same normalisation the application uses, so a URL supplied
+    # by a hosting integration migrates and serves identically.
+    from app.core.config import _normalise_postgres_driver
+
     config = Config(str(BACKEND / "alembic.ini"))
     config.set_main_option("script_location", str(BACKEND / "alembic"))
-    config.set_main_option("sqlalchemy.url", url)
+    config.set_main_option(
+        "sqlalchemy.url", _normalise_postgres_driver(url))
 
     command.upgrade(config, "head")
     print("Schema is up to date.")
