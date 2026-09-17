@@ -1,0 +1,39 @@
+# Render deployment.
+#
+# Defines the web service only. The database is deliberately not declared
+# here: a free Render Postgres is deleted 30 days after it is created, taking
+# every patient record with it. Point DATABASE_URL at a Neon database, whose
+# free tier has no expiry, and set it in the dashboard.
+#
+# Create the service with: New + -> Blueprint -> pick this repository.
+
+services:
+  - type: web
+    name: sasthosetu
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: singapore
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      # One worker: a free instance has 512 MB and each worker holds about
+      # 190 MB once scikit-learn and the models are loaded.
+      - key: WEB_CONCURRENCY
+        value: "1"
+      # Loads the 570 hospitals, 50 doctors and the drug tables on first
+      # boot. Idempotent, so later restarts leave the data alone.
+      - key: SEED_ON_START
+        value: "true"
+      # Generated once and kept, so tokens issued before a redeploy stay
+      # valid afterwards.
+      - key: SECRET_KEY
+        generateValue: true
+      # Set in the dashboard to the Neon connection string. Any of
+      # postgres://, postgresql:// or postgresql+psycopg2:// is accepted.
+      - key: DATABASE_URL
+        sync: false
