@@ -49,7 +49,8 @@ natural Bangla, romanised Banglish, English, and English paraphrase.
 **New to the project? Follow [docs/SETUP.md](docs/SETUP.md)** — a step-by-step
 guide from clone to running, with troubleshooting. Once it is up,
 [docs/TESTING-GUIDE.md](docs/TESTING-GUIDE.md) walks every feature in turn as
-an admin, a doctor and a patient.
+an admin, a doctor and a patient. To put it online, see
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 The condensed version:
 
