@@ -1,7 +1,9 @@
 import logging
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.core.middleware import (
@@ -252,15 +254,31 @@ def check_schema_on_startup() -> None:
     verify_schema()
 
 
-@app.get("/")
-def root():
-    return {
-        "message": "SasthoSetu API Running"
-    }
-
-
 @app.get("/health")
 def health_check():
     return {
         "status": "healthy"
     }
+
+
+# Serving the pages from the API is what lets the whole application run as a
+# single service, which is all a free hosting plan allows. It is mounted last
+# so that every /api/v1 route above is matched first, and only when the built
+# frontend is actually present - during development the pages are served
+# separately and this stays out of the way.
+_FRONTEND = Path(__file__).resolve().parents[2] / "frontend"
+_BUILT = _FRONTEND / "dist"
+_PAGES = _BUILT if (_BUILT / "index.html").exists() else _FRONTEND
+
+if (_PAGES / "index.html").exists():
+    app.mount(
+        "/",
+        StaticFiles(directory=str(_PAGES), html=True),
+        name="frontend",
+    )
+else:
+    @app.get("/")
+    def root():
+        return {
+            "message": "SasthoSetu API Running"
+        }
