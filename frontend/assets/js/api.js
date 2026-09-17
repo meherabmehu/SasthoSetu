@@ -76,8 +76,39 @@ export const session = {
     for (const key of Object.keys(localStorage)) {
       if (key.startsWith(CACHE_PREFIX)) localStorage.removeItem(key);
     }
+    // Resolves once the cached responses are gone. Callers that are about to
+    // navigate must await it, or the browser tears the page down first and
+    // the deletion never completes.
+    return clearCachedResponses();
   },
 };
+
+/* The service worker keeps a copy of every successful API read so the app
+ * still shows something useful without a connection. Those copies include
+ * prescriptions, appointments and triage history, and removing the token
+ * does not remove them: the next person to use the phone could read the
+ * previous patient's records straight out of the cache.
+ *
+ * Signing out therefore has to discard the data cache as well. The shell
+ * cache is left alone - it holds only the pages themselves, and throwing it
+ * away would mean re-downloading the whole app on a connection that may not
+ * be there.
+ */
+function clearCachedResponses() {
+  if (!('caches' in window)) return Promise.resolve();
+  return caches
+    .keys()
+    .then((names) =>
+      Promise.all(
+        names
+          .filter((name) => name.includes('data'))
+          .map((name) => caches.delete(name))
+      )
+    )
+    .catch(() => {
+      /* A browser that refuses cache access has nothing stored to leak. */
+    });
+}
 
 /* Cached reads are scoped to the account that fetched them: the same URL
    returns different rows for different users, and a shared device must not
@@ -142,7 +173,9 @@ async function request(path, { method = 'GET', body, auth = true, queueable = fa
     });
 
     if (response.status === 401 && auth) {
-      session.clear();
+      // An expired session ends the same way a deliberate sign-out does, so
+      // the cached records have to go with it.
+      await session.clear();
       window.dispatchEvent(new CustomEvent('unauthorized'));
       throw new ApiError(i18n.t('auth.needLogin'), 401, null);
     }
@@ -200,8 +233,8 @@ export const api = {
 
   register: (payload) => request('/users', { method: 'POST', body: payload, auth: false }),
 
-  logout() {
-    session.clear();
+  async logout() {
+    await session.clear();
     window.dispatchEvent(new CustomEvent('loggedout'));
   },
 };
