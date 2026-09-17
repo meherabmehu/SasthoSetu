@@ -45,11 +45,19 @@ def api_base() -> str:
             "API_BASE_URL is not set. The deployed pages would fall back to\n"
             "the local development address and every request would fail.\n"
             "Set it to the public address of the backend, for example:\n"
-            "  API_BASE_URL=https://sasthosetu-api.up.railway.app"
+            "  API_BASE_URL=https://sasthosetu-api.up.railway.app\n"
+            "or to the path alone when the API answers on the same domain:\n"
+            "  API_BASE_URL=/api/v1"
         )
+    # A same-origin deployment serves the API from the same host as the
+    # pages, so a path is the right answer - hard-coding the host would
+    # break every preview deployment, which each get their own.
+    if raw.startswith("/"):
+        return raw
     if not raw.startswith(("http://", "https://")):
         raise SystemExit(
-            f"API_BASE_URL must include the scheme, got: {raw}")
+            "API_BASE_URL must be an absolute URL with a scheme, or a path "
+            f"beginning with /, got: {raw}")
     if raw.endswith(API_SUFFIX):
         return raw
     return raw + API_SUFFIX
