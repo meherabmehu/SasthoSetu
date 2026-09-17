@@ -136,6 +136,41 @@ class DeploymentManifestTests(unittest.TestCase):
                     "serverless deployment",
                 )
 
+    def test_the_committed_models_match_the_pinned_scikit_learn(self):
+        """A model pickled by another version may silently misbehave.
+
+        scikit-learn does not promise that an estimator pickled by one
+        version loads correctly into another; it warns and carries on. Since
+        the artifacts are committed from a developer's machine and the
+        deployment installs the pinned version, the two drift apart the
+        moment someone retrains without matching the pin. The warning would
+        appear in the deployment log, where nobody is looking, and the
+        predictions it qualifies are triage levels.
+        """
+        import warnings
+
+        import joblib
+        from sklearn.exceptions import InconsistentVersionWarning
+
+        for name in ("triage_model.joblib", "surge_model.joblib"):
+            with self.subTest(artifact=name):
+                with warnings.catch_warnings(record=True) as caught:
+                    warnings.simplefilter("always")
+                    joblib.load(ARTIFACTS / name)
+
+                mismatched = [
+                    str(w.message) for w in caught
+                    if issubclass(w.category, InconsistentVersionWarning)
+                ]
+                self.assertEqual(
+                    [], mismatched,
+                    f"{name} was pickled by a different scikit-learn than "
+                    "the one pinned in requirements. Retrain it in an "
+                    "environment built from backend/requirements.txt:\n"
+                    "  pip install -r backend/requirements.txt\n"
+                    "  python ml/prepare_all.py",
+                )
+
     def test_the_vercel_entrypoint_exposes_the_application(self):
         entry = ROOT / "api" / "index.py"
         self.assertTrue(entry.exists(), "api/index.py is missing")
