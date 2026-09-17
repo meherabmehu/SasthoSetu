@@ -215,8 +215,10 @@ export function renderChrome({ active = '' } = {}) {
   });
   const logout = header.querySelector('#logoutBtn');
   if (logout) {
-    logout.addEventListener('click', () => {
-      api.logout();
+    logout.addEventListener('click', async () => {
+      // Awaited: leaving the page before the cached records are deleted
+      // would abandon the deletion and leave them readable.
+      await api.logout();
       window.location.href = 'login.html';
     });
   }
