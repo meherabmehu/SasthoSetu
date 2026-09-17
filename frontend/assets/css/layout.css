@@ -22,7 +22,7 @@
   gap: var(--space-3);
   text-decoration: none;
   color: var(--text);
-  flex-shrink: 0;
+  min-width: 0;
 }
 .brand-mark {
   display: grid;
@@ -69,6 +69,20 @@
   flex-shrink: 0;
 }
 
+/* The brand is the only part of the header that can give up space. Left
+   unshrinkable it pushes the language, theme and account controls off the
+   right edge. Signed in the squeeze is worse, because the logout button is
+   wider than the login link it replaces. Letting the wordmark shrink and
+   ellipsise absorbs the difference; the logo keeps its size so the link
+   home stays recognisable. */
+.brand-text { min-width: 0; }
+.brand-text strong,
+.brand-text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .nav-toggle { display: none; font-size: var(--text-xl); }
 
 @media (max-width: 900px) {
@@ -88,6 +102,16 @@
   .primary-nav.open { display: flex; }
   .navlink { padding: var(--space-3); font-size: var(--text-base); }
   .brand-text small { display: none; }
+  .header-inner { gap: var(--space-2); }
+}
+
+/* On a phone the wordmark is dropped rather than squeezed. Ellipsising it
+   leaves "সা…", which reads as a glitch; the logo alone is a cleaner and
+   still recognisable link home, and it frees the row for the controls that
+   do something. The shrink rules above stay as the safety net for widths
+   between here and the tablet breakpoint. */
+@media (max-width: 430px) {
+  .brand-text { display: none; }
 }
 
 /* Page scaffolding */
@@ -146,6 +170,9 @@
   cursor: pointer;
   min-height: 40px;
   transition: background var(--transition), border-color var(--transition);
+}
+@media (pointer: coarse) {
+  .chip { min-height: 44px; }
 }
 .chip:hover { background: var(--teal-50); border-color: var(--teal-400); }
 .chip[aria-pressed="true"] {
