@@ -12,7 +12,10 @@
  *
  *   API writes                 never cached; the app queues them itself.
  */
-const VERSION = 'v1';
+/* Raising this discards the previous caches on activate. It must be raised
+ * whenever the shell list or the caching rules change, otherwise a returning
+ * visitor keeps being served the old app from their own disk. */
+const VERSION = 'v2';
 const SHELL_CACHE = `sasthosetu-shell-${VERSION}`;
 const DATA_CACHE = `sasthosetu-data-${VERSION}`;
 
@@ -25,6 +28,9 @@ const SHELL_ASSETS = [
   'review.html',
   'hospitals.html',
   'hospital-detail.html',
+  'map.html',
+  'skin.html',
+  'xray.html',
   'pharmacy.html',
   'verify.html',
   'appointments.html',
