@@ -7,14 +7,41 @@ from sqlalchemy.orm import Session
 
 from app.models.patient import Patient
 from app.models.file_record import FileRecord
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 
+# Uploads are held in the database rather than on disk. These are medical
+# records, and a local directory is lost whenever the instance is replaced -
+# which on a serverless host is after every request, and on any host with
+# more than one instance means the file is only present on the machine that
+# received it.
+#
+# Rows created before that change still point at this directory, so it stays
+# readable for them. Nothing new is written here.
 UPLOAD_DIR = "uploads"
 
-os.makedirs(
-    UPLOAD_DIR,
-    exist_ok=True
-)
+# Scans and reports; large enough for a chest film, small enough that a
+# single request cannot exhaust the database connection's memory.
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+
+ALLOWED_TYPES = {
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "application/pdf",
+}
+
+
+def _safe_name(name: str | None) -> str:
+    """Reduce a client-supplied filename to something safe to store.
+
+    The name is echoed back in the download's Content-Disposition header, so
+    it must not carry path separators or control characters.
+    """
+    candidate = os.path.basename(name or "").strip()
+    candidate = candidate.replace("\\", "").replace("\r", "").replace("\n", "")
+    if not candidate or candidate in {".", ".."}:
+        return "upload"
+    return candidate[:120]
 
 
 def upload_file_service(
@@ -37,24 +64,39 @@ def upload_file_service(
             detail="Patient not found"
         )
 
-    file_path = os.path.join(
-        UPLOAD_DIR,
-        file.filename
-    )
+    if file.content_type not in ALLOWED_TYPES:
+        raise HTTPException(
+            status_code=415,
+            detail=(
+                "Only JPEG, PNG, WebP images and PDF documents can be "
+                "uploaded"
+            )
+        )
 
-    with open(
-        file_path,
-        "wb"
-    ) as buffer:
-        buffer.write(
-            file.file.read()
+    payload = file.file.read(MAX_UPLOAD_BYTES + 1)
+
+    if not payload:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file is empty"
+        )
+
+    if len(payload) > MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=(
+                f"Files must be {MAX_UPLOAD_BYTES // (1024 * 1024)} MB "
+                "or smaller"
+            )
         )
 
     record = FileRecord(
         patient_id=patient.id,
         uploaded_by=patient_user_id,
-        file_name=file.filename,
-        file_path=file_path,
+        file_name=_safe_name(file.filename),
+        file_path=None,
+        content=payload,
+        file_size=len(payload),
         file_type=file.content_type
     )
 
@@ -63,7 +105,7 @@ def upload_file_service(
 
     return {
         "message": "File uploaded successfully",
-        "file_name": file.filename
+        "file_name": record.file_name
     }
 
 
@@ -95,6 +137,8 @@ def get_patient_files_service(
     )
 
     return files
+
+
 def _assert_file_access(file, current_user, db) -> None:
     """A file may be read by its patient, a clinician, or an administrator.
 
@@ -143,7 +187,18 @@ def download_file_service(
 
     _assert_file_access(file, current_user, db)
 
-    if not os.path.exists(file.file_path):
+    if file.content is not None:
+        return Response(
+            content=file.content,
+            media_type=file.file_type,
+            headers={
+                "Content-Disposition":
+                    f'attachment; filename="{file.file_name}"'
+            }
+        )
+
+    # Uploaded before file contents were stored in the database.
+    if not file.file_path or not os.path.exists(file.file_path):
         raise HTTPException(
             status_code=404,
             detail="Physical file not found"
@@ -154,6 +209,8 @@ def download_file_service(
         filename=file.file_name,
         media_type=file.file_type
     )
+
+
 def delete_file_service(
     file_id: str,
     db: Session,
@@ -176,7 +233,7 @@ def delete_file_service(
 
     _assert_file_access(file, current_user, db)
 
-    if os.path.exists(file.file_path):
+    if file.file_path and os.path.exists(file.file_path):
         os.remove(file.file_path)
 
     db.delete(file)
