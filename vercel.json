@@ -1,8 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "python3 scripts/build_frontend.py",
+  "buildCommand": "python3 scripts/vercel_build.py",
   "outputDirectory": "frontend/dist",
   "framework": null,
+  "functions": {
+    "api/index.py": {
+      "memory": 1024,
+      "maxDuration": 60,
+      "excludeFiles": "{data/**,ml/**,notebooks/**,docs/**,tools/**,backend/tests/**,backend/app/ai/artifacts/skin*,backend/app/ai/artifacts/dermnet*,backend/app/ai/artifacts/xray*}"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/health", "destination": "/api/index" },
+    { "source": "/docs", "destination": "/api/index" },
+    { "source": "/openapi.json", "destination": "/api/index" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

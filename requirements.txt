@@ -1,0 +1,53 @@
+# Serverless deployment dependencies.
+#
+# Vercel installs from the repository root, so this is the list that decides
+# the size of the function bundle. It is backend/requirements.txt minus the
+# packages only the data pipeline needs:
+#
+#   pyarrow    145 MB, reads the Hugging Face image shards
+#   openpyxl   reads the dengue and symptom workbooks
+#   pypdf      reads the survey codebook
+#
+# None of them is imported by backend/app, and together they are most of the
+# difference between a bundle that fits and one that does not. Anyone running
+# ml/prepare_all.py installs backend/requirements.txt instead, which still
+# has them.
+
+alembic==1.18.4
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.14.0
+bcrypt==5.0.0
+click==8.4.1
+colorama==0.4.6
+dnspython==2.8.0
+ecdsa==0.19.2
+email-validator==2.3.0
+exceptiongroup==1.3.1
+fastapi==0.137.1
+greenlet==3.5.1
+h11==0.16.0
+idna==3.18
+Mako==1.3.12
+MarkupSafe==3.0.3
+psycopg2-binary==2.9.12
+pyasn1==0.6.3
+pydantic==2.13.4
+pydantic_core==2.46.4
+python-dotenv==1.2.2
+python-jose==3.5.0
+rsa==4.9.1
+six==1.17.0
+SQLAlchemy==2.0.51
+starlette==1.3.1
+tomli==2.4.1
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+uvicorn==0.49.0
+python-multipart==0.0.32
+pandas==2.2.3
+numpy==2.1.3
+scikit-learn==1.5.2
+joblib==1.4.2
+qrcode==8.0
+pillow==11.3.0
