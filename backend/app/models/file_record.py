@@ -1,6 +1,8 @@
 import uuid
 
 from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import LargeBinary
 from sqlalchemy import String
 
 from app.models.base import Base
@@ -30,9 +32,21 @@ class FileRecord(Base):
         nullable=False
     )
 
+    # Kept only for rows written when uploads went to a local directory.
+    # New uploads leave it empty and store the bytes in `content`.
     file_path = Column(
         String,
-        nullable=False
+        nullable=True
+    )
+
+    content = Column(
+        LargeBinary,
+        nullable=True
+    )
+
+    file_size = Column(
+        Integer,
+        nullable=True
     )
 
     file_type = Column(

@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_db
 from app.core.security import get_current_user, require_self_or_clinician
 
+from app.schemas.file_record import FileRecordSummary
+
 from app.modules.files.service import (
     upload_file_service,
     get_patient_files_service,
@@ -36,7 +38,8 @@ def upload_file(
 
 
 @router.get(
-    "/files/{patient_user_id}"
+    "/files/{patient_user_id}",
+    response_model=list[FileRecordSummary]
 )
 def get_patient_files(
     patient_user_id: str,
