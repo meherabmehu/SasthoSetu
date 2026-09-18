@@ -81,8 +81,23 @@ case "${1:-serve}" in
     ensure_ai_artifacts
 
     if [[ "${SEED_ON_START:-false}" == "true" ]]; then
-      echo "Seeding reference data..."
-      python scripts/seed_database.py || echo "Seeding skipped or already applied."
+      # Seeding 570 hospitals, 50 doctors and the provider tables takes
+      # upwards of fifteen minutes on a small shared instance. A managed
+      # host gives the process about five minutes to open its port before
+      # deciding the deploy has hung and killing it, so this cannot run
+      # ahead of the server.
+      #
+      # It runs alongside instead. The seed script is idempotent and only
+      # touches reference data, so the application is usable throughout -
+      # the hospital and doctor lists simply fill in as it works.
+      echo "Seeding reference data in the background..."
+      (
+        if python scripts/seed_database.py; then
+          echo "Seeding complete."
+        else
+          echo "Seeding failed; reference data may be incomplete." >&2
+        fi
+      ) &
     fi
 
     echo "Starting SasthoSetu on ${BIND} with ${WORKERS} workers."
