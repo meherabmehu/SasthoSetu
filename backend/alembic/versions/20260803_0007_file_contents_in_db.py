@@ -41,20 +41,35 @@ def upgrade() -> None:
     # Rows written before this point have a path and no content; rows written
     # after have content and no path. Both are valid, so the column that was
     # required has to stop being required.
-    with op.batch_alter_table("file_records") as batch:
-        batch.alter_column(
-            "file_path",
-            existing_type=sa.String(),
-            nullable=True,
-        )
+    _set_file_path_nullable(True)
 
 
 def downgrade() -> None:
-    with op.batch_alter_table("file_records") as batch:
-        batch.alter_column(
-            "file_path",
-            existing_type=sa.String(),
-            nullable=False,
-        )
+    _set_file_path_nullable(False)
     op.drop_column("file_records", "file_size")
     op.drop_column("file_records", "content")
+
+
+def _set_file_path_nullable(nullable: bool) -> None:
+    """Relax or restore the NOT NULL on file_path.
+
+    SQLite cannot alter a column in place, so Alembic's batch mode rebuilds
+    the table. That rebuild needs to read the existing schema, which means a
+    live connection - it cannot run in offline (--sql) mode. Every other
+    database alters the column directly, so only SQLite pays that cost.
+    """
+    if op.get_bind().dialect.name == "sqlite":
+        with op.batch_alter_table("file_records") as batch:
+            batch.alter_column(
+                "file_path",
+                existing_type=sa.String(),
+                nullable=nullable,
+            )
+        return
+
+    op.alter_column(
+        "file_records",
+        "file_path",
+        existing_type=sa.String(),
+        nullable=nullable,
+    )
