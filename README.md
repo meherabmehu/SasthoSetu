@@ -115,7 +115,7 @@ backend/
     payments/        Gateway abstraction and adapters
     schemas/         Pydantic request and response models
   alembic/           Migrations
-  tests/             305 tests
+  tests/             309 tests
 ml/                  Dataset generators, training, retraining
 scripts/             Database seeding
 docker/              Entrypoint and nginx configuration
