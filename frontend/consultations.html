@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>কনসালটেশন · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<style>
+  .chat-thread {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-height: 55vh;
+    overflow-y: auto;
+    padding: var(--space-2);
+  }
+  .chat-msg {
+    max-width: 82%;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .chat-msg.theirs {
+    align-self: flex-start;
+    background: var(--surface-alt);
+  }
+  .chat-msg.mine {
+    align-self: flex-end;
+    background: var(--teal-600);
+    color: var(--on-accent);
+  }
+  .chat-meta {
+    font-size: var(--text-xs);
+    opacity: 0.75;
+    margin-top: var(--space-1);
+  }
+</style>
+</head>
+<body>
+<main id="main" class="container">
+  <div class="page-head">
+    <h1 data-i18n="consult.title">কনসালটেশন</h1>
+    <p class="muted" data-i18n="consult.subtitle">
+      আপনার চিকিৎসা সংক্রান্ত কথোপকথন ও নোট।</p>
+  </div>
+
+  <div id="list" aria-live="polite"></div>
+
+  <div id="thread" class="hidden">
+    <button class="btn btn-ghost btn-sm mb-4" id="backBtn" type="button">
+      ← <span data-i18n="consult.back">তালিকায় ফিরুন</span></button>
+
+    <div class="card">
+      <div class="row-between mb-4">
+        <strong id="threadTitle"></strong>
+        <span id="threadStatus" class="chip"></span>
+      </div>
+
+      <div id="summary" class="hidden"></div>
+
+      <div class="chat-thread" id="messages"></div>
+
+      <form id="sendForm" class="mt-4">
+        <div class="row gap-2">
+          <input id="msgInput" class="input" type="text" maxlength="4000"
+            style="flex:1" data-i18n-placeholder="consult.placeholder"
+            placeholder="আপনার বার্তা লিখুন...">
+          <button class="btn" id="sendBtn" type="submit"
+            data-i18n="consult.send">পাঠান</button>
+        </div>
+      </form>
+      <p class="error-text hidden" id="sendError" role="alert"></p>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, emptyState, setBusy, requireAuth } from './assets/js/ui.js';
+
+bootstrap('consultations.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+const listEl = document.getElementById('list');
+const threadEl = document.getElementById('thread');
+const messagesEl = document.getElementById('messages');
+const summaryEl = document.getElementById('summary');
+const titleEl = document.getElementById('threadTitle');
+const statusEl = document.getElementById('threadStatus');
+const sendForm = document.getElementById('sendForm');
+const msgInput = document.getElementById('msgInput');
+const sendError = document.getElementById('sendError');
+
+let openId = null;
+let pollTimer = null;
+
+function statusChip(status) {
+  const open = status !== 'COMPLETED';
+  statusEl.textContent = open ? i18n.t('consult.open') : i18n.t('consult.closed');
+  statusEl.setAttribute('aria-pressed', open ? 'true' : 'false');
+}
+
+async function loadList() {
+  listEl.innerHTML = '';
+  try {
+    const items = await api.get('/consultations/mine');
+    if (!items.length) {
+      listEl.innerHTML = emptyState('consult.empty', '💬');
+      return;
+    }
+    listEl.innerHTML = items.map((c) => `
+      <button class="card consult-row" type="button" data-id="${escapeHtml(c.id)}"
+        style="width:100%;text-align:start;cursor:pointer">
+        <div class="row-between">
+          <strong>${escapeHtml(c.with || i18n.t('consult.unknown'))}</strong>
+          <span class="tiny subtle">${escapeHtml(c.appointment_date || '')}</span>
+        </div>
+        <span class="small muted">
+          ${escapeHtml(c.status === 'COMPLETED' ? i18n.t('consult.closed') : i18n.t('consult.open'))}
+        </span>
+      </button>`).join('');
+  } catch (error) {
+    listEl.innerHTML =
+      `<div class="alert alert-danger">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+listEl.addEventListener('click', (event) => {
+  const row = event.target.closest('.consult-row');
+  if (row) openThread(row.dataset.id);
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  clearInterval(pollTimer);
+  pollTimer = null;
+  openId = null;
+  threadEl.classList.add('hidden');
+  listEl.classList.remove('hidden');
+  loadList();
+});
+
+function bubble(m) {
+  const mine = m.sender_role === (session.user?.role === 'DOCTOR' ? 'DOCTOR' : 'PATIENT');
+  return `
+    <div class="chat-msg ${mine ? 'mine' : 'theirs'}">
+      ${escapeHtml(m.body)}
+      <div class="chat-meta">${escapeHtml(when(m.sent_at))}</div>
+    </div>`;
+}
+
+function when(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime())
+    ? ''
+    : d.toLocaleString(i18n.lang === 'bn' ? 'bn-BD' : 'en-GB', {
+        hour: '2-digit', minute: '2-digit',
+        day: 'numeric', month: 'short',
+      });
+}
+
+async function refreshThread() {
+  if (!openId) return;
+  try {
+    const [detail, msgs] = await Promise.all([
+      api.get(`/consultations/${openId}`),
+      api.get(`/consultations/${openId}/messages`),
+    ]);
+    statusChip(detail.status);
+    messagesEl.innerHTML = msgs.length
+      ? msgs.map(bubble).join('')
+      : `<p class="muted small text-center">${escapeHtml(i18n.t('consult.noMessages'))}</p>`;
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    // Once the encounter is finished, the clinical summary the doctor wrote
+    // is the part the patient is here for.
+    if (detail.status === 'COMPLETED') {
+      const rows = [];
+      if (detail.diagnosis) rows.push(['consult.diagnosis', detail.diagnosis]);
+      if (detail.advice) rows.push(['consult.advice', detail.advice]);
+      if (detail.examination_notes) rows.push(['consult.notes', detail.examination_notes]);
+      summaryEl.innerHTML = rows.length
+        ? `<div class="alert alert-info">
+             ${rows.map(([k, v]) =>
+               `<p class="mb-2"><strong>${escapeHtml(i18n.t(k))}:</strong> ${escapeHtml(v)}</p>`).join('')}
+           </div>`
+        : '';
+      summaryEl.classList.remove('hidden');
+      msgInput.disabled = true;
+      sendForm.querySelector('#sendBtn').disabled = true;
+      msgInput.placeholder = i18n.t('consult.closedNote');
+    }
+  } catch {
+    // A missed poll is not an error worth showing; the next one is seconds away.
+  }
+}
+
+async function openThread(id) {
+  openId = id;
+  listEl.classList.add('hidden');
+  threadEl.classList.remove('hidden');
+  summaryEl.classList.add('hidden');
+  msgInput.disabled = false;
+  sendForm.querySelector('#sendBtn').disabled = false;
+  msgInput.placeholder = i18n.t('consult.placeholder');
+  titleEl.textContent = i18n.t('consult.threadTitle');
+
+  try {
+    const items = await api.get('/consultations/mine');
+    const mine = items.find((c) => c.id === id);
+    if (mine) titleEl.textContent = mine.with || i18n.t('consult.threadTitle');
+  } catch { /* the title is a convenience */ }
+
+  await refreshThread();
+  // New messages arrive while the page sits open; polling keeps both sides
+  // usable without the websocket a free-tier deployment cannot hold.
+  clearInterval(pollTimer);
+  pollTimer = setInterval(refreshThread, 10000);
+}
+
+sendForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  sendError.classList.add('hidden');
+  const body = msgInput.value.trim();
+  if (!body || !openId) return;
+
+  const button = document.getElementById('sendBtn');
+  setBusy(button, true, i18n.t('status.loading'));
+  try {
+    await api.post(`/consultations/${openId}/messages`, { body });
+    msgInput.value = '';
+    await refreshThread();
+  } catch (error) {
+    sendError.textContent = error.message;
+    sendError.classList.remove('hidden');
+  } finally {
+    setBusy(button, false);
+  }
+});
+
+loadList();
+</script>
+</body>
+</html>
