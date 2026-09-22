@@ -33,13 +33,23 @@ python -m http.server 5501
 | API ডকুমেন্টেশন (Swagger) | http://localhost:8000/docs |
 | API হেলথ চেক | http://localhost:8000/health |
 
-### ডেমো অ্যাকাউন্ট
+### ডেমো অ্যাকাউন্ট ও তিনটি আলাদা লগইন পথ
 
-| রোল | ইমেইল | পাসওয়ার্ড |
-|---|---|---|
-| ADMIN | `admin@sasthosetu.gov.bd` | `Admin@12345` |
-| DOCTOR | `doctor@sasthosetu.gov.bd` | `Doctor@12345` |
-| PATIENT | `patient@sasthosetu.gov.bd` | `Patient@12345` |
+| রোল | লগইন পেজ | ইমেইল | পাসওয়ার্ড |
+|---|---|---|---|
+| PATIENT | `/login.html` | `patient@sasthosetu.gov.bd` | `Patient@12345` |
+| DOCTOR | `/doctor-login.html` | `doctor@sasthosetu.gov.bd` | `Doctor@12345` |
+| ADMIN | `/staff-portal.html` | `admin@sasthosetu.gov.bd` | `Admin@12345` |
+
+তিনটা পথ আলাদা করে রাখা হয়েছে:
+
+- রোগীর পেজে রেজিস্ট্রেশন আছে; ডাক্তার বা অ্যাডমিন ক্রেডেনশিয়াল দিলে
+  সে নিজের পোর্টালে পাঠিয়ে দেওয়া হয়।
+- ডাক্তারের পেজে রেজিস্ট্রেশন নেই — অ্যাকাউন্ট বিএমডিসি যাচাইয়ের পর
+  প্রশাসক খোলেন।
+- অ্যাডমিনের পেজ (`staff-portal.html`) মূল সাইটের কোথাও লিংক করা নেই,
+  দেখতে আলাদা, আর রোগী/ডাক্তার ক্রেডেনশিয়াল সেখানে ধরা পড়লে সাথে সাথে
+  লগআউট করিয়ে দেওয়া হয়। ঠিকানাটা শুধু যাদের বলা হয় তারাই জানেন।
 
 ### ⚠️ তিন রোল একসাথে টেস্ট করার নিয়ম
 
@@ -235,7 +245,7 @@ python scripts\check_setup.py
 ### ধাপ ২ — ডাক্তার (ইনকগনিটো উইন্ডোতে, `Ctrl+Shift+N`)
 
 **২.১ লগইন**
-১. যান http://localhost:5501/login.html
+১. যান http://localhost:5501/doctor-login.html
 ২. `doctor@sasthosetu.gov.bd` / `Doctor@12345`
 ৩. ✅ ড্যাশবোর্ডে যাবে, ৪টা নেভিগেশন লিংক
 
@@ -265,7 +275,7 @@ python scripts\check_setup.py
 ### ধাপ ৩ — অ্যাডমিন (সাধারণ Chrome উইন্ডোতে)
 
 **৩.১ লগইন**
-১. যান http://localhost:5501/login.html
+১. যান http://localhost:5501/staff-portal.html (মূল সাইটে এর কোনো লিংক নেই — ঠিকানা সরাসরি লিখুন)
 ২. `admin@sasthosetu.gov.bd` / `Admin@12345`
 ৩. ✅ অ্যাডমিন ড্যাশবোর্ড, ৪টা নেভিগেশন লিংক
 
@@ -351,7 +361,9 @@ python -m unittest discover -s tests
 
 **সাধারণ**
 - হোম — http://localhost:5501/index.html
-- লগইন — http://localhost:5501/login.html
+- রোগী লগইন — http://localhost:5501/login.html
+- ডাক্তার লগইন — http://localhost:5501/doctor-login.html
+- স্টাফ পোর্টাল — http://localhost:5501/staff-portal.html
 - API ডকস — http://localhost:8000/docs
 
 **পেশেন্ট**

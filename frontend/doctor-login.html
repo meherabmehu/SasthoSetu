@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>চিকিৎসক লগইন · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="container">
+  <div class="auth-shell">
+    <div class="page-head text-center">
+      <h1 data-i18n="auth.doctorTitle">চিকিৎসক লগইন</h1>
+      <p class="muted" data-i18n="auth.doctorSubtitle">
+        রোগীর তালিকা, সময়সূচি ও প্রেসক্রিপশন যাচাইয়ের জন্য।</p>
+    </div>
+
+    <section class="card">
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label class="label" for="loginEmail" data-i18n="auth.email">ইমেইল</label>
+          <input id="loginEmail" class="input" type="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label class="label" for="loginPassword" data-i18n="auth.password">পাসওয়ার্ড</label>
+          <input id="loginPassword" class="input" type="password" required
+            autocomplete="current-password">
+        </div>
+        <p class="error-text hidden" id="loginError" role="alert"></p>
+        <button class="btn btn-block" id="loginBtn" type="submit"
+          data-i18n="auth.login">লগইন</button>
+      </form>
+
+      <!-- No registration form. A clinician account is created by an
+           administrator after the BMDC number is checked, so offering a
+           sign-up here would promise something the platform cannot do. -->
+      <p class="small muted mt-4 mb-0" data-i18n="auth.doctorNoAccount">
+        অ্যাকাউন্ট নেই? হাসপাতাল প্রশাসকের সাথে যোগাযোগ করুন — বিএমডিসি নম্বর
+        যাচাইয়ের পর অ্যাকাউন্ট খোলা হয়।</p>
+    </section>
+
+    <p class="small muted text-center mt-4">
+      <a href="login.html" data-i18n="auth.patientPortal">রোগী হিসেবে লগইন করুন</a>
+    </p>
+  </div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { toast, setBusy } from './assets/js/ui.js';
+
+bootstrap('doctor-login.html');
+
+const params = new URLSearchParams(window.location.search);
+const next = params.get('next');
+
+// Where a signed-in account belongs. A patient who reaches this page is sent
+// to their own side rather than to a dashboard that would refuse them.
+function destinationFor(user) {
+  if (user?.role === 'DOCTOR' || user?.role === 'ADMIN') {
+    return next || 'doctor.html';
+  }
+  return 'index.html';
+}
+
+if (session.isAuthenticated) {
+  window.location.href = destinationFor(session.user);
+}
+
+document.getElementById('loginForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = document.getElementById('loginBtn');
+  const errorEl = document.getElementById('loginError');
+  errorEl.classList.add('hidden');
+
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) {
+    errorEl.textContent = i18n.t('auth.invalid');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  setBusy(button, true);
+  try {
+    const user = await api.login(email, password);
+    if (user?.role !== 'DOCTOR' && user?.role !== 'ADMIN') {
+      // Signed in correctly, but through the wrong door. Send them on
+      // instead of leaving them at a dashboard that will reject them.
+      toast(i18n.t('auth.useYourPortal'), 'info');
+      window.location.href = 'index.html';
+      return;
+    }
+    toast(i18n.t('status.saved'), 'success');
+    window.location.href = destinationFor(user);
+  } catch (error) {
+    errorEl.textContent = error.status === 401 || error.status === 400
+      ? i18n.t('auth.invalid')
+      : error.message;
+    errorEl.classList.remove('hidden');
+  } finally {
+    setBusy(button, false);
+  }
+});
+</script>
+</body>
+</html>

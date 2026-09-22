@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+<!-- Deliberately kept out of search results. This page is reached by people
+     who were told the address, not by people browsing the site. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Staff portal</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<style>
+  /* Visually distinct from the public site, so nobody mistakes one for the
+     other, and an administrator can see at a glance which they are using. */
+  body { background: var(--slate-900, #0f172a); }
+  .staff-shell {
+    max-width: 26rem;
+    margin: 0 auto;
+    padding-block: 12vh var(--space-12);
+  }
+  .staff-mark {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto var(--space-4);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: var(--text-2xl);
+  }
+  .staff-shell h1 {
+    color: #fff;
+    text-align: center;
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+  .staff-shell .lede {
+    color: rgba(255, 255, 255, 0.65);
+    text-align: center;
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-6);
+  }
+  .staff-shell .card { background: var(--surface); }
+  .staff-foot {
+    color: rgba(255, 255, 255, 0.45);
+    text-align: center;
+    font-size: var(--text-xs);
+    margin-top: var(--space-6);
+  }
+  .staff-foot a { color: rgba(255, 255, 255, 0.7); }
+</style>
+</head>
+<body>
+<main id="main" class="container">
+  <div class="staff-shell">
+    <div class="staff-mark" aria-hidden="true">&#9673;</div>
+    <h1>SasthoSetu Staff Portal</h1>
+    <p class="lede">Authorised administrators only.</p>
+
+    <section class="card">
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label class="label" for="loginEmail">Email</label>
+          <input id="loginEmail" class="input" type="email" required
+            autocomplete="email" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <label class="label" for="loginPassword">Password</label>
+          <input id="loginPassword" class="input" type="password" required
+            autocomplete="current-password">
+        </div>
+        <p class="error-text hidden" id="loginError" role="alert"></p>
+        <button class="btn btn-block" id="loginBtn" type="submit">Sign in</button>
+      </form>
+    </section>
+
+    <p class="staff-foot">
+      Access is logged. If you are looking for health services,
+      <a href="index.html">go to SasthoSetu</a>.
+    </p>
+  </div>
+</main>
+
+<script type="module">
+import { api, session } from './assets/js/api.js';
+import { i18n } from './assets/js/i18n.js';
+
+/* The shared chrome is not rendered here. The public header carries the
+ * navigation, the language toggle and the brand, none of which belong on a
+ * page that is meant to look and behave like a separate system. */
+
+const params = new URLSearchParams(window.location.search);
+const next = params.get('next');
+
+if (session.isAuthenticated && session.hasRole('ADMIN')) {
+  window.location.href = next || 'admin.html';
+}
+
+const form = document.getElementById('loginForm');
+const button = document.getElementById('loginBtn');
+const errorEl = document.getElementById('loginError');
+
+function fail(message) {
+  errorEl.textContent = message;
+  errorEl.classList.remove('hidden');
+}
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  errorEl.classList.add('hidden');
+
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) {
+    fail('Enter an email address and password.');
+    return;
+  }
+
+  button.disabled = true;
+  const original = button.textContent;
+  button.textContent = 'Signing in...';
+
+  try {
+    const user = await api.login(email, password);
+    if (user?.role !== 'ADMIN') {
+      /* A valid patient or clinician account is not an administrator. Sign
+       * the session straight back out: leaving a live token behind on a
+       * page that implies elevated access invites confusion about what the
+       * holder can actually do. */
+      await api.logout();
+      fail('This account does not have administrator access.');
+      return;
+    }
+    window.location.href = next || 'admin.html';
+  } catch (error) {
+    // Deliberately identical whether the address is unknown or the password
+    // is wrong, so this page cannot be used to discover who has an account.
+    fail(error.status === 401 || error.status === 400
+      ? 'Those credentials were not accepted.'
+      : (error.message || i18n.t('status.error')));
+  } finally {
+    button.disabled = false;
+    button.textContent = original;
+  }
+});
+</script>
+</body>
+</html>

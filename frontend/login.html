@@ -17,6 +17,12 @@
 <body>
 <main id="main" class="container">
   <div class="auth-shell">
+    <div class="page-head text-center">
+      <h1 data-i18n="auth.patientTitle">রোগীর লগইন</h1>
+      <p class="muted" data-i18n="auth.patientSubtitle">
+        উপসর্গ পরীক্ষা, ডাক্তার খোঁজা ও অ্যাপয়েন্টমেন্টের জন্য।</p>
+    </div>
+
     <div class="tabs" role="tablist">
       <button class="tab" id="tabLogin" role="tab" aria-selected="true"
         aria-controls="loginPanel" data-i18n="auth.login">লগইন</button>
@@ -64,6 +70,11 @@
         <button class="btn btn-block" id="registerBtn" type="submit" data-i18n="auth.register">নতুন অ্যাকাউন্ট</button>
       </form>
     </section>
+
+    <p class="small muted text-center mt-4">
+      <span data-i18n="auth.doctorPrompt">আপনি কি চিকিৎসক?</span>
+      <a href="doctor-login.html" data-i18n="auth.doctorPortal">চিকিৎসক পোর্টালে যান</a>
+    </p>
   </div>
 </main>
 
@@ -83,6 +94,18 @@ function destinationFor(user) {
   if (user?.role === 'DOCTOR') return 'doctor.html';
   if (user?.role === 'ADMIN') return 'admin.html';
   return 'index.html';
+}
+
+/* Each role has its own way in, so a clinician signing in here is sent to
+ * theirs rather than silently landing on the patient home page. The account
+ * is not rejected - the session is real either way - it is a redirect, so
+ * nothing here is a security boundary. The enforcement is on the server and
+ * in requireAuth() on each page.
+ */
+function portalFor(role) {
+  if (role === 'DOCTOR') return 'doctor-login.html';
+  if (role === 'ADMIN') return 'staff-portal.html';
+  return null;
 }
 
 if (session.isAuthenticated) {
@@ -121,6 +144,12 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
   setBusy(button, true);
   try {
     const user = await api.login(email, password);
+    const portal = next ? null : portalFor(user?.role);
+    if (portal) {
+      toast(i18n.t('auth.useYourPortal'), 'info');
+      window.location.href = portal;
+      return;
+    }
     toast(i18n.t('status.saved'), 'success');
     window.location.href = destinationFor(user);
   } catch (error) {
