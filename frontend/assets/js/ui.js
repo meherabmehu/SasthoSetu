@@ -216,10 +216,18 @@ export function renderChrome({ active = '' } = {}) {
   const logout = header.querySelector('#logoutBtn');
   if (logout) {
     logout.addEventListener('click', async () => {
+      // Read before the session is cleared: after signing out there is no
+      // role left to decide where to go, and an administrator should not be
+      // dropped onto the public site.
+      const role = session.user?.role;
       // Awaited: leaving the page before the cached records are deleted
       // would abandon the deletion and leave them readable.
       await api.logout();
-      window.location.href = 'login.html';
+      window.location.href = role === 'ADMIN'
+        ? 'staff-portal.html'
+        : role === 'DOCTOR'
+          ? 'doctor-login.html'
+          : 'login.html';
     });
   }
 
@@ -231,8 +239,11 @@ export function renderChrome({ active = '' } = {}) {
 
   window.addEventListener('unauthorized', () => {
     toast(i18n.t('auth.needLogin'), 'danger');
+    // The session is already gone by the time this fires, so the page being
+    // viewed is the only clue about which portal to return to.
+    const page = window.location.pathname.split('/').pop();
     setTimeout(() => {
-      window.location.href = 'login.html';
+      window.location.href = PORTAL_FOR_PAGE[page] || 'login.html';
     }, 1200);
   });
 
@@ -265,11 +276,25 @@ export function renderFooter() {
 
 /* ------------------------------------------------------------- guards etc */
 
+/* Which sign-in page a visitor should be sent to when they are not signed
+ * in. Decided from the page they asked for, since a page's own role guard is
+ * what knows who belongs there. doctors.html is deliberately absent: it is
+ * the patient-facing doctor directory, not the administration list.
+ */
+const PORTAL_FOR_PAGE = {
+  'admin.html': 'staff-portal.html',
+  'doctor.html': 'doctor-login.html',
+  'doctor-schedule.html': 'doctor-login.html',
+};
+
 export function requireAuth(...roles) {
   if (!session.isAuthenticated) {
-    window.location.href = `login.html?next=${encodeURIComponent(
-      window.location.pathname.split('/').pop()
-    )}`;
+    const page = window.location.pathname.split('/').pop();
+    const portal = PORTAL_FOR_PAGE[page]
+      || (roles.includes('ADMIN') && roles.length === 1
+        ? 'staff-portal.html'
+        : 'login.html');
+    window.location.href = `${portal}?next=${encodeURIComponent(page)}`;
     return false;
   }
   if (roles.length && !session.hasRole(...roles)) {
