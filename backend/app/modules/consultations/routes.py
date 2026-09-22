@@ -16,6 +16,7 @@ from app.schemas.clinical import (
 )
 
 from app.modules.consultations.service import (
+    list_my_consultations_service,
     cancel_prescription_service,
     close_consultation_service,
     dispense_prescription_service,
@@ -39,6 +40,14 @@ def start_consultation(
     db: Session = Depends(get_db),
 ):
     return start_consultation_service(payload, current_user, db)
+
+
+@router.get("/consultations/mine")
+def list_my_consultations(
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return list_my_consultations_service(current_user, db)
 
 
 @router.get("/consultations/{consultation_id}")

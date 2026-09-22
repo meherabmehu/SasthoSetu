@@ -127,6 +127,7 @@ const NAV_BY_ROLE = {
     ['xray.html', 'nav.xray'],
     ['recommend.html', 'nav.doctors'],
     ['appointments.html', 'nav.appointments'],
+    ['consultations.html', 'consult.title'],
     ['review.html', 'review.title'],
     ['records.html', 'nav.records'],
     ['hospitals.html', 'nav.hospitals'],
@@ -137,6 +138,7 @@ const NAV_BY_ROLE = {
   ],
   DOCTOR: [
     ['doctor.html', 'nav.dashboard'],
+    ['consultations.html', 'consult.title'],
     ['doctor-schedule.html', 'nav.schedule'],
     ['verify.html', 'nav.verify'],
     ['triage.html', 'nav.triage'],

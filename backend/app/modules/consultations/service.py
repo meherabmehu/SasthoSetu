@@ -180,6 +180,93 @@ def _assert_participant(consultation: Consultation, current_user, db: Session):
     )
 
 
+def list_my_consultations_service(current_user, db: Session):
+    """The consultations the signed-in account takes part in.
+
+    A patient sees the encounters their appointments turned into; a doctor
+    sees their own. Without this, a consultation id was only ever known to
+    whoever created it, so the other side had no way in.
+    """
+    user_id = current_user.get("user_id")
+
+    doctor = (
+        db.query(Doctor).filter(Doctor.user_id == user_id).first()
+    )
+    patient = (
+        db.query(Patient).filter(Patient.user_id == user_id).first()
+    )
+
+    query = db.query(Consultation)
+    if doctor:
+        query = query.filter(Consultation.doctor_id == doctor.id)
+    elif patient:
+        query = query.filter(Consultation.patient_id == patient.id)
+    else:
+        # An administrator without either profile has no consultations of
+        # their own; an ordinary account with neither has none either.
+        return []
+
+    rows = (
+        query.order_by(Consultation.started_at.desc())
+        .limit(50)
+        .all()
+    )
+
+    out = []
+    for c in rows:
+        appointment = (
+            db.query(Appointment)
+            .filter(Appointment.id == c.appointment_id)
+            .first()
+        )
+        other_name = None
+        if patient and appointment is not None:
+            doc = (
+                db.query(Doctor)
+                .filter(Doctor.id == c.doctor_id)
+                .first()
+            )
+            if doc:
+                owner = (
+                    db.query(User)
+                    .filter(User.id == doc.user_id)
+                    .first()
+                )
+                other_name = owner.full_name if owner else None
+        elif doctor and appointment is not None:
+            # The appointment stores the patient table id, not the user id,
+            # so the name is reached through the patient row.
+            patient_row = (
+                db.query(Patient)
+                .filter(Patient.id == appointment.patient_id)
+                .first()
+            )
+            owner = (
+                db.query(User)
+                .filter(User.id == patient_row.user_id)
+                .first()
+            ) if patient_row else None
+            if owner:
+                other_name = owner.full_name
+        out.append(
+            {
+                "id": c.id,
+                "status": c.status,
+                "started_at": (
+                    c.started_at.isoformat() if c.started_at else None
+                ),
+                "appointment_date": (
+                    appointment.appointment_date if appointment else None
+                ),
+                "appointment_time": (
+                    appointment.appointment_time if appointment else None
+                ),
+                "with": other_name,
+            }
+        )
+    return out
+
+
 def get_consultation_service(consultation_id: str, current_user, db: Session):
     consultation = _load_consultation(consultation_id, db)
     _assert_participant(consultation, current_user, db)
