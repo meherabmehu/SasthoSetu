@@ -69,6 +69,26 @@ const errorEl = document.getElementById('skinError');
 const resultEl = document.getElementById('result');
 const submitBtn = document.getElementById('submitBtn');
 
+/* See skin.html: the model is not built on every deployment, and a form that
+ * looks ready but cannot answer wastes the reader's time at the worst moment.
+ */
+(async () => {
+  try {
+    const status = await api.get('/ai/xray-check/status');
+    if (status?.available) return;
+  } catch {
+    return; // A failed check is not proof of absence; leave the form usable.
+  }
+
+  submitBtn.disabled = true;
+  photoEl.disabled = true;
+  form.insertAdjacentHTML('beforebegin', `
+    <div class="alert alert-warning" role="status">
+      <strong>${escapeHtml(i18n.t('xray.unavailable'))}</strong>
+      <p class="mb-0 mt-2">${escapeHtml(i18n.t('imaging.offline'))}</p>
+    </div>`);
+})();
+
 const BAND_STYLE = {
   urgent_review: { cls: 'alert-danger', icon: '\u26A0' },
   doctor_review: { cls: 'alert-warning', icon: '\uD83E\uDE7A' },

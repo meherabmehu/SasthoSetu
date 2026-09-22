@@ -69,6 +69,28 @@ const errorEl = document.getElementById('skinError');
 const resultEl = document.getElementById('result');
 const submitBtn = document.getElementById('submitBtn');
 
+/* The image models are several gigabytes of training data and are not built
+ * on every deployment. Without this the page looks entirely normal, and the
+ * reader only discovers the model is missing after photographing a mole and
+ * waiting for an upload that ends in an error. Ask first, and say so plainly.
+ */
+(async () => {
+  try {
+    const status = await api.get('/ai/skin-check/status');
+    if (status?.available) return;
+  } catch {
+    return; // A failed check is not proof of absence; leave the form usable.
+  }
+
+  submitBtn.disabled = true;
+  photoEl.disabled = true;
+  form.insertAdjacentHTML('beforebegin', `
+    <div class="alert alert-warning" role="status">
+      <strong>${escapeHtml(i18n.t('skin.unavailable'))}</strong>
+      <p class="mb-0 mt-2">${escapeHtml(i18n.t('imaging.offline'))}</p>
+    </div>`);
+})();
+
 const BAND_STYLE = {
   see_doctor_soon: { cls: 'alert-danger', icon: '\u26A0' },
   get_it_checked: { cls: 'alert-warning', icon: '\uD83E\uDE7A' },
