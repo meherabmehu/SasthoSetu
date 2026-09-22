@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>অ্যাকাউন্ট · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="container">
+  <div class="page-head">
+    <h1 data-i18n="account.title">অ্যাকাউন্ট</h1>
+    <p class="muted" id="whoami"></p>
+  </div>
+
+  <section class="card">
+    <h2 data-i18n="account.passwordTitle">পাসওয়ার্ড বদলান</h2>
+    <p class="small muted" data-i18n="account.passwordWhy">
+      একই পাসওয়ার্ড বেশি দিন ব্যবহার করবেন না, আর কারো সাথে শেয়ার করবেন না।</p>
+
+    <form id="pwForm" novalidate>
+      <div class="field">
+        <label class="label" for="currentPassword" data-i18n="account.current">বর্তমান পাসওয়ার্ড</label>
+        <input id="currentPassword" class="input" type="password" required
+          autocomplete="current-password">
+      </div>
+      <div class="field">
+        <label class="label" for="newPassword" data-i18n="account.new">নতুন পাসওয়ার্ড</label>
+        <input id="newPassword" class="input" type="password" required minlength="8"
+          autocomplete="new-password">
+        <p class="tiny subtle" data-i18n="account.newHint">কমপক্ষে ৮ অক্ষর।</p>
+      </div>
+      <div class="field">
+        <label class="label" for="confirmPassword" data-i18n="account.confirm">নতুন পাসওয়ার্ড আবার</label>
+        <input id="confirmPassword" class="input" type="password" required minlength="8"
+          autocomplete="new-password">
+      </div>
+      <p class="error-text hidden" id="pwError" role="alert"></p>
+      <button class="btn btn-block" id="pwBtn" type="submit"
+        data-i18n="account.save">পাসওয়ার্ড বদলান</button>
+    </form>
+
+    <p class="alert alert-success hidden mt-4" id="pwDone" role="status"
+      data-i18n="account.done">নতুন পাসওয়ার্ড সংরক্ষিত হয়েছে। পরেরবার লগইনে নতুনটি দেবেন।</p>
+  </section>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { setBusy, requireAuth } from './assets/js/ui.js';
+
+bootstrap('account.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+// Whose account this is, in plain language, so nobody changes a password
+// believing they are somewhere else.
+const roleLabel = {
+  PATIENT: i18n.t('account.rolePatient'),
+  DOCTOR: i18n.t('account.roleDoctor'),
+  ADMIN: i18n.t('account.roleAdmin'),
+};
+const user = session.user;
+if (user) {
+  document.getElementById('whoami').textContent =
+    `${roleLabel[user.role] || user.role || ''}`;
+}
+
+document.getElementById('pwForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = document.getElementById('pwBtn');
+  const errorEl = document.getElementById('pwError');
+  const doneEl = document.getElementById('pwDone');
+  errorEl.classList.add('hidden');
+  doneEl.classList.add('hidden');
+
+  const current = document.getElementById('currentPassword').value;
+  const next = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('confirmPassword').value;
+
+  if (next.length < 8) {
+    errorEl.textContent = i18n.t('account.tooShort');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  if (next !== confirm) {
+    errorEl.textContent = i18n.t('account.mismatch');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  if (next === current) {
+    errorEl.textContent = i18n.t('account.sameAsOld');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  setBusy(button, true, i18n.t('status.loading'));
+  try {
+    await api.post('/auth/change-password', {
+      current_password: current,
+      new_password: next,
+    });
+    doneEl.classList.remove('hidden');
+    event.target.reset();
+  } catch (error) {
+    errorEl.textContent = error.message;
+    errorEl.classList.remove('hidden');
+  } finally {
+    setBusy(button, false);
+  }
+});
+</script>
+</body>
+</html>

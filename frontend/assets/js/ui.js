@@ -132,18 +132,21 @@ const NAV_BY_ROLE = {
     ['hospitals.html', 'nav.hospitals'],
     ['map.html', 'nav.map'],
     ['pharmacy.html', 'nav.pharmacy'],
+    ['account.html', 'nav.account'],
   ],
   DOCTOR: [
     ['doctor.html', 'nav.dashboard'],
     ['doctor-schedule.html', 'nav.schedule'],
     ['verify.html', 'nav.verify'],
     ['triage.html', 'nav.triage'],
+    ['account.html', 'nav.account'],
   ],
   ADMIN: [
     ['admin.html', 'nav.dashboard'],
     ['hospitals.html', 'nav.hospitals'],
     ['doctors.html', 'nav.doctors'],
     ['verify.html', 'nav.verify'],
+    ['account.html', 'nav.account'],
   ],
 };
 
