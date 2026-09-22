@@ -178,6 +178,16 @@ const TRANSLATIONS = {
     'account.roleDoctor': 'চিকিৎসকের অ্যাকাউন্ট',
     'account.roleAdmin': 'প্রশাসকের অ্যাকাউন্ট',
 
+    'notif.title': 'বিজ্ঞপ্তি',
+    'notif.subtitle': 'অ্যাপয়েন্টমেন্ট, প্রেসক্রিপশন ও অন্য হালনাগাদের খবর।',
+    'notif.markAll': 'সব পড়া হয়েছে করুন',
+    'notif.markRead': 'পড়া হয়েছে',
+    'notif.empty': 'এখনো কোনো বিজ্ঞপ্তি নেই।',
+    'notif.justNow': 'এই মুহূর্তে',
+    'notif.minutesAgo': '{n} মিনিট আগে',
+    'notif.hoursAgo': '{n} ঘণ্টা আগে',
+    'notif.daysAgo': '{n} দিন আগে',
+
     'status.loading': 'লোড হচ্ছে...',
     'status.offline': 'ইন্টারনেট সংযোগ নেই — অফলাইন মোডে চলছে',
     'status.saved': 'সংরক্ষিত হয়েছে',
@@ -387,6 +397,16 @@ const TRANSLATIONS = {
     'account.rolePatient': 'Patient account',
     'account.roleDoctor': 'Clinician account',
     'account.roleAdmin': 'Administrator account',
+
+    'notif.title': 'Notifications',
+    'notif.subtitle': 'Appointments, prescriptions and other updates.',
+    'notif.markAll': 'Mark all as read',
+    'notif.markRead': 'Mark read',
+    'notif.empty': 'No notifications yet.',
+    'notif.justNow': 'just now',
+    'notif.minutesAgo': '{n} min ago',
+    'notif.hoursAgo': '{n} h ago',
+    'notif.daysAgo': '{n} d ago',
 
     'status.loading': 'Loading...',
     'status.offline': 'No connection - working offline',

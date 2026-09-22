@@ -331,3 +331,22 @@
   background: var(--danger-bg);
 }
 .progress-urgent { background: var(--danger); }
+
+/* Notification bell and its unread count. */
+.notif-bell { position: relative; text-decoration: none; }
+.notif-badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--danger);
+  color: #fff;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+}

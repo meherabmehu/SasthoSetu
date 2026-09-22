@@ -372,6 +372,7 @@ python -m unittest discover -s tests
 - এক্স-রে — http://localhost:5501/xray.html
 - ডাক্তার সাজেশন — http://localhost:5501/recommend.html
 - অ্যাপয়েন্টমেন্ট — http://localhost:5501/appointments.html
+- বিজ্ঞপ্তি — http://localhost:5501/notifications.html
 - রিভিউ — http://localhost:5501/review.html
 - রেকর্ড — http://localhost:5501/records.html
 - হাসপাতাল — http://localhost:5501/hospitals.html

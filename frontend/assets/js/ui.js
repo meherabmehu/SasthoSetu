@@ -133,6 +133,7 @@ const NAV_BY_ROLE = {
     ['map.html', 'nav.map'],
     ['pharmacy.html', 'nav.pharmacy'],
     ['account.html', 'nav.account'],
+    ['notifications.html', 'notif.title'],
   ],
   DOCTOR: [
     ['doctor.html', 'nav.dashboard'],
@@ -140,6 +141,7 @@ const NAV_BY_ROLE = {
     ['verify.html', 'nav.verify'],
     ['triage.html', 'nav.triage'],
     ['account.html', 'nav.account'],
+    ['notifications.html', 'notif.title'],
   ],
   ADMIN: [
     ['admin.html', 'nav.dashboard'],
@@ -147,12 +149,36 @@ const NAV_BY_ROLE = {
     ['doctors.html', 'nav.doctors'],
     ['verify.html', 'nav.verify'],
     ['account.html', 'nav.account'],
+    ['notifications.html', 'notif.title'],
   ],
 };
 
 function navFor(user) {
   if (!user) return NAV_BY_ROLE.guest;
   return NAV_BY_ROLE[user.role] || NAV_BY_ROLE.PATIENT;
+}
+
+/* Count the reader's unread notifications and show them on the header bell.
+ * Failure is silent: the bell is an ambient indicator, and an offline moment
+ * or a hiccup must not throw errors onto every page. */
+function updateNotificationBadge(badgeEl, userId) {
+  api.get(`/notifications/${userId}`)
+    .then((items) => {
+      const unread = Array.isArray(items)
+        ? items.filter((n) => !n.is_read).length
+        : 0;
+      if (unread > 0) {
+        badgeEl.textContent = unread > 9 ? '9+' : String(unread);
+        badgeEl.classList.remove('hidden');
+        badgeEl.parentElement.setAttribute(
+          'aria-label',
+          `${i18n.t('notif.title')}: ${unread}`
+        );
+      } else {
+        badgeEl.classList.add('hidden');
+      }
+    })
+    .catch(() => {});
 }
 
 export function renderChrome({ active = '' } = {}) {
@@ -171,6 +197,17 @@ export function renderChrome({ active = '' } = {}) {
     ? `<button class="btn btn-ghost btn-sm" id="logoutBtn" data-i18n="nav.logout">${escapeHtml(i18n.t('nav.logout'))}</button>`
     : `<a href="login.html" class="btn btn-sm" data-i18n="nav.login">${escapeHtml(i18n.t('nav.login'))}</a>`;
 
+  // The bell only appears for someone signed in, and carries the count of
+  // unread notifications so the rest of the app's events (a confirmed
+  // appointment, a ready prescription) are visible from every page.
+  const bell = session.isAuthenticated
+    ? `<a href="notifications.html" class="btn btn-ghost btn-sm notif-bell"
+         id="notifBell" aria-label="${escapeHtml(i18n.t('notif.title'))}">
+         <span aria-hidden="true">🔔</span>
+         <span class="notif-badge hidden" id="notifBadge"></span>
+       </a>`
+    : '';
+
   const header = document.createElement('header');
   header.className = 'site-header no-print';
   header.innerHTML = `
@@ -187,6 +224,7 @@ export function renderChrome({ active = '' } = {}) {
         aria-expanded="false" aria-controls="primaryNav" aria-label="Menu">☰</button>
       <nav class="primary-nav" id="primaryNav" aria-label="Primary">${links}</nav>
       <div class="header-actions">
+        ${bell}
         <button class="btn btn-ghost btn-sm" id="langBtn" aria-label="Change language">
           ${i18n.lang === 'bn' ? 'EN' : 'বাং'}
         </button>
@@ -201,6 +239,11 @@ export function renderChrome({ active = '' } = {}) {
     </div>`;
 
   document.body.prepend(header);
+
+  const badge = header.querySelector('#notifBadge');
+  if (badge && session.user?.user_id) {
+    updateNotificationBadge(badge, session.user.user_id);
+  }
 
   header.querySelector('#langBtn').addEventListener('click', () => {
     i18n.toggle();

@@ -1,10 +1,13 @@
 import uuid
+from datetime import datetime, timezone
 
 from sqlalchemy import Column
 from sqlalchemy import String
 from sqlalchemy import Boolean
+from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import false
+from sqlalchemy import func
 
 from app.models.base import Base
 
@@ -38,4 +41,15 @@ class Notification(Base):
         Boolean,
         default=False,
         server_default=false(),
+    )
+
+    # When it arrived, so the list can be shown newest first. Stamped by the
+    # client rather than the database: the server default only carries whole
+    # seconds, and two notifications written inside one second then sort in a
+    # random order.
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc),
+        server_default=func.now(),
     )
