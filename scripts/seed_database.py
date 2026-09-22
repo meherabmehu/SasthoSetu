@@ -106,13 +106,22 @@ def seed_hospitals(db) -> int:
     records = json.loads(path.read_text(encoding="utf-8"))
     created = 0
 
+    # Read the existing rows once instead of querying per record. Against a
+    # local SQLite file the difference is invisible, but a hosted database is
+    # a network round-trip away: 570 hospitals with four wards each turned
+    # into thousands of separate queries, and at 60-120 ms apiece the seed
+    # took longer than the platform's start-up timeout allowed.
+    existing = {h.code: h for h in db.query(Hospital).all()}
+    wards_by_hospital: dict[str, dict[str, Ward]] = {}
+    for ward in db.query(Ward).all():
+        wards_by_hospital.setdefault(ward.hospital_id, {})[ward.ward_type] = ward
+
+    new_hospitals = []
     for record in records:
-        hospital = (
-            db.query(Hospital).filter(Hospital.code == record["hospital_id"]).first()
-        )
+        hospital = existing.get(record["hospital_id"])
         if not hospital:
             hospital = Hospital(code=record["hospital_id"])
-            db.add(hospital)
+            new_hospitals.append(hospital)
             created += 1
 
         hospital.name = record["name"]
@@ -122,37 +131,45 @@ def seed_hospitals(db) -> int:
         hospital.longitude = record.get("lng")
         hospital.has_emergency = bool(record.get("emergency", True))
         hospital.is_active = True
-        db.flush()
 
+    # One flush for every new hospital, so each gets its generated id before
+    # the wards that reference it are built.
+    db.add_all(new_hospitals)
+    db.flush()
+
+    new_wards = []
+    for record in records:
+        hospital = existing.get(record["hospital_id"]) or next(
+            h for h in new_hospitals if h.code == record["hospital_id"]
+        )
         total_beds = int(record.get("general_beds", 0)) + int(
             record.get("icu_beds", 0)
         )
 
+        current = wards_by_hospital.get(hospital.id, {})
         for ward_type, ward_name, share in WARD_TEMPLATE:
             if ward_type == "icu":
                 capacity = int(record.get("icu_beds", 0))
             else:
                 capacity = max(1, int(total_beds * share))
 
-            ward = (
-                db.query(Ward)
-                .filter(Ward.hospital_id == hospital.id, Ward.ward_type == ward_type)
-                .first()
-            )
+            ward = current.get(ward_type)
             if not ward:
-                ward = Ward(
-                    hospital_id=hospital.id,
-                    ward_type=ward_type,
-                    name=ward_name,
-                    total_beds=capacity,
-                    # Start near a realistic occupancy rather than empty.
-                    occupied_beds=int(capacity * 0.78),
+                new_wards.append(
+                    Ward(
+                        hospital_id=hospital.id,
+                        ward_type=ward_type,
+                        name=ward_name,
+                        total_beds=capacity,
+                        # Start near a realistic occupancy rather than empty.
+                        occupied_beds=int(capacity * 0.78),
+                    )
                 )
-                db.add(ward)
             else:
                 ward.total_beds = capacity
                 ward.name = ward_name
 
+    db.add_all(new_wards)
     return created
 
 
@@ -390,12 +407,25 @@ STOCK_ITEMS = [
 ]
 
 
-def _upsert_provider(db, code, name, provider_type, district, area, phone):
-    provider = db.query(Provider).filter(Provider.code == code).first()
+def _upsert_provider(db, code, name, provider_type, district, area, phone,
+                     known=None):
+    """Create or refresh a provider.
+
+    ``known`` is a code -> Provider map read in one query by the caller.
+    Without it this issues a SELECT per provider, which is 597 round-trips
+    to a hosted database before any stock is written.
+    """
+    if known is None:
+        provider = db.query(Provider).filter(Provider.code == code).first()
+    else:
+        provider = known.get(code)
+
     created = provider is None
     if created:
         provider = Provider(code=code)
         db.add(provider)
+        if known is not None:
+            known[code] = provider
 
     provider.name = name
     provider.provider_type = provider_type
@@ -414,9 +444,22 @@ def seed_pharmacies(db) -> int:
     created = 0
     rng = random.Random(42)
 
+    known = {p.code: p for p in db.query(Provider).all()}
+    # Which (provider, generic, strength) rows already exist, read once. The
+    # per-item lookup this replaces ran roughly 14,000 times.
+    stocked = {
+        (s.provider_id, s.generic_name, s.strength)
+        for s in db.query(
+            PharmacyStock.provider_id,
+            PharmacyStock.generic_name,
+            PharmacyStock.strength,
+        ).all()
+    }
+    pending = []
+
     for index, (code, name, district, area, phone) in enumerate(PHARMACIES):
         provider, is_new = _upsert_provider(
-            db, code, name, "PHARMACY", district, area, phone
+            db, code, name, "PHARMACY", district, area, phone, known=known
         )
         created += int(is_new)
 
@@ -439,19 +482,10 @@ def seed_pharmacies(db) -> int:
                 continue
             carried.add(key)
 
-            existing = (
-                db.query(PharmacyStock)
-                .filter(
-                    PharmacyStock.provider_id == provider.id,
-                    PharmacyStock.generic_name == generic,
-                    PharmacyStock.strength == strength,
-                )
-                .first()
-            )
-            if existing:
+            if (provider.id, generic, strength) in stocked:
                 continue
 
-            db.add(
+            pending.append(
                 PharmacyStock(
                     provider_id=provider.id,
                     brand_name=brand,
@@ -463,6 +497,7 @@ def seed_pharmacies(db) -> int:
                 )
             )
 
+    db.add_all(pending)
     return created
 
 
@@ -471,9 +506,16 @@ def seed_labs(db) -> int:
     created = 0
     rng = random.Random(7)
 
+    known = {p.code: p for p in db.query(Provider).all()}
+    catalogued = {
+        (t.provider_id, t.code)
+        for t in db.query(LabTest.provider_id, LabTest.code).all()
+    }
+    pending = []
+
     for index, (code, name, district, area, phone) in enumerate(LABS):
         provider, is_new = _upsert_provider(
-            db, code, name, "LAB", district, area, phone
+            db, code, name, "LAB", district, area, phone, known=known
         )
         created += int(is_new)
 
@@ -483,18 +525,10 @@ def seed_labs(db) -> int:
             if (test_index + index) % 8 == 0:
                 continue
 
-            existing = (
-                db.query(LabTest)
-                .filter(
-                    LabTest.provider_id == provider.id,
-                    LabTest.code == test_code,
-                )
-                .first()
-            )
-            if existing:
+            if (provider.id, test_code) in catalogued:
                 continue
 
-            db.add(
+            pending.append(
                 LabTest(
                     provider_id=provider.id,
                     code=test_code,
@@ -505,6 +539,7 @@ def seed_labs(db) -> int:
                 )
             )
 
+    db.add_all(pending)
     return created
 
 
