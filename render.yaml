@@ -13,6 +13,11 @@ services:
     runtime: docker
     dockerfilePath: ./Dockerfile
     plan: free
+    # Keep this in the same region as the database. Every query is a network
+    # round-trip, so a service and a database on different continents turn a
+    # few thousand statements into several minutes of waiting. Change it if
+    # the database lives elsewhere - matching matters more than the specific
+    # region.
     region: singapore
     healthCheckPath: /health
     autoDeployTrigger: commit
