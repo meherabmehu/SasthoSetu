@@ -15,3 +15,7 @@ class ChangePasswordRequest(BaseModel):
 class CurrentUserResponse(BaseModel):
     user_id: str
     role: str
+    # The profile fields the account page shows and edits. Optional so older
+    # callers that only look at identity keep working if a row predates them.
+    full_name: str | None = None
+    phone: str | None = None

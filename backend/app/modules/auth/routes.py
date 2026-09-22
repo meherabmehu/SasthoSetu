@@ -9,6 +9,7 @@ from app.schemas.auth import (
     LoginRequest,
 )
 from app.core.dependencies import get_db
+from app.models.user import User
 from app.core.security import get_current_user
 
 from app.modules.auth.service import (
@@ -37,8 +38,20 @@ def login(
 )
 def get_my_identity(
     current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
-    return current_user
+    # The token only carries identity. The profile fields live on the row,
+    # so they are read here rather than widening the shared dependency.
+    user = (
+        db.query(User)
+        .filter(User.id == current_user["user_id"])
+        .first()
+    )
+    return {
+        **current_user,
+        "full_name": user.full_name if user else None,
+        "phone": user.phone if user else None,
+    }
 
 
 @router.post("/change-password")

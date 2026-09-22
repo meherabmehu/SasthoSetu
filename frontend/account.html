@@ -22,6 +22,30 @@
   </div>
 
   <section class="card">
+    <h2 data-i18n="account.profileTitle">প্রোফাইল</h2>
+
+    <form id="profileForm" novalidate>
+      <div class="field">
+        <label class="label" for="profileName" data-i18n="account.name">নাম</label>
+        <input id="profileName" class="input" type="text" required minlength="2"
+          maxlength="100" autocomplete="name">
+      </div>
+      <div class="field">
+        <label class="label" for="profilePhone" data-i18n="account.phone">মোবাইল নম্বর</label>
+        <input id="profilePhone" class="input" type="tel" required
+          pattern="01[3-9][0-9]{8}" autocomplete="tel">
+        <p class="tiny subtle" data-i18n="account.phoneHint">01XXXXXXXXX</p>
+      </div>
+      <p class="error-text hidden" id="profileError" role="alert"></p>
+      <button class="btn btn-block" id="profileBtn" type="submit"
+        data-i18n="account.saveProfile">সংরক্ষণ করুন</button>
+    </form>
+
+    <p class="alert alert-success hidden mt-4" id="profileDone" role="status"
+      data-i18n="account.profileDone">প্রোফাইল সংরক্ষিত হয়েছে।</p>
+  </section>
+
+  <section class="card">
     <h2 data-i18n="account.passwordTitle">পাসওয়ার্ড বদলান</h2>
     <p class="small muted" data-i18n="account.passwordWhy">
       একই পাসওয়ার্ড বেশি দিন ব্যবহার করবেন না, আর কারো সাথে শেয়ার করবেন না।</p>
@@ -74,6 +98,61 @@ if (user) {
   document.getElementById('whoami').textContent =
     `${roleLabel[user.role] || user.role || ''}`;
 }
+
+/* Profile: prefill from the server, because the locally cached copy may be
+ * stale after an edit on another device. */
+async function loadProfile() {
+  try {
+    const me = await api.get('/auth/me');
+    if (me?.full_name) {
+      document.getElementById('profileName').value = me.full_name;
+    }
+    if (me?.phone) {
+      document.getElementById('profilePhone').value = me.phone;
+    }
+  } catch {
+    // The form simply starts empty; saving still works.
+  }
+}
+loadProfile();
+
+document.getElementById('profileForm').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = document.getElementById('profileBtn');
+  const errorEl = document.getElementById('profileError');
+  const doneEl = document.getElementById('profileDone');
+  errorEl.classList.add('hidden');
+  doneEl.classList.add('hidden');
+
+  const full_name = document.getElementById('profileName').value.trim();
+  const phone = document.getElementById('profilePhone').value.trim();
+
+  if (full_name.length < 2) {
+    errorEl.textContent = i18n.t('account.nameTooShort');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  if (!/^01[3-9]\d{8}$/.test(phone)) {
+    errorEl.textContent = i18n.t('account.phoneInvalid');
+    errorEl.classList.remove('hidden');
+    return;
+  }
+
+  setBusy(button, true, i18n.t('status.loading'));
+  try {
+    const updated = await api.patch('/users/me', { full_name, phone });
+    doneEl.classList.remove('hidden');
+    // Keep the cached identity in step, so any page showing the name
+    // reflects the change without another sign-in.
+    const merged = { ...session.user, full_name: updated.full_name, phone: updated.phone };
+    localStorage.setItem('sasthosetu.user', JSON.stringify(merged));
+  } catch (error) {
+    errorEl.textContent = error.message;
+    errorEl.classList.remove('hidden');
+  } finally {
+    setBusy(button, false);
+  }
+});
 
 document.getElementById('pwForm').addEventListener('submit', async (event) => {
   event.preventDefault();
