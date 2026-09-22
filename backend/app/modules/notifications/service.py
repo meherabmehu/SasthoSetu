@@ -27,11 +27,19 @@ def get_notifications_service(
     db: Session
 ):
 
+    # Newest first, and capped: this is a feed of recent events, not an
+    # archive, and a long-lived account would otherwise return years of
+    # rows on every page load.
     return (
         db.query(Notification)
         .filter(
             Notification.user_id == user_id
         )
+        .order_by(
+            Notification.created_at.desc(),
+            Notification.id.desc(),
+        )
+        .limit(50)
         .all()
     )
 

@@ -15,7 +15,7 @@
 /* Raising this discards the previous caches on activate. It must be raised
  * whenever the shell list or the caching rules change, otherwise a returning
  * visitor keeps being served the old app from their own disk. */
-const VERSION = 'v4';
+const VERSION = 'v5';
 const SHELL_CACHE = `sasthosetu-shell-${VERSION}`;
 const DATA_CACHE = `sasthosetu-data-${VERSION}`;
 
@@ -37,6 +37,7 @@ const SHELL_ASSETS = [
   'records.html',
   'login.html',
   'account.html',
+  'notifications.html',
   'doctor-login.html',
   'staff-portal.html',
   'doctor.html',

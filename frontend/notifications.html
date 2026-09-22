@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b817d">
+<title>বিজ্ঞপ্তি · সাস্থ্যসেতু</title>
+<link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+</head>
+<body>
+<main id="main" class="container">
+  <div class="page-head">
+    <h1 data-i18n="notif.title">বিজ্ঞপ্তি</h1>
+    <p class="muted" data-i18n="notif.subtitle">
+      অ্যাপয়েন্টমেন্ট, প্রেসক্রিপশন ও অন্য হালনাগাদের খবর।</p>
+  </div>
+
+  <div class="row gap-2 mb-4" id="actions">
+    <button class="btn btn-ghost btn-sm" id="markAllBtn" type="button"
+      data-i18n="notif.markAll">সব পড়া হয়েছে করুন</button>
+  </div>
+
+  <div id="list" aria-live="polite"></div>
+</main>
+
+<script type="module">
+import { i18n } from './assets/js/i18n.js';
+import { api, session } from './assets/js/api.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, emptyState, requireAuth } from './assets/js/ui.js';
+
+bootstrap('notifications.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+
+const listEl = document.getElementById('list');
+const markAllBtn = document.getElementById('markAllBtn');
+
+function when(iso) {
+  if (!iso) return '';
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return '';
+  const minutes = Math.round((Date.now() - then) / 60000);
+  if (minutes < 1) return i18n.t('notif.justNow');
+  if (minutes < 60) return i18n.t('notif.minutesAgo').replace('{n}', minutes);
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return i18n.t('notif.hoursAgo').replace('{n}', hours);
+  const days = Math.round(hours / 24);
+  return i18n.t('notif.daysAgo').replace('{n}', days);
+}
+
+function card(item) {
+  const cls = item.is_read ? '' : ' unread';
+  const dot = item.is_read
+    ? ''
+    : '<span class="notif-dot" aria-hidden="true"></span>';
+  const mark = item.is_read
+    ? ''
+    : `<button class="btn btn-ghost btn-sm notif-read-btn" type="button"
+         data-id="${escapeHtml(item.id)}" data-i18n="notif.markRead">
+         পড়া হয়েছে</button>`;
+  return `
+    <div class="card notif${cls}" data-id="${escapeHtml(item.id)}">
+      <div class="row gap-2" style="justify-content:space-between">
+        <strong>${escapeHtml(item.title)}</strong>
+        ${dot}
+      </div>
+      <p class="mb-2">${escapeHtml(item.message)}</p>
+      <div class="row gap-2" style="justify-content:space-between">
+        <span class="tiny subtle">${escapeHtml(when(item.created_at))}</span>
+        ${mark}
+      </div>
+    </div>`;
+}
+
+async function load() {
+  const userId = session.user?.user_id;
+  if (!userId) return;
+
+  try {
+    const items = await api.get(`/notifications/${userId}`);
+    if (!items.length) {
+      listEl.innerHTML = emptyState('notif.empty', '🔔');
+      markAllBtn.disabled = true;
+      return;
+    }
+    markAllBtn.disabled = !items.some((n) => !n.is_read);
+    listEl.innerHTML = items.map(card).join('');
+  } catch (error) {
+    listEl.innerHTML =
+      `<div class="alert alert-danger">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+listEl.addEventListener('click', async (event) => {
+  const btn = event.target.closest('.notif-read-btn');
+  if (!btn) return;
+  const id = btn.dataset.id;
+  btn.disabled = true;
+  try {
+    await api.patch(`/notifications/${id}/read`, {});
+    const host = btn.closest('.notif');
+    host.classList.remove('unread');
+    btn.remove();
+    if (!listEl.querySelector('.notif-read-btn')) {
+      markAllBtn.disabled = true;
+    }
+  } catch (error) {
+    btn.disabled = false;
+  }
+});
+
+markAllBtn.addEventListener('click', async () => {
+  const pending = [...listEl.querySelectorAll('.notif-read-btn')];
+  markAllBtn.disabled = true;
+  await Promise.allSettled(
+    pending.map((btn) =>
+      api.patch(`/notifications/${btn.dataset.id}/read`, {})
+        .then(() => {
+          btn.closest('.notif')?.classList.remove('unread');
+          btn.remove();
+        })
+    )
+  );
+});
+
+load();
+</script>
+<style>
+  .notif { position: relative; }
+  .notif.unread { border-color: var(--teal-400); }
+  .notif-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--teal-600);
+    flex-shrink: 0;
+    /* Only an unread item carries the dot; removing the class on click
+       hides it without touching the card's markup. */
+    display: none;
+  }
+  .notif.unread .notif-dot { display: inline-block; }
+  .notif-read-btn { min-height: 32px; }
+</style>
+</body>
+</html>
