@@ -22,6 +22,16 @@
       <p class="muted" id="who"></p>
     </div>
 
+    <!-- Shown only while the BMDC number awaits an administrator's check.
+         Everything clinical is locked until then, and a silent lock reads
+         as a bug. -->
+    <div class="alert alert-warning hidden" id="pendingBanner" role="status">
+      <strong data-i18n="auth.pendingTitle">বিএমডিসি যাচাই অপেক্ষমান</strong>
+      <p class="mb-0" data-i18n="auth.pendingBody">
+        আপনার প্রোফাইল তৈরি হয়েছে। প্রশাসক নম্বরটি যাচাই করার আগে রোগীরা আপনাকে
+        খুঁজে পাবে না এবং কনসালটেশন শুরু করা যাবে না।</p>
+    </div>
+
     <div class="metric-grid" id="metrics"></div>
 
     <h2 class="mt-4" style="margin-top:2rem" id="queueTitle">আজকের রোগী</h2>
@@ -62,6 +72,10 @@ const label = (s) => (STATUS_LABEL[i18n.lang] || STATUS_LABEL.bn)[s] || s;
 async function resolveDoctor() {
   // The dashboard needs the doctor row id, which is distinct from the user id.
   const profile = await api.get('/doctors/me', { cache: true });
+  const banner = document.getElementById('pendingBanner');
+  if (banner && profile && profile.verification_status === false) {
+    banner.classList.remove('hidden');
+  }
   return profile?.id || null;
 }
 

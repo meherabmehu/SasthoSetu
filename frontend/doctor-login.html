@@ -39,12 +39,15 @@
           data-i18n="auth.login">লগইন</button>
       </form>
 
-      <!-- No registration form. A clinician account is created by an
-           administrator after the BMDC number is checked, so offering a
-           sign-up here would promise something the platform cannot do. -->
-      <p class="small muted mt-4 mb-0" data-i18n="auth.doctorNoAccount">
-        অ্যাকাউন্ট নেই? হাসপাতাল প্রশাসকের সাথে যোগাযোগ করুন — বিএমডিসি নম্বর
-        যাচাইয়ের পর অ্যাকাউন্ট খোলা হয়।</p>
+      <!-- Self-service sign-up lives on the main login page behind the
+           clinician door. It creates an unverified profile that an
+           administrator approves after checking the BMDC number. -->
+      <p class="small muted mt-4 mb-0">
+        <span data-i18n="auth.doctorNoAccount">অ্যাকাউন্ট নেই?</span>
+        <a href="login.html?role=doctor&tab=register" data-i18n="auth.doctorRegister">
+          চিকিৎসক অ্যাকাউন্ট খুলুন</a> —
+        <span data-i18n="auth.doctorPendingShort">বিএমডিসি যাচাইয়ের পর সম্পূর্ণ অ্যাক্সেস।</span>
+      </p>
     </section>
 
     <p class="small muted text-center mt-4">
