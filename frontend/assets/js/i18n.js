@@ -178,6 +178,15 @@ const TRANSLATIONS = {
     'account.roleDoctor': 'চিকিৎসকের অ্যাকাউন্ট',
     'account.roleAdmin': 'প্রশাসকের অ্যাকাউন্ট',
 
+    'account.profileTitle': 'প্রোফাইল',
+    'account.name': 'নাম',
+    'account.phone': 'মোবাইল নম্বর',
+    'account.phoneHint': '01XXXXXXXXX',
+    'account.saveProfile': 'সংরক্ষণ করুন',
+    'account.profileDone': 'প্রোফাইল সংরক্ষিত হয়েছে।',
+    'account.nameTooShort': 'নাম কমপক্ষে ২ অক্ষরের হতে হবে।',
+    'account.phoneInvalid': 'সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)।',
+
     'notif.title': 'বিজ্ঞপ্তি',
     'notif.subtitle': 'অ্যাপয়েন্টমেন্ট, প্রেসক্রিপশন ও অন্য হালনাগাদের খবর।',
     'notif.markAll': 'সব পড়া হয়েছে করুন',
@@ -397,6 +406,15 @@ const TRANSLATIONS = {
     'account.rolePatient': 'Patient account',
     'account.roleDoctor': 'Clinician account',
     'account.roleAdmin': 'Administrator account',
+
+    'account.profileTitle': 'Profile',
+    'account.name': 'Name',
+    'account.phone': 'Mobile number',
+    'account.phoneHint': '01XXXXXXXXX',
+    'account.saveProfile': 'Save',
+    'account.profileDone': 'Your profile has been saved.',
+    'account.nameTooShort': 'The name must be at least 2 characters.',
+    'account.phoneInvalid': 'Enter a valid mobile number (01XXXXXXXXX).',
 
     'notif.title': 'Notifications',
     'notif.subtitle': 'Appointments, prescriptions and other updates.',
