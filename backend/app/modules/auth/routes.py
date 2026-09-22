@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.schemas.auth import (
     ChangePasswordRequest,
+    DoctorRegisterRequest,
     CurrentUserResponse,
     LoginRequest,
 )
@@ -14,6 +15,7 @@ from app.core.security import get_current_user
 
 from app.modules.auth.service import (
     change_password_service,
+    register_doctor_service,
     login_service
 )
 
@@ -52,6 +54,14 @@ def get_my_identity(
         "full_name": user.full_name if user else None,
         "phone": user.phone if user else None,
     }
+
+
+@router.post("/register-doctor")
+def register_doctor(
+    payload: DoctorRegisterRequest,
+    db: Session = Depends(get_db)
+):
+    return register_doctor_service(payload, db)
 
 
 @router.post("/change-password")
