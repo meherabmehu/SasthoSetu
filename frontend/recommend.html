@@ -237,6 +237,11 @@ function doctorCard(doctor, index) {
       <a class="btn btn-sm mt-4"
         href="doctor-profile.html?id=${encodeURIComponent(doctor.doctor_id)}">
         ${escapeHtml(i18n.t('action.view'))}</a>
+      <!-- The booking form itself lives on the doctors page; without this
+           link the reader's journey ends at a profile with no way in. -->
+      <a class="btn btn-sm mt-4" style="margin-inline-start:.5rem"
+        href="doctors.html?book=${encodeURIComponent(doctor.doctor_id)}">
+        ${escapeHtml(i18n.t('action.book'))}</a>
     </div>
   </article>`;
 }
@@ -273,6 +278,9 @@ document.getElementById('filters').addEventListener('submit', (event) => {
   search();
 });
 
+// Results first, refinement after: someone who ignores or declines the
+// location prompt should not wait out its timeout before seeing anyone.
+search();
 locating.then(search);
 </script>
 

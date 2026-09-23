@@ -15,7 +15,7 @@
 /* Raising this discards the previous caches on activate. It must be raised
  * whenever the shell list or the caching rules change, otherwise a returning
  * visitor keeps being served the old app from their own disk. */
-const VERSION = 'v7';
+const VERSION = 'v8';
 const SHELL_CACHE = `sasthosetu-shell-${VERSION}`;
 const DATA_CACHE = `sasthosetu-data-${VERSION}`;
 
