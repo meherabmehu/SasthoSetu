@@ -158,6 +158,10 @@ function openBooking(data) {
       <div class="card modal-card" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
         <h3 id="bookTitle">${escapeHtml(i18n.t('appointment.book'))}</h3>
         <p class="muted">${escapeHtml(data.name)}</p>
+        ${data.date ? '' : `
+          <div class="alert alert-warning" role="status">
+            ${i18n.lang === 'bn' ? 'এই ডাক্তারের সামনের সপ্তাহে কোনো খালি সময় পাওয়া যায়নি — অন্য ডাক্তার দেখুন বা সরাসরি ফোন করুন।' : 'No free slot was found for this doctor in the coming week — try another doctor or call directly.'}
+          </div>`}
         <form id="bookForm">
           <div class="field">
             <label class="label" for="bDate">${escapeHtml(i18n.t('appointment.date'))}</label>
@@ -219,7 +223,39 @@ function openBooking(data) {
   });
 }
 
-search();
+/* A card's "book" link lands here with ?book=<doctor_id>. The modal needs
+ * the doctor's next free slot, which the listing already carries; if the
+ * doctor is not among the listed cards, the profile endpoint fills it in. */
+async function openFromQuery() {
+  const wanted = new URLSearchParams(window.location.search).get("book");
+  if (!wanted) return;
+
+  const button = document.querySelector(`.bookBtn[data-doctor="${wanted}"]`);
+  if (button) { button.click(); return; }
+
+  try {
+    const [doctor, slots] = await Promise.all([
+      api.get(`/doctors/id/${wanted}`),
+      // The profile endpoint carries no availability, so the next free
+      // slot is read separately - an empty date in the form reads as a
+      // broken booking rather than a choice.
+      api.get(`/doctor-availability/${wanted}`).catch(() => []),
+    ]);
+    const next = (Array.isArray(slots) ? slots : [])
+      .filter((s) => !s.is_booked && s.available_date >= new Date().toISOString().slice(0, 10))
+      .sort((a, b) =>
+        (a.available_date + a.start_time).localeCompare(b.available_date + b.start_time))[0];
+    openBooking({
+      doctor: wanted,
+      name: doctor.name || doctor.full_name || "",
+      date: next?.available_date || "",
+      time: next?.start_time || "",
+    });
+  } catch {
+    // An unknown id simply leaves the normal directory on screen.
+  }
+}
+search().then(openFromQuery);
 </script>
 
 <style>
