@@ -7,6 +7,22 @@ R4 interoperability, and access channels for people without a smartphone.
 
 ---
 
+## Live demo
+
+**https://sasthosetu.onrender.com** — free-tier deployment (a cold start takes
+about a minute after fifteen idle minutes).
+
+| Role | Where | Credentials |
+|---|---|---|
+| Patient | `login.html`, the 🙋 door | `patient@sasthosetu.gov.bd` / `Patient@12345` |
+| Clinician | `login.html`, the 🩺 door (or `doctor-login.html`) | `doctor@sasthosetu.gov.bd` / `Doctor@12345` |
+| Administrator | `staff-portal.html` — deliberately unlinked from the public site | `admin@sasthosetu.gov.bd` / `Admin@12345` |
+
+A clinician account can also be created from the login page; it stays limited
+until an administrator verifies the BMDC number.
+
+---
+
 ## Why this exists
 
 Bangladesh has roughly 3 doctors per 10,000 people against a WHO minimum of 10.
@@ -27,7 +43,7 @@ users rather than an afterthought.
 | **Bilingual triage** | Bangla, Banglish, English and code-switched input. Deterministic red-flag layer plus a calibrated ML classifier |
 | **Clinical safety** | 11 hard-coded red-flag rules that can only escalate. Machine learning never lowers a severity a rule has raised |
 | **Doctor matching** | Ranked by soonest availability, filtered to BMDC-verified doctors |
-| **Consultations** | Notes, diagnosis, secure messaging; records become append-only once signed |
+| **Consultations** | Notes, diagnosis, two-way messaging between patient and clinician; records become append-only once signed |
 | **Prescriptions** | Multi-item, HMAC-signed, single-use dispensing, forgery and expiry detection |
 | **Drug safety** | 152 Bangladeshi brand aliases over 73 generics, 81 curated interaction pairs, duplicate-therapy detection |
 | **Hospital capacity** | Per-ward bed tracking, append-only history, emergency routing by availability then distance |
@@ -37,9 +53,11 @@ users rather than an afterthought.
 | **Payments** | bKash, Nagad, Rocket, SSLCommerz behind one interface; idempotent, signature-verified, reconciled |
 | **Interoperability** | FHIR R4 resources and a per-patient `$everything` bundle |
 | **Rural access** | SMS triage, IVR menus, offline CHW batch submission |
+| **Notifications** | Every booking, prescription and payment writes to a feed; unread count on every page |
+| **Accounts** | Self-service password and profile changes; role-scoped sign-in doors for patients, clinicians and staff |
 | **Web apps** | Patient, doctor and admin surfaces; installable PWA that works offline |
 
-**281 automated tests.** Every red-flag rule is asserted in four phrasings —
+**336 automated tests.** Every red-flag rule is asserted in four phrasings —
 natural Bangla, romanised Banglish, English, and English paraphrase.
 
 ---
@@ -115,7 +133,7 @@ backend/
     payments/        Gateway abstraction and adapters
     schemas/         Pydantic request and response models
   alembic/           Migrations
-  tests/             309 tests
+  tests/             336 tests
 ml/                  Dataset generators, training, retraining
 scripts/             Database seeding
 docker/              Entrypoint and nginx configuration
