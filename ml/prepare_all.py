@@ -62,6 +62,7 @@ OPTIONAL = [
     ("TB / pneumonia films (7.7 GB)", "fetch_tb_data.py"),
     ("Smartphone lesion photographs (PAD-UFES-20, 3.6 GB)", "fetch_pad_data.py"),
     ("Verified viral rash photographs (MSLD v2.0, 43 MB)", "fetch_msld_data.py"),
+    ("Retina photographs (364 MB)", "fetch_dr_data.py"),
     ("Train skin condition classifier (23 conditions)",
      "train_dermnet_model.py"),
     ("Pigmented lesion images (HAM10000, ~2.8 GB)", "fetch_skin_data.py"),
@@ -71,6 +72,7 @@ OPTIONAL = [
     ("Train tuberculosis screen", "train_tb_model.py"),
     ("Train smartphone lesion screen", "train_pad_model.py"),
     ("Train verified viral rash screen", "train_msld_model.py"),
+    ("Train diabetic retinopathy screen", "train_dr_model.py"),
 ]
 
 

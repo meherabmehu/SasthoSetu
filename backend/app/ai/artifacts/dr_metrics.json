@@ -1,0 +1,21 @@
+{
+  "selected_model": "hist_gradient_boosting",
+  "validation_macro_f1": {
+    "hist_gradient_boosting": 0.5068,
+    "logistic_regression": 0.4563
+  },
+  "test_macro_f1": 0.4634,
+  "test_accuracy": 0.6416,
+  "sight_threatening_recall": 0.8333,
+  "any_dr_recall": 0.9202,
+  "referral_threshold": 0.45000000000000007,
+  "referred_of_test": "210/413",
+  "class_counts": {
+    "Proliferative DR": 290,
+    "Severe DR": 190,
+    "Moderate DR": 900,
+    "Mild DR": 370,
+    "Healthy": 1000
+  },
+  "seed": 42
+}

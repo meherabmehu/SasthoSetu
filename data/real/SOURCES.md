@@ -240,3 +240,25 @@ published five-fold layout, because every image appears in all five folds.
 **Why it is here.** Cowpox and hand-foot-mouth disease appear in no other
 dataset we serve, and the whole collection is dermatologist-verified -
 a stronger review than the web-sourced MSID set.
+
+---
+
+## `imaging/dr_labels.csv` — 2,750 retina photographs, 5 grades
+
+**Source:** a [Hugging Face mirror](https://huggingface.co/datasets/
+Rami/Diabetic_Retinopathy_Preprocessed_Dataset_256x256) of a Kaggle
+diabetic retinopathy collection, itself built from the public EyePACS-style
+screening corpora and resized to 256x256.
+
+**Licence:** the mirror declares none. The underlying Kaggle competition
+data (APTOS/EyePACS-derived) is released for research use; only the
+derived label CSV is committed and the photographs stay out of the
+repository, re-fetchable from the mirror.
+
+**Contents:** 1,000 healthy, 900 moderate, 370 mild, 290 proliferative and
+190 severe retinopathy photographs.
+
+**Why it is here.** Diabetes prevalence among Bangladeshi adults has
+passed ten percent and retinopathy is a leading cause of preventable
+blindness; a fundus camera in an upazila vision centre is realistic, an
+ophthalmologist is not.
