@@ -1,0 +1,47 @@
+{
+  "dataset": "PAD-UFES-20 (tone-labelled subset)",
+  "tones": {
+    "1": {
+      "n": 153,
+      "dermnet_urgent_rate": 0.8693,
+      "ham_referral_rate": 0.6863,
+      "pad_referral_rate": 0.9477,
+      "malignant_recall": 0.975
+    },
+    "2": {
+      "n": 876,
+      "dermnet_urgent_rate": 0.7979,
+      "ham_referral_rate": 0.5913,
+      "pad_referral_rate": 0.9326,
+      "malignant_recall": 0.9759
+    },
+    "3": {
+      "n": 392,
+      "dermnet_urgent_rate": 0.7985,
+      "ham_referral_rate": 0.5179,
+      "pad_referral_rate": 0.926,
+      "malignant_recall": 0.9485
+    },
+    "4": {
+      "n": 62,
+      "dermnet_urgent_rate": 0.8226,
+      "ham_referral_rate": 0.4677,
+      "pad_referral_rate": 0.6613,
+      "malignant_recall": 0.931
+    },
+    "5": {
+      "n": 10,
+      "dermnet_urgent_rate": 0.7,
+      "ham_referral_rate": 0.6,
+      "pad_referral_rate": 0.8,
+      "malignant_recall": 1.0
+    },
+    "6": {
+      "n": 1,
+      "dermnet_urgent_rate": 1.0,
+      "ham_referral_rate": 0.0,
+      "pad_referral_rate": 0.0,
+      "malignant_recall": null
+    }
+  }
+}

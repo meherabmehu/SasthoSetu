@@ -169,6 +169,13 @@ auditable and must never regress silently between model versions.
 | Smartphone lesion screen | Malignancy screen for phone photographs | malignant recall **0.89**, trained on 2,298 PAD-UFES-20 smartphone photographs |
 | Verified viral rash screen | Mpox / cowpox / HFMD / measles / chickenpox | monkeypox recall **0.98**, trained on 755 dermatologist-verified MSLD v2.0 photographs |
 | Diabetic retinopathy screen | Sight-threatening retinopathy from a fundus photo | sight-threatening recall **0.83**, any-DR recall **0.92**, trained on 2,750 public retina photographs |
+
+**Skin-tone audit.** The referral rates and malignant recall of the skin
+screens are measured per Fitzpatrick skin type on the tone-labelled subset
+of PAD-UFES-20 — see
+[docs/model_cards/skin_tone_audit.md](docs/model_cards/skin_tone_audit.md).
+The measured gap (skin types IV–VI make up 73 of 1,494 tone-labelled
+photographs) is the project's clearest data need.
 | Surge forecaster | 24/48/72h bed demand per ward | MAE **≈2.9 beds**, beats naive persistence at every horizon |
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |
