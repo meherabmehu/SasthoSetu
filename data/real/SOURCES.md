@@ -175,3 +175,28 @@ absent from DermNet and HAM10000 entirely; without this screen a rash
 photograph had no class it could land in that meant "monkeypox". The
 dataset is small (770 images) and web-sourced, so its screen is exactly
 that — a screen that raises a referral, never a diagnosis.
+
+---
+
+## `imaging/tb_labels.csv` — 15,990 chest films, 4 classes
+
+**Source:** a [Hugging Face collection](https://huggingface.co/datasets/
+DevVoyageR007/classify_Pneumonia_Tuberculosis_and_Normal__Non_Xray_chest_
+Xray_images) aggregating several long-public chest-film sets. The
+tuberculosis films trace back to the US National Library of Medicine's
+Montgomery County and Shenzhen collections and the Belarus/NIAID sets; the
+pneumonia and COVID films to the RSNA and other public corpora.
+
+**Licence:** the aggregation repo declares none. The underlying US NLM
+collections are US Government public domain; the Belarus set is CC BY 4.0.
+Only the derived label CSV is committed - the films stay out of the
+repository and are re-fetchable.
+
+**Contents:** 4,197 tuberculosis, 4,273 pneumonia, 2,031 COVID-19 and
+5,489 normal films. The source's "unknown" folder (1,818 films) is
+dropped: a class whose provenance cannot be stated cannot be explained to
+a clinician.
+
+**Why it is here.** Tuberculosis is among the top infectious causes of
+death in Bangladesh, and the pneumonia screen we already served had no
+class that could mean it.

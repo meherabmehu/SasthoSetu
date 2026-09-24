@@ -165,6 +165,7 @@ auditable and must never regress silently between model versions.
 | Pigmented lesion classifier | Malignancy screen, dermatoscopic | malignant recall **0.9187**, macro AUC **0.9098**, trained on 10,015 HAM10000 images |
 | Chest X-ray screen | Pneumonia screen from a film photograph | AUC **0.8718**, pneumonia recall **0.9231**, trained on 5,856 films |
 | Viral rash screen | Mpox / chickenpox / measles from a photograph | monkeypox recall **0.79**, trained on 770 MSID photographs from Islamic University, Kushtia |
+| Tuberculosis screen | TB / pneumonia / COVID screen from a film | TB recall **0.91**, accuracy 0.87, trained on 15,990 public chest films |
 | Surge forecaster | 24/48/72h bed demand per ward | MAE **≈2.9 beds**, beats naive persistence at every horizon |
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |

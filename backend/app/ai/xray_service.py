@@ -89,7 +89,89 @@ def _bundle() -> dict:
     return joblib.load(path)
 
 
+@lru_cache(maxsize=1)
+def _tb_bundle() -> dict | None:
+    """The tuberculosis screen, trained on the combined film collection.
+
+    Optional: absent on a deployment that did not build it. Tuberculosis
+    had no class in the pneumonia model's vocabulary at all, so before this
+    screen a film full of upper-lobe cavities could only ever read as
+    "nothing clearly wrong".
+    """
+    path = _ART / "tb_model.joblib"
+    if not path.exists():
+        return None
+    return joblib.load(path)
+
+
+# What the TB screen calls its classes, in the words the response carries.
+TB_PRESENTATION = {
+    "tuberculosis": {
+        "name_en": "Tuberculosis — needs a confirmatory test",
+        "name_bn": "যক্ষ্মা (টিবি) সন্দেহ — কফ পরীক্ষা দরকার",
+    },
+    "pneumonia": {
+        "name_en": "Pneumonia",
+        "name_bn": "নিউমোনিয়া",
+    },
+    "covid19": {
+        "name_en": "COVID-19 pattern",
+        "name_bn": "কোভিড-১৯ সন্দেহ",
+    },
+    "normal": {
+        "name_en": "Normal",
+        "name_bn": "স্বাভাবিক",
+    },
+}
+
+
+def _screen_tb(features) -> dict | None:
+    """Concern score and named findings from the TB screen."""
+    bundle = _tb_bundle()
+    if bundle is None:
+        return None
+
+    model = bundle["model"]
+    weight = bundle.get("concern_weight", {})
+    threshold = float(bundle.get("referral_threshold", 0.5))
+    # sklearn stores the ids it was fitted with; the bundle carries their
+    # readable codes.
+    code_for = {int(c): str(bundle["classes"][int(c)])
+                for c in model.classes_}
+
+    probabilities = model.predict_proba(features)[0]
+    classes = list(model.classes_)
+
+    concern = 0.0
+    for index, cls in enumerate(classes):
+        concern += float(weight.get(int(cls), 0.0)) * float(probabilities[index])
+
+    return {
+        "concern": round(concern, 4),
+        "threshold": round(threshold, 3),
+        "ranked": sorted(
+            (
+                {
+                    "finding": code_for[int(cls)],
+                    "name_en": TB_PRESENTATION.get(
+                        code_for[int(cls)], {}
+                    ).get("name_en", code_for[int(cls)]),
+                    "name_bn": TB_PRESENTATION.get(
+                        code_for[int(cls)], {}
+                    ).get("name_bn", code_for[int(cls)]),
+                    "likelihood": round(float(probability), 4),
+                }
+                for cls, probability in zip(classes, probabilities,
+                                            strict=True)
+            ),
+            key=lambda item: -item["likelihood"],
+        ),
+    }
+
+
 def model_available() -> bool:
+    if _tb_bundle() is not None:
+        return True
     try:
         _bundle()
     except Exception:  # noqa: BLE001
@@ -136,6 +218,13 @@ def assess_chest_xray(payload: bytes, age: Optional[int] = None) -> dict:
     if age is not None and age < 5 and pneumonia >= threshold / 2:
         band = "urgent_review"
 
+    tb_screen = _screen_tb(features)
+    if tb_screen is not None and tb_screen["concern"] >= tb_screen["threshold"]:
+        # A concerning tuberculosis reading escalates the band the same way
+        # a concerning pneumonia reading does: both films need a doctor
+        # today, and the TB one additionally needs a confirmatory test.
+        band = "urgent_review"
+
     ranked = sorted(
         (
             {
@@ -157,6 +246,15 @@ def assess_chest_xray(payload: bytes, age: Optional[int] = None) -> dict:
         "pneumonia_score": round(pneumonia, 4),
         "threshold": round(float(threshold), 3),
         "findings": ranked,
+        "tuberculosis_screen": (
+            {
+                "concern": tb_screen["concern"],
+                "threshold": tb_screen["threshold"],
+                "top": tb_screen["ranked"][0] if tb_screen["ranked"] else None,
+            }
+            if tb_screen is not None
+            else None
+        ),
         "recommended_specialty": "Pulmonology",
         "disclaimer": DISCLAIMER["en"],
         "disclaimer_bn": DISCLAIMER["bn"],
