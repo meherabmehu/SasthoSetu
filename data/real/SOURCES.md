@@ -156,3 +156,22 @@ on a phone is not the same as the film itself.
 | `data/drugs/` | Real brand-to-generic data exists (DGDA, 25,000+ entries) but the official export needs a browser session or a written request. |
 
 See `docs/REAL_DATA.md` for the full assessment.
+
+---
+
+## `imaging/mpox_labels.csv` — 770 viral-rash photographs, 4 classes
+
+**Source:** [Monkeypox Skin Images Dataset (MSID)](https://data.mendeley.com/datasets/r9bfpnvyxr/6),
+Department of Computer Science and Engineering, Islamic University, Kushtia,
+Bangladesh. DOI 10.17632/r9bfpnvyxr.6.
+
+**Licence:** CC BY 4.0. Cite the dataset and its contributors.
+
+**Contents:** 279 monkeypox, 107 chickenpox, 91 measles and 293 normal-skin
+photographs collected from internet health sources.
+
+**Why it is here.** The viral exanthems that circulate in Bangladesh are
+absent from DermNet and HAM10000 entirely; without this screen a rash
+photograph had no class it could land in that meant "monkeypox". The
+dataset is small (770 images) and web-sourced, so its screen is exactly
+that — a screen that raises a referral, never a diagnosis.

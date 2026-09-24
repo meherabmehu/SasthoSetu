@@ -58,11 +58,13 @@ STEPS = [
 OPTIONAL = [
     ("Medical imaging datasets (DermNet + chest X-ray, ~1.7 GB)",
      "fetch_medical_datasets.py"),
+    ("Viral rash photographs (MSID, 54 MB)", "fetch_mpox_data.py"),
     ("Train skin condition classifier (23 conditions)",
      "train_dermnet_model.py"),
     ("Pigmented lesion images (HAM10000, ~2.8 GB)", "fetch_skin_data.py"),
     ("Train pigmented lesion classifier", "train_skin_model.py"),
     ("Train chest X-ray pneumonia screen", "train_chest_xray_model.py"),
+    ("Train viral rash screen", "train_mpox_model.py"),
 ]
 
 

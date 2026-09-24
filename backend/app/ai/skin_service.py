@@ -144,6 +144,105 @@ def _general_bundle() -> dict:
     return joblib.load(path)
 
 
+@lru_cache(maxsize=1)
+def _mpox_bundle() -> dict | None:
+    """The viral-rash screen, trained on the MSID photographs.
+
+    Monkeypox, chickenpox and measles are absent from every other dataset we
+    serve, so without this screen a rash photograph has no path at all to
+    "this could be monkeypox". Optional: absent on a deployment that did not
+    build it, present when its artifact ships.
+    """
+    path = _ART / "mpox_model.joblib"
+    if not path.exists():
+        return None
+    return joblib.load(path)
+
+
+# What the viral-rash screen calls its classes, in the words the response
+# carries. Isolation and contact tracing lose their window when a monkeypox
+# photograph is dismissed, so it presents as urgent; the other two viral
+# rashes ask for confirmation without the same-day pressure.
+MPOX_PRESENTATION = {
+    "mpox": {
+        "name_en": "Mpox (monkeypox) — needs urgent review",
+        "name_bn": "মাংকিপক্স সন্দেহ — দ্রুত পরীক্ষা দরকার",
+        "risk": "concerning",
+    },
+    "chickenpox": {
+        "name_en": "Chickenpox (varicella)",
+        "name_bn": "জলবসন্ত (চিকেনপক্স)",
+        "risk": "uncertain",
+    },
+    "measles": {
+        "name_en": "Measles",
+        "name_bn": "হাম",
+        "risk": "uncertain",
+    },
+    "normal": {
+        "name_en": "Normal skin",
+        "name_bn": "স্বাভাবিক ত্বক",
+        "risk": "reassuring",
+    },
+}
+
+
+def _assess_mpox(features) -> dict | None:
+    """Referral band and named differential from the viral-rash screen."""
+    bundle = _mpox_bundle()
+    if bundle is None:
+        return None
+
+    model = bundle["model"]
+    weight = bundle.get("concern_weight", {})
+    threshold = float(bundle.get("referral_threshold", 0.5))
+    # sklearn stores the class ids it was fitted with (0..3); the bundle
+    # carries their readable codes, which is what the response names use.
+    code_for = {int(c): str(bundle["classes"][int(c)])
+                for c in model.classes_}
+
+    probabilities = model.predict_proba(features)[0]
+    classes = list(model.classes_)
+
+    score = 0.0
+    for index, cls in enumerate(classes):
+        score += float(weight.get(int(cls), 0.0)) * float(probabilities[index])
+
+    if score >= threshold:
+        band = "see_doctor_soon"
+    elif score >= threshold / 2:
+        band = "get_it_checked"
+    else:
+        band = "watch_it"
+
+    return {
+        "band": band,
+        "concern": round(score, 4),
+        "threshold": threshold,
+        "ranked": sorted(
+            (
+                {
+                    "code": code_for[int(cls)],
+                    "name_en": MPOX_PRESENTATION.get(
+                        code_for[int(cls)], {}
+                    ).get("name_en", code_for[int(cls)]),
+                    "name_bn": MPOX_PRESENTATION.get(
+                        code_for[int(cls)], {}
+                    ).get("name_bn", code_for[int(cls)]),
+                    "risk": MPOX_PRESENTATION.get(
+                        code_for[int(cls)], {}
+                    ).get("risk", "unknown"),
+                    "likelihood": round(float(probability), 4),
+                }
+                for cls, probability in zip(classes, probabilities,
+                                            strict=True)
+            ),
+            key=lambda item: -item["likelihood"],
+        ),
+    }
+
+
+
 def _assess_general(features) -> dict | None:
     """Referral band from the DermNet model, or None if it is not built."""
     try:
@@ -174,6 +273,8 @@ def _assess_general(features) -> dict | None:
 
 def model_available() -> bool:
     """Whether any skin model can be served, without raising if none can."""
+    if _mpox_bundle() is not None:
+        return True
     for loader in (_general_bundle, _bundle):
         try:
             loader()
@@ -218,6 +319,7 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
     features = extract_features(image).reshape(1, -1)
 
     general = _assess_general(features)
+    mpox = _assess_mpox(features)
 
     ranked: list[dict] = []
     concerning = 0.0
@@ -304,6 +406,22 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
             "python ml/train_dermnet_model.py"
         )
 
+    mpox_contribution = None
+    if mpox is not None:
+        # The viral-rash screen can only raise the band, never lower it,
+        # and its strongest named candidate joins the differential so the
+        # reader sees why.
+        band = max(band, mpox["band"], key=BAND_ORDER.index)
+        mpox_contribution = {
+            "concern": mpox["concern"],
+            "threshold": mpox["threshold"],
+            "top": mpox["ranked"][0] if mpox["ranked"] else None,
+        }
+        top = mpox["ranked"][0] if mpox["ranked"] else None
+        if top is not None and top["likelihood"] >= 0.3:
+            ranked.append(top)
+            ranked.sort(key=lambda item: -item["likelihood"])
+
     # Older skin carries a higher baseline risk, so a borderline result in an
     # older patient is nudged towards review rather than away from it.
     if age is not None and age >= 60 and band == "watch_it":
@@ -323,7 +441,9 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
         "models": {
             "general_conditions": general is not None,
             "pigmented_lesions": bundle is not None,
+            "viral_rash_screen": mpox is not None,
         },
+        "viral_rash": mpox_contribution,
         "disclaimer": DISCLAIMER["en"],
         "disclaimer_bn": DISCLAIMER["bn"],
         "model_version": MODEL_VERSION,

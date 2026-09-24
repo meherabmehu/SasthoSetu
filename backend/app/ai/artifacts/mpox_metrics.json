@@ -1,0 +1,19 @@
+{
+  "selected_model": "logistic_regression",
+  "validation_macro_f1": {
+    "hist_gradient_boosting": 0.5472,
+    "logistic_regression": 0.5505
+  },
+  "test_macro_f1": 0.4939,
+  "test_accuracy": 0.5195,
+  "monkeypox_recall": 0.7857,
+  "referral_threshold": 0.35000000000000003,
+  "referred_of_test": "93/154",
+  "class_counts": {
+    "Monkeypox": 279,
+    "Chickenpox": 107,
+    "Measles": 91,
+    "Normal": 293
+  },
+  "seed": 42
+}
