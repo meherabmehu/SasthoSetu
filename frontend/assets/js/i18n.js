@@ -178,6 +178,11 @@ const TRANSLATIONS = {
     'account.roleDoctor': 'চিকিৎসকের অ্যাকাউন্ট',
     'account.roleAdmin': 'প্রশাসকের অ্যাকাউন্ট',
 
+    'triage.voiceMicDenied': 'মাইক্রোফোন ব্যবহারের অনুমতি দিন — ঠিকানা বারে 🔒 বা 🎤 আইকনে ক্লিক করে অনুমতি দেওয়া যায়।',
+    'triage.voiceNetwork': 'ভয়েস চেনার জন্য ইন্টারনেট সংযোগ দরকার। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।',
+    'triage.voiceNoSpeech': 'কিছু শোনা যায়নি — বোতাম চেপে আবার স্পষ্ট করে বলুন।',
+    'triage.voiceNoMic': 'কোনো মাইক্রোফোন পাওয়া যায়নি।',
+
     'auth.chooseDoor': 'আপনি কে? নিচ থেকে বেছে নিন।',
     'auth.asPatient': 'রোগী',
     'auth.asPatientHint': 'উপসর্গ পরীক্ষা, ডাক্তার খোঁজা',
@@ -441,6 +446,11 @@ const TRANSLATIONS = {
     'account.rolePatient': 'Patient account',
     'account.roleDoctor': 'Clinician account',
     'account.roleAdmin': 'Administrator account',
+
+    'triage.voiceMicDenied': 'Allow microphone access — click the 🔒 or 🎤 icon in the address bar to grant it.',
+    'triage.voiceNetwork': 'Voice recognition needs an internet connection. Check the connection and try again.',
+    'triage.voiceNoSpeech': 'Nothing was heard — tap the button and speak again.',
+    'triage.voiceNoMic': 'No microphone was found.',
 
     'auth.chooseDoor': 'Who are you? Pick below.',
     'auth.asPatient': 'Patient',

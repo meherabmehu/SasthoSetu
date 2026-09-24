@@ -228,10 +228,25 @@ if (SpeechRecognition) {
     listening = false;
     micBtn.setAttribute('aria-pressed', 'false');
   });
-  recognition.addEventListener('error', () => {
+  recognition.addEventListener('error', (event) => {
     listening = false;
     micBtn.setAttribute('aria-pressed', 'false');
-    toast(i18n.t('status.error'), 'danger');
+    // "Something went wrong" teaches nobody anything. The four failures a
+    // reader can actually act on are each named, because the difference
+    // between "allow the microphone" and "the connection dropped" decides
+    // what they do next.
+    const reason = event.error;
+    let key = 'status.error';
+    if (reason === 'not-allowed' || reason === 'service-not-allowed') {
+      key = 'triage.voiceMicDenied';
+    } else if (reason === 'network') {
+      key = 'triage.voiceNetwork';
+    } else if (reason === 'no-speech') {
+      key = 'triage.voiceNoSpeech';
+    } else if (reason === 'audio-capture') {
+      key = 'triage.voiceNoMic';
+    }
+    toast(i18n.t(key), 'danger');
   });
 }
 
