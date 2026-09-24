@@ -25,7 +25,8 @@ os.environ.setdefault("SECRET_KEY", "test-secret-key-at-least-32-characters-long
 ROOT = Path(__file__).resolve().parents[2]
 IMAGING = ROOT / "data" / "real" / "imaging"
 
-HAS_DATASET = (IMAGING / "mpox_labels.csv").exists()
+HAS_DATASET = ((IMAGING / "mpox_labels.csv").exists()
+                 and any((IMAGING / "mpox").glob("*")))
 
 
 @unittest.skipUnless(HAS_DATASET, "MSID photographs not fetched")

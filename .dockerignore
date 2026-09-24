@@ -17,6 +17,7 @@ data/real/imaging/dermnet
 data/real/imaging/chest_xray
 data/real/imaging/mpox
 data/real/imaging/tb
+data/real/imaging/pad
 data/triage
 data/surge
 data/surveillance
