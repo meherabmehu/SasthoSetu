@@ -160,6 +160,21 @@ def _mpox_bundle() -> dict | None:
 
 
 @lru_cache(maxsize=1)
+def _msld_bundle() -> dict | None:
+    """The dermatologist-verified viral rash screen, trained on MSLD v2.0.
+
+    A second, independently reviewed collection covering two classes no
+    other dataset we serve carries - cowpox and hand-foot-mouth disease.
+    Where both viral screens are built they act as two readers: either can
+    raise the band, neither can lower it.
+    """
+    path = _ART / "msld_model.joblib"
+    if not path.exists():
+        return None
+    return joblib.load(path)
+
+
+@lru_cache(maxsize=1)
 def _pad_bundle() -> dict | None:
     """The smartphone lesion screen, trained on PAD-UFES-20.
 
@@ -176,6 +191,39 @@ def _pad_bundle() -> dict | None:
 
 # What the smartphone screen calls its classes, in the words the response
 # carries.
+MSLD_PRESENTATION = {
+    "monkeypox": {
+        "name_en": "Mpox (monkeypox) — needs urgent review",
+        "name_bn": "মাংকিপক্স (এমপক্স) সন্দেহ — দ্রুত পরীক্ষা দরকার",
+        "risk": "concerning",
+    },
+    "cowpox": {
+        "name_en": "Cowpox — needs review",
+        "name_bn": "কাউপক্স সন্দেহ — পরীক্ষা দরকার",
+        "risk": "concerning",
+    },
+    "hfmd": {
+        "name_en": "Hand, foot and mouth disease",
+        "name_bn": "হাত-পা-মুখ রোগ",
+        "risk": "uncertain",
+    },
+    "measles": {
+        "name_en": "Measles",
+        "name_bn": "হাম",
+        "risk": "uncertain",
+    },
+    "chickenpox": {
+        "name_en": "Chickenpox (varicella)",
+        "name_bn": "জলবসন্ত (চিকেনপক্স)",
+        "risk": "uncertain",
+    },
+    "healthy": {
+        "name_en": "Healthy skin",
+        "name_bn": "স্বাভাবিক ত্বক",
+        "risk": "reassuring",
+    },
+}
+
 PAD_PRESENTATION = {
     "bcc": {
         "name_en": "Basal cell carcinoma",
@@ -310,6 +358,14 @@ def _assess_pad(features) -> dict | None:
     return _generic_concern_screen(bundle, features, PAD_PRESENTATION)
 
 
+def _assess_msld(features) -> dict | None:
+    """Referral band and named differential from the MSLD screen."""
+    bundle = _msld_bundle()
+    if bundle is None:
+        return None
+    return _generic_concern_screen(bundle, features, MSLD_PRESENTATION)
+
+
 def _assess_general(features) -> dict | None:
     """Referral band from the DermNet model, or None if it is not built."""
     try:
@@ -340,7 +396,8 @@ def _assess_general(features) -> dict | None:
 
 def model_available() -> bool:
     """Whether any skin model can be served, without raising if none can."""
-    if _mpox_bundle() is not None or _pad_bundle() is not None:
+    if (_mpox_bundle() is not None or _pad_bundle() is not None
+            or _msld_bundle() is not None):
         return True
     for loader in (_general_bundle, _bundle):
         try:
@@ -388,6 +445,7 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
     general = _assess_general(features)
     mpox = _assess_mpox(features)
     pad = _assess_pad(features)
+    msld = _assess_msld(features)
 
     ranked: list[dict] = []
     concerning = 0.0
@@ -494,6 +552,7 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
 
     mpox_contribution = merge_concern_screen(mpox, "viral")
     pad_contribution = merge_concern_screen(pad, "smartphone")
+    msld_contribution = merge_concern_screen(msld, "msld")
 
     # Older skin carries a higher baseline risk, so a borderline result in an
     # older patient is nudged towards review rather than away from it.
@@ -516,9 +575,11 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
             "pigmented_lesions": bundle is not None,
             "viral_rash_screen": mpox is not None,
             "smartphone_lesion_screen": pad is not None,
+            "verified_viral_rash_screen": msld is not None,
         },
         "viral_rash": mpox_contribution,
         "smartphone_lesion": pad_contribution,
+        "verified_viral_rash": msld_contribution,
         "disclaimer": DISCLAIMER["en"],
         "disclaimer_bn": DISCLAIMER["bn"],
         "model_version": MODEL_VERSION,

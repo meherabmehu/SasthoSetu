@@ -167,6 +167,7 @@ auditable and must never regress silently between model versions.
 | Viral rash screen | Mpox / chickenpox / measles from a photograph | monkeypox recall **0.79**, trained on 770 MSID photographs from Islamic University, Kushtia |
 | Tuberculosis screen | TB / pneumonia / COVID screen from a film | TB recall **0.91**, accuracy 0.87, trained on 15,990 public chest films |
 | Smartphone lesion screen | Malignancy screen for phone photographs | malignant recall **0.89**, trained on 2,298 PAD-UFES-20 smartphone photographs |
+| Verified viral rash screen | Mpox / cowpox / HFMD / measles / chickenpox | monkeypox recall **0.98**, trained on 755 dermatologist-verified MSLD v2.0 photographs |
 | Surge forecaster | 24/48/72h bed demand per ward | MAE **≈2.9 beds**, beats naive persistence at every horizon |
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |

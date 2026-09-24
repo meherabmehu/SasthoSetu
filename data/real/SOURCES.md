@@ -220,3 +220,23 @@ or a textbook atlas; this one is ordinary phone photographs under
 whatever light the room had, which is exactly what our users submit. The
 paper: Pacheco et al., "PAD-UFES-20: A skin lesion dataset composed of
 single images captured by smartphones", 2020.
+
+---
+
+## `imaging/msld_labels.csv` — 755 verified viral-rash photographs, 6 classes
+
+**Source:** [MSLD v2.0](https://github.com/ShamsNafisaAli/Monkeypox-Skin-Lesion-Dataset-v2)
+by Shams Nafisa Ali et al., also on [Kaggle](https://www.kaggle.com/datasets/joydippaul/mpox-skin-lesion-dataset-version-20-msld-v20)
+and Google Drive. Class labels verified by a dermatologist.
+
+**Licence:** CC BY 4.0 (the authors' license badge). Cite the dataset
+paper: Ali et al., "MSLD: Moneypox Skin Lesion Dataset", 2022, and its
+version 2.0 release notes.
+
+**Contents:** 284 monkeypox, 161 hand-foot-mouth disease, 114 healthy, 75
+chickenpox, 66 cowpox and 55 measles photographs - one fold of the
+published five-fold layout, because every image appears in all five folds.
+
+**Why it is here.** Cowpox and hand-foot-mouth disease appear in no other
+dataset we serve, and the whole collection is dermatologist-verified -
+a stronger review than the web-sourced MSID set.
