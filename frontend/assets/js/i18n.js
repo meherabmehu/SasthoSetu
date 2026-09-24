@@ -178,6 +178,16 @@ const TRANSLATIONS = {
     'account.roleDoctor': 'চিকিৎসকের অ্যাকাউন্ট',
     'account.roleAdmin': 'প্রশাসকের অ্যাকাউন্ট',
 
+    'oral.title': 'মুখের ক্যানসার পরীক্ষা',
+    'oral.subtitle': 'মুখের ভেতরের ছবি দিন — ক্যানসারের লক্ষণ আছে কিনা দেখবে।',
+    'oral.choose': 'মুখের ভেতরের ছবি দিন',
+    'oral.analyze': 'পরীক্ষা করুন',
+    'oral.analyzing': 'ছবি দেখা হচ্ছে...',
+    'oral.findings': 'যা দেখা গেল',
+    'oral.needPhoto': 'আগে একটি ছবি বাছুন।',
+    'oral.tips': 'ফোনের টর্চ জ্বালিয়ে, ঘা বা দাগটি যেন স্পষ্ট ফ্রেমে থাকে তাতে করে তুলুন।',
+    'oral.unavailable': 'মুখ-পরীক্ষার মডেল এখনো তৈরি হয়নি।',
+
     'eye.title': 'চোখের রেটিনা পরীক্ষা',
     'eye.subtitle': 'রেটিনার ছবি দিন — ডায়াবেটিক রেটিনোপ্যাথির লক্ষণ আছে কিনা দেখবে।',
     'eye.choose': 'রেটিনার ছবি দিন',
@@ -456,6 +466,16 @@ const TRANSLATIONS = {
     'account.rolePatient': 'Patient account',
     'account.roleDoctor': 'Clinician account',
     'account.roleAdmin': 'Administrator account',
+
+    'oral.title': 'Oral cancer screen',
+    'oral.subtitle': 'Give a photograph of the inside of a mouth and check it for signs of cancer.',
+    'oral.choose': 'Give the mouth photograph',
+    'oral.analyze': 'Check it',
+    'oral.analyzing': 'Reading the photograph...',
+    'oral.findings': 'What was seen',
+    'oral.needPhoto': 'Choose a photo first.',
+    'oral.tips': 'Use the phone torch, with the sore or patch clearly in frame.',
+    'oral.unavailable': 'The oral cancer model has not been built yet.',
 
     'eye.title': 'Retina screen',
     'eye.subtitle': 'Give a retina photograph and check it for signs of diabetic retinopathy.',

@@ -262,3 +262,22 @@ repository, re-fetchable from the mirror.
 passed ten percent and retinopathy is a leading cause of preventable
 blindness; a fundus camera in an upazila vision centre is realistic, an
 ophthalmologist is not.
+
+---
+
+## `imaging/oral_labels.csv` — 10,002 mouth photographs, 2 classes
+
+**Source:** a [Hugging Face mirror](https://huggingface.co/datasets/
+Alwaly/Oral_Cancer-cancer) of a Kaggle oral-cancer collection of clinical
+photographs - 5,001 oral squamous cell carcinoma and 5,001 normal.
+
+**Licence:** the mirror declares none. Only the derived label CSV is
+committed; the photographs stay out of the repository and are re-fetchable.
+
+**Contents:** balanced two-class clinical photographs of the inside of the
+mouth.
+
+**Why it is here.** Oral cancer is among the commonest cancers in
+Bangladesh, driven by betel-quid and tobacco chewing, and presents late. A
+health worker with a phone torch can take this photograph; the screen
+answers the screening question.
