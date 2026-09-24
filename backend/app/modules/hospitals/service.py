@@ -302,11 +302,39 @@ def find_nearby_service(
     if emergency:
         query = query.filter(Hospital.has_emergency.is_(True))
 
+    hospitals = query.all()
+
+    # A location narrows the candidates to a ~200 km box before any
+    # per-hospital work happens, then to the nearest 80. Reading one ward
+    # row per hospital across a network-bound database is what made this
+    # endpoint take a minute with the full 64-district facility list; a
+    # patient waiting that long assumes the page is broken.
+    if latitude is not None and longitude is not None:
+        hospitals = [
+            h for h in hospitals
+            if h.latitude is not None and h.longitude is not None
+            and abs(h.latitude - latitude) <= 2.0
+            and abs(h.longitude - longitude) <= 2.0
+        ]
+        hospitals.sort(
+            key=lambda h: _distance_km(latitude, longitude, h.latitude, h.longitude)
+        )
+        hospitals = hospitals[:80]
+
+    wards_by_hospital: dict[str, list] = {}
+    if hospitals:
+        for ward in (
+            db.query(Ward)
+            .filter(Ward.hospital_id.in_([h.id for h in hospitals]))
+            .all()
+        ):
+            wards_by_hospital.setdefault(ward.hospital_id, []).append(ward)
+
     preferred = [ward_type] if ward_type else (EMERGENCY_WARDS if emergency else [])
 
     results = []
-    for hospital in query.all():
-        wards = db.query(Ward).filter(Ward.hospital_id == hospital.id).all()
+    for hospital in hospitals:
+        wards = wards_by_hospital.get(hospital.id, [])
 
         available_total = sum(max(0, w.total_beds - w.occupied_beds) for w in wards)
         icu_available = sum(
