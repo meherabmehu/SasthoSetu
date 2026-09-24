@@ -33,6 +33,11 @@ from app.ai.eye_service import (
     assess_eye_photo,
     model_available as eye_model_available,
 )
+from app.ai.oral_service import (
+    OralModelError,
+    assess_oral_photo,
+    model_available as oral_model_available,
+)
 
 from app.modules.ai.service import (
     drug_check_service,
@@ -198,3 +203,38 @@ async def eye_check(
 )
 def eye_check_status(current_user=Depends(get_current_user)):
     return {"available": eye_model_available()}
+
+
+@router.post(
+    "/ai/oral-check",
+    summary="Screen a mouth photograph for signs of oral cancer",
+)
+async def oral_check(
+    image: UploadFile = File(...),
+    age_years: int | None = Form(default=None),
+    current_user=Depends(get_current_user),
+):
+    """Screen one photograph of the inside of a mouth.
+
+    A screen, not a diagnosis. It cannot rule cancer out, and the response
+    says so in both languages.
+    """
+    payload = await image.read()
+
+    if not payload:
+        raise HTTPException(status_code=400, detail="No image was uploaded")
+
+    try:
+        return assess_oral_photo(payload, age=age_years)
+    except OralModelError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+
+
+@router.get(
+    "/ai/oral-check/status",
+    summary="Whether the oral cancer model is built and servable",
+)
+def oral_check_status(current_user=Depends(get_current_user)):
+    return {"available": oral_model_available()}
