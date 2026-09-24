@@ -1,0 +1,17 @@
+{
+  "selected_model": "hist_gradient_boosting",
+  "validation_macro_f1": {
+    "hist_gradient_boosting": 0.4672,
+    "logistic_regression": 0.3328
+  },
+  "test_macro_f1": 0.5097,
+  "test_accuracy": 0.7435,
+  "malignant_recall": 0.9187,
+  "malignant_precision": 0.4174,
+  "referral_threshold": 0.02,
+  "macro_auc": 0.9098,
+  "test_size": 1002,
+  "n_images": 10015,
+  "n_features": 32,
+  "seed": 42
+}

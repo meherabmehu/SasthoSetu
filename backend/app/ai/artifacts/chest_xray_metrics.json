@@ -1,0 +1,12 @@
+{
+  "test_macro_f1": 0.7449,
+  "test_accuracy": 0.7804,
+  "auc": 0.8718,
+  "pneumonia_recall": 0.9231,
+  "missed_pneumonia": 30,
+  "pneumonia_total": 390,
+  "threshold": 0.43,
+  "test_size": 624,
+  "n_films": 5856,
+  "seed": 42
+}
