@@ -64,6 +64,7 @@ backend/app/ai/artifacts/*
 !backend/app/ai/artifacts/msld_metrics.json
 !backend/app/ai/artifacts/dr_model.joblib
 !backend/app/ai/artifacts/dr_metrics.json
+!backend/app/ai/artifacts/skin_tone_audit.json
 
 # HAM10000 images: 2.8 GB, CC BY-NC (non-commercial), re-fetchable with
 # ml/fetch_skin_data.py. The derived metadata CSV is committed.

@@ -94,7 +94,9 @@ def main() -> None:
     ]
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    rows: list[str] = ["file,label_id,condition,condition_bn,risk\n"]
+    rows: list[str] = [
+        "file,label_id,condition,condition_bn,risk,fitspatrick,age\n"
+    ]
     kept = 0
     for name in image_zips:
         # Each part is over a gigabyte, so it goes to disk first and is
@@ -127,9 +129,15 @@ def main() -> None:
                 continue
             filename = f"pad_{spec['label_id']}_{kept:06d}.png"
             (OUT_DIR / filename).write_bytes(blob)
+            # The Fitzpatrick skin type travels with the image: without it
+            # the skin-tone audit in ml/audit_skin_tones.py has nothing to
+            # group by, and an unmeasured bias stays invisible.
+            tone = (row.get("fitspatrick") or "").strip()
+            tone = tone[:-2] if tone.endswith(".0") else tone
             rows.append(
                 f"{filename},{spec['label_id']},{row['diagnostic']},"
-                f"{spec['bn']},{spec['risk']}\n"
+                f"{spec['bn']},{spec['risk']},{tone},"
+                f"{(row.get('age') or '').strip()}\n"
             )
             kept += 1
         inner.close()
