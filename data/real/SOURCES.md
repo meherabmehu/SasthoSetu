@@ -200,3 +200,23 @@ a clinician.
 **Why it is here.** Tuberculosis is among the top infectious causes of
 death in Bangladesh, and the pneumonia screen we already served had no
 class that could mean it.
+
+---
+
+## `imaging/pad_labels.csv` — 2,298 smartphone photographs, 6 diagnoses
+
+**Source:** [PAD-UFES-20](https://data.mendeley.com/datasets/zr7vgbcyr2/1),
+smartphone photographs collected in Brazil with clinical context (age,
+Fitzpatrick skin type, body region, symptoms).
+
+**Licence:** CC BY 4.0.
+
+**Contents:** 845 basal cell carcinoma, 730 actinic keratosis, 244
+melanocytic nevus, 235 seborrheic keratosis, 192 squamous cell carcinoma
+and 52 melanoma photographs.
+
+**Why it is here.** Every other lesion dataset we serve is dermatoscopic
+or a textbook atlas; this one is ordinary phone photographs under
+whatever light the room had, which is exactly what our users submit. The
+paper: Pacheco et al., "PAD-UFES-20: A skin lesion dataset composed of
+single images captured by smartphones", 2020.

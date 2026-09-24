@@ -1,0 +1,21 @@
+{
+  "selected_model": "hist_gradient_boosting",
+  "validation_macro_f1": {
+    "hist_gradient_boosting": 0.3332,
+    "logistic_regression": 0.3122
+  },
+  "test_macro_f1": 0.3147,
+  "test_accuracy": 0.5058,
+  "malignant_recall": 0.8902,
+  "referral_threshold": 0.6900000000000002,
+  "referred_of_test": "261/346",
+  "class_counts": {
+    "BCC": 845,
+    "SCC": 192,
+    "MEL": 52,
+    "ACK": 730,
+    "NEV": 244,
+    "SEK": 235
+  },
+  "seed": 42
+}

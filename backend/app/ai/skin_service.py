@@ -159,6 +159,57 @@ def _mpox_bundle() -> dict | None:
     return joblib.load(path)
 
 
+@lru_cache(maxsize=1)
+def _pad_bundle() -> dict | None:
+    """The smartphone lesion screen, trained on PAD-UFES-20.
+
+    Every other lesion model we serve reads dermatoscope images; our users
+    photograph a mole with the phone they own, under whatever light they
+    have. This screen is trained on exactly that kind of photograph, so it
+    is the honest match for that input. Optional, like the others.
+    """
+    path = _ART / "pad_model.joblib"
+    if not path.exists():
+        return None
+    return joblib.load(path)
+
+
+# What the smartphone screen calls its classes, in the words the response
+# carries.
+PAD_PRESENTATION = {
+    "bcc": {
+        "name_en": "Basal cell carcinoma",
+        "name_bn": "বেসাল সেল কার্সিনোমা (ত্বকের ক্যানসার)",
+        "risk": "malignant",
+    },
+    "scc": {
+        "name_en": "Squamous cell carcinoma",
+        "name_bn": "স্কোয়ামাস সেল কার্সিনোমা (ত্বকের ক্যানসার)",
+        "risk": "malignant",
+    },
+    "mel": {
+        "name_en": "Melanoma",
+        "name_bn": "মেলানোমা (ত্বকের ক্যানসার)",
+        "risk": "malignant",
+    },
+    "ack": {
+        "name_en": "Actinic keratosis",
+        "name_bn": "অ্যাক্টিনিক কেরাটোসিস (প্রাক-ক্যানসার)",
+        "risk": "precancerous",
+    },
+    "nev": {
+        "name_en": "Melanocytic nevus (ordinary mole)",
+        "name_bn": "সাধারণ তিল — ক্ষতিকর নয়",
+        "risk": "benign",
+    },
+    "sek": {
+        "name_en": "Seborrheic keratosis",
+        "name_bn": "সেবোরিক কেরাটোসিস (নিরীহ)",
+        "risk": "benign",
+    },
+}
+
+
 # What the viral-rash screen calls its classes, in the words the response
 # carries. Isolation and contact tracing lose their window when a monkeypox
 # photograph is dismissed, so it presents as urgent; the other two viral
@@ -187,17 +238,18 @@ MPOX_PRESENTATION = {
 }
 
 
-def _assess_mpox(features) -> dict | None:
-    """Referral band and named differential from the viral-rash screen."""
-    bundle = _mpox_bundle()
-    if bundle is None:
-        return None
+def _generic_concern_screen(bundle: dict, features, presentation: dict) -> dict:
+    """Shared scoring for the optional concern-weighted screens.
 
+    Both the viral-rash and the smartphone screens ask the same question -
+    a summed, weighted probability against a validation-chosen threshold -
+    so they share one implementation rather than two copies that drift.
+    """
     model = bundle["model"]
     weight = bundle.get("concern_weight", {})
     threshold = float(bundle.get("referral_threshold", 0.5))
-    # sklearn stores the class ids it was fitted with (0..3); the bundle
-    # carries their readable codes, which is what the response names use.
+    # sklearn stores the ids it was fitted with; the bundle carries their
+    # readable codes.
     code_for = {int(c): str(bundle["classes"][int(c)])
                 for c in model.classes_}
 
@@ -223,13 +275,13 @@ def _assess_mpox(features) -> dict | None:
             (
                 {
                     "code": code_for[int(cls)],
-                    "name_en": MPOX_PRESENTATION.get(
+                    "name_en": presentation.get(
                         code_for[int(cls)], {}
                     ).get("name_en", code_for[int(cls)]),
-                    "name_bn": MPOX_PRESENTATION.get(
+                    "name_bn": presentation.get(
                         code_for[int(cls)], {}
                     ).get("name_bn", code_for[int(cls)]),
-                    "risk": MPOX_PRESENTATION.get(
+                    "risk": presentation.get(
                         code_for[int(cls)], {}
                     ).get("risk", "unknown"),
                     "likelihood": round(float(probability), 4),
@@ -241,6 +293,21 @@ def _assess_mpox(features) -> dict | None:
         ),
     }
 
+
+def _assess_mpox(features) -> dict | None:
+    """Referral band and named differential from the viral-rash screen."""
+    bundle = _mpox_bundle()
+    if bundle is None:
+        return None
+    return _generic_concern_screen(bundle, features, MPOX_PRESENTATION)
+
+
+def _assess_pad(features) -> dict | None:
+    """Referral band and named differential from the smartphone screen."""
+    bundle = _pad_bundle()
+    if bundle is None:
+        return None
+    return _generic_concern_screen(bundle, features, PAD_PRESENTATION)
 
 
 def _assess_general(features) -> dict | None:
@@ -273,7 +340,7 @@ def _assess_general(features) -> dict | None:
 
 def model_available() -> bool:
     """Whether any skin model can be served, without raising if none can."""
-    if _mpox_bundle() is not None:
+    if _mpox_bundle() is not None or _pad_bundle() is not None:
         return True
     for loader in (_general_bundle, _bundle):
         try:
@@ -320,6 +387,7 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
 
     general = _assess_general(features)
     mpox = _assess_mpox(features)
+    pad = _assess_pad(features)
 
     ranked: list[dict] = []
     concerning = 0.0
@@ -406,21 +474,26 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
             "python ml/train_dermnet_model.py"
         )
 
-    mpox_contribution = None
-    if mpox is not None:
-        # The viral-rash screen can only raise the band, never lower it,
-        # and its strongest named candidate joins the differential so the
-        # reader sees why.
-        band = max(band, mpox["band"], key=BAND_ORDER.index)
-        mpox_contribution = {
-            "concern": mpox["concern"],
-            "threshold": mpox["threshold"],
-            "top": mpox["ranked"][0] if mpox["ranked"] else None,
-        }
-        top = mpox["ranked"][0] if mpox["ranked"] else None
+    def merge_concern_screen(screen, key_name):
+        """A screen may only raise the band, never lower it, and its
+        strongest candidate joins the differential when it is saying
+        anything definite, so the reader sees why the band moved."""
+        nonlocal band
+        if screen is None:
+            return None
+        band = max(band, screen["band"], key=BAND_ORDER.index)
+        top = screen["ranked"][0] if screen["ranked"] else None
         if top is not None and top["likelihood"] >= 0.3:
             ranked.append(top)
             ranked.sort(key=lambda item: -item["likelihood"])
+        return {
+            "concern": screen["concern"],
+            "threshold": screen["threshold"],
+            "top": top,
+        }
+
+    mpox_contribution = merge_concern_screen(mpox, "viral")
+    pad_contribution = merge_concern_screen(pad, "smartphone")
 
     # Older skin carries a higher baseline risk, so a borderline result in an
     # older patient is nudged towards review rather than away from it.
@@ -442,8 +515,10 @@ def assess_skin_image(payload: bytes, age: Optional[int] = None) -> dict:
             "general_conditions": general is not None,
             "pigmented_lesions": bundle is not None,
             "viral_rash_screen": mpox is not None,
+            "smartphone_lesion_screen": pad is not None,
         },
         "viral_rash": mpox_contribution,
+        "smartphone_lesion": pad_contribution,
         "disclaimer": DISCLAIMER["en"],
         "disclaimer_bn": DISCLAIMER["bn"],
         "model_version": MODEL_VERSION,

@@ -60,6 +60,7 @@ OPTIONAL = [
      "fetch_medical_datasets.py"),
     ("Viral rash photographs (MSID, 54 MB)", "fetch_mpox_data.py"),
     ("TB / pneumonia films (7.7 GB)", "fetch_tb_data.py"),
+    ("Smartphone lesion photographs (PAD-UFES-20, 3.6 GB)", "fetch_pad_data.py"),
     ("Train skin condition classifier (23 conditions)",
      "train_dermnet_model.py"),
     ("Pigmented lesion images (HAM10000, ~2.8 GB)", "fetch_skin_data.py"),
@@ -67,6 +68,7 @@ OPTIONAL = [
     ("Train chest X-ray pneumonia screen", "train_chest_xray_model.py"),
     ("Train viral rash screen", "train_mpox_model.py"),
     ("Train tuberculosis screen", "train_tb_model.py"),
+    ("Train smartphone lesion screen", "train_pad_model.py"),
 ]
 
 
