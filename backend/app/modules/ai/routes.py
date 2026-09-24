@@ -28,6 +28,11 @@ from app.ai.xray_service import (
     assess_chest_xray,
     model_available as xray_model_available,
 )
+from app.ai.eye_service import (
+    EyeModelError,
+    assess_eye_photo,
+    model_available as eye_model_available,
+)
 
 from app.modules.ai.service import (
     drug_check_service,
@@ -158,3 +163,38 @@ async def xray_check(
 )
 def xray_check_status(current_user=Depends(get_current_user)):
     return {"available": xray_model_available()}
+
+
+@router.post(
+    "/ai/eye-check",
+    summary="Screen a retina photograph for diabetic retinopathy",
+)
+async def eye_check(
+    image: UploadFile = File(...),
+    age_years: int | None = Form(default=None),
+    current_user=Depends(get_current_user),
+):
+    """Screen one fundus photograph.
+
+    A screen, not an eye examination. It cannot rule retinopathy out, and
+    the response says so in both languages.
+    """
+    payload = await image.read()
+
+    if not payload:
+        raise HTTPException(status_code=400, detail="No image was uploaded")
+
+    try:
+        return assess_eye_photo(payload, age=age_years)
+    except EyeModelError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+
+
+@router.get(
+    "/ai/eye-check/status",
+    summary="Whether the retinopathy model is built and servable",
+)
+def eye_check_status(current_user=Depends(get_current_user)):
+    return {"available": eye_model_available()}

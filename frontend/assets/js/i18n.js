@@ -178,6 +178,16 @@ const TRANSLATIONS = {
     'account.roleDoctor': 'চিকিৎসকের অ্যাকাউন্ট',
     'account.roleAdmin': 'প্রশাসকের অ্যাকাউন্ট',
 
+    'eye.title': 'চোখের রেটিনা পরীক্ষা',
+    'eye.subtitle': 'রেটিনার ছবি দিন — ডায়াবেটিক রেটিনোপ্যাথির লক্ষণ আছে কিনা দেখবে।',
+    'eye.choose': 'রেটিনার ছবি দিন',
+    'eye.analyze': 'পরীক্ষা করুন',
+    'eye.analyzing': 'ছবি দেখা হচ্ছে...',
+    'eye.findings': 'যা দেখা গেল',
+    'eye.needPhoto': 'আগে একটি ছবি বাছুন।',
+    'eye.tips': 'ছবিটি যতটা সম্ভব স্পষ্ট ও সোজা করে তুলুন, পুরো রেটিনা যেন ফ্রেমে থাকে।',
+    'eye.unavailable': 'রেটিনা পরীক্ষার মডেল এখনো তৈরি হয়নি।',
+
     'triage.voiceMicDenied': 'মাইক্রোফোন ব্যবহারের অনুমতি দিন — ঠিকানা বারে 🔒 বা 🎤 আইকনে ক্লিক করে অনুমতি দেওয়া যায়।',
     'triage.voiceNetwork': 'ভয়েস চেনার জন্য ইন্টারনেট সংযোগ দরকার। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।',
     'triage.voiceNoSpeech': 'কিছু শোনা যায়নি — বোতাম চেপে আবার স্পষ্ট করে বলুন।',
@@ -446,6 +456,16 @@ const TRANSLATIONS = {
     'account.rolePatient': 'Patient account',
     'account.roleDoctor': 'Clinician account',
     'account.roleAdmin': 'Administrator account',
+
+    'eye.title': 'Retina screen',
+    'eye.subtitle': 'Give a retina photograph and check it for signs of diabetic retinopathy.',
+    'eye.choose': 'Give the retina photograph',
+    'eye.analyze': 'Check it',
+    'eye.analyzing': 'Reading the photograph...',
+    'eye.findings': 'What was seen',
+    'eye.needPhoto': 'Choose a photo first.',
+    'eye.tips': 'Photograph as sharp and straight as possible, with the whole retina in frame.',
+    'eye.unavailable': 'The retinopathy model has not been built yet.',
 
     'triage.voiceMicDenied': 'Allow microphone access — click the 🔒 or 🎤 icon in the address bar to grant it.',
     'triage.voiceNetwork': 'Voice recognition needs an internet connection. Check the connection and try again.',
