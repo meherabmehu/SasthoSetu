@@ -56,6 +56,8 @@ backend/app/ai/artifacts/*
 !backend/app/ai/artifacts/chest_xray_metrics.json
 !backend/app/ai/artifacts/mpox_model.joblib
 !backend/app/ai/artifacts/mpox_metrics.json
+!backend/app/ai/artifacts/tb_model.joblib
+!backend/app/ai/artifacts/tb_metrics.json
 
 # HAM10000 images: 2.8 GB, CC BY-NC (non-commercial), re-fetchable with
 # ml/fetch_skin_data.py. The derived metadata CSV is committed.
@@ -66,6 +68,7 @@ data/real/skin/images/
 data/real/imaging/dermnet/
 data/real/imaging/chest_xray/
 data/real/imaging/mpox/
+data/real/imaging/tb/
 
 # Built by scripts/build_frontend.py at deploy time. Committing it would
 # freeze one deployment's API address into the repository.
