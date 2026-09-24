@@ -1,0 +1,14 @@
+{
+  "validation_macro_f1": 0.4747,
+  "test_macro_f1": 0.381,
+  "test_accuracy": 0.4259,
+  "urgent_recall": 0.7427,
+  "urgent_threshold": 0.27,
+  "checked_threshold": 0.42,
+  "urgent_dismissed_as_watch": 18,
+  "urgent_total": 583,
+  "test_size": 2334,
+  "n_images": 15557,
+  "n_conditions": 23,
+  "seed": 42
+}
