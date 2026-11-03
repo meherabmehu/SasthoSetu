@@ -92,14 +92,14 @@ class MobileWalletGateway(PaymentGateway):
                 accepted=False,
                 gateway_reference="",
                 status="FAILED",
-                is_sandbox=not self.is_configured(),
+                is_sandbox=True,
                 message="Amount must be greater than zero",
             )
 
         gateway_reference = (
             f"{self.prefix}-{secrets.token_hex(8).upper()}"
         )
-        sandbox = not self.is_configured()
+        sandbox = True
 
         return ChargeResult(
             accepted=True,
@@ -109,7 +109,7 @@ class MobileWalletGateway(PaymentGateway):
             status="PENDING",
             is_sandbox=sandbox,
             message=(
-                "Sandbox mode: no live credentials configured"
+                "DEMO: simulated payment; no money is charged"
                 if sandbox
                 else "Charge initiated"
             ),
@@ -118,6 +118,8 @@ class MobileWalletGateway(PaymentGateway):
                 "amount": round(request.amount_bdt, 2),
                 "currency": "BDT",
                 "gateway": self.name,
+                "is_sandbox": True,
+                "mode": "demo",
             },
         )
 
@@ -127,15 +129,15 @@ class MobileWalletGateway(PaymentGateway):
                 accepted=False,
                 gateway_reference=gateway_reference,
                 status="FAILED",
-                is_sandbox=not self.is_configured(),
+                is_sandbox=True,
                 message="Refund amount must be greater than zero",
             )
         return ChargeResult(
             accepted=True,
             gateway_reference=f"RFND-{secrets.token_hex(6).upper()}",
             status="REFUNDED",
-            is_sandbox=not self.is_configured(),
-            message="Refund accepted",
+            is_sandbox=True,
+            message="DEMO: simulated refund; no money is moved",
             payload={"original": gateway_reference, "amount": round(amount_bdt, 2)},
         )
 

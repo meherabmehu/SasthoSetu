@@ -7,7 +7,6 @@ from app.models.user import User
 from app.core.security import (
     verify_password,
     hash_password,
-    create_access_token
 )
 
 
@@ -46,18 +45,8 @@ def login_service(
             detail="Invalid credentials"
         )
 
-    token = create_access_token(
-        {
-            "sub": user.id,
-            "user_id": user.id,
-            "role": user.role
-        }
-    )
-
-    return {
-        "access_token": token,
-        "token_type": "bearer"
-    }
+    from app.modules.auth.tokens import session_tokens
+    return session_tokens(user, db)
 
 
 def change_password_service(
@@ -106,6 +95,7 @@ def change_password_service(
         )
 
     user.password_hash = hash_password(new_password)
+    user.token_version += 1
     db.commit()
 
     return {

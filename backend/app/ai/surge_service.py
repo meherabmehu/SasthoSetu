@@ -14,7 +14,7 @@ import os
 from functools import lru_cache
 from pathlib import Path
 
-import joblib
+from .artifact_loading import load_artifact
 import numpy as np
 import pandas as pd
 
@@ -34,7 +34,7 @@ _ALERT_RATE = 0.90       # occupancy fraction that raises a surge alert
 
 @lru_cache(maxsize=1)
 def _bundle():
-    return joblib.load(_ART / "surge_model.joblib")
+    return load_artifact(_ART / "surge_model.joblib")
 
 
 @lru_cache(maxsize=1)
@@ -105,6 +105,8 @@ def forecast(hospital_id: str, ward_types: list[str] | None = None) -> dict:
 
     return {
         "hospital_id": hospital_id,
+        "data_source": "synthetic_demo",
+        "is_live": False,
         "hospital_name": str(
             hist[hist.hospital_id == hospital_id]["hospital_name"].iloc[0]),
         "wards": out_wards,

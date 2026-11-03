@@ -29,11 +29,12 @@ def upload_file(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    require_self_or_clinician(patient_user_id, current_user)
+    require_self_or_clinician(patient_user_id, current_user, db)
     return upload_file_service(
         patient_user_id=patient_user_id,
         file=file,
-        db=db
+        db=db,
+        uploaded_by=current_user["user_id"]
     )
 
 
@@ -46,7 +47,7 @@ def get_patient_files(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    require_self_or_clinician(patient_user_id, current_user)
+    require_self_or_clinician(patient_user_id, current_user, db)
     return get_patient_files_service(
         patient_user_id=patient_user_id,
         db=db

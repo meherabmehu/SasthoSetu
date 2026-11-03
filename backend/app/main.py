@@ -12,10 +12,12 @@ from app.core.middleware import (
     SecurityHeadersMiddleware,
 )
 from app.core.schema_check import verify_schema
+from app.core.readiness import router as readiness_router
 
 from app.modules.users.routes import router as user_router
 from app.modules.auth.routes import router as auth_router
 from app.modules.patients.routes import router as patient_router
+from app.modules.patients.consent import router as consent_router
 from app.modules.doctors.routes import (
     router as doctor_router
 )
@@ -97,6 +99,7 @@ app = FastAPI(
         "capacity, labs, pharmacies, payments and FHIR R4 interoperability."
     ),
 )
+app.include_router(readiness_router)
 
 # Middleware runs bottom-up, so rate limiting is evaluated before the handler
 # and request logging wraps everything.
@@ -136,6 +139,7 @@ app.include_router(
     prefix="/api/v1",
     tags=["Patients"]
 )
+app.include_router(consent_router, prefix="/api/v1", tags=["Patient consent"])
 app.include_router(
     doctor_router,
     prefix="/api/v1",

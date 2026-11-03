@@ -48,6 +48,8 @@ def _hospital_payload(hospital: Hospital, wards: list[Ward]) -> dict:
     ward_payloads = [_ward_payload(w) for w in wards]
     return {
         "id": hospital.id,
+        "capacity_source": "demo_or_staff_reported_unverified",
+        "is_live_verified": False,
         "code": hospital.code,
         "name": hospital.name,
         "district": hospital.district,
@@ -366,6 +368,8 @@ def find_nearby_service(
         results.append(
             {
                 "id": hospital.id,
+        "capacity_source": "demo_or_staff_reported_unverified",
+        "is_live_verified": False,
                 "code": hospital.code,
                 "name": hospital.name,
                 "district": hospital.district,

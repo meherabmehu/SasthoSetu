@@ -18,7 +18,7 @@
 <main id="main" class="page">
   <div class="container">
     <div class="page-head">
-      <h1 data-i18n="nav.records">আমার রেকর্ড</h1>
+      <p><a class="btn btn-secondary" href="labs.html">পরীক্ষা বুক করুন / Book a lab test</a></p><h1 data-i18n="nav.records">আমার রেকর্ড</h1>
     </div>
 
     <div class="tabs" role="tablist">
@@ -32,6 +32,7 @@
 
     <section id="rx" role="tabpanel" aria-live="polite"></section>
     <section id="labs" role="tabpanel" class="hidden" aria-live="polite"></section>
+    <div id="labPaymentSimulator" aria-live="polite"></div>
     <section id="triage" role="tabpanel" class="hidden" aria-live="polite"></section>
   </div>
 </main>
@@ -41,7 +42,7 @@ import { i18n } from './assets/js/i18n.js';
 import { api, session } from './assets/js/api.js';
 import { bootstrap } from './assets/js/page.js';
 import {
-  escapeHtml, formatDate, formatDateTime, formatBdt, skeletonList,
+  toast, escapeHtml, formatDate, formatDateTime, formatBdt, skeletonList,
   emptyState, errorState, severityChip, requireAuth,
 } from './assets/js/ui.js';
 
@@ -135,7 +136,7 @@ async function loadLabs() {
                  <div>${escapeHtml(order.result_summary)}</div></div>`
             : ''}
         </div>
-        <span class="badge ${order.status === 'REPORTED' ? 'badge-success' : 'badge-info'}">
+        <button class="btn btn-secondary" data-consent="${escapeHtml(order.id)}" data-share="${order.share_with_doctor}">${order.share_with_doctor ? 'অনুমতি তুলুন / Stop sharing' : 'অনুমতি দিন / Share'}</button><button class="btn btn-secondary" data-pay-lab="${escapeHtml(order.id)}">Demo payment</button><span class="badge ${order.status === 'REPORTED' ? 'badge-success' : 'badge-info'}">
           ${escapeHtml(label(order.status))}</span>
       </article>`).join('')}</div>`;
   } catch (error) {
@@ -175,6 +176,27 @@ async function loadTriage() {
 loadPrescriptions();
 loadLabs();
 loadTriage();
+document.getElementById('labs').addEventListener('click', async event => {
+  const consent = event.target.closest('button[data-consent]');
+  const pay = event.target.closest('button[data-pay-lab]');
+  if (!consent && !pay) return;
+  const button = consent || pay; button.disabled = true;
+  try {
+    if (consent) { await api.patch(`/lab-orders/${encodeURIComponent(consent.dataset.consent)}/consent`, { share_with_doctor: consent.dataset.share !== 'true' }); await loadLabs(); }
+    else {
+      const payment = await api.post('/payments/checkout', { purpose: 'LAB_ORDER', method: 'bkash', idempotency_key: `lab-${pay.dataset.payLab}-${crypto.randomUUID()}`, lab_order_id: pay.dataset.payLab });
+      document.getElementById('labPaymentSimulator').innerHTML = `<section class="card"><p>DEMO: ${escapeHtml(payment.reference)} · আসল টাকা কাটা হবে না / No money charged</p><button class="btn" data-payment="${escapeHtml(payment.id)}" data-status="COMPLETED">সফল দেখান / Simulate success</button><button class="btn btn-secondary" data-payment="${escapeHtml(payment.id)}" data-status="FAILED">ব্যর্থ দেখান / Simulate failure</button></section>`;
+    }
+  } catch(error) { toast(error.message, 'danger'); } finally { button.disabled = false; }
+});
+document.getElementById('labPaymentSimulator').addEventListener('click', async event => {
+  const button = event.target.closest('button[data-payment]'); if (!button) return;
+  button.disabled = true;
+  try {
+    const payment = await api.post(`/payments/${encodeURIComponent(button.dataset.payment)}/simulate`, { status: button.dataset.status });
+    document.getElementById('labPaymentSimulator').textContent = `DEMO: ${payment.status}`;
+  } catch(error) { toast(error.message, 'danger'); button.disabled = false; }
+});
 </script>
 </body>
 </html>

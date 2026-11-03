@@ -6,6 +6,13 @@ export function bootstrap(active) {
   renderChrome({ active });
   renderFooter();
   i18n.apply();
+  const demo = document.createElement('aside');
+  demo.className = 'container alert alert-warning';
+  demo.setAttribute('role', 'note');
+  demo.textContent = i18n.lang === 'bn'
+    ? 'ডেমো সংস্করণ: পেমেন্টে আসল টাকা কাটা হয় না। হাসপাতালের শয্যা ও পূর্বাভাস যাচাইকৃত live তথ্য নয়। AI ফল চিকিৎসকের বিকল্প নয়।'
+    : 'Demo: payments move no real money. Bed capacity and forecasts are not verified live data. AI results require a clinician.';
+  document.querySelector('main')?.prepend(demo);
   registerServiceWorker();
 }
 

@@ -136,6 +136,11 @@ def start_consultation_service(payload, current_user, db: Session):
     if existing:
         return _consultation_payload(existing)
 
+    if payload.triage_session_id:
+        from app.models.triage_session import TriageSession
+        triage = db.get(TriageSession, payload.triage_session_id)
+        if not triage or triage.patient_id != appointment.patient_id:
+            raise HTTPException(status_code=403, detail="Triage session belongs to another patient")
     consultation = Consultation(
         appointment_id=appointment.id,
         doctor_id=doctor.id,
@@ -168,7 +173,8 @@ def _assert_participant(consultation: Consultation, current_user, db: Session):
         return "ADMIN"
 
     doctor = db.query(Doctor).filter(Doctor.user_id == user_id).first()
-    if doctor and doctor.id == consultation.doctor_id:
+    if (current_user.get("role") == "DOCTOR" and doctor and doctor.verification_status
+            and doctor.id == consultation.doctor_id):
         return "DOCTOR"
 
     patient = db.query(Patient).filter(Patient.user_id == user_id).first()
@@ -630,7 +636,7 @@ def dispense_prescription_service(payload, current_user, db: Session):
         .filter(
             PrescriptionRecord.verification_code == payload.verification_code.upper()
         )
-        .first()
+        .with_for_update().populate_existing().first()
     )
     if not record:
         raise HTTPException(status_code=404, detail="Prescription not found")
@@ -697,9 +703,8 @@ def list_patient_prescriptions_service(patient_user_id: str, current_user, db: S
     patient = (
         db.query(Patient).filter(Patient.user_id == patient_user_id).first()
     )
-    role = current_user.get("role")
-    if role not in ("ADMIN", "DOCTOR") and current_user.get("user_id") != patient_user_id:
-        raise HTTPException(status_code=403, detail="Not authorised")
+    from app.core.security import require_self_or_clinician
+    require_self_or_clinician(patient_user_id, current_user, db)
 
     # A patient who has not filled in their profile yet simply has no
     # records; that is an empty history, not a missing page.

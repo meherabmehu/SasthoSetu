@@ -75,13 +75,14 @@
     <p class="alert alert-success hidden mt-4" id="pwDone" role="status"
       data-i18n="account.done">নতুন পাসওয়ার্ড সংরক্ষিত হয়েছে। পরেরবার লগইনে নতুনটি দেবেন।</p>
   </section>
-</main>
+<section class="card"><h2>ইমেইল যাচাই / Email verification</h2><button class="btn" id="verifyEmail">Verification link / যাচাই লিংক</button><p id="verifyStatus" role="status"></p></section>
+<section class="card" id="consentCard"><h2>রেকর্ড দেখার অনুমতি / Record sharing</h2><p>আপনার confirmed চিকিৎসককে রেকর্ড দেখার অনুমতি দিন বা তুলে নিন। / Grant or revoke record access for your confirmed treating doctors.</p><div id="careAccess" aria-live="polite"></div></section></main>
 
 <script type="module">
 import { i18n } from './assets/js/i18n.js';
 import { api, session } from './assets/js/api.js';
 import { bootstrap } from './assets/js/page.js';
-import { setBusy, requireAuth } from './assets/js/ui.js';
+import { setBusy, requireAuth, escapeHtml } from './assets/js/ui.js';
 
 bootstrap('account.html');
 if (!requireAuth()) throw new Error('unauthenticated');
@@ -188,8 +189,11 @@ document.getElementById('pwForm').addEventListener('submit', async (event) => {
       current_password: current,
       new_password: next,
     });
+    await session.clear();
     doneEl.classList.remove('hidden');
+    doneEl.textContent = i18n.lang === 'bn' ? 'পাসওয়ার্ড বদলেছে। আবার লগইন করুন।' : 'Password changed. Sign in again.';
     event.target.reset();
+    window.location.assign('login.html');
   } catch (error) {
     errorEl.textContent = error.message;
     errorEl.classList.remove('hidden');
@@ -197,6 +201,26 @@ document.getElementById('pwForm').addEventListener('submit', async (event) => {
     setBusy(button, false);
   }
 });
+document.getElementById('verifyEmail').addEventListener('click', async () => {
+  const status = document.getElementById('verifyStatus');
+  try { status.textContent = (await api.post('/auth/request-email-verification', {})).message; }
+  catch(error) { status.textContent = error.message; }
+});
+async function loadCareAccess() {
+  const host = document.getElementById('careAccess');
+  if (session.user?.role !== 'PATIENT') { document.getElementById('consentCard').classList.add('hidden'); return; }
+  try {
+    const rows = await api.get('/patients/me/care-access');
+    host.innerHTML = rows.map(row => `<p>${escapeHtml(row.doctor_name)} <button class="btn btn-secondary" data-doctor="${escapeHtml(row.doctor_id)}" data-granted="${row.granted}">${row.granted ? 'অনুমতি তুলুন / Revoke' : 'অনুমতি দিন / Allow'}</button></p>`).join('') || (i18n.lang === 'bn' ? 'Confirmed চিকিৎসক নেই।' : 'No confirmed treating doctors yet.');
+  } catch(error) { host.textContent = error.message; }
+}
+document.getElementById('careAccess').addEventListener('click', async event => {
+  const button = event.target.closest('button[data-doctor]'); if (!button) return;
+  button.disabled = true;
+  try { await api.put(`/patients/me/care-access/${encodeURIComponent(button.dataset.doctor)}`, { granted: button.dataset.granted !== 'true' }); await loadCareAccess(); }
+  catch(error) { document.getElementById('careAccess').textContent = error.message; }
+});
+loadCareAccess();
 </script>
 </body>
 </html>

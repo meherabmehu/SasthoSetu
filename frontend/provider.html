@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1b817d"><title>Provider workspace · SasthoSetu</title><link rel="icon" href="assets/icons/favicon-32.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="assets/css/design-system.css"><link rel="stylesheet" href="assets/css/layout.css"><meta name="referrer" content="no-referrer"></head><body><main id="main" class="container"><div class="page-head"><h1>Lab workspace / ল্যাব পরিচালনা</h1><p>Only assigned providers are shown / শুধু আপনার দায়িত্বপ্রাপ্ত প্রতিষ্ঠান দেখাবে।</p></div><section class="card"><label class="label" for="provider">Provider / প্রতিষ্ঠান</label><select class="input" id="provider"><option value="">Select / বেছে নিন</option></select><p id="status" role="status"></p></section><section class="card"><h2>Catalogue / পরীক্ষার তালিকা</h2><form id="testForm"><label class="label" for="testCode">Code</label><input class="input" id="testCode" required maxlength="32"><label class="label" for="testName">Name / নাম</label><input class="input" id="testName" required minlength="2" maxlength="200"><label class="label" for="price">Price / মূল্য</label><input class="input" id="price" type="number" min="0" max="1000000" step="0.01" required><label class="label" for="sample">Sample / নমুনা</label><input class="input" id="sample" maxlength="64"><button class="btn" type="submit">Save test / সংরক্ষণ</button></form></section><h2>Orders / অর্ডার</h2><div id="orders" aria-live="polite"></div><section class="card hidden" id="resultCard"><h2>Report / রিপোর্ট</h2><form id="resultForm"><input id="orderId" type="hidden"><label class="label" for="summary">Result summary / ফলাফল</label><textarea class="input" id="summary" required maxlength="4000"></textarea><label><input type="checkbox" id="abnormal"> Abnormal / অস্বাভাবিক</label><button class="btn" type="submit">Publish report / রিপোর্ট প্রকাশ</button></form></section></main><script type="module">
+import { api, session } from './assets/js/api.js';
+import { i18n } from './assets/js/i18n.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, requireAuth, toast, formatBdt } from './assets/js/ui.js';
+const BN = i18n.lang === 'bn';
+bootstrap('provider.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+if (session.user?.role === 'ADMIN') {
+  const panel = document.createElement('section'); panel.className = 'card';
+  panel.innerHTML = `<h2>Operator assignment / দায়িত্ব প্রদান</h2><form id="ownerForm"><label class="label" for="ownerEmail">Operator email / পরিচালকের ইমেইল</label><input class="input" id="ownerEmail" type="email" required><button class="btn" type="submit">Assign selected lab / নির্বাচিত ল্যাবের দায়িত্ব দিন</button></form>`;
+  document.getElementById('main').appendChild(panel);
+  document.getElementById('ownerForm').addEventListener('submit', async event => {
+    event.preventDefault(); const provider = document.getElementById('provider').value;
+    if (!provider) return;
+    try { await api.put(`/providers/${encodeURIComponent(provider)}/owner`, { email: document.getElementById('ownerEmail').value }); toast('Assigned / দায়িত্ব দেওয়া হয়েছে', 'success'); }
+    catch(error) { toast(error.message, 'danger'); }
+  });
+}
+const select = document.getElementById('provider');
+const status = document.getElementById('status');
+const host = document.getElementById('orders');
+const next = { REQUESTED: 'ACCEPTED', ACCEPTED: 'SAMPLE_COLLECTED', SAMPLE_COLLECTED: 'PROCESSING' };
+async function loadOrders() {
+  document.getElementById('resultCard').classList.add('hidden');
+  if (!select.value) { host.textContent = ''; return; }
+  try {
+    const rows = await api.get(`/lab-orders/provider/${encodeURIComponent(select.value)}`);
+    host.innerHTML = rows.map(row => `<article class="card"><h3>${escapeHtml(row.test_name)}</h3><p>${escapeHtml(row.order_code)} · ${escapeHtml(row.status)}</p>${next[row.status] ? `<button class="btn" data-id="${escapeHtml(row.id)}" data-next="${next[row.status]}">${escapeHtml(next[row.status])}</button>` : ''}${!['REPORTED','CANCELLED'].includes(row.status) ? `<button class="btn btn-secondary" data-result="${escapeHtml(row.id)}">Report / রিপোর্ট</button><button class="btn btn-secondary" data-id="${escapeHtml(row.id)}" data-next="CANCELLED">Cancel / বাতিল</button>` : ''}${row.result_summary ? `<p>${escapeHtml(row.result_summary)}</p>` : ''}</article>`).join('') || (BN ? 'অর্ডার নেই।' : 'No orders.');
+  } catch (error) { host.textContent = error.message; }
+}
+try {
+  const rows = (await api.get('/providers/mine')).filter(row => row.provider_type === 'LAB');
+  for (const row of rows) { const option = document.createElement('option'); option.value = row.id; option.textContent = row.name; select.appendChild(option); }
+  if (!rows.length) status.textContent = BN ? 'প্রশাসককে আপনার ল্যাবের দায়িত্ব দিতে বলুন।' : 'Ask an administrator to assign your provider account.';
+} catch (error) { status.textContent = error.message; }
+select.addEventListener('change', loadOrders);
+document.getElementById('testForm').addEventListener('submit', async event => {
+  event.preventDefault(); if (!select.value) return;
+  try { await api.post(`/providers/${encodeURIComponent(select.value)}/tests`, { code: document.getElementById('testCode').value, name: document.getElementById('testName').value, price_bdt: Number(document.getElementById('price').value), sample_type: document.getElementById('sample').value }); toast(BN ? 'সংরক্ষিত' : 'Saved', 'success'); event.target.reset(); } catch(error) { toast(error.message,'danger'); }
+});
+host.addEventListener('click', async event => {
+  const button = event.target.closest('button'); if (!button) return;
+  if (button.dataset.result) { document.getElementById('orderId').value = button.dataset.result; document.getElementById('resultCard').classList.remove('hidden'); document.getElementById('summary').focus(); return; }
+  button.disabled = true;
+  try { await api.patch(`/lab-orders/${encodeURIComponent(button.dataset.id)}/status`, { status: button.dataset.next }); await loadOrders(); } catch (error) { toast(error.message,'danger'); button.disabled = false; }
+});
+document.getElementById('resultForm').addEventListener('submit', async event => {
+  event.preventDefault(); const button = event.submitter; button.disabled = true;
+  try { await api.post(`/lab-orders/${encodeURIComponent(document.getElementById('orderId').value)}/result`, { result_summary: document.getElementById('summary').value, is_abnormal: document.getElementById('abnormal').checked }); event.target.reset(); await loadOrders(); } catch(error) { toast(error.message,'danger'); } finally { button.disabled = false; }
+});
+</script></body></html>

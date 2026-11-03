@@ -291,14 +291,20 @@ class TriageSessionTests(ClinicalTestCase):
         self.assertGreaterEqual(listing.json()["total"], 2)
 
     def test_clinician_can_override_and_flag_is_recorded(self):
-        _, patient_headers = self._patient()
+        context = self._booked_appointment()
+        patient_headers = context["patient_headers"]
+        doctor_headers = context["doctor_headers"]
+        self.client.patch(f"/api/v1/appointments/{context['appointment_id']}/status",
+                          json={"status": "CONFIRMED"}, headers=doctor_headers)
+        consent = self.client.put(f"/api/v1/patients/me/care-access/{context['doctor_id']}",
+                                  json={"granted": True}, headers=patient_headers)
+        self.assertEqual(200, consent.status_code, consent.text)
         created = self.client.post(
             "/api/v1/triage/sessions",
             json={"symptoms": "জ্বর", "age_years": 30},
             headers=patient_headers,
         ).json()
 
-        _, _, doctor_headers = self._doctor()
         review = self.client.post(
             f"/api/v1/triage/sessions/{created['triage_session_id']}/review",
             json={"clinician_level": 5, "note": "Patient looked septic"},

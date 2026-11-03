@@ -21,7 +21,7 @@ def get_patient_history(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    require_self_or_clinician(patient_user_id, current_user)
+    require_self_or_clinician(patient_user_id, current_user, db)
     return get_patient_history_service(
         patient_user_id=patient_user_id,
         db=db

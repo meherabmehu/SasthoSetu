@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.core.dependencies import get_db
-from app.core.security import get_current_user
+from app.core.security import get_current_user, require_self_or_clinician
 
 from app.fhir import mapping
 from app.models.consultation import Consultation
@@ -23,13 +23,18 @@ router = APIRouter()
 
 def _assert_patient_access(patient: Patient, current_user, db: Session):
     """A record may be read by its subject, a clinician or an administrator."""
-    role = current_user.get("role")
-    if role in ("ADMIN", "DOCTOR"):
-        return
-    if patient.user_id != current_user.get("user_id"):
-        raise HTTPException(
-            status_code=403, detail="Not authorised to read this record"
-        )
+    require_self_or_clinician(patient.user_id, current_user, db)
+
+
+def _visible_lab_orders(patient_id, current_user, db):
+    query = db.query(LabOrder).filter(LabOrder.patient_id == patient_id)
+    if current_user.get("role") == "DOCTOR":
+        doctor = db.query(Doctor).filter(Doctor.user_id == current_user["user_id"]).first()
+        if not doctor:
+            return []
+        query = query.filter(LabOrder.share_with_doctor.is_(True),
+                             LabOrder.ordered_by_doctor_id == doctor.id)
+    return query.all()
 
 
 def _patient_or_404(patient_id: str, db: Session) -> Patient:
@@ -113,6 +118,8 @@ def read_observation(
         raise HTTPException(status_code=404, detail="Observation not found")
     if session.patient_id:
         _assert_patient_access(_patient_or_404(session.patient_id, db), current_user, db)
+    elif current_user.get("role") != "ADMIN" and session.user_id != current_user.get("user_id"):
+        raise HTTPException(status_code=403, detail="Not authorised")
     return mapping.triage_observation_resource(session)
 
 
@@ -151,7 +158,7 @@ def search_diagnostic_reports(
     subject = _patient_or_404(patient, db)
     _assert_patient_access(subject, current_user, db)
 
-    orders = db.query(LabOrder).filter(LabOrder.patient_id == subject.id).all()
+    orders = _visible_lab_orders(subject.id, current_user, db)
     resources = []
     for order in orders:
         test = db.query(LabTest).filter(LabTest.id == order.lab_test_id).first()
@@ -199,7 +206,7 @@ def patient_everything(
         )
         resources.extend(mapping.medication_request_resources(record, lines))
 
-    for order in db.query(LabOrder).filter(LabOrder.patient_id == patient.id).all():
+    for order in _visible_lab_orders(patient.id, current_user, db):
         test = db.query(LabTest).filter(LabTest.id == order.lab_test_id).first()
         resources.append(mapping.diagnostic_report_resource(order, test))
 

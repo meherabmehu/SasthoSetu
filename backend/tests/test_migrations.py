@@ -10,6 +10,9 @@ from app.core.config import BACKEND_DIR
 
 
 EXPECTED_TABLES = {
+    "rate_limit_windows",
+    "account_tokens",
+    "patient_care_consents",
     "ai_feedback",
     "alembic_version",
     "appointments",

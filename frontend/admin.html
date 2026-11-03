@@ -276,6 +276,17 @@ loadPending();
 loadCapacity();
 loadSurveillance();
 loadFinance();
+const demoPanel = document.createElement('section');
+demoPanel.className = 'card';
+demoPanel.innerHTML = `<h2>Demo tools / ডেমো সরঞ্জাম</h2><p><a href="provider.html">Lab workspace / ল্যাব পরিচালনা</a></p><button class="btn btn-secondary" id="loadOutbox">Demo email outbox / ডেমো ইমেইল</button><div id="outbox" aria-live="polite"></div>`;
+document.querySelector('main .container').appendChild(demoPanel);
+document.getElementById('loadOutbox').addEventListener('click', async () => {
+  const host = document.getElementById('outbox');
+  try {
+    const data = await api.get('/auth/demo-outbox');
+    host.innerHTML = data.messages.map(item => `<p>${escapeHtml(item.recipient)} · ${escapeHtml(item.purpose)} <a href="${escapeHtml(item.link)}">Open demo link / ডেমো লিংক খুলুন</a></p>`).join('') || 'No messages / কোনো বার্তা নেই';
+  } catch(error) { host.textContent = error.message; }
+});
 </script>
 </body>
 </html>

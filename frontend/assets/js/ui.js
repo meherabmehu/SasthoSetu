@@ -132,6 +132,8 @@ const NAV_BY_ROLE = {
     ['consultations.html', 'consult.title'],
     ['review.html', 'review.title'],
     ['records.html', 'nav.records'],
+    ['labs.html', 'nav.labs'],
+    ['provider.html', 'nav.provider'],
     ['hospitals.html', 'nav.hospitals'],
     ['map.html', 'nav.map'],
     ['pharmacy.html', 'nav.pharmacy'],

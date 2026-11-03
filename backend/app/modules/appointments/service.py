@@ -137,6 +137,7 @@ def create_appointment_service(
         db.query(DoctorAvailability)
         .filter(DoctorAvailability.id == availability.id)
         .with_for_update()
+        .populate_existing()
         .first()
     )
 

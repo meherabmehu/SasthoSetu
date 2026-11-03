@@ -7,6 +7,7 @@ from app.core.dependencies import get_db
 from app.core.security import (
     get_current_user,
     require_doctor,
+    require_doctor_identity,
     require_self_or_admin,
     require_self_or_clinician,
 )
@@ -60,7 +61,7 @@ def get_patient_appointments(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    require_self_or_clinician(patient_user_id, current_user)
+    require_self_or_clinician(patient_user_id, current_user, db)
     return get_patient_appointments_service(
         patient_user_id=patient_user_id,
         db=db
@@ -75,6 +76,7 @@ def get_doctor_appointments(
     current_user=Depends(require_doctor),
     db: Session = Depends(get_db)
 ):
+    require_doctor_identity(doctor_id, current_user, db)
     return get_doctor_appointments_service(
         doctor_id=doctor_id,
         db=db

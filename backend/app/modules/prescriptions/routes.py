@@ -19,6 +19,7 @@ from app.modules.prescriptions.service import (
 from app.core.security import (
     get_current_user,
     require_doctor,
+    require_doctor_identity,
     require_self_or_clinician,
 )
 
@@ -36,6 +37,7 @@ def create_prescription(
     ),
     db: Session = Depends(get_db)
 ):
+    require_doctor_identity(doctor_id, current_user, db)
     return create_prescription_service(
         doctor_id=doctor_id,
         payload=payload,
@@ -49,7 +51,7 @@ def get_patient_prescriptions(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    require_self_or_clinician(patient_user_id, current_user)
+    require_self_or_clinician(patient_user_id, current_user, db)
     return get_patient_prescriptions_service(
         patient_user_id=patient_user_id,
         db=db
@@ -64,6 +66,7 @@ def get_doctor_prescriptions(
     current_user=Depends(require_doctor),
     db: Session = Depends(get_db)
 ):
+    require_doctor_identity(doctor_id, current_user, db)
     return get_doctor_prescriptions_service(
         doctor_id=doctor_id,
         db=db

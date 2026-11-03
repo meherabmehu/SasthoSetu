@@ -26,9 +26,7 @@ from sqlalchemy.orm import Session
 
 from app.ai.extraction import extract
 from app.ai.safety import check_red_flags
-from app.models.patient import Patient
 from app.models.triage_session import TriageSession
-from app.models.user import User
 from app.modules.symptom_checker.service import triage_symptoms
 from app.schemas.triage import TriageRequest
 
@@ -195,13 +193,10 @@ def sms_triage_service(payload, db: Session):
     )
     result = triage_symptoms(request)
 
+    # Sandbox input is not verified by a telecom provider, so it must not
+    # attach medical history to an account named by an arbitrary phone number.
     user = None
-    if payload.phone:
-        user = db.query(User).filter(User.phone == payload.phone).first()
-
-    patient = (
-        db.query(Patient).filter(Patient.user_id == user.id).first() if user else None
-    )
+    patient = None
 
     session = TriageSession(
         patient_id=patient.id if patient else None,
@@ -229,6 +224,8 @@ def sms_triage_service(payload, db: Session):
     reply = compose_sms_reply(result, payload.language)
     return {
         "reply": reply,
+        "is_sandbox": True,
+        "message_sent": False,
         "segments": (len(reply) // 70) + 1,
         "characters": len(reply),
         "triage_level": result.triage_level.value,

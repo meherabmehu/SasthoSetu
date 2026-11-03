@@ -134,13 +134,13 @@ def main() -> None:
     x, y, ids = _load(args.limit)
     print(f"  {len(x):,} images, {x.shape[1]} features each")
 
-    rng = np.random.default_rng(SEED)
-    order = rng.permutation(len(x))
-    cut_val = int(len(x) * 0.8)
-    cut_test = int(len(x) * 0.9)
-    train_idx = order[:cut_val]
-    val_idx = order[cut_val:cut_test]
-    test_idx = order[cut_test:]
+    from grouped_split import grouped_image_split
+    with METADATA.open(encoding="utf-8") as source:
+        by_id = {row["image_id"]: row for row in csv.DictReader(source)}
+    train_idx, val_idx, test_idx = grouped_image_split(
+        [IMAGES / f"{image_id}.jpg" for image_id in ids],
+        [by_id[image_id].get("lesion_id", "") for image_id in ids],
+        seed=SEED, val_fraction=0.1, test_fraction=0.1)
 
     print(f"  train={len(train_idx):,} val={len(val_idx):,} "
           f"test={len(test_idx):,}")
@@ -263,6 +263,7 @@ def main() -> None:
             "n_images": int(len(x)),
             "n_features": int(x.shape[1]),
             "seed": SEED,
+            "split_strategy": "lesion_groups_and_exact_duplicate_components",
         }, indent=2),
         encoding="utf-8",
     )

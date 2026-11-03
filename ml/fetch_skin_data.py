@@ -138,13 +138,14 @@ def main() -> None:
     with out.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.writer(fh)
         writer.writerow(["image_id", "diagnosis", "diagnosis_name",
-                         "risk", "confirmed_by", "age", "sex", "site"])
+                         "risk", "confirmed_by", "age", "sex", "site", "lesion_id"])
         for row in rows:
             name, risk = CLASSES.get(row["dx"], (row["dx"], "unknown"))
             writer.writerow([
                 row["image_id"], row["dx"], name, risk,
                 row.get("dx_type", ""), row.get("age", ""),
                 row.get("sex", ""), row.get("localization", ""),
+                row.get("lesion_id", ""),
             ])
 
     from collections import Counter

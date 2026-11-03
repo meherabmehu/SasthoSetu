@@ -23,7 +23,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-import joblib
+from .artifact_loading import load_artifact
 from PIL import Image
 
 from .skin_features import extract_features
@@ -102,7 +102,7 @@ def _bundle() -> dict:
             f"The retinopathy model is missing at {path}. Build it with: "
             "python ml/fetch_dr_data.py && python ml/train_dr_model.py"
         )
-    return joblib.load(path)
+    return load_artifact(path, EyeModelError)
 
 
 def model_available() -> bool:

@@ -20,7 +20,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-import joblib
+from .artifact_loading import load_artifact
 import pandas as pd
 
 from .extraction import extract
@@ -57,7 +57,7 @@ def _model():
         raise ModelArtifactError(
             f"Triage model artifact is missing at {path}. {_REBUILD_HINT}"
         )
-    return joblib.load(path)
+    return load_artifact(path, ModelArtifactError)
 
 
 def _specialties(symptoms: list[str], flags: list[dict]) -> list[str]:

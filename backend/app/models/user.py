@@ -5,6 +5,7 @@ from sqlalchemy import String
 from sqlalchemy import Boolean
 from sqlalchemy import false
 from sqlalchemy import true
+from sqlalchemy import Integer
 
 from app.models.base import Base
 
@@ -21,6 +22,7 @@ class User(Base):
     phone = Column(String, unique=True, nullable=False)
 
     password_hash = Column(String, nullable=False)
+    token_version = Column(Integer, nullable=False, default=0, server_default="0")
 
     is_active = Column(
         Boolean,

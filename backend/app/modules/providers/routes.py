@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import Query
+from pydantic import BaseModel, EmailStr
 
 from sqlalchemy.orm import Session
 
@@ -35,6 +36,35 @@ from app.modules.providers.service import (
 )
 
 router = APIRouter()
+
+
+@router.get("/providers/mine")
+def my_providers(current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    from app.models.provider import Provider
+    from app.modules.providers.service import _provider_payload
+    query = db.query(Provider).filter(Provider.is_active.is_(True))
+    if current_user["role"] != "ADMIN":
+        query = query.filter(Provider.owner_user_id == current_user["user_id"])
+    return [_provider_payload(row) for row in query.order_by(Provider.name).all()]
+
+
+class ProviderOwner(BaseModel):
+    email: EmailStr
+
+
+@router.put("/providers/{provider_id}/owner")
+def assign_owner(provider_id: str, payload: ProviderOwner,
+                 current_user=Depends(require_admin), db: Session = Depends(get_db)):
+    from fastapi import HTTPException
+    from app.models.user import User
+    from app.modules.providers.service import _provider_or_404
+    provider = _provider_or_404(provider_id, db)
+    user = db.query(User).filter(User.email == str(payload.email), User.is_active.is_(True)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Active account not found")
+    provider.owner_user_id = user.id
+    db.commit()
+    return {"provider_id": provider.id, "owner_user_id": user.id}
 
 
 @router.post("/providers")

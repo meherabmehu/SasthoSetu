@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1b817d"><title>Labs · SasthoSetu</title><link rel="icon" href="assets/icons/favicon-32.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="assets/css/design-system.css"><link rel="stylesheet" href="assets/css/layout.css"><meta name="referrer" content="no-referrer"></head><body><main id="main" class="container"><div class="page-head"><h1 id="title">ল্যাব টেস্ট</h1><a class="btn btn-secondary" href="provider.html" id="operator">ল্যাব পরিচালনা</a></div><section class="card"><form id="searchForm"><label class="label" for="search">Test / পরীক্ষা</label><input class="input" id="search" maxlength="120"><button class="btn" type="submit">Search / খুঁজুন</button></form><label class="mt-4"><input type="checkbox" id="share" checked> Share results with the ordering doctor / অর্ডারকারী চিকিৎসককে রিপোর্ট দেখান</label><p class="muted">You can change sharing later in Records / পরে রেকর্ড পৃষ্ঠা থেকে অনুমতি বদলাতে পারবেন।</p></section><div id="catalogue" aria-live="polite"></div></main><script type="module">
+import { api, session } from './assets/js/api.js';
+import { i18n } from './assets/js/i18n.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, requireAuth, toast, formatBdt } from './assets/js/ui.js';
+const BN = i18n.lang === 'bn';
+bootstrap('labs.html');
+if (!requireAuth()) throw new Error('unauthenticated');
+const host = document.getElementById('catalogue');
+document.getElementById('title').textContent = BN ? 'ল্যাব টেস্ট বুক করুন' : 'Book a laboratory test';
+document.getElementById('operator').textContent = BN ? 'ল্যাব পরিচালনা' : 'Provider workspace';
+async function load() {
+  host.textContent = BN ? 'লোড হচ্ছে…' : 'Loading…';
+  try {
+    const rows = await api.get('/lab-tests?search=' + encodeURIComponent(document.getElementById('search').value));
+    host.innerHTML = rows.length ? rows.map(row => `<article class="card"><h2>${escapeHtml(row.name)}</h2><p>${formatBdt(row.price_bdt)} · ${escapeHtml(row.sample_type || '')}</p><button class="btn" data-id="${escapeHtml(row.id)}" data-provider="${escapeHtml(row.provider_id)}">${BN ? 'বুক করুন' : 'Book test'}</button></article>`).join('') : (BN ? 'কোনো পরীক্ষা পাওয়া যায়নি।' : 'No tests found.');
+  } catch (error) { host.textContent = error.message; }
+}
+document.getElementById('searchForm').addEventListener('submit', event => { event.preventDefault(); load(); });
+host.addEventListener('click', async event => {
+  const button = event.target.closest('button[data-id]');
+  if (!button) return;
+  button.disabled = true;
+  try {
+    const order = await api.post('/lab-orders', { provider_id: button.dataset.provider, lab_test_id: button.dataset.id, share_with_doctor: document.getElementById('share').checked });
+    toast(`${BN ? 'বুক হয়েছে' : 'Booked'}: ${order.order_code}`, 'success');
+    window.location.href = 'records.html';
+  } catch (error) { toast(error.message, 'danger'); button.disabled = false; }
+});
+load();
+</script></body></html>
