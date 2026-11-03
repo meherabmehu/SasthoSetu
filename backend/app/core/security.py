@@ -121,6 +121,8 @@ def get_current_user(
                 status_code=403,
                 detail="User account is disabled",
             )
+        if payload.get("ver", 0) != user.token_version:
+            raise HTTPException(status_code=401, detail="Session revoked. Sign in again.")
 
         return {
             "user_id": user.id,
@@ -173,6 +175,9 @@ def require_self_or_admin(
 def require_self_or_clinician(
     target_user_id: str,
     current_user: dict,
+    db: Session,
+    *,
+    consent_required: bool = True,
 ) -> None:
     """Allow the record's owner, a treating clinician, or an administrator.
 
@@ -181,14 +186,35 @@ def require_self_or_clinician(
     owner alone would break the consultation workflow. A patient still cannot
     read another patient's record.
     """
-    role = current_user.get("role")
-    if role in ("DOCTOR", "ADMIN"):
+    if current_user.get("role") == "ADMIN" or current_user.get("user_id") == target_user_id:
         return
-    if current_user.get("user_id") != target_user_id:
-        raise HTTPException(
-            status_code=403,
-            detail="You cannot access another user's health record",
-        )
+    from app.models.appointment import Appointment
+    from app.models.care_consent import CareConsent
+    from app.models.doctor import Doctor
+    from app.models.patient import Patient
+
+    doctor = db.query(Doctor).filter(Doctor.user_id == current_user.get("user_id")).first()
+    patient = db.query(Patient).filter(Patient.user_id == target_user_id).first()
+    if current_user.get("role") == "DOCTOR" and doctor and doctor.verification_status and patient:
+        relationship = db.query(Appointment.id).filter(
+            Appointment.doctor_id == doctor.id,
+            Appointment.patient_id == patient.id,
+            Appointment.status.in_(["CONFIRMED", "IN_PROGRESS", "COMPLETED"]),
+        ).first()
+        consent = db.get(CareConsent, (patient.id, doctor.id))
+        if relationship and (not consent_required or (consent and consent.granted)):
+            return
+    raise HTTPException(status_code=403, detail="Patient consent and a verified treating doctor are required")
+
+
+def require_doctor_identity(doctor_id: str, current_user: dict, db: Session) -> None:
+    """Never trust the clinician ID supplied in a URL as the caller's identity."""
+    from app.models.doctor import Doctor
+
+    doctor = db.get(Doctor, doctor_id)
+    if (current_user.get("role") != "DOCTOR" or not doctor
+            or doctor.user_id != current_user.get("user_id") or not doctor.verification_status):
+        raise HTTPException(status_code=403, detail="Verified doctor identity required")
 
 
 def require_admin(

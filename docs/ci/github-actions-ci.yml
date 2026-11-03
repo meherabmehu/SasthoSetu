@@ -11,9 +11,72 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PYTHON_VERSION: "3.13"
+  PYTHON_VERSION: "3.12"
 
 jobs:
+  postgres:
+    name: PostgreSQL migrations and concurrency
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: review
+          POSTGRES_PASSWORD: review-test-only
+          POSTGRES_DB: sasthosetu_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U review -d sasthosetu_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - name: Actual database checks
+        working-directory: backend
+        env:
+          APP_ENV: test
+          DATABASE_URL: "sqlite:///:memory:"
+          TEST_POSTGRES_URL: postgresql+psycopg2://review:review-test-only@127.0.0.1:5432/sasthosetu_test
+        run: python -m unittest discover -s tests -p test_postgres_concurrency.py -v
+
+  browser:
+    name: Browser journeys and offline isolation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - run: python -m playwright install --with-deps chromium
+      - name: Start isolated fixture application
+        run: python tools/review_server.py > /tmp/sasthosetu-browser.log 2>&1 &
+      - name: Wait for application
+        run: |
+          python - <<'PY'
+          import time, urllib.request
+          for attempt in range(30):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:8765/ready', timeout=5)
+                  break
+              except Exception:
+                  time.sleep(1)
+          else:
+              raise SystemExit('Fixture server did not become ready')
+          PY
+      - run: python tools/browser_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-screenshot
+          path: .tmp/browser-smoke.png
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -26,7 +89,7 @@ jobs:
           cache: pip
 
       - name: Install linters
-        run: pip install ruff==0.8.4
+        run: pip install ruff==0.17.3
 
       - name: Ruff
         run: ruff check backend ml scripts tools
@@ -44,7 +107,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r backend/requirements.txt
+          pip install -r requirements-dev.txt
           pip install uvicorn
 
       # The AI services load generated datasets and trained artifacts. Building
@@ -92,7 +155,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r backend/requirements.txt
+          pip install -r requirements-dev.txt
           pip install uvicorn
 
       - name: Build datasets and train models

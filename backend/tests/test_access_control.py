@@ -114,8 +114,8 @@ class HealthRecordConfidentialityTests(AccessTestCase):
                     403, self.client.get(path, headers=attacker).status_code
                 )
 
-    def test_a_clinician_may_read_a_patient_record(self):
-        """Restricting to the owner alone would break the consultation."""
+    def test_an_unrelated_clinician_cannot_read_a_patient_record(self):
+        """The doctor role alone does not establish treatment or consent."""
         victim_id, victim = self._account("PATIENT")
         self.client.post(
             f"/api/v1/patients/{victim_id}",
@@ -134,7 +134,7 @@ class HealthRecordConfidentialityTests(AccessTestCase):
         response = self.client.get(
             f"/api/v1/prescriptions/patient/{victim_id}", headers=doctor
         )
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(403, response.status_code)
 
     def test_a_clinician_may_not_read_a_patients_notifications(self):
         """Personal correspondence is not part of the clinical record."""

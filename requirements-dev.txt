@@ -1,0 +1,4 @@
+-r backend/requirements.txt
+httpx2==2.16.0
+ruff==0.17.3
+playwright>=1.48,<2

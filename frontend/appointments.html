@@ -20,7 +20,7 @@
     <div class="page-head">
       <h1 data-i18n="appointment.mine">আমার অ্যাপয়েন্টমেন্ট</h1>
     </div>
-    <div class="list" id="list" aria-live="polite"></div>
+    <p class="alert alert-warning">ডেমো পেমেন্ট: আসল টাকা কাটা হবে না। / Demo payment: no real money is charged.</p><div id="paymentSimulator" aria-live="polite"></div><div class="list" id="list" aria-live="polite"></div>
   </div>
 </main>
 
@@ -114,19 +114,26 @@ listEl.addEventListener('click', async (event) => {
       const payment = await api.post('/payments/checkout', {
         purpose: 'CONSULTATION',
         method: 'bkash',
-        // A stable key per appointment means a double tap cannot double charge.
-        idempotency_key: `appt-${payBtn.dataset.id}`,
+        // The server reuses a pending checkout. A failed demo can start a fresh attempt.
+        idempotency_key: `appt-${payBtn.dataset.id}-${crypto.randomUUID()}`,
         appointment_id: payBtn.dataset.id,
       });
       toast(
         `${i18n.lang === 'bn' ? 'পেমেন্ট শুরু হয়েছে' : 'Payment started'}: ${payment.reference}`,
         'success'
       );
+      document.getElementById('paymentSimulator').innerHTML = `<section class="card"><p>DEMO: ${escapeHtml(payment.reference)}</p><button class="btn" data-payment="${escapeHtml(payment.id)}" data-status="COMPLETED">সফল দেখান / Simulate success</button><button class="btn btn-secondary" data-payment="${escapeHtml(payment.id)}" data-status="FAILED">ব্যর্থ দেখান / Simulate failure</button></section>`;
       load();
     } catch (error) {
       toast(error.message, 'danger');
     }
   }
+});
+document.getElementById('paymentSimulator').addEventListener('click', async event => {
+  const button = event.target.closest('button[data-payment]'); if (!button) return;
+  button.disabled = true;
+  try { const payment = await api.post(`/payments/${encodeURIComponent(button.dataset.payment)}/simulate`, { status: button.dataset.status }); document.getElementById('paymentSimulator').textContent = `DEMO: ${payment.status}`; load(); }
+  catch(error) { toast(error.message, 'danger'); button.disabled = false; }
 });
 
 load();

@@ -18,6 +18,20 @@ class CurrentUserResponse(BaseModel):
     # callers that only look at identity keep working if a row predates them.
     full_name: str | None = None
     phone: str | None = None
+    email: str | None = None
+    is_verified: bool = False
+
+
+class EmailRequest(BaseModel):
+    email: EmailStr
+
+
+class TokenRequest(BaseModel):
+    token: str = Field(min_length=32, max_length=256)
+
+
+class ResetPasswordRequest(TokenRequest):
+    new_password: str = Field(min_length=8, max_length=128)
 
 
 class DoctorRegisterRequest(BaseModel):

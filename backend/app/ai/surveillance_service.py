@@ -78,6 +78,7 @@ def surveillance(district: str | None = None, disease: str | None = None,
 
     alerts.sort(key=lambda a: (a["week_ending"], -a["z_score"]), reverse=True)
     return {
+        "data_source": "synthetic_demo", "is_live": False,
         "window_weeks": weeks,
         "z_threshold": z_threshold,
         "series": series_out,

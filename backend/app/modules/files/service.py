@@ -47,7 +47,8 @@ def _safe_name(name: str | None) -> str:
 def upload_file_service(
     patient_user_id: str,
     file: UploadFile,
-    db: Session
+    db: Session,
+    uploaded_by: str | None = None,
 ):
 
     patient = (
@@ -92,7 +93,7 @@ def upload_file_service(
 
     record = FileRecord(
         patient_id=patient.id,
-        uploaded_by=patient_user_id,
+        uploaded_by=uploaded_by or patient_user_id,
         file_name=_safe_name(file.filename),
         file_path=None,
         content=payload,
@@ -146,23 +147,24 @@ def _assert_file_access(file, current_user, db) -> None:
     the record itself; otherwise anyone holding an id could read a stranger's
     scan or report.
     """
+    from app.core.security import require_self_or_clinician
+
     if current_user is None:
-        return
+        raise HTTPException(status_code=401, detail="Authentication required")
+    patient = db.get(Patient, file.patient_id)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    require_self_or_clinician(patient.user_id, current_user, db)
+    if current_user.get("role") == "DOCTOR":
+        from app.models.doctor import Doctor
+        from app.models.provider import LabOrder
+        doctor = db.query(Doctor).filter(Doctor.user_id == current_user["user_id"]).first()
+        reports = db.query(LabOrder).filter(LabOrder.result_file_id == file.id).all()
+        if any(not report.share_with_doctor or not doctor or
+               report.ordered_by_doctor_id != doctor.id for report in reports):
+            raise HTTPException(status_code=403, detail="The patient has not shared this lab report")
 
-    role = current_user.get("role")
-    if role in ("DOCTOR", "ADMIN"):
-        return
 
-    patient = (
-        db.query(Patient)
-        .filter(Patient.id == file.patient_id)
-        .first()
-    )
-    if not patient or patient.user_id != current_user.get("user_id"):
-        raise HTTPException(
-            status_code=403,
-            detail="You cannot access another patient's file"
-        )
 
 
 def download_file_service(

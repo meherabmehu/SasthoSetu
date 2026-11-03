@@ -115,7 +115,10 @@ def main() -> None:
     X, y = features_for(rows)
     print(f"  {len(rows)} images, {X.shape[1]} features each")
 
-    train_idx, val_idx, test_idx = split_by_class(y, SEED)
+    from grouped_split import grouped_image_split
+    train_idx, val_idx, test_idx = grouped_image_split(
+        [IMAGES / row["file"] for row in rows],
+        [row.get("patient_id", "") for row in rows], seed=SEED)
     print(f"train={len(train_idx)} val={len(val_idx)} test={len(test_idx)}")
 
     candidates = {
@@ -221,6 +224,7 @@ def main() -> None:
                     CONDITIONS[c][1]: int((y == c).sum()) for c in range(6)
                 },
                 "seed": SEED,
+                "split_strategy": "patient_groups_and_exact_duplicate_components",
             },
             indent=2,
             ensure_ascii=False,

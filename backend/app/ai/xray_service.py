@@ -21,10 +21,10 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-import joblib
 from PIL import Image
 
 from .skin_features import extract_features
+from .artifact_loading import IncompatibleArtifact, load_artifact
 
 _ART = Path(__file__).resolve().parent / "artifacts"
 
@@ -86,7 +86,7 @@ def _bundle() -> dict:
             "python ml/fetch_medical_datasets.py --only pneumonia && "
             "python ml/train_chest_xray_model.py"
         )
-    return joblib.load(path)
+    return load_artifact(path)
 
 
 @lru_cache(maxsize=1)
@@ -101,7 +101,10 @@ def _tb_bundle() -> dict | None:
     path = _ART / "tb_model.joblib"
     if not path.exists():
         return None
-    return joblib.load(path)
+    try:
+        return load_artifact(path)
+    except IncompatibleArtifact:
+        return None
 
 
 # What the TB screen calls its classes, in the words the response carries.
@@ -259,4 +262,7 @@ def assess_chest_xray(payload: bytes, age: Optional[int] = None) -> dict:
         "disclaimer": DISCLAIMER["en"],
         "disclaimer_bn": DISCLAIMER["bn"],
         "model_version": MODEL_VERSION,
+        "tuberculosis_available": _tb_bundle() is not None,
+        "mode": "demo",
+        "clinically_validated": False,
     }

@@ -24,7 +24,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
-import joblib
+from .artifact_loading import load_artifact
 from PIL import Image
 
 from .skin_features import extract_features
@@ -123,7 +123,7 @@ def _bundle() -> dict:
             f"The pigmented lesion model is missing at {path}. Build it with: "
             "python ml/fetch_skin_data.py && python ml/train_skin_model.py"
         )
-    return joblib.load(path)
+    return load_artifact(path, SkinModelError)
 
 
 @lru_cache(maxsize=1)
@@ -141,7 +141,7 @@ def _general_bundle() -> dict:
             "python ml/fetch_medical_datasets.py --only dermnet && "
             "python ml/train_dermnet_model.py"
         )
-    return joblib.load(path)
+    return load_artifact(path, SkinModelError)
 
 
 @lru_cache(maxsize=1)
@@ -156,7 +156,10 @@ def _mpox_bundle() -> dict | None:
     path = _ART / "mpox_model.joblib"
     if not path.exists():
         return None
-    return joblib.load(path)
+    try:
+        return load_artifact(path, SkinModelError)
+    except SkinModelError:
+        return None
 
 
 @lru_cache(maxsize=1)
@@ -171,7 +174,10 @@ def _msld_bundle() -> dict | None:
     path = _ART / "msld_model.joblib"
     if not path.exists():
         return None
-    return joblib.load(path)
+    try:
+        return load_artifact(path, SkinModelError)
+    except SkinModelError:
+        return None
 
 
 @lru_cache(maxsize=1)
@@ -186,7 +192,10 @@ def _pad_bundle() -> dict | None:
     path = _ART / "pad_model.joblib"
     if not path.exists():
         return None
-    return joblib.load(path)
+    try:
+        return load_artifact(path, SkinModelError)
+    except SkinModelError:
+        return None
 
 
 # What the smartphone screen calls its classes, in the words the response

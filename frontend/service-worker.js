@@ -15,7 +15,7 @@
 /* Raising this discards the previous caches on activate. It must be raised
  * whenever the shell list or the caching rules change, otherwise a returning
  * visitor keeps being served the old app from their own disk. */
-const VERSION = 'v11';
+const VERSION = 'v12';
 const SHELL_CACHE = `sasthosetu-shell-${VERSION}`;
 const DATA_CACHE = `sasthosetu-data-${VERSION}`;
 
@@ -39,6 +39,9 @@ const SHELL_ASSETS = [
   'records.html',
   'login.html',
   'account.html',
+  'account-action.html',
+  'labs.html',
+  'provider.html',
   'notifications.html',
   'consultations.html',
   'doctor-login.html',
@@ -95,26 +98,9 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
 
   if (isApiRequest(url)) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(DATA_CACHE).then((cache) => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() =>
-          caches.match(request).then(
-            (cached) =>
-              cached ||
-              new Response(
-                JSON.stringify({ detail: 'Offline', offline: true }),
-                { status: 503, headers: { 'Content-Type': 'application/json' } }
-              )
-          )
-        )
-    );
+    // Sensitive responses are never persisted by the worker. The app owns
+    // encrypted, expiring, session-scoped offline storage instead.
+    event.respondWith(fetch(request, { cache: 'no-store' }));
     return;
   }
 

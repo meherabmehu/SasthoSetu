@@ -139,7 +139,8 @@ def add_lab_test_service(provider_id: str, payload, current_user, db: Session):
 
 
 def list_lab_tests_service(db: Session, provider_id: str | None = None, search: str | None = None):
-    query = db.query(LabTest).filter(LabTest.is_active.is_(True))
+    query = db.query(LabTest).join(Provider, Provider.id == LabTest.provider_id).filter(
+        LabTest.is_active.is_(True), Provider.is_active.is_(True), Provider.is_verified.is_(True))
     if provider_id:
         provider = _provider_or_404(provider_id, db)
         query = query.filter(LabTest.provider_id == provider.id)
@@ -210,6 +211,9 @@ def create_lab_order_service(payload, current_user, db: Session):
         raise HTTPException(
             status_code=403, detail="Cannot order a test for another patient"
         )
+    if target_user_id != current_user.get("user_id") and current_user.get("role") != "ADMIN":
+        from app.core.security import require_self_or_clinician
+        require_self_or_clinician(target_user_id, current_user, db)
 
     patient = db.query(Patient).filter(Patient.user_id == target_user_id).first()
     if not patient:
@@ -218,6 +222,13 @@ def create_lab_order_service(payload, current_user, db: Session):
     doctor = (
         db.query(Doctor).filter(Doctor.user_id == current_user.get("user_id")).first()
     )
+    if payload.consultation_id:
+        from app.models.consultation import Consultation
+        consultation = db.get(Consultation, payload.consultation_id)
+        if (not consultation or consultation.patient_id != patient.id
+                or (current_user.get("role") == "DOCTOR" and
+                    (not doctor or consultation.doctor_id != doctor.id))):
+            raise HTTPException(status_code=403, detail="Consultation does not belong to this care episode")
 
     order = LabOrder(
         order_code=f"LAB-{secrets.token_hex(5).upper()}",
@@ -275,6 +286,11 @@ def upload_result_service(order_id: str, payload, current_user, db: Session):
         raise HTTPException(
             status_code=409, detail=f"Order is already {order.status}"
         )
+    if payload.result_file_id:
+        from app.models.file_record import FileRecord
+        result_file = db.get(FileRecord, payload.result_file_id)
+        if not result_file or result_file.patient_id != order.patient_id:
+            raise HTTPException(status_code=400, detail="Result file must belong to this patient")
 
     order.result_summary = payload.result_summary
     order.result_values = payload.result_values

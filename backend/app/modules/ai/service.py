@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.ai.drug_safety import check_interactions
+from app.ai.artifact_loading import IncompatibleArtifact
 from app.ai.triage_service import triage as run_ml_triage
 from app.ai import surge_service
 from app.ai import surveillance_service
@@ -32,7 +33,7 @@ def ml_triage_service(notes: str, age: int | None = None):
 def surge_forecast_service(hospital_code: str):
     try:
         return surge_service.forecast(hospital_code.upper())
-    except FileNotFoundError:
+    except (FileNotFoundError, IncompatibleArtifact):
         # Never surface the filesystem path: it discloses server layout and
         # tells the caller nothing they can act on.
         raise HTTPException(

@@ -95,7 +95,7 @@ def main() -> None:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     rows: list[str] = [
-        "file,label_id,condition,condition_bn,risk,fitspatrick,age\n"
+        "file,label_id,condition,condition_bn,risk,fitspatrick,age,patient_id,lesion_id\n"
     ]
     kept = 0
     for name in image_zips:
@@ -137,7 +137,9 @@ def main() -> None:
             rows.append(
                 f"{filename},{spec['label_id']},{row['diagnostic']},"
                 f"{spec['bn']},{spec['risk']},{tone},"
-                f"{(row.get('age') or '').strip()}\n"
+                f"{(row.get('age') or '').strip()},"
+                f"{(row.get('patient_id') or '').strip()},"
+                f"{(row.get('lesion_id') or '').strip()}\n"
             )
             kept += 1
         inner.close()

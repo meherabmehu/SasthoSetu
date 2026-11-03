@@ -135,13 +135,10 @@ def get_triage_session_service(session_id: str, current_user, db: Session):
     if not session:
         raise HTTPException(status_code=404, detail="Triage session not found")
 
-    role = current_user.get("role")
-    if role not in ("ADMIN", "DOCTOR") and session.user_id != current_user.get(
-        "user_id"
-    ):
-        raise HTTPException(
-            status_code=403, detail="You cannot view this triage session"
-        )
+    from app.core.security import require_self_or_clinician
+    if not session.user_id and current_user.get("role") != "ADMIN":
+        raise HTTPException(status_code=403, detail="Anonymous sessions are not patient records")
+    require_self_or_clinician(session.user_id, current_user, db)
 
     return _session_payload(session)
 
@@ -200,6 +197,8 @@ def review_triage_session_service(session_id: str, payload, current_user, db: Se
             status_code=403, detail="Only a registered doctor can review triage"
         )
 
+    from app.core.security import require_self_or_clinician
+    require_self_or_clinician(session.user_id, current_user, db)
     session.reviewed_by = doctor.id
     session.clinician_level = payload.clinician_level
     session.review_note = payload.note

@@ -86,3 +86,4 @@ data/real/imaging/oral/
 # Built by scripts/build_frontend.py at deploy time. Committing it would
 # freeze one deployment's API address into the repository.
 frontend/dist/
+.tmp/

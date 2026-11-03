@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#1b817d"><title>Account recovery · SasthoSetu</title><link rel="icon" href="assets/icons/favicon-32.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="assets/css/design-system.css"><link rel="stylesheet" href="assets/css/layout.css"><meta name="referrer" content="no-referrer"></head><body><main id="main" class="container"><section class="card"><h1 id="title">অ্যাকাউন্ট পুনরুদ্ধার / Account recovery</h1><form id="actionForm"><div id="emailField"><label class="label" for="email">Email / ইমেইল</label><input class="input" id="email" type="email" autocomplete="email"></div><div class="hidden" id="passwordField"><label class="label" for="password">New password / নতুন পাসওয়ার্ড</label><input class="input" id="password" type="password" minlength="8" maxlength="128" autocomplete="new-password"></div><button class="btn" id="submit" type="submit">Continue / এগিয়ে যান</button></form><p id="result" role="status"></p><a href="login.html">Sign in / লগইন</a></section></main><script type="module">
+import { api, session } from './assets/js/api.js';
+import { i18n } from './assets/js/i18n.js';
+import { bootstrap } from './assets/js/page.js';
+import { escapeHtml, requireAuth, toast, formatBdt } from './assets/js/ui.js';
+const BN = i18n.lang === 'bn';
+bootstrap('account-action.html');
+const fragment = new URLSearchParams(window.location.hash.slice(1));
+const token = fragment.get('token');
+const purpose = fragment.get('purpose');
+history.replaceState(null, '', window.location.pathname);
+const emailField = document.getElementById('emailField');
+const passwordField = document.getElementById('passwordField');
+const result = document.getElementById('result');
+if (token) {
+  emailField.classList.add('hidden');
+  if (purpose === 'reset') { passwordField.classList.remove('hidden'); document.getElementById('password').required = true; }
+  document.getElementById('title').textContent = purpose === 'verify' ? 'Verify email / ইমেইল যাচাই' : 'Reset password / পাসওয়ার্ড পুনরায় দিন';
+} else { document.getElementById('email').required = true; }
+document.getElementById('actionForm').addEventListener('submit', async event => {
+  event.preventDefault(); const button = document.getElementById('submit'); button.disabled = true;
+  try {
+    let response;
+    if (!token) response = await api.post('/auth/forgot-password', { email: document.getElementById('email').value }, { auth: false });
+    else if (purpose === 'reset') response = await api.post('/auth/reset-password', { token, new_password: document.getElementById('password').value }, { auth: false });
+    else if (purpose === 'verify') response = await api.post('/auth/verify-email', { token }, { auth: false });
+    else throw new Error('Invalid link / লিংক সঠিক নয়');
+    result.textContent = response.message;
+    event.target.reset();
+    if (token) event.target.classList.add('hidden');
+  } catch(error) { result.textContent = error.message; } finally { button.disabled = false; }
+});
+</script></body></html>

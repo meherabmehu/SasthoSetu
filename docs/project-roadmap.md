@@ -12,7 +12,10 @@ this file now guards against.
 
 ## Current state
 
-**281 automated tests passing. 116 API endpoints. Lint clean.**
+Current implementation and verification are recorded in
+[IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md). The release scope is demo/sandbox.
+The phase summaries below describe implemented workflows, not clinical validation
+or live external integrations.
 
 | Phase | Status |
 |---|---|
@@ -118,17 +121,17 @@ this file now guards against.
 
 **Remaining before a live clinical deployment**
 
-These are deliberately listed rather than quietly omitted. None are code
-defects; each needs infrastructure, an external party, or real-world data.
+These are deliberately listed rather than quietly omitted. The follow-up implementation closes code defects found in review; the items
+below require production infrastructure, an external party, or real-world data.
 
 | Item | Why it is not done here |
 |---|---|
 | Clinical validation of BanglaMed-AI | Requires a registered clinical advisory board and real patient data under ethics approval. The model cards state this precondition explicitly |
-| Real BMDC, DGHS and gateway credentials | Requires signed institutional agreements. Adapters run in clearly labelled sandbox mode until then |
+| Real BMDC, DGHS and gateway credentials | Requires signed institutional agreements. Current adapters are local demo simulations; credentials alone do not implement live provider calls |
 | Backup and restore drills | Requires the target production infrastructure |
 | Penetration test and security audit | Requires an external assessor |
 | Load and failover testing | Requires a production-like environment |
-| Distributed rate limiting | In-process limiting is correct for one instance and a conservative floor behind several; a shared store is needed once multi-node |
+| Distributed rate limiting | In-process limiting is correct for one instance and a conservative floor behind several; an optional shared database counter is now implemented; enable and verify it for the target deployment |
 | Real training corpora | The current corpora are synthetic but principled. Replacing them with de-identified clinical text is the single largest quality improvement available. `docs/REAL_DATA.md` records what each component needs and which public sources were verified as usable |
 
 ---

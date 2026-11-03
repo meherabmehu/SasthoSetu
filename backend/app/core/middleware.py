@@ -7,6 +7,8 @@ timing, security response headers, and abuse control.
 from __future__ import annotations
 
 import logging
+import os
+import ipaddress
 import time
 import uuid
 from collections import deque
@@ -17,6 +19,7 @@ from sqlalchemy.exc import OperationalError
 
 from app.ai.triage_service import ModelArtifactError
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.concurrency import run_in_threadpool
 
 from app.core.config import settings
 
@@ -24,7 +27,7 @@ logger = logging.getLogger("sasthosetu.request")
 
 # Paths that must stay reachable even when a client is being rate limited,
 # because they are how operators find out the service is unhealthy.
-RATE_LIMIT_EXEMPT = {"/health", "/", "/openapi.json", "/docs", "/redoc"}
+RATE_LIMIT_EXEMPT = {"/ready", "/health", "/", "/openapi.json", "/docs", "/redoc"}
 
 SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
@@ -132,6 +135,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         for header, value in SECURITY_HEADERS.items():
             response.headers.setdefault(header, value)
+        if request.url.path.startswith("/api/"):
+            # Offline copies are encrypted by the application. Browser and
+            # intermediary caches must not retain authenticated API responses.
+            response.headers["Cache-Control"] = "no-store"
 
         if settings.app_env in ("staging", "production"):
             response.headers.setdefault(
@@ -157,8 +164,16 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
     def _client_key(self, request: Request) -> str:
         forwarded = request.headers.get("X-Forwarded-For", "")
-        if forwarded:
-            return forwarded.split(",")[0].strip()
+        peer = request.client.host if request.client else "unknown"
+        trusted = os.environ.get("TRUSTED_PROXY_CIDRS", "").split(",")
+        try:
+            is_trusted = any(ipaddress.ip_address(peer) in ipaddress.ip_network(c.strip())
+                             for c in trusted if c.strip())
+            if forwarded and is_trusted:
+                candidate = forwarded.split(",")[0].strip()
+                return str(ipaddress.ip_address(candidate))
+        except ValueError:
+            pass
         return request.client.host if request.client else "unknown"
 
     async def dispatch(self, request: Request, call_next):
@@ -166,6 +181,17 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         key = self._client_key(request)
+        if os.environ.get("RATE_LIMIT_BACKEND", "memory") == "database":
+            from app.core.shared_limits import check_database_limit
+            try:
+                retry = await run_in_threadpool(check_database_limit, key, self.limit)
+            except Exception:
+                logger.exception("Shared rate limiter unavailable")
+                return JSONResponse(status_code=503, content={"detail": "Please try again shortly"})
+            if retry:
+                return JSONResponse(status_code=429, content={"detail": "Too many requests"},
+                                    headers={"Retry-After": str(retry)})
+            return await call_next(request)
         now = time.monotonic()
         window = self._hits.setdefault(key, deque())
 
@@ -187,7 +213,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         # Bound memory: drop clients that have gone quiet.
         if len(self._hits) > 10_000:
-            for stale_key in [k for k, v in self._hits.items() if not v]:
+            for stale_key in [k for k, v in self._hits.items() if not v or now - v[-1] > 60]:
                 self._hits.pop(stale_key, None)
 
         return await call_next(request)

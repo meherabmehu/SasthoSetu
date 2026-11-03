@@ -11,6 +11,7 @@ from app.core.config import settings
 from app.models.appointment import Appointment
 from app.models.doctor import Doctor
 from app.models.payment import Payment
+from app.models.patient import Patient
 from app.models.provider import LabOrder
 from app.modules.notifications.service import create_notification
 from app.payments.gateways import ChargeRequest, get_gateway
@@ -29,6 +30,9 @@ def _reference() -> str:
 def _payload(payment: Payment) -> dict:
     return {
         "id": payment.id,
+        "is_sandbox": True,
+        "mode": "demo",
+        "gateway_message": "DEMO: no money is charged or refunded",
         "reference": payment.reference,
         "purpose": payment.purpose,
         "amount_bdt": payment.amount_bdt,
@@ -76,14 +80,26 @@ def _resolve_amount(payload, db: Session):
     raise HTTPException(status_code=400, detail="Unsupported payment purpose")
 
 
+def _assert_checkout_replay(payment, payload, user):
+    if payment.payer_user_id != user.get("user_id"):
+        raise HTTPException(status_code=403, detail="This payment belongs to another account")
+    if (payment.purpose, payment.method, payment.appointment_id, payment.lab_order_id) != (
+            payload.purpose, payload.method, payload.appointment_id, payload.lab_order_id):
+        raise HTTPException(status_code=409, detail="Idempotency key was used for a different checkout")
+
+
 def create_checkout_service(payload, current_user, db: Session):
     """Start a payment. Repeating the same idempotency key returns the original."""
+    if ((payload.purpose == "CONSULTATION" and payload.lab_order_id is not None)
+            or (payload.purpose == "LAB_ORDER" and payload.appointment_id is not None)):
+        raise HTTPException(status_code=400, detail="Supply only the target matching the payment purpose")
     existing = (
         db.query(Payment)
         .filter(Payment.idempotency_key == payload.idempotency_key)
         .first()
     )
     if existing:
+        _assert_checkout_replay(existing, payload, current_user)
         return _payload(existing)
 
     try:
@@ -94,6 +110,23 @@ def create_checkout_service(payload, current_user, db: Session):
         )
 
     amount, provider_id = _resolve_amount(payload, db)
+    if payload.purpose == "CONSULTATION":
+        subject = db.query(Appointment).filter(Appointment.id == payload.appointment_id).with_for_update().populate_existing().first()
+    else:
+        subject = db.query(LabOrder).filter(LabOrder.id == payload.lab_order_id).with_for_update().populate_existing().first()
+    patient = db.get(Patient, subject.patient_id)
+    if not patient or patient.user_id != current_user.get("user_id"):
+        raise HTTPException(status_code=403, detail="Only the patient can pay for this order")
+    if subject.status in {"CANCELLED", "REJECTED"}:
+        raise HTTPException(status_code=409, detail="This order is cancelled")
+    prior = db.query(Payment).filter(
+        Payment.appointment_id == payload.appointment_id if payload.purpose == "CONSULTATION"
+        else Payment.lab_order_id == payload.lab_order_id,
+        Payment.status.in_(["PENDING", "COMPLETED"]),
+    ).first()
+    if prior:
+        _assert_checkout_replay(prior, payload, current_user)
+        return _payload(prior)
     if amount <= 0:
         raise HTTPException(status_code=400, detail="Nothing to pay")
 
@@ -140,6 +173,7 @@ def create_checkout_service(payload, current_user, db: Session):
             .first()
         )
         if duplicate:
+            _assert_checkout_replay(duplicate, payload, current_user)
             return _payload(duplicate)
         raise
 
@@ -155,7 +189,7 @@ def handle_callback_service(payload, db: Session):
     payment = (
         db.query(Payment)
         .filter(Payment.reference == payload.reference)
-        .first()
+        .with_for_update().populate_existing().first()
     )
     if not payment:
         raise HTTPException(status_code=404, detail="Payment not found")
@@ -211,7 +245,8 @@ def handle_callback_service(payload, db: Session):
 
 
 def refund_service(payment_id: str, payload, current_user, db: Session):
-    payment = db.query(Payment).filter(Payment.id == payment_id).first()
+    payment = (db.query(Payment).filter(Payment.id == payment_id)
+               .with_for_update().populate_existing().first())
     if not payment:
         raise HTTPException(status_code=404, detail="Payment not found")
     if payment.status != "COMPLETED":

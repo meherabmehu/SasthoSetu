@@ -36,6 +36,17 @@ users rather than an afterthought.
 
 ---
 
+## Current scope
+
+This version is a **demo/sandbox**. Payments move no real money; bed capacity,
+forecasts and surveillance are not verified live feeds. Shared patient records
+require explicit consent for verified treating doctors. The incompatible TB
+artifact is disabled until rebuilt; the pneumonia screen remains available.
+
+See [implementation status](docs/IMPLEMENTATION_STATUS.md) for completed fixes,
+local verification, new pages, migrations and externally blocked work. Existing
+model scores below describe their original evaluation, not a new clinical study.
+
 ## What works today
 
 | Capability | Detail |
@@ -57,7 +68,7 @@ users rather than an afterthought.
 | **Accounts** | Self-service password and profile changes; role-scoped sign-in doors for patients, clinicians and staff |
 | **Web apps** | Patient, doctor and admin surfaces; installable PWA that works offline |
 
-**336 automated tests.** Every red-flag rule is asserted in four phrasings —
+**Automated unit, API, PostgreSQL and browser checks.** Every red-flag rule is asserted in four phrasings —
 natural Bangla, romanised Banglish, English, and English paraphrase.
 
 ---
@@ -87,7 +98,7 @@ models, which takes a minute or two.
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r backend/requirements.txt uvicorn
+pip install -r requirements-dev.txt
 
 python ml/prepare_all.py                       # datasets + models (~90s)
 
@@ -133,7 +144,7 @@ backend/
     payments/        Gateway abstraction and adapters
     schemas/         Pydantic request and response models
   alembic/           Migrations
-  tests/             336 tests
+  tests/             automated tests
 ml/                  Dataset generators, training, retraining
 scripts/             Database seeding
 docker/              Entrypoint and nginx configuration
@@ -184,8 +195,7 @@ photographs) is the project's clearest data need.
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |
 
-Full limitations are documented in `docs/model_cards/`. The corpora are
-synthetic but principled, generated from the same lexicon the runtime uses.
+Full limitations are documented in `docs/model_cards/`. Triage labels and operational corpora still include generated data; imaging models use public collections.
 **Clinical validation is required before real-world deployment**, and the model
 cards say so explicitly.
 
@@ -240,6 +250,9 @@ SMS replies are composed against the 160-character limit — Bangla in UCS-2 get
 
 ## Testing
 
+Install `requirements-dev.txt` first. Browser and PostgreSQL instructions are in
+[the implementation notes](docs/IMPLEMENTATION_STATUS.md).
+
 ```bash
 cd backend
 APP_ENV=test DATABASE_URL=sqlite:///./test.db \
@@ -251,7 +264,7 @@ APP_ENV=test DATABASE_URL=sqlite:///./test.db \
 ruff check backend ml scripts tools
 ```
 
-CI (`docs/ci/`) lints, builds the datasets, trains the models, runs migrations,
+CI (`.github/workflows/ci.yml`) lints, builds the datasets, trains the models, runs migrations,
 runs the suite, then boots a real server and asserts that Bangla chest pain with
 breathlessness returns `EMERGENCY` over HTTP.
 
@@ -271,13 +284,13 @@ breathlessness returns `EMERGENCY` over HTTP.
 
 ## API
 
-Interactive documentation at `/docs` once running. 116 endpoints across triage,
+Interactive documentation at `/docs` once running. APIs across triage,
 appointments, consultations, prescriptions, hospitals, labs, pharmacies,
 payments, FHIR, rural access and administration.
 
 See `docs/API.md` for the AI and clinical surface, and `docs/BANGLAMED_AI.md`
-for how each model works. Every corpus the models train on is generated rather
-than collected; `docs/REAL_DATA.md` sets out what real data each component
+for how each model works. The platform combines generated triage/operational data with public real
+imaging and directory datasets; `docs/REAL_DATA.md` sets out what real data each component
 needs and which public Bangladeshi sources were verified as usable.
 
 ---

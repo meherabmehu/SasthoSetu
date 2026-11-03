@@ -11,6 +11,53 @@ const TOKEN_KEY = 'sasthosetu.token';
 const USER_KEY = 'sasthosetu.user';
 const QUEUE_KEY = 'sasthosetu.queue';
 const CACHE_PREFIX = 'sasthosetu.cache.';
+const STORAGE_PREFIX = 'sasthosetu.private.v2.';
+const TAB_ID = sessionStorage.getItem('sasthosetu.tab') || crypto.randomUUID();
+sessionStorage.setItem('sasthosetu.tab', TAB_ID);
+const MAX_AGE = 24 * 60 * 60 * 1000;
+// Discard the old unencrypted, unowned data rather than migrating identities.
+localStorage.removeItem(QUEUE_KEY);
+for (const key of Object.keys(localStorage)) {
+  if (key.startsWith(CACHE_PREFIX)) localStorage.removeItem(key);
+}
+
+function identity() {
+  const user = session.user;
+  return user?.user_id || user?.id || null;
+}
+function privateKey(kind) {
+  const owner = identity();
+  return owner && session.token ? `${STORAGE_PREFIX}${owner}.${TAB_ID}.${kind}` : null;
+}
+async function encryptionKey() {
+  const name = 'sasthosetu.crypto.' + TAB_ID;
+  let raw = sessionStorage.getItem(name);
+  if (!raw) {
+    raw = JSON.stringify(Array.from(crypto.getRandomValues(new Uint8Array(32))));
+    sessionStorage.setItem(name, raw);
+  }
+  return crypto.subtle.importKey('raw', new Uint8Array(JSON.parse(raw)), 'AES-GCM', false,
+    ['encrypt', 'decrypt']);
+}
+async function seal(data) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const bytes = new TextEncoder().encode(JSON.stringify(data));
+  const cipher = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await encryptionKey(), bytes);
+  return { iv: Array.from(iv), cipher: Array.from(new Uint8Array(cipher)) };
+}
+async function unseal(data) {
+  const bytes = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: new Uint8Array(data.iv) },
+    await encryptionKey(), new Uint8Array(data.cipher));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+function discardPrivateData() {
+  for (const key of Object.keys(localStorage)) {
+    if (key.startsWith(STORAGE_PREFIX) || key.startsWith(CACHE_PREFIX)) localStorage.removeItem(key);
+  }
+  sessionStorage.removeItem('sasthosetu.crypto.' + TAB_ID);
+  localStorage.removeItem(QUEUE_KEY);
+}
+
 
 function resolveBase() {
   // An explicit override always wins, which is how a deployment points the
@@ -67,10 +114,13 @@ export const session = {
     return Boolean(user && roles.includes(user.role));
   },
   save(token, user) {
+    if (this.token !== token) discardPrivateData();
     localStorage.setItem(TOKEN_KEY, token);
     if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
+    else localStorage.removeItem(USER_KEY);
   },
   clear() {
+    discardPrivateData();
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     for (const key of Object.keys(localStorage)) {
@@ -113,57 +163,69 @@ function clearCachedResponses() {
 /* Cached reads are scoped to the account that fetched them: the same URL
    returns different rows for different users, and a shared device must not
    show one patient the previous patient's screen. */
-function cacheKey(path) {
-  const user = session.user;
-  const scope = user?.id ?? (session.token ? 'session' : 'guest');
-  return `${CACHE_PREFIX}${scope}.${path}`;
+async function readCache(path) {
+  const key = privateKey('cache.' + path);
+  const token = session.token;
+  try {
+    const raw = key && localStorage.getItem(key);
+    if (!raw) return null;
+    const entry = await unseal(JSON.parse(raw));
+    if (session.token !== token || Date.now() - entry.time > MAX_AGE) return null;
+    return entry.data;
+  } catch { return null; }
 }
 
-function readCache(path) {
+async function writeCache(path, data, token) {
+  const key = privateKey('cache.' + path);
+  if (!key || token !== session.token) return;
   try {
-    const raw = localStorage.getItem(cacheKey(path));
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeCache(path, data) {
-  try {
-    localStorage.setItem(cacheKey(path), JSON.stringify(data));
-  } catch {
-    // Storage full or blocked: caching is best-effort, never fatal.
-  }
+    const entry = await seal({ time: Date.now(), data });
+    if (token === session.token) localStorage.setItem(key, JSON.stringify(entry));
+  } catch { /* Storage is best effort. */ }
 }
 
 export const queue = {
-  all() {
-    try {
-      return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
-    } catch {
-      return [];
-    }
+  records() {
+    try { return JSON.parse(localStorage.getItem(privateKey('queue')) || '[]'); }
+    catch { return []; }
   },
-  add(entry) {
-    const items = this.all();
-    items.push({ ...entry, id: crypto.randomUUID(), queuedAt: Date.now() });
-    localStorage.setItem(QUEUE_KEY, JSON.stringify(items));
+  async all() {
+    const token = session.token;
+    const items = [];
+    for (const record of this.records()) {
+      try {
+        const item = await unseal(record);
+        if (item.owner === identity() && Date.now() - item.queuedAt <= MAX_AGE) items.push(item);
+      } catch { /* A different tab or expired key cannot decrypt the entry. */ }
+    }
+    return token === session.token ? items : [];
+  },
+  async add(entry, token) {
+    const key = privateKey('queue');
+    if (!key || token !== session.token) throw new Error('Session changed');
+    const item = { ...entry, owner: identity(), id: crypto.randomUUID(), queuedAt: Date.now() };
+    const encrypted = await seal(item);
+    if (token !== session.token) throw new Error('Session changed');
+    const items = this.records();
+    items.push({ ...encrypted, id: item.id });
+    localStorage.setItem(key, JSON.stringify(items));
     window.dispatchEvent(new CustomEvent('queuechange', { detail: { size: items.length } }));
   },
   remove(id) {
-    const items = this.all().filter((item) => item.id !== id);
-    localStorage.setItem(QUEUE_KEY, JSON.stringify(items));
+    const key = privateKey('queue');
+    if (!key) return;
+    const items = this.records().filter((item) => item.id !== id);
+    localStorage.setItem(key, JSON.stringify(items));
     window.dispatchEvent(new CustomEvent('queuechange', { detail: { size: items.length } }));
   },
-  get size() {
-    return this.all().length;
-  },
+  get size() { return this.records().length; },
 };
 
 async function request(path, { method = 'GET', body, auth = true, queueable = false, cache = false } = {}) {
+  const requestToken = session.token;
   const headers = { Accept: 'application/json' };
   if (body !== undefined) headers['Content-Type'] = 'application/json';
-  if (auth && session.token) headers.Authorization = `Bearer ${session.token}`;
+  if (auth && requestToken) headers.Authorization = `Bearer ${requestToken}`;
 
   try {
     const response = await fetch(`${API_BASE}${path}`, {
@@ -172,6 +234,7 @@ async function request(path, { method = 'GET', body, auth = true, queueable = fa
       body: body === undefined ? undefined : JSON.stringify(body),
     });
 
+    if (auth && requestToken !== session.token) throw new ApiError('Session changed', 409, null);
     if (response.status === 401 && auth) {
       // An expired session ends the same way a deliberate sign-out does, so
       // the cached records have to go with it.
@@ -191,18 +254,19 @@ async function request(path, { method = 'GET', body, auth = true, queueable = fa
       throw new ApiError(message, response.status, data);
     }
 
-    if (cache && method === 'GET') writeCache(path, data);
+    if (cache && method === 'GET') await writeCache(path, data, requestToken);
     return data;
   } catch (error) {
     if (error instanceof ApiError) throw error;
 
+    if (auth && requestToken !== session.token) throw new ApiError('Session changed', 409, null);
     // Network-level failure: fall back to cache for reads, queue writes.
     if (method === 'GET' && cache) {
-      const cached = readCache(path);
-      if (cached) return { ...cached, __fromCache: true };
+      const cached = await readCache(path);
+      if (cached) return Array.isArray(cached) ? cached : { ...cached, __fromCache: true };
     }
     if (queueable && method !== 'GET') {
-      queue.add({ path, method, body });
+      await queue.add({ path, method, body }, requestToken);
       throw new ApiError(i18n.t('status.queued'), 0, { queued: true });
     }
     throw new ApiError(i18n.t('status.offline'), 0, null);
@@ -212,6 +276,7 @@ async function request(path, { method = 'GET', body, auth = true, queueable = fa
 export const api = {
   get: (path, options) => request(path, { ...options, method: 'GET' }),
   post: (path, body, options) => request(path, { ...options, method: 'POST', body }),
+  put: (path, body, options) => request(path, { ...options, method: 'PUT', body }),
   patch: (path, body, options) => request(path, { ...options, method: 'PATCH', body }),
   delete: (path, options) => request(path, { ...options, method: 'DELETE' }),
 
@@ -225,8 +290,10 @@ export const api = {
     try {
       const me = await request('/auth/me');
       session.save(data.access_token, me);
-    } catch {
-      // Identity lookup is a convenience; the token alone is enough to proceed.
+    } catch (error) {
+      // Never continue under a previous account's cached identity.
+      await session.clear();
+      throw error;
     }
     return session.user;
   },
@@ -234,22 +301,37 @@ export const api = {
   register: (payload) => request('/users', { method: 'POST', body: payload, auth: false }),
 
   async logout() {
+    try { await request('/auth/logout', { method: 'POST', body: {} }); } catch { /* Offline sign-out still clears this device. */ }
     await session.clear();
     window.dispatchEvent(new CustomEvent('loggedout'));
   },
 };
 
 /** Replay queued writes, oldest first. Stops at the first failure. */
-export async function flushQueue() {
-  const items = queue.all();
+let flushing;
+export function flushQueue() {
+  if (!flushing) {
+    const replay = () => replayQueue();
+    const lock = privateKey('queue');
+    flushing = (navigator.locks && lock ? navigator.locks.request(lock, replay) : replay())
+      .finally(() => { flushing = null; });
+  }
+  return flushing;
+}
+async function replayQueue() {
+  const token = session.token;
+  const items = await queue.all();
   let sent = 0;
 
   for (const item of items) {
+    if (!token || token !== session.token || item.owner !== identity()) break;
     try {
       await request(item.path, { method: item.method, body: item.body });
+      if (token !== session.token) break;
       queue.remove(item.id);
       sent += 1;
     } catch (error) {
+      if (token !== session.token || error.status === 401) break;
       if (error.status && error.status >= 400 && error.status < 500) {
         // A rejected request will never succeed on retry; drop it rather
         // than blocking everything queued behind it.
@@ -261,6 +343,14 @@ export async function flushQueue() {
   }
   return sent;
 }
+
+window.addEventListener('storage', (event) => {
+  if (event.key === TOKEN_KEY) {
+    discardPrivateData();
+    clearCachedResponses();
+    window.dispatchEvent(new CustomEvent('unauthorized'));
+  }
+});
 
 window.addEventListener('online', () => {
   flushQueue().then((sent) => {

@@ -1,6 +1,11 @@
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import Query
+from fastapi import HTTPException
+from pydantic import BaseModel
+from typing import Literal
+from app.models.payment import Payment
+from app.payments.gateways import get_gateway
 
 from sqlalchemy.orm import Session
 
@@ -28,7 +33,26 @@ router = APIRouter()
 
 @router.get("/payments/methods")
 def list_methods():
-    return {"methods": SUPPORTED_METHODS, "currency": "BDT"}
+    return {"methods": SUPPORTED_METHODS, "currency": "BDT", "is_sandbox": True, "mode": "demo"}
+
+
+class SimulationResult(BaseModel):
+    status: Literal["COMPLETED", "FAILED"]
+
+
+@router.post("/payments/{payment_id}/simulate")
+def simulate_payment(payment_id: str, payload: SimulationResult,
+                     current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    """Local simulator only. Never contacts a provider or moves money."""
+    payment = db.get(Payment, payment_id)
+    if not payment:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    if payment.payer_user_id != current_user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your payment")
+    body = {"reference": payment.reference, "status": payload.status,
+            "gateway_reference": payment.gateway_reference or ""}
+    callback = PaymentCallback(**body, signature=get_gateway(payment.method).signature_for(body))
+    return handle_callback_service(callback, db)
 
 
 @router.post("/payments/checkout")

@@ -75,7 +75,14 @@ const submitBtn = document.getElementById('submitBtn');
 (async () => {
   try {
     const status = await api.get('/ai/xray-check/status');
-    if (status?.available) return;
+    if (status?.available) {
+      if (!status.tuberculosis_available) {
+        const notice = document.createElement('p'); notice.className = 'alert alert-warning';
+        notice.textContent = i18n.lang === 'bn' ? 'এই ডেমোতে টিবি স্ক্রিন বন্ধ আছে। নিউমোনিয়া স্ক্রিন চালু আছে।' : 'TB screening is unavailable in this demo. Pneumonia screening is available.';
+        form.before(notice);
+      }
+      return;
+    }
   } catch {
     return; // A failed check is not proof of absence; leave the form usable.
   }

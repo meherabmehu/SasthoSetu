@@ -167,7 +167,9 @@ async def xray_check(
     summary="Whether the chest X-ray model is built and servable",
 )
 def xray_check_status(current_user=Depends(get_current_user)):
-    return {"available": xray_model_available()}
+    from app.ai.xray_service import _tb_bundle
+    return {"available": xray_model_available(), "tuberculosis_available": _tb_bundle() is not None,
+            "mode": "demo", "clinically_validated": False}
 
 
 @router.post(

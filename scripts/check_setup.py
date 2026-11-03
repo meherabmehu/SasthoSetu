@@ -16,7 +16,6 @@ Exit status is 0 when everything passes, 1 when something needs attention.
 from __future__ import annotations
 
 import sys
-import warnings
 from datetime import date
 from pathlib import Path
 
@@ -33,16 +32,6 @@ from app.models.provider import Provider  # noqa: E402
 
 ARTIFACTS = ROOT / "backend" / "app" / "ai" / "artifacts"
 
-# A model built by a slightly different scikit-learn still loads and scores
-# correctly. The warning is noise in a setup check, and hiding it here does not
-# hide it from training, where the version does matter.
-warnings.filterwarnings("ignore", message=".*InconsistentVersion.*")
-try:
-    from sklearn.exceptions import InconsistentVersionWarning
-
-    warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
-except ImportError:
-    pass
 
 PASS = "  ok   "
 FAIL = "  FAIL "

@@ -19,6 +19,7 @@ from app.modules.medical_records.service import (
 from app.core.security import (
     get_current_user,
     require_doctor,
+    require_doctor_identity,
     require_self_or_clinician,
 )
 router = APIRouter()
@@ -35,6 +36,11 @@ def create_medical_record(
     ),
     db: Session = Depends(get_db)
 ):
+    require_doctor_identity(doctor_id, current_user, db)
+    from app.models.patient import Patient
+    patient = db.get(Patient, payload.patient_id)
+    if patient:
+        require_self_or_clinician(patient.user_id, current_user, db)
     return create_medical_record_service(
         doctor_id=doctor_id,
         payload=payload,
@@ -49,7 +55,7 @@ def get_patient_medical_records(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    require_self_or_clinician(patient_user_id, current_user)
+    require_self_or_clinician(patient_user_id, current_user, db)
     return get_patient_medical_records_service(
         patient_user_id=patient_user_id,
         db=db
@@ -64,6 +70,7 @@ def get_doctor_medical_records(
     current_user=Depends(require_doctor),
     db: Session = Depends(get_db)
 ):
+    require_doctor_identity(doctor_id, current_user, db)
     return get_doctor_medical_records_service(
         doctor_id=doctor_id,
         db=db
