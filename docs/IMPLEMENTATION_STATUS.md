@@ -20,6 +20,10 @@ real money, SMS is not delivered, and real email is disabled by default.
 | Evaluation split tooling | HAM metadata fetch retains lesion IDs, PAD fetch retains patient/lesion IDs; training uses grouped components that keep repeated subjects and exact duplicate images together. Missing grouping metadata stops training with a clear error. Existing scores remain historical until retrained and independently evaluated. |
 | Data honesty | Demo labels on capacity, forecasts, surveillance and payment surfaces; API provenance flags distinguish simulated data from verified live feeds. |
 
+CI model generation uses the committed source data with `--skip-download`.
+The data generators and trainers still run; external dataset acquisition is
+kept separate so remote source availability does not control test reproducibility.
+
 ## Run locally
 
 Install development tools with `python -m pip install -r requirements-dev.txt`.
