@@ -106,6 +106,10 @@ desktop rendering and language switching, but is not a full accessibility audit.
   is in `review-tests.log`, `review-postgres.log` and `.tmp/browser-smoke-completion.log`.
 - Final publishing review also verifies `Cache-Control: no-store` on private API
   responses, rejects mixed checkout targets, and rejects missing/NaN grouping IDs.
+- A tracked-source snapshot rebuilt the datasets and triage/surge models without
+  downloading data (229 seconds locally). Its standalone AI checks then ran 34
+  tests successfully (one skipped). The degraded-mode test group now owns its
+  temporary SQLite database instead of depending on earlier tests' setup.
 
 ## Still requires data, infrastructure or an external party
 
