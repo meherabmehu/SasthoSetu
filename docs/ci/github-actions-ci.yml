@@ -110,11 +110,10 @@ jobs:
           pip install -r requirements-dev.txt
           pip install uvicorn
 
-      # The AI services load generated datasets and trained artifacts. Building
-      # them here is what keeps the pipeline honest: if a generator or training
-      # script breaks, CI fails rather than the endpoints failing in production.
+      # Rebuild against the versioned source data. External dataset downloads
+      # are acquisition work, not a dependency of a reproducible test run.
       - name: Build datasets and train models
-        run: python ml/prepare_all.py
+        run: python ml/prepare_all.py --skip-download
 
       - name: Run migrations against a clean database
         working-directory: backend
@@ -159,7 +158,7 @@ jobs:
           pip install uvicorn
 
       - name: Build datasets and train models
-        run: python ml/prepare_all.py
+        run: python ml/prepare_all.py --skip-download
 
       - name: Prepare database
         working-directory: backend
