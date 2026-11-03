@@ -230,10 +230,36 @@ class DegradedModeTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from fastapi.testclient import TestClient
+        from sqlalchemy import create_engine
+        from sqlalchemy.orm import sessionmaker
+        from sqlalchemy.pool import StaticPool
 
+        from app.core.dependencies import get_db
         from app.main import app
+        from app.models.base import Base
 
+        cls.engine = create_engine("sqlite://", connect_args={"check_same_thread": False},
+                                   poolclass=StaticPool)
+        Base.metadata.create_all(cls.engine)
+        sessions = sessionmaker(bind=cls.engine)
+
+        def test_db():
+            with sessions() as db:
+                yield db
+
+        cls.app, cls.db_dependency = app, get_db
+        cls.previous_db = app.dependency_overrides.get(get_db)
+        app.dependency_overrides[get_db] = test_db
         cls.client = TestClient(app, raise_server_exceptions=False)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.client.close()
+        if cls.previous_db is None:
+            cls.app.dependency_overrides.pop(cls.db_dependency, None)
+        else:
+            cls.app.dependency_overrides[cls.db_dependency] = cls.previous_db
+        cls.engine.dispose()
 
     def test_rule_triage_works_without_any_artifact(self):
         response = self.client.post(
