@@ -25,7 +25,6 @@ import io
 import zipfile
 from pathlib import Path
 
-import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGING = ROOT / "data" / "real" / "imaging"
@@ -55,21 +54,8 @@ CLASSES = {
 
 
 def _fetch_zip() -> Path:
-    CACHE.mkdir(parents=True, exist_ok=True)
-    cached = CACHE / "pad.zip"
-    if cached.exists() and cached.stat().st_size > 3_000_000_000:
-        return cached
-
-    print("  downloading PAD-UFES-20 (3.6 GB)...")
-    request = urllib.request.Request(ZIP_URL, headers={"User-Agent": "sasthosetu/1.0"})
-    with urllib.request.urlopen(request, timeout=600) as response, \
-            cached.open("wb") as out:
-        while True:
-            chunk = response.read(1 << 20)
-            if not chunk:
-                break
-            out.write(chunk)
-    return cached
+    from download_ranges import download
+    return download(ZIP_URL, CACHE / "pad.zip", kind="zip")
 
 
 def main() -> None:

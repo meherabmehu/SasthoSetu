@@ -1,47 +1,125 @@
 {
-  "dataset": "PAD-UFES-20 (tone-labelled subset)",
+  "dataset": "PAD-UFES-20 frozen patient/component-disjoint test subset",
+  "model_sha256": "b915bb7de398fb3a569e09e4f4679d25299339ffb0784ac9784570c3a1791975",
+  "clinically_validated": false,
+  "test_images": 318,
+  "unlabelled_tone_images": 119,
   "tones": {
     "1": {
-      "n": 153,
-      "dermnet_urgent_rate": 0.8693,
-      "ham_referral_rate": 0.6863,
-      "pad_referral_rate": 0.9477,
-      "malignant_recall": 0.975
+      "n": 37,
+      "positive_images": 30,
+      "tp": 25,
+      "fp": 6,
+      "tn": 1,
+      "fn": 5,
+      "recall": 0.8333333333333334,
+      "specificity": 0.14285714285714285,
+      "precision": 0.8064516129032258,
+      "referred_fraction": 0.8378378378378378,
+      "confidence_intervals": {
+        "method": "component_bootstrap_percentile",
+        "repetitions": 1000,
+        "components": 14,
+        "recall_95": [
+          0.65,
+          0.941218487394958
+        ],
+        "specificity_95": [
+          0.0,
+          0.4
+        ]
+      }
     },
     "2": {
-      "n": 876,
-      "dermnet_urgent_rate": 0.7979,
-      "ham_referral_rate": 0.5913,
-      "pad_referral_rate": 0.9326,
-      "malignant_recall": 0.9759
+      "n": 108,
+      "positive_images": 81,
+      "tp": 74,
+      "fp": 19,
+      "tn": 8,
+      "fn": 7,
+      "recall": 0.9135802469135802,
+      "specificity": 0.2962962962962963,
+      "precision": 0.7956989247311828,
+      "referred_fraction": 0.8611111111111112,
+      "confidence_intervals": {
+        "method": "component_bootstrap_percentile",
+        "repetitions": 1000,
+        "components": 66,
+        "recall_95": [
+          0.8470361990950226,
+          0.9651162790697675
+        ],
+        "specificity_95": [
+          0.1362878787878788,
+          0.4782608695652174
+        ]
+      }
     },
     "3": {
-      "n": 392,
-      "dermnet_urgent_rate": 0.7985,
-      "ham_referral_rate": 0.5179,
-      "pad_referral_rate": 0.926,
-      "malignant_recall": 0.9485
+      "n": 40,
+      "positive_images": 25,
+      "tp": 20,
+      "fp": 7,
+      "tn": 8,
+      "fn": 5,
+      "recall": 0.8,
+      "specificity": 0.5333333333333333,
+      "precision": 0.7407407407407407,
+      "referred_fraction": 0.675,
+      "confidence_intervals": {
+        "method": "component_bootstrap_percentile",
+        "repetitions": 1000,
+        "components": 25,
+        "recall_95": [
+          0.5714285714285714,
+          0.9524350649350648
+        ],
+        "specificity_95": [
+          0.16666666666666666,
+          0.8333333333333334
+        ]
+      }
     },
     "4": {
-      "n": 62,
-      "dermnet_urgent_rate": 0.8226,
-      "ham_referral_rate": 0.4677,
-      "pad_referral_rate": 0.6613,
-      "malignant_recall": 0.931
+      "n": 14,
+      "positive_images": 5,
+      "tp": 4,
+      "fp": 6,
+      "tn": 3,
+      "fn": 1,
+      "recall": 0.8,
+      "specificity": 0.3333333333333333,
+      "precision": 0.4,
+      "referred_fraction": 0.7142857142857143,
+      "confidence_intervals": {
+        "method": "component_bootstrap_percentile",
+        "repetitions": 1000,
+        "components": 8,
+        "recall_95": [
+          0.5714285714285714,
+          1.0
+        ],
+        "specificity_95": [
+          0.0,
+          0.625
+        ]
+      }
     },
     "5": {
-      "n": 10,
-      "dermnet_urgent_rate": 0.7,
-      "ham_referral_rate": 0.6,
-      "pad_referral_rate": 0.8,
-      "malignant_recall": 1.0
+      "n": 0,
+      "positive_images": 0,
+      "recall": null,
+      "specificity": null,
+      "referred_fraction": null,
+      "confidence_intervals": null
     },
     "6": {
-      "n": 1,
-      "dermnet_urgent_rate": 1.0,
-      "ham_referral_rate": 0.0,
-      "pad_referral_rate": 0.0,
-      "malignant_recall": null
+      "n": 0,
+      "positive_images": 0,
+      "recall": null,
+      "specificity": null,
+      "referred_fraction": null,
+      "confidence_intervals": null
     }
   }
 }

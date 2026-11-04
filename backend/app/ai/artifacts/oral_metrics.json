@@ -1,17 +1,27 @@
 {
-  "selected_model": "hist_gradient_boosting",
+  "selected_model": "extra_trees_balanced",
   "validation_macro_f1": {
-    "hist_gradient_boosting": 0.91,
-    "logistic_regression": 0.6573
+    "extra_trees_balanced": 0.9265,
+    "hist_gradient_boosting_balanced": 0.9201,
+    "hist_gradient_boosting": 0.9076,
+    "logistic_regression": 0.6344
   },
-  "test_macro_f1": 0.8953,
-  "test_accuracy": 0.8953,
-  "carcinoma_recall": 0.892,
-  "referral_threshold": 0.4800000000000001,
-  "referred_of_test": "741/1500",
+  "test_macro_f1": 0.9187,
+  "test_accuracy": 0.9187,
+  "carcinoma_recall": 0.9033,
+  "referral_threshold": 0.5280748880984378,
+  "referred_of_test": "677/1427",
   "class_counts": {
     "Oral SCC": 5001,
     "Normal": 5001
   },
-  "seed": 42
+  "seed": 42,
+  "evaluation_protocol": "source_groups_and_pixel_phash_components_v1",
+  "clinically_validated": false,
+  "calibration": {
+    "partition": "validation",
+    "target_recall": 0.9,
+    "numerical_margin": 1e-12,
+    "test_used": false
+  }
 }

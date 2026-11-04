@@ -38,7 +38,7 @@ data/surveillance/*.csv
 data/real/_cache/
 
 # Trained model artifacts (binary, rebuilt by ml/prepare_all.py).
-# The exceptions are the five served models: together under 8 MB, and a
+# The exceptions are the served models and their evaluation records. A
 # hosted deployment cannot rebuild them at start-up (the imaging ones need
 # several GB of source images). They are tracked and refreshed by
 # re-running the pipeline in a pinned environment.
@@ -67,6 +67,11 @@ backend/app/ai/artifacts/*
 !backend/app/ai/artifacts/skin_tone_audit.json
 !backend/app/ai/artifacts/oral_model.joblib
 !backend/app/ai/artifacts/oral_metrics.json
+!backend/app/ai/artifacts/*_split.json
+!backend/app/ai/artifacts/*_holdout.json
+!backend/app/ai/artifacts/*_evaluation.csv
+!backend/app/ai/artifacts/*_holdout_predictions.csv
+!backend/app/ai/artifacts/imaging_release.json
 
 # HAM10000 images: 2.8 GB, CC BY-NC (non-commercial), re-fetchable with
 # ml/fetch_skin_data.py. The derived metadata CSV is committed.

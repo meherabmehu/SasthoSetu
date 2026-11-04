@@ -1,5 +1,10 @@
 # সাস্থ্যসেতুর সম্পূর্ণ AI প্রতিবেদন
 
+> Historical report: the imaging scores and skin-tone results below predate the
+> grouped retraining. Current results, exclusions, uncertainty and source hashes
+> are in [the 2026-11-04 retraining report](MODEL_RETRAINING_2026-11-04.md).
+> The old and new splits differ, so their scores are not directly comparable.
+
 **১১টি প্রশিক্ষিত মডেল · ১৩টি বাস্তব ডেটাসেট · ৩৫৯টি স্বয়ংক্রিয় পরীক্ষা**
 
 সব সংখ্যা `backend/app/ai/artifacts/*_metrics.json` থেকে নেওয়া — মনের

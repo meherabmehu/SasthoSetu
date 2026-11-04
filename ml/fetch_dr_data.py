@@ -22,7 +22,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGING = ROOT / "data" / "real" / "imaging"
@@ -32,7 +31,8 @@ LABELS = IMAGING / "dr_labels.csv"
 
 PARQUET_URL = (
     "https://huggingface.co/datasets/"
-    "Rami/Diabetic_Retinopathy_Preprocessed_Dataset_256x256/resolve/main/"
+    "Rami/Diabetic_Retinopathy_Preprocessed_Dataset_256x256/resolve/"
+    "ae864f738ccb7ff2ca74f4112a2ad2d6d595d7c1/"
     "data/train-00000-of-00001-7c2397e3a09be033.parquet"
 )
 
@@ -56,23 +56,8 @@ CLASSES = {
 
 
 def _fetch_parquet() -> Path:
-    CACHE.mkdir(parents=True, exist_ok=True)
-    cached = CACHE / "dr.parquet"
-    if cached.exists() and cached.stat().st_size > 300_000_000:
-        return cached
-
-    print("  downloading the parquet (364 MB)...")
-    request = urllib.request.Request(
-        PARQUET_URL, headers={"User-Agent": "sasthosetu/1.0"}
-    )
-    with urllib.request.urlopen(request, timeout=900) as response, \
-            cached.open("wb") as out:
-        while True:
-            chunk = response.read(1 << 20)
-            if not chunk:
-                break
-            out.write(chunk)
-    return cached
+    from download_dataset_file import download
+    return download(PARQUET_URL, CACHE / "dr.parquet", kind="parquet")
 
 
 def main() -> None:

@@ -136,7 +136,7 @@ def main() -> None:
     SKIN.mkdir(parents=True, exist_ok=True)
     out = SKIN / "metadata.csv"
     with out.open("w", newline="", encoding="utf-8") as fh:
-        writer = csv.writer(fh)
+        writer = csv.writer(fh, lineterminator="\n")
         writer.writerow(["image_id", "diagnosis", "diagnosis_name",
                          "risk", "confirmed_by", "age", "sex", "site", "lesion_id"])
         for row in rows:

@@ -1,0 +1,93 @@
+{
+  "dataset": "msld",
+  "model_sha256": "0849a50c90a64e9f3f3f7c07505f1deb97d9026a080f45731671672c4d3b4b26",
+  "labels_sha256": "add5e21d623b9959365f479561215cabc48d09ea6c8a0626c97f6b7598a73af4",
+  "sklearn_version": "1.5.2",
+  "threshold": 0.4350512460340097,
+  "threshold_selection": "validation_positive_scores_only_target_recall_0.90",
+  "threshold_numerical_margin": 1e-12,
+  "test_used_for_classifier_or_threshold_selection": false,
+  "test_used_for_research_release_gate": true,
+  "clinically_validated": false,
+  "engineering_gate_passed": true,
+  "research_release_floor": {
+    "validation_recall": 0.9,
+    "heldout_recall": 0.8,
+    "minimum_positive_holdout_images": 10
+  },
+  "gate_limitation": "Research integrity/validation gate; not a clinical safety acceptance test.",
+  "split_audit": {
+    "dataset": "msld",
+    "seed": 42,
+    "input_signature": "920504495a58a0e2fe5e015ca10e5437ad29ddbe969c3705a80b54e3472df02f",
+    "source_rows": 755,
+    "eligible_images": 754,
+    "excluded_images": 1,
+    "exclusions": {
+      "exact_pixel_duplicate": 1
+    },
+    "perceptual_hamming_limit": 4,
+    "near_duplicate_edges": 2,
+    "source_group_field": "patient_id",
+    "rows_with_source_group": 755,
+    "source_groups_disjoint": true,
+    "all_subjects_known": true,
+    "patient_identity_limitation": null,
+    "components_disjoint": true,
+    "partition_sizes": {
+      "train": 455,
+      "validation": 135,
+      "test": 164
+    },
+    "partition_components": {
+      "train": 313,
+      "validation": 103,
+      "test": 105
+    }
+  },
+  "metrics": {
+    "validation": {
+      "tp": 43,
+      "fp": 59,
+      "tn": 29,
+      "fn": 4,
+      "recall": 0.9148936170212766,
+      "specificity": 0.32954545454545453,
+      "precision": 0.4215686274509804,
+      "referred_fraction": 0.7555555555555555,
+      "images": 135,
+      "positive_images": 47,
+      "macro_f1": 0.35842099261079,
+      "accuracy": 0.43703703703703706,
+      "referral_score_auc": 0.6460348162475822
+    },
+    "test": {
+      "tp": 56,
+      "fp": 86,
+      "tn": 20,
+      "fn": 2,
+      "recall": 0.9655172413793104,
+      "specificity": 0.18867924528301888,
+      "precision": 0.39436619718309857,
+      "referred_fraction": 0.8658536585365854,
+      "images": 164,
+      "positive_images": 58,
+      "macro_f1": 0.3854165179746576,
+      "accuracy": 0.4817073170731707,
+      "referral_score_auc": 0.6673715029277815,
+      "confidence_intervals": {
+        "method": "component_bootstrap_percentile",
+        "repetitions": 1000,
+        "components": 105,
+        "recall_95": [
+          0.902427068388331,
+          1.0
+        ],
+        "specificity_95": [
+          0.11762254901960785,
+          0.2766115441331367
+        ]
+      }
+    }
+  }
+}

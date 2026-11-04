@@ -29,9 +29,10 @@ data/real/imaging/msld_labels.csv (committed).
 """
 from __future__ import annotations
 
-import subprocess
-import sys
 import zipfile
+import csv
+import hashlib
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +45,9 @@ DRIVE_URL = (
     "https://drive.google.com/drive/folders/"
     "1_bGmbDQNgJViQenjZ4QUhhzpdiubga48"
 )
+# Original Images.zip, obtained from the authors' public folder listing.
+# Fetch only originals; augmented copies must not become independent cases.
+ORIGINAL_FILE_ID = "1Udyvv8cVbQ4dfYSFKa38m3ROSItgnjT8"
 
 CLASSES = {
     "MKP": {"label_id": 0, "code": "monkeypox",
@@ -68,14 +72,20 @@ def _fetch_archive() -> Path:
         return cached
 
     print("  downloading MSLD v2.0 originals from Google Drive (43 MB)...")
-    # gdown carries the Drive session dance that urllib cannot.
-    subprocess.run(
-        [sys.executable, "-m", "gdown", "--folder", DRIVE_URL,
-         "-O", str(CACHE / "msld_dl"), "-q"],
-        check=True,
-    )
-    downloaded = CACHE / "msld_dl" / "Original Images.zip"
-    downloaded.rename(cached)
+    import gdown
+    result = gdown.download(id=ORIGINAL_FILE_ID, output=str(cached),
+                            quiet=False, resume=True, use_cookies=False)
+    if not result:
+        raise RuntimeError("The authors' original archive is unavailable")
+    with zipfile.ZipFile(cached) as source:
+        if not source.infolist():
+            raise ValueError("The original archive is empty")
+    with cached.open("rb") as handle:
+        digest = hashlib.file_digest(handle, "sha256").hexdigest()
+    cached.with_suffix(".source.json").write_text(json.dumps({
+        "source_folder": DRIVE_URL, "file_id": ORIGINAL_FILE_ID,
+        "sha256": digest, "bytes": cached.stat().st_size,
+    }, indent=2), encoding="utf-8")
     return cached
 
 
@@ -86,7 +96,7 @@ def main() -> None:
     source = zipfile.ZipFile(archive)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    rows: list[str] = ["file,label_id,code,condition,condition_bn,urgency\n"]
+    rows = []
     kept = 0
     seen: set[str] = set()
 
@@ -107,17 +117,23 @@ def main() -> None:
             continue
         filename = f"msld_{spec['label_id']}_{kept:06d}.jpg"
         (OUT_DIR / filename).write_bytes(blob)
-        rows.append(
-            f"{filename},{spec['label_id']},{spec['code']},{prefix},"
-            f"{spec['bn']},{spec['urgency']}\n"
-        )
+        parts = stem.split("_")
+        rows.append({"file": filename, "label_id": spec["label_id"], "code": spec["code"],
+                     "condition": prefix, "condition_bn": spec["bn"], "urgency": spec["urgency"],
+                     "source_file": name,
+                     "patient_id": f"{prefix}_{parts[1]}" if len(parts) >= 3 else ""})
         kept += 1
 
-    LABELS.write_text("".join(rows), encoding="utf-8")
+    if not rows:
+        raise ValueError("No original fold-1 images found; existing labels were not changed")
+    with LABELS.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
 
     from collections import Counter
 
-    by_class = Counter(r.split(",")[3] for r in rows[1:])
+    by_class = Counter(row["condition"] for row in rows)
     print(f"  images   {kept} on disk (fold 1 of 5, no repeats)")
     print(f"  wrote {LABELS.relative_to(ROOT)}: {kept} labelled images")
     for cls, count in sorted(by_class.items()):

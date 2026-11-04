@@ -16,14 +16,13 @@ Output: backend/app/ai/artifacts/tb_model.joblib, tb_metrics.json
 from __future__ import annotations
 
 import csv
+import os
 import json
-import time
 from pathlib import Path
 
 import joblib
 import numpy as np
-from PIL import Image
-from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.ensemble import HistGradientBoostingClassifier, ExtraTreesClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -40,12 +39,13 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
-from app.ai.skin_features import extract_features, FEATURE_NAMES  # noqa: E402
 
 IMAGING = ROOT / "data" / "real" / "imaging"
 IMAGES = IMAGING / "tb"
 LABELS = IMAGING / "tb_labels.csv"
-ART = ROOT / "backend" / "app" / "ai" / "artifacts"
+ART = Path(os.environ.get("SASTHOSETU_ARTIFACT_DIR", ROOT / "backend" / "app" / "ai" / "artifacts"))
+
+from imaging_training import features_for_rows, make_split, recall_threshold
 
 SEED = 42
 
@@ -70,37 +70,7 @@ def load_rows() -> list[dict]:
 
 
 def features_for(rows: list[dict]):
-    X = np.zeros((len(rows), len(FEATURE_NAMES)), dtype=np.float32)
-    y = np.zeros(len(rows), dtype=np.int64)
-    started = time.time()
-    for index, row in enumerate(rows):
-        image = Image.open(IMAGES / row["file"]).convert("RGB")
-        X[index] = extract_features(image)
-        y[index] = int(row["label_id"])
-        if (index + 1) % 1000 == 0:
-            rate = (index + 1) / (time.time() - started)
-            print(f"  {index + 1}/{len(rows)} films ({rate:.0f}/s)")
-    return X, y
-
-
-def split_by_class(y: np.ndarray, seed: int, val_frac=0.15, test_frac=0.15):
-    rng = np.random.default_rng(seed)
-    train_idx, val_idx, test_idx = [], [], []
-    for cls in np.unique(y):
-        idx = np.where(y == cls)[0]
-        rng.shuffle(idx)
-        n = len(idx)
-        n_val = max(1, int(round(n * val_frac)))
-        n_test = max(1, int(round(n * test_frac)))
-        val_idx.extend(idx[:n_val])
-        test_idx.extend(idx[n_val:n_val + n_test])
-        train_idx.extend(idx[n_val + n_test:])
-    return (
-        np.array(sorted(train_idx)),
-        np.array(sorted(val_idx)),
-        np.array(sorted(test_idx)),
-    )
-
+    return features_for_rows(rows, IMAGES, "tb")
 
 def concern_score(proba: np.ndarray) -> np.ndarray:
     return sum(w * proba[:, c] for c, w in CONCERN_WEIGHT.items())
@@ -112,10 +82,15 @@ def main() -> None:
     X, y = features_for(rows)
     print(f"  {len(rows)} films, {X.shape[1]} features each")
 
-    train_idx, val_idx, test_idx = split_by_class(y, SEED)
+    train_idx, val_idx, test_idx = make_split(rows, IMAGES, "tb", ART, group_field='patient_id', fraction=0.15)
     print(f"train={len(train_idx)} val={len(val_idx)} test={len(test_idx)}")
 
     candidates = {
+        "extra_trees_balanced": ExtraTreesClassifier(
+            n_estimators=400, min_samples_leaf=2, class_weight="balanced",
+            n_jobs=2, random_state=SEED),
+        "hist_gradient_boosting_balanced": HistGradientBoostingClassifier(
+            max_iter=300, learning_rate=0.05, class_weight="balanced", random_state=SEED),
         "hist_gradient_boosting": HistGradientBoostingClassifier(
             random_state=SEED
         ),
@@ -151,11 +126,7 @@ def main() -> None:
     scores_val = concern_score(proba_val)
     is_tb_val = y[val_idx] == 0
 
-    threshold = 0.5
-    for candidate in np.arange(0.05, 0.95, 0.01):
-        caught = (scores_val[is_tb_val] >= candidate).mean()
-        if caught >= 0.90:
-            threshold = float(candidate)
+    threshold = recall_threshold(scores_val, is_tb_val, target=0.90)
     print(
         f"referral threshold = {threshold:.2f} "
         f"(validation, >=90% tuberculosis recall)"
@@ -216,6 +187,8 @@ def main() -> None:
                     CONDITIONS[c][1]: int((y == c).sum()) for c in range(4)
                 },
                 "seed": SEED,
+                "evaluation_protocol": "source_groups_and_pixel_phash_components_v1",
+                "clinically_validated": False,
             },
             indent=2,
             ensure_ascii=False,

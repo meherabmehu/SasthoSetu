@@ -182,15 +182,16 @@ that — a screen that raises a referral, never a diagnosis.
 
 **Source:** a [Hugging Face collection](https://huggingface.co/datasets/
 DevVoyageR007/classify_Pneumonia_Tuberculosis_and_Normal__Non_Xray_chest_
-Xray_images) aggregating several long-public chest-film sets. The
-tuberculosis films trace back to the US National Library of Medicine's
-Montgomery County and Shenzhen collections and the Belarus/NIAID sets; the
-pneumonia and COVID films to the RSNA and other public corpora.
+Xray_images) aggregating chest-film sets. Some filenames resemble established
+collections, but complete image-level lineage has not been verified. Do not
+treat this mirror as an independent prospectively collected clinical cohort.
 
-**Licence:** the aggregation repo declares none. The underlying US NLM
-collections are US Government public domain; the Belarus set is CC BY 4.0.
-Only the derived label CSV is committed - the films stay out of the
-repository and are re-fetchable.
+**Licence:** the aggregation repo declares none. This mirror does not provide
+enough lineage to establish permission for every underlying image. Do not infer
+a blanket public-domain or commercial-use licence from its public availability.
+Only derived metadata is committed; the source archive and images stay local.
+The pinned revision and downloaded-file hashes are recorded in
+`imaging/dataset_sources.json`. Production reuse requires provenance and licence review.
 
 **Contents:** 4,197 tuberculosis, 4,273 pneumonia, 2,031 COVID-19 and
 5,489 normal films. The source's "unknown" folder (1,818 films) is

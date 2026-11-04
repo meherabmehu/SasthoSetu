@@ -118,7 +118,12 @@ class DeploymentManifestTests(unittest.TestCase):
         """A serverless function has no start-up in which to train them."""
         import subprocess
 
-        for name in ("triage_model.joblib", "surge_model.joblib"):
+        for name in (
+            "triage_model.joblib", "surge_model.joblib", "skin_model.joblib",
+            "dermnet_model.joblib", "chest_xray_model.joblib", "tb_model.joblib",
+            "pad_model.joblib", "mpox_model.joblib", "msld_model.joblib",
+            "dr_model.joblib", "oral_model.joblib",
+        ):
             with self.subTest(artifact=name):
                 path = ARTIFACTS / name
                 self.assertTrue(

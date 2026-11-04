@@ -1,19 +1,29 @@
 {
-  "selected_model": "hist_gradient_boosting",
+  "selected_model": "hist_gradient_boosting_balanced",
   "validation_macro_f1": {
-    "hist_gradient_boosting": 0.8582,
-    "logistic_regression": 0.7484
+    "extra_trees_balanced": 0.8378,
+    "hist_gradient_boosting_balanced": 0.8655,
+    "hist_gradient_boosting": 0.8611,
+    "logistic_regression": 0.7358
   },
-  "test_macro_f1": 0.8709,
-  "test_accuracy": 0.8695,
-  "tuberculosis_recall": 0.9143,
-  "referral_threshold": 0.5000000000000001,
-  "referred_of_test": "886/2399",
+  "test_macro_f1": 0.8548,
+  "test_accuracy": 0.8578,
+  "tuberculosis_recall": 0.8932,
+  "referral_threshold": 0.5184963645563155,
+  "referred_of_test": "832/2257",
   "class_counts": {
     "Tuberculosis": 4197,
     "Pneumonia": 4273,
     "COVID-19": 2031,
     "Normal": 5489
   },
-  "seed": 42
+  "seed": 42,
+  "evaluation_protocol": "source_groups_and_pixel_phash_components_v1",
+  "clinically_validated": false,
+  "calibration": {
+    "partition": "validation",
+    "target_recall": 0.9,
+    "numerical_margin": 1e-12,
+    "test_used": false
+  }
 }

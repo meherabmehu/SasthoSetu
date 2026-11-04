@@ -1,39 +1,24 @@
-# ত্বক-টোন নিরীক্ষা — স্ক্রিনগুলো কার ত্বকে কেমন
+# Skin-tone audit — held-out smartphone photographs
 
-প্রতিটি মডেল কার্ডে একই সতর্কতা লেখা আছে: প্রশিক্ষণ-সংগ্রহগুলো
-মূলত ফর্সা ত্বকের, বাংলাদেশি ত্বকে আচরণ অযাচাইকৃত। এই নথি সেই কথাটি
-প্রথমবার **মাপে** — একমাত্র টোন-লেবেল করা সংগ্রহ PAD-UFES-20 দিয়ে
-(১,৪৯৪টি টোন-লেবেল করা ছবি; ব্রাজিলের স্মার্টফোন-ছবি)।
+Only PAD's frozen test partition is included. Patient IDs and duplicate components are disjoint from training and validation. The model and referral threshold were fixed before this audit.
 
-এটি প্রশিক্ষণ-ডাটার নিরীক্ষা, বাংলাদেশি ত্বকের নয় — ফিটজপ্যাট্রিক IV–VI
-দেশের জনসংখ্যার বড় অংশের ত্বক, আর নমুনায় তাদের সংখ্যা খুবই কম।
-সেই স্বল্পতাই প্রথম সারির ফল।
+রেফার হার and malignant recall are reported separately. Positive labels are BCC, SCC and MEL; the referral score also weights precancerous ACK. These are retrospective research results, not clinical validation or evidence of performance on Bangladeshi patients.
 
-| টোন | ছবি | DermNet জরুরি | HAM রেফার | স্মার্টফোন রেফার |
-|---|---|---|---|---|
-| I — সবচেয়ে ফর্সা (সবসময় পোড়ে, কখনো ট্যান হয় না) | 153 | 87% | 69% | 95% |
-| II — ফর্সা (সহজে পোড়ে, সামান্য ট্যান) | 876 | 80% | 59% | 93% |
-| III — গমবর্ণ (কখনো পোড়ে, ধীরে ট্যান) | 392 | 80% | 52% | 93% |
-| IV — বাদামি (খুব কম পোড়ে, সহজে ট্যান) | 62 | 82% | 47% | 66% |
-| V — গাঢ় বাদামি (প্রায় কখনো পোড়ে না, গভীর ট্যান) | 10 | 70% | 60% | 80% |
-| VI — কালো (কখনো পোড়ে না) | 1 | 100% | 0% | 0% |
+| Fitzpatrick type | Test images | Malignant images | Referral rate | Malignant recall | Specificity |
+|---|---:|---:|---:|---:|---:|
+| I — সবচেয়ে ফর্সা | 37 | 30 | 83.8% | 83.3% | 14.3% |
+| II — ফর্সা | 108 | 81 | 86.1% | 91.4% | 29.6% |
+| III — গমবর্ণ | 40 | 25 | 67.5% | 80.0% | 53.3% |
+| IV — বাদামি | 14 | 5 | 71.4% | 80.0% | 33.3% |
+| V — গাঢ় বাদামি | 0 | 0 | unmeasured | unmeasured | unmeasured |
+| VI — কালো | 0 | 0 | unmeasured | unmeasured | unmeasured |
 
-## স্মার্টফোন-স্ক্রিনের ম্যালিগন্যান্ট recall, টোন অনুযায়ী
+119 test images lack a Fitzpatrick label and are omitted from tone comparisons.
 
-| টোন | ম্যালিগন্যান্ট ছবি | জরুরি ব্যান্ডে ধরা | recall |
-|---|---|---|---|
-| I — সবচেয়ে ফর্সা (সবসময় পোড়ে, কখনো ট্যান হয় না) | 120 | 117 | 98% |
-| II — ফর্সা (সহজে পোড়ে, সামান্য ট্যান) | 663 | 647 | 98% |
-| III — গমবর্ণ (কখনো পোড়ে, ধীরে ট্যান) | 272 | 258 | 95% |
-| IV — বাদামি (খুব কম পোড়ে, সহজে ট্যান) | 29 | 27 | 93% |
-| V — গাঢ় বাদামি (প্রায় কখনো পোড়ে না, গভীর ট্যান) | 5 | 5 | 100% |
+Zero positive cases means recall is unmeasured. Small groups cannot establish parity; the companion JSON reports 95% component-bootstrap intervals (1,000 repetitions), which remain unreliable for very small groups. Fitzpatrick type is a limited proxy, not ethnicity.
 
-## পাঠ
+Independent consented Bangladeshi cohorts, especially darker skin types, and clinician review are still required. No fairness claim follows from these results.
 
-টোন IV–VI-এর নমুনা এত ছোট (৭৩টি) যে শতকরা-হার দিয়ে সিদ্ধান্ত নেওয়া
-যায় না — কিন্তু ফলটি যা-ই হোক, এই মাপার ক্ষমতাটি নিজেই প্রকল্পের
-পরবর্তী প্রয়োজন চিহ্নিত করে: **বাংলাদেশি ত্বকে টোন-লেবেল করা ছবির
-সংগ্রহ**। যতদিন তা নেই, এই স্ক্রিনগুলোর গাঢ় ত্বকে আচরণ অনুমানই থাকবে,
-এবং প্রতিটি মডেল কার্ডে সেই কথা থাকবে।
+Source: [PAD-UFES-20, CC BY 4.0](https://data.mendeley.com/datasets/zr7vgbcyr2/1).
 
-নিরীক্ষণ পুনরায় চালানো: `python ml/audit_skin_tones.py`
+Reproduce: `python ml/audit_skin_tones.py` after `python ml/evaluate_imaging.py pad --artifacts backend/app/ai/artifacts`.

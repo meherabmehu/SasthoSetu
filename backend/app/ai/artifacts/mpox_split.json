@@ -1,0 +1,29 @@
+{
+  "dataset": "mpox",
+  "seed": 42,
+  "input_signature": "0858d011f0e8855d93a7a9492c931a49d1b1f31a4454fd314c926c7a99582bdb",
+  "source_rows": 770,
+  "eligible_images": 766,
+  "excluded_images": 4,
+  "exclusions": {
+    "exact_pixel_duplicate": 4
+  },
+  "perceptual_hamming_limit": 4,
+  "near_duplicate_edges": 14,
+  "source_group_field": null,
+  "rows_with_source_group": 0,
+  "source_groups_disjoint": false,
+  "all_subjects_known": false,
+  "patient_identity_limitation": "Some or all patient IDs are unavailable; duplicate separation is not patient-level validation.",
+  "components_disjoint": true,
+  "partition_sizes": {
+    "train": 457,
+    "validation": 156,
+    "test": 153
+  },
+  "partition_components": {
+    "train": 452,
+    "validation": 150,
+    "test": 151
+  }
+}

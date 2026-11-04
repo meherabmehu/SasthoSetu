@@ -1,15 +1,17 @@
 {
-  "selected_model": "hist_gradient_boosting",
+  "selected_model": "logistic_regression",
   "validation_macro_f1": {
-    "hist_gradient_boosting": 0.5068,
-    "logistic_regression": 0.4563
+    "extra_trees_balanced": 0.4081,
+    "hist_gradient_boosting_balanced": 0.4138,
+    "hist_gradient_boosting": 0.421,
+    "logistic_regression": 0.4315
   },
-  "test_macro_f1": 0.4634,
-  "test_accuracy": 0.6416,
-  "sight_threatening_recall": 0.8333,
-  "any_dr_recall": 0.9202,
-  "referral_threshold": 0.45000000000000007,
-  "referred_of_test": "210/413",
+  "test_macro_f1": 0.4321,
+  "test_accuracy": 0.5974,
+  "sight_threatening_recall": 0.931,
+  "any_dr_recall": 0.933,
+  "referral_threshold": 0.5231569980157312,
+  "referred_of_test": "209/390",
   "class_counts": {
     "Proliferative DR": 290,
     "Severe DR": 190,
@@ -17,5 +19,13 @@
     "Mild DR": 370,
     "Healthy": 1000
   },
-  "seed": 42
+  "seed": 42,
+  "evaluation_protocol": "source_groups_and_pixel_phash_components_v1",
+  "clinically_validated": false,
+  "calibration": {
+    "partition": "validation",
+    "target_recall": 0.9,
+    "numerical_margin": 1e-12,
+    "test_used": false
+  }
 }

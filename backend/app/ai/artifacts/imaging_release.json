@@ -1,0 +1,41 @@
+{
+  "scope": "demo/research only",
+  "clinically_validated": false,
+  "models": {
+    "skin": {
+      "promoted": true,
+      "candidate_sha256": "84107810a38c7fa35bfc8cdea5f831779f728797acce31614e6d05b07ccedaea",
+      "reason": "passed research integrity and recall floor"
+    },
+    "tb": {
+      "promoted": true,
+      "candidate_sha256": "ff8f8b318c4c9760dad34fb80d6cd7b7dd798fc8db547364edc5660d09be8866",
+      "reason": "passed research integrity and recall floor"
+    },
+    "pad": {
+      "promoted": true,
+      "candidate_sha256": "b915bb7de398fb3a569e09e4f4679d25299339ffb0784ac9784570c3a1791975",
+      "reason": "passed research integrity and recall floor"
+    },
+    "mpox": {
+      "promoted": true,
+      "candidate_sha256": "6634ce14070dafdf9fd69fc550a70e67b662f0fde4568b9726eeadc7caf9081b",
+      "reason": "passed research integrity and recall floor"
+    },
+    "msld": {
+      "promoted": true,
+      "candidate_sha256": "0849a50c90a64e9f3f3f7c07505f1deb97d9026a080f45731671672c4d3b4b26",
+      "reason": "passed research integrity and recall floor"
+    },
+    "dr": {
+      "promoted": true,
+      "candidate_sha256": "003d4b9134b0b05faa8c5b92080fb954cf07d3dc3ffa41705f3c6fc1707efee5",
+      "reason": "passed research integrity and recall floor"
+    },
+    "oral": {
+      "promoted": true,
+      "candidate_sha256": "129aacc6ef080c32b3ede560bf8dec626f439ba8683695948166e42bb2cfabc7",
+      "reason": "passed research integrity and recall floor"
+    }
+  }
+}

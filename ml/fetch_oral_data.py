@@ -23,7 +23,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGING = ROOT / "data" / "real" / "imaging"
@@ -32,6 +31,7 @@ OUT_DIR = IMAGING / "oral"
 LABELS = IMAGING / "oral_labels.csv"
 
 REPO = "Alwaly/Oral_Cancer-cancer"
+REVISION = "a4da25db84e6f00255fbf57ac5b3ebb55c133221"
 SHARDS = [
     "data/train-00000-of-00002.parquet",
     "data/train-00001-of-00002.parquet",
@@ -52,22 +52,10 @@ CLASSES = {
 
 
 def _fetch(shard: str) -> Path:
-    CACHE.mkdir(parents=True, exist_ok=True)
+    from download_dataset_file import download
     cached = CACHE / f"oral_{shard.split('-')[1]}.parquet"
-    if cached.exists() and cached.stat().st_size > 100_000_000:
-        return cached
-
-    url = (f"https://huggingface.co/datasets/{REPO}/resolve/main/{shard}")
-    print(f"  downloading {shard}...")
-    request = urllib.request.Request(url, headers={"User-Agent": "sasthosetu/1.0"})
-    with urllib.request.urlopen(request, timeout=900) as response, \
-            cached.open("wb") as out:
-        while True:
-            chunk = response.read(1 << 20)
-            if not chunk:
-                break
-            out.write(chunk)
-    return cached
+    url = f"https://huggingface.co/datasets/{REPO}/resolve/{REVISION}/{shard}"
+    return download(url, cached, kind="parquet")
 
 
 def main() -> None:

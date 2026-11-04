@@ -1,0 +1,155 @@
+{
+  "scope": "local research/demo acquisition; no production licensing clearance",
+  "datasets": {
+    "skin": {
+      "title": "HAM10000",
+      "source": "https://doi.org/10.7910/DVN/DBW86T",
+      "licence": "CC BY-NC 4.0",
+      "images_extracted": 10015,
+      "eligible_images": 10013,
+      "files": [
+        {
+          "cache_file": "ham1.zip",
+          "bytes": 1366522108,
+          "sha256": "6202a599129c2efe81c25aea8586d422eeda8a4fae5df49dd7b7bbf956d419db"
+        },
+        {
+          "cache_file": "ham2.zip",
+          "bytes": 1403566547,
+          "sha256": "9677f30118c21ecc667a147de369d89acb25efab046fd32f6b13ad677ce2d6d0"
+        },
+        {
+          "cache_file": "ham10000_metadata.csv",
+          "bytes": 830428,
+          "sha256": "a430c61b1f42eb6b080ded6f7a9dbd2dd707cfe64db318e1ea62d43ab97a6505"
+        }
+      ],
+      "clinical_validation": false
+    },
+    "mpox": {
+      "title": "MSID v6",
+      "source": "https://data.mendeley.com/datasets/r9bfpnvyxr/6",
+      "licence": "CC BY 4.0",
+      "images_extracted": 770,
+      "eligible_images": 766,
+      "files": [
+        {
+          "cache_file": "mpox.zip",
+          "bytes": 57067813,
+          "url": "https://data.mendeley.com/public-api/zip/r9bfpnvyxr/download/6",
+          "sha256": "fa5eadc3fb532cdc3335280d667e8d4c53ae1ffe49148b6ec9ca2e08837f9969",
+          "container": "zip",
+          "ranges_validated": true
+        }
+      ],
+      "clinical_validation": false
+    },
+    "msld": {
+      "title": "MSLD v2 originals",
+      "source": "https://github.com/ShamsNafisaAli/Monkeypox-Skin-Lesion-Dataset-v2",
+      "licence": "CC BY 4.0 (authors' badge)",
+      "images_extracted": 755,
+      "eligible_images": 754,
+      "files": [
+        {
+          "cache_file": "msld_original.zip",
+          "bytes": 43301559,
+          "source_folder": "https://drive.google.com/drive/folders/1_bGmbDQNgJViQenjZ4QUhhzpdiubga48",
+          "file_id": "1Udyvv8cVbQ4dfYSFKa38m3ROSItgnjT8",
+          "sha256": "c84f57164513fb92401c5d6a64db760061da4db94132f6171c572d1b664e7f45"
+        }
+      ],
+      "clinical_validation": false
+    },
+    "tb": {
+      "title": "TB/pneumonia/COVID/normal mirror",
+      "source": "https://huggingface.co/datasets/DevVoyageR007/classify_Pneumonia_Tuberculosis_and_Normal__Non_Xray_chest_Xray_images",
+      "licence": "Mirror declares no licence; underlying lineage not fully verified",
+      "images_extracted": 15990,
+      "eligible_images": 15907,
+      "files": [
+        {
+          "cache_file": "tb_full.zip",
+          "bytes": 7698595287,
+          "url": "https://huggingface.co/datasets/DevVoyageR007/classify_Pneumonia_Tuberculosis_and_Normal__Non_Xray_chest_Xray_images/resolve/8bc28dc33778ce84d228bf04b798c0828ad64e18/data.zip?download=true",
+          "sha256": "ac3889164d42ad96f41a6059f56f7d264036623ab25a92d2a2306aa2c8372afa",
+          "container": "zip",
+          "ranges_validated": true
+        }
+      ],
+      "clinical_validation": false
+    },
+    "pad": {
+      "title": "PAD-UFES-20 v1",
+      "source": "https://data.mendeley.com/datasets/zr7vgbcyr2/1",
+      "licence": "CC BY 4.0",
+      "images_extracted": 2298,
+      "eligible_images": 2269,
+      "files": [
+        {
+          "cache_file": "pad.zip",
+          "bytes": 3593344681,
+          "url": "https://data.mendeley.com/public-api/zip/zr7vgbcyr2/download/1",
+          "sha256": "e8c7e17bac1698c97e44d4096ec20ac1b91c135285c1446b7b2e7ebbc9be933c",
+          "container": "zip",
+          "ranges_validated": true
+        }
+      ],
+      "clinical_validation": false
+    },
+    "dr": {
+      "title": "Retinopathy 256px mirror",
+      "source": "https://huggingface.co/datasets/Rami/Diabetic_Retinopathy_Preprocessed_Dataset_256x256",
+      "licence": "Mirror declares no licence",
+      "images_extracted": 2750,
+      "eligible_images": 2624,
+      "files": [
+        {
+          "cache_file": "dr.parquet",
+          "bytes": 363939124,
+          "url": "https://huggingface.co/datasets/Rami/Diabetic_Retinopathy_Preprocessed_Dataset_256x256/resolve/ae864f738ccb7ff2ca74f4112a2ad2d6d595d7c1/data/train-00000-of-00001-7c2397e3a09be033.parquet?download=true",
+          "sha256": "bb253a354d369c74835a38d0f97594393715021cceefcb94118d45ce23624b65",
+          "container": "parquet",
+          "container_validated": true
+        }
+      ],
+      "clinical_validation": false
+    },
+    "oral": {
+      "title": "Oral carcinoma/normal mirror",
+      "source": "https://huggingface.co/datasets/Alwaly/Oral_Cancer-cancer",
+      "licence": "Mirror declares no licence",
+      "images_extracted": 10002,
+      "eligible_images": 10002,
+      "files": [
+        {
+          "cache_file": "oral_00000.parquet",
+          "bytes": 447535334,
+          "url": "https://huggingface.co/datasets/Alwaly/Oral_Cancer-cancer/resolve/a4da25db84e6f00255fbf57ac5b3ebb55c133221/data/train-00000-of-00002.parquet?download=true",
+          "sha256": "1bae3e4be613cc3330def14355f1963b7d2e31f7a3c6715f51c9d06673fb8dec",
+          "container": "parquet",
+          "container_validated": true
+        },
+        {
+          "cache_file": "oral_00001.parquet",
+          "bytes": 444015023,
+          "url": "https://huggingface.co/datasets/Alwaly/Oral_Cancer-cancer/resolve/a4da25db84e6f00255fbf57ac5b3ebb55c133221/data/train-00001-of-00002.parquet?download=true",
+          "sha256": "3a1f95285355079a14d71ef118fdf5bb1861b73a906487290d5f550449473dc6",
+          "container": "parquet",
+          "container_validated": true
+        }
+      ],
+      "clinical_validation": false
+    }
+  },
+  "cross_dataset_exact_overlap": [
+    {
+      "datasets": [
+        "mpox",
+        "msld"
+      ],
+      "shared_decoded_pixel_hashes": 10
+    }
+  ],
+  "overlap_limitation": "Exact 128px pixel hashes only; absence does not exclude transformed/shared patients."
+}

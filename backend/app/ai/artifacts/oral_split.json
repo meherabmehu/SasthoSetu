@@ -1,0 +1,27 @@
+{
+  "dataset": "oral",
+  "seed": 42,
+  "input_signature": "1bd292cd3fd4792e95f3cd656357593b318f887115c8768578e4fe8d8ce49880",
+  "source_rows": 10002,
+  "eligible_images": 10002,
+  "excluded_images": 0,
+  "exclusions": {},
+  "perceptual_hamming_limit": 4,
+  "near_duplicate_edges": 24,
+  "source_group_field": null,
+  "rows_with_source_group": 0,
+  "source_groups_disjoint": false,
+  "all_subjects_known": false,
+  "patient_identity_limitation": "Some or all patient IDs are unavailable; duplicate separation is not patient-level validation.",
+  "components_disjoint": true,
+  "partition_sizes": {
+    "train": 7144,
+    "validation": 1431,
+    "test": 1427
+  },
+  "partition_components": {
+    "train": 7127,
+    "validation": 1426,
+    "test": 1425
+  }
+}

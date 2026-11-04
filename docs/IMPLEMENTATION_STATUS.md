@@ -1,4 +1,4 @@
-# Implementation status — 2026-11-03
+# Implementation status — 2026-11-04
 
 Scope: safe demo/sandbox, as selected by the project owner. Payments move no
 real money, SMS is not delivered, and real email is disabled by default.
@@ -16,8 +16,8 @@ real money, SMS is not delivered, and real email is disabled by default.
 | Recovery and sessions | Single-use hashed expiring reset/verification tokens, rotating refresh API, password-change/reset/logout session revocation, account recovery page and verification control. Demo mail goes to an admin-only in-memory outbox, not a mailbox. |
 | Delivery | GitHub Actions workflow, declared development dependencies, browser job and actual PostgreSQL migration/concurrency job. The workflow runs on pushes and pull requests to main; remote results are available in the repository Actions tab. |
 | Operations | `/health` liveness, `/ready` database/schema/required-model checks, explicit proxy trust, optional shared database rate limits, disposable PostgreSQL backup/restore drill and local concurrency smoke tools. |
-| Model compatibility | Runtime rejects incompatible scikit-learn artifacts. The supplied TB artifact is disabled under 1.5.2; pneumonia screening remains available and the UI reports the missing TB screen. It was not relabelled or re-saved to hide the mismatch. |
-| Evaluation split tooling | HAM metadata fetch retains lesion IDs, PAD fetch retains patient/lesion IDs; training uses grouped components that keep repeated subjects and exact duplicate images together. Missing grouping metadata stops training with a clear error. Existing scores remain historical until retrained and independently evaluated. |
+| Model compatibility | Runtime rejects incompatible scikit-learn artifacts. TB was genuinely retrained under the pinned 1.5.2 runtime and restored. Seven imaging models have recorded validation calibration and grouped holdout results. |
+| Evaluation split tooling | Acquired/refreshed seven image collections (42,580 source images). Patient/lesion and duplicate/perceptual components remain disjoint. Exclusions, source-file hashes, split manifests, per-image predictions and uncertainty intervals accompany the models. See MODEL_RETRAINING_2026-11-04.md. |
 | Data honesty | Demo labels on capacity, forecasts, surveillance and payment surfaces; API provenance flags distinguish simulated data from verified live feeds. |
 
 CI model generation uses the committed source data with `--skip-download`.
@@ -84,6 +84,18 @@ desktop rendering and language switching, but is not a full accessibility audit.
 
 ## Validation performed
 
+- Imaging retraining verification (2026-11-04): **393 tests, OK, 7 skipped**
+  (386 passed), including the downloaded-image checks. Six skipped checks need
+  an opt-in PostgreSQL URL; the seventh covers intentionally absent artifacts.
+  Ruff and staged diff checks passed. All 11 committed models load under the
+  pinned scikit-learn runtime; the expanded deployment checks passed separately.
+  The seven active imaging model/label hashes match their frozen holdout reports.
+- CI smoke seeding now uses the same backend-anchored SQLite URL as migrations
+  and the API. Fresh local migrations plus seeding completed successfully in a
+  disposable database. GitHub results are recorded in Actions after publication.
+  Logs: `.tmp/retraining-full-suite-final.log`, `.tmp/deployment-artifact-tests.log`
+  and `.tmp/ci-seed-check.log` (local and gitignored).
+
 - Security regression checks cover patient grants/revocation, unrelated and
   unverified doctors, forged doctor IDs, FHIR, token replay/expiry, password and
   logout revocation, demo mail access, payment ownership, simulation, readiness
@@ -99,9 +111,9 @@ desktop rendering and language switching, but is not a full accessibility audit.
   overflow and language toggle passed against an isolated fixture server.
 - Local request smoke: 40 requests, eight concurrent clients, zero errors.
   This does not establish production throughput or failover behavior.
-- Final full suite: **386 tests, OK, 25 skipped** (361 passed). The six opt-in
-  PostgreSQL tests were then exercised separately and all passed; the other 19
-  skipped checks require image datasets. Ruff passed. Browser checks also covered
+- Previous suite, before imaging retraining: **386 tests, OK, 25 skipped** (361 passed). The six opt-in
+  PostgreSQL tests were then exercised separately and all passed; other skips
+  included missing image datasets and the absent-artifact branch. Ruff passed. Browser checks also covered
   demo lab payment completion and a failed login identity lookup. Local output
   is in `review-tests.log`, `review-postgres.log` and `.tmp/browser-smoke-completion.log`.
 - Final publishing review also verifies `Cache-Control: no-store` on private API
@@ -118,9 +130,9 @@ desktop rendering and language switching, but is not a full accessibility audit.
 2. Verified hospital capacity and real surveillance feeds; these remain simulated
    in the selected demo scope. Downloading a real file alone does not make the
    current operational feed live.
-3. Rebuilding TB under the pinned runtime requires its image dataset, which is
-   not in this checkout. HAM/PAD grouped retraining requires refreshed metadata
-   and the original images. No new model-performance numbers are claimed here.
+3. Source patient identities for the retina/oral mirrors and some TB/MSID cases
+   remain unavailable. Duplicate grouping does not establish patient independence;
+   independent source cohorts and verified image-level provenance are needed.
 4. Production licensing clearance, external penetration/accessibility audits,
    realistic infrastructure failover/load tests and actual backup/restore drills
    on the chosen production deployment.
