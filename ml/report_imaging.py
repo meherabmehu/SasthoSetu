@@ -107,7 +107,8 @@ def report(artifacts, destination):
             raise FileNotFoundError(labels)
     lines += ["", "Downloaded archive/shard SHA-256 values, immutable Hugging Face revisions and file sizes "
         "are recorded in [dataset_sources.json](../data/real/imaging/dataset_sources.json). "
-        "Public availability does not establish reuse rights. Images and source archives remain local "
+        "Label digests use UTF-8 CSV bytes with CRLF normalized to LF, so Git checkout line endings "
+        "do not change dataset identity. Public availability does not establish reuse rights. Images and source archives remain local "
         "and gitignored. HAM is noncommercial; unclear mirror licences require independent clearance.", "",
         "MSLD uses the 755 originals once (fold1), with filename patient IDs; augmented images and repeated "
         "fold directories are not new cases. TB is stored as lossless 128px PNG after the exact serving "

@@ -1,7 +1,7 @@
 {
   "dataset": "mpox",
   "model_sha256": "6634ce14070dafdf9fd69fc550a70e67b662f0fde4568b9726eeadc7caf9081b",
-  "labels_sha256": "fc7ea37293740b6756ee10efd4d23364f6617150feff965753f1dac4ebfc1b76",
+  "labels_sha256": "8a01f820602b66af50a7d53f0b261600031f5f0b2f636ed925c5acd963788727",
   "sklearn_version": "1.5.2",
   "threshold": 0.38839474134197716,
   "threshold_selection": "validation_positive_scores_only_target_recall_0.90",
@@ -89,5 +89,6 @@
         ]
       }
     }
-  }
+  },
+  "labels_hash_format": "UTF-8 CSV bytes with CRLF normalized to LF"
 }
