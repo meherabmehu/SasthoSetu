@@ -1,0 +1,30 @@
+{
+  "dataset": "dr",
+  "seed": 42,
+  "input_signature": "18fb1ab92c1ea9a5aec156b1dc0de64c12cfad38e1d839441f875102b2f77de9",
+  "source_rows": 2750,
+  "eligible_images": 2624,
+  "excluded_images": 126,
+  "exclusions": {
+    "conflicting_labels_for_same_pixels": 43,
+    "exact_pixel_duplicate": 83
+  },
+  "perceptual_hamming_limit": 4,
+  "near_duplicate_edges": 433,
+  "source_group_field": "patient_id",
+  "rows_with_source_group": 0,
+  "source_groups_disjoint": false,
+  "all_subjects_known": false,
+  "patient_identity_limitation": "Some or all patient IDs are unavailable; duplicate separation is not patient-level validation.",
+  "components_disjoint": true,
+  "partition_sizes": {
+    "train": 1872,
+    "validation": 362,
+    "test": 390
+  },
+  "partition_components": {
+    "train": 1678,
+    "validation": 318,
+    "test": 313
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "dataset": "skin",
+  "seed": 42,
+  "input_signature": "0611e665cd6fff77ec5adb524023cd66a35879dd73cf370b07fec2e48620f48f",
+  "source_rows": 10015,
+  "eligible_images": 10013,
+  "excluded_images": 2,
+  "exclusions": {
+    "exact_pixel_duplicate": 2
+  },
+  "perceptual_hamming_limit": 4,
+  "near_duplicate_edges": 420,
+  "source_group_field": "lesion_id",
+  "rows_with_source_group": 10015,
+  "source_groups_disjoint": true,
+  "all_subjects_known": false,
+  "patient_identity_limitation": "Some or all patient IDs are unavailable; duplicate separation is not patient-level validation.",
+  "components_disjoint": true,
+  "partition_sizes": {
+    "train": 8029,
+    "validation": 1014,
+    "test": 970
+  },
+  "partition_components": {
+    "train": 5861,
+    "validation": 719,
+    "test": 701
+  }
+}

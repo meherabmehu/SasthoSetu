@@ -40,12 +40,12 @@ users rather than an afterthought.
 
 This version is a **demo/sandbox**. Payments move no real money; bed capacity,
 forecasts and surveillance are not verified live feeds. Shared patient records
-require explicit consent for verified treating doctors. The incompatible TB
-artifact is disabled until rebuilt; the pneumonia screen remains available.
+require explicit consent for verified treating doctors. The TB artifact has been
+rebuilt under the pinned runtime and is available alongside pneumonia screening.
 
 See [implementation status](docs/IMPLEMENTATION_STATUS.md) for completed fixes,
-local verification, new pages, migrations and externally blocked work. Existing
-model scores below describe their original evaluation, not a new clinical study.
+local verification, new pages, migrations and externally blocked work. The seven
+retrained imaging models use the grouped research evaluation linked below.
 
 ## What works today
 
@@ -173,27 +173,27 @@ auditable and must never regress silently between model versions.
 |---|---|---|
 | Triage classifier | 5-level severity from free text | macro-F1 **0.8616**, emergency recall **0.9938**, 1 errors spanning ≥3 bands |
 | Skin condition classifier | Referral band from a photograph, 23 conditions | urgent recall **0.7427**, 18 of 583 urgent cases dismissed, trained on 15,557 DermNet images |
-| Pigmented lesion classifier | Malignancy screen, dermatoscopic | malignant recall **0.9187**, macro AUC **0.9098**, trained on 10,015 HAM10000 images |
+| Pigmented lesion classifier | Malignancy screen, dermatoscopic | Held-out referral recall **88.6%**, specificity **63.1%**; n=970, grouped split |
 | Chest X-ray screen | Pneumonia screen from a film photograph | AUC **0.8718**, pneumonia recall **0.9231**, trained on 5,856 films |
-| Viral rash screen | Mpox / chickenpox / measles from a photograph | monkeypox recall **0.79**, trained on 770 MSID photographs from Islamic University, Kushtia |
-| Tuberculosis screen | TB / pneumonia / COVID screen from a film | TB recall **0.91**, accuracy 0.87, trained on 15,990 public chest films |
-| Smartphone lesion screen | Malignancy screen for phone photographs | malignant recall **0.89**, trained on 2,298 PAD-UFES-20 smartphone photographs |
-| Verified viral rash screen | Mpox / cowpox / HFMD / measles / chickenpox | monkeypox recall **0.98**, trained on 755 dermatologist-verified MSLD v2.0 photographs |
-| Diabetic retinopathy screen | Sight-threatening retinopathy from a fundus photo | sight-threatening recall **0.83**, any-DR recall **0.92**, trained on 2,750 public retina photographs |
-| Oral cancer screen | Carcinoma screen from a mouth photo | accuracy **0.90**, carcinoma recall **0.89**, trained on 10,002 public mouth photographs |
-
-The complete model-by-model report — every dataset, training setup and
-measured result — is in **[docs/AI_REPORT.md](docs/AI_REPORT.md)**.
-
-**Skin-tone audit.** The referral rates and malignant recall of the skin
-screens are measured per Fitzpatrick skin type on the tone-labelled subset
-of PAD-UFES-20 — see
-[docs/model_cards/skin_tone_audit.md](docs/model_cards/skin_tone_audit.md).
-The measured gap (skin types IV–VI make up 73 of 1,494 tone-labelled
-photographs) is the project's clearest data need.
+| Viral rash screen | Mpox / chickenpox / measles from a photograph | Held-out referral recall **83.6%**, specificity **67.3%**; n=153, grouped split |
+| Tuberculosis screen | TB / pneumonia / COVID screen from a film | Held-out referral recall **89.3%**, specificity **81.7%**; n=2257, grouped split |
+| Smartphone lesion screen | Malignancy screen for phone photographs | Held-out referral recall **87.2%**, specificity **35.0%**; n=318, grouped split |
+| Verified viral rash screen | Mpox / cowpox / HFMD / measles / chickenpox | Held-out referral recall **96.6%**, specificity **18.9%**; n=164, grouped split |
+| Diabetic retinopathy screen | Sight-threatening retinopathy from a fundus photo | Held-out referral recall **93.1%**, specificity **53.3%**; n=390, grouped split |
+| Oral cancer screen | Carcinoma screen from a mouth photo | Held-out referral recall **90.3%**, specificity **93.1%**; n=1427, grouped split |
 | Surge forecaster | 24/48/72h bed demand per ward | MAE **≈2.9 beds**, beats naive persistence at every horizon |
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |
+
+Current imaging methods, exclusions, 95% component-bootstrap intervals and source
+hashes are in [the retraining report](docs/MODEL_RETRAINING_2026-11-04.md).
+Non-imaging scores retain their earlier evaluation. Historical imaging scores in
+[AI_REPORT.md](docs/AI_REPORT.md) use different splits and are not directly comparable.
+
+**Skin-tone audit.** The [updated audit](docs/model_cards/skin_tone_audit.md)
+uses only PAD's frozen test partition. Types V and VI have no test cases;
+small groups and missing tone labels prevent fairness or local-population claims.
+Independent Bangladeshi cohorts remain necessary.
 
 Full limitations are documented in `docs/model_cards/`. Triage labels and operational corpora still include generated data; imaging models use public collections.
 **Clinical validation is required before real-world deployment**, and the model

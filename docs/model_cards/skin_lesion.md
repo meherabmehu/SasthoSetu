@@ -1,11 +1,12 @@
-# Model Card — Skin Lesion Referral Classifier v1.0
+# Model Card — Skin Lesion Referral Classifier (2026-11-04 grouped release)
 
 **Task** Decide, from a photograph of a skin lesion, whether it should be seen
 by a dermatologist. Seven diagnoses are scored internally; what the patient is
 shown is a referral band.
 
 **Architecture** 32 handcrafted features → HistGradientBoosting (balanced class
-weights). Selected over multinomial logistic regression (val macro-F1 0.333).
+weights). Validation macro-F1 0.4812, compared with 0.4726 for balanced extra
+trees and 0.3545 for multinomial logistic regression.
 
 The features are deliberately handcrafted rather than learned. A dermatologist
 assessing a mole looks at asymmetry, border irregularity, colour variation and
@@ -21,7 +22,10 @@ entropy, and blue-white veil fraction.
 
 **Training data** HAM10000 — 10,015 dermatoscopic images from the Medical
 University of Vienna. Diagnoses confirmed by histopathology (over half),
-follow-up, expert consensus or confocal microscopy. Split 80/10/10.
+follow-up, expert consensus or confocal microscopy. Two exact duplicates were
+excluded. Lesion IDs and pixel/perceptual components remain disjoint across
+8,029 training, 1,014 validation and 970 test images. Patient IDs are unavailable;
+lesion separation does not establish patient-independent evaluation.
 
 | Class | Images | Risk |
 |---|---|---|
@@ -33,27 +37,27 @@ follow-up, expert consensus or confocal microscopy. Split 80/10/10.
 | vasc — vascular lesion | 142 | benign |
 | df — dermatofibroma | 115 | benign |
 
-**Metrics (held-out test, n=1,002)**
+**Metrics (frozen grouped test, n=970)**
 
 | metric | value |
 |---|---|
-| macro AUC | 0.9098 |
-| accuracy | 0.7435 |
-| macro-F1 (7-class) | 0.5097 |
-| **malignant / precancerous recall** | **0.9187** |
-| malignant / precancerous precision | 0.4174 |
+| macro AUC | 0.9009 |
+| accuracy | 0.7309 |
+| macro-F1 (7-class) | 0.4326 |
+| **malignant / precancerous recall** | **0.8860** |
+| malignant / precancerous precision | 0.3734 |
+| specificity | 0.6306 |
 
-**Why recall is reported ahead of accuracy.** Taking the single most likely
-class catches only 55% of malignant lesions, because melanoma is outnumbered
-six to one by ordinary moles and rarely wins the argmax outright. The question
-a patient needs answered is not "which of seven is this" but "does this need a
-doctor", so the referral decision sums probability across the malignant and
-precancerous classes and compares it to a threshold chosen on the validation
-split for at least 90% recall.
+The referral decision sums probability across malignant and precancerous
+classes, using a threshold chosen on validation for at least 90% recall.
+Observed test recall is 88.6%, with a 95% component-bootstrap interval of
+83.6%–93.3%. Validation calibration does not guarantee the same recall on new cases.
 
-That deliberately over-refers: about four in ten flagged lesions turn out
-benign. For a screening tool that is the correct direction to err, and the
-interface wording reflects it.
+About 63% of flagged test images have benign source labels. Over-referral and
+missed positives both need clinician review. The
+[retraining report](../MODEL_RETRAINING_2026-11-04.md) records the complete protocol,
+uncertainty and exclusions. Historical scores used a different split and are
+not directly comparable.
 
 **Safety design** The response never names a cancer as a conclusion. It returns
 one of three bands — see a dermatologist soon, worth getting checked, keep an

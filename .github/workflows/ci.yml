@@ -169,7 +169,7 @@ jobs:
 
       - name: Seed reference data
         env:
-          DATABASE_URL: sqlite:///./backend/smoke.db
+          DATABASE_URL: sqlite:///./smoke.db
           SECRET_KEY: ci-secret-key-at-least-32-characters-long
         run: python scripts/seed_database.py
 

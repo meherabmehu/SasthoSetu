@@ -1,756 +1,756 @@
-file,label_id,code,condition,condition_bn,urgency
-msld_4_000000.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000001.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000002.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000003.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000004.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000005.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000006.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000007.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000008.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_1_000009.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000010.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000011.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000012.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000013.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000014.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000015.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_5_000016.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000017.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000018.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000019.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000020.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000021.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000022.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000023.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000024.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_2_000025.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000026.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000027.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000028.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000029.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000030.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000031.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000032.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000033.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000034.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000035.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000036.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000037.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000038.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000039.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000040.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_0_000041.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000042.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000043.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000044.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000045.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000046.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000047.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000048.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000049.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000050.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000051.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000052.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000053.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000054.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000055.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000056.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000057.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000058.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000059.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000060.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000061.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000062.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000063.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000064.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000065.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000066.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000067.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_3_000068.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000069.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000070.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000071.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000072.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000073.jpg,3,measles,MSL,হাম,get_it_checked
-msld_4_000074.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000075.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000076.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000077.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000078.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000079.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000080.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000081.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000082.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000083.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000084.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000085.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000086.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000087.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000088.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000089.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000090.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000091.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000092.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000093.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000094.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000095.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000096.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000097.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000098.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000099.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000100.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000101.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000102.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000103.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000104.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000105.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000106.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000107.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000108.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000109.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000110.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000111.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000112.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000113.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000114.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000115.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000116.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000117.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000118.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000119.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000120.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000121.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000122.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000123.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_1_000124.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000125.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000126.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000127.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000128.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000129.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000130.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000131.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000132.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000133.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000134.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000135.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000136.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000137.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000138.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000139.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000140.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000141.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000142.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000143.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000144.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000145.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000146.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000147.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000148.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000149.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000150.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000151.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000152.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000153.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000154.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000155.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000156.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000157.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000158.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000159.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000160.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000161.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000162.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000163.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000164.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000165.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000166.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000167.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000168.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000169.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000170.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000171.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000172.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_5_000173.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000174.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000175.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000176.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000177.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000178.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000179.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000180.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000181.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000182.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000183.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000184.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000185.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000186.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000187.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000188.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000189.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000190.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000191.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000192.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000193.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000194.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000195.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000196.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000197.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000198.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000199.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000200.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000201.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000202.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000203.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000204.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000205.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000206.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000207.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000208.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000209.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000210.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000211.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000212.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000213.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000214.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000215.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000216.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000217.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000218.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000219.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000220.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000221.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000222.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000223.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000224.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000225.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000226.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000227.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000228.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000229.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000230.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000231.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000232.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000233.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000234.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000235.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000236.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000237.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000238.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000239.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000240.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000241.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000242.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000243.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000244.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000245.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000246.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000247.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000248.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000249.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000250.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000251.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000252.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000253.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000254.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000255.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_2_000256.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000257.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000258.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000259.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000260.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000261.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000262.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000263.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000264.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000265.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000266.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000267.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000268.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000269.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000270.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000271.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000272.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000273.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000274.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000275.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000276.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000277.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000278.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000279.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000280.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000281.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000282.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000283.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000284.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000285.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000286.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000287.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000288.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000289.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000290.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000291.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000292.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000293.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000294.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000295.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000296.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000297.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000298.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000299.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000300.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000301.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000302.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000303.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000304.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000305.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000306.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000307.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000308.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000309.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000310.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000311.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000312.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000313.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000314.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000315.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000316.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000317.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000318.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000319.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000320.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000321.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000322.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000323.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000324.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000325.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000326.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000327.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000328.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000329.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000330.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000331.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000332.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000333.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000334.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000335.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000336.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000337.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000338.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000339.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000340.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000341.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000342.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000343.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000344.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000345.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000346.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000347.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000348.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000349.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000350.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000351.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000352.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000353.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000354.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000355.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000356.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000357.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000358.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000359.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000360.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000361.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000362.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000363.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000364.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000365.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000366.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000367.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000368.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000369.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000370.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000371.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_0_000372.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000373.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000374.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000375.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000376.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000377.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000378.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000379.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000380.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000381.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000382.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000383.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000384.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000385.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000386.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000387.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000388.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000389.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000390.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000391.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000392.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000393.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000394.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000395.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000396.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000397.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000398.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000399.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000400.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000401.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000402.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000403.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000404.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000405.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000406.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000407.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000408.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000409.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000410.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000411.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000412.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000413.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000414.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000415.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000416.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000417.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000418.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000419.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000420.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000421.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000422.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000423.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000424.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000425.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000426.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000427.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000428.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000429.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000430.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000431.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000432.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000433.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000434.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000435.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000436.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000437.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000438.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000439.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000440.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000441.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000442.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000443.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000444.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000445.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000446.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000447.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000448.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000449.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000450.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000451.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000452.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000453.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000454.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000455.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000456.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000457.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000458.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000459.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000460.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000461.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000462.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000463.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000464.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000465.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000466.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000467.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000468.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000469.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000470.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000471.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000472.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000473.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000474.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000475.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000476.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000477.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000478.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000479.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000480.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000481.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000482.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000483.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000484.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000485.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000486.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000487.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000488.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000489.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000490.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000491.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000492.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000493.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000494.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000495.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000496.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000497.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000498.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000499.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000500.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000501.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000502.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000503.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000504.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000505.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000506.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000507.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000508.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000509.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000510.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000511.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000512.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000513.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000514.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000515.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000516.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000517.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000518.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000519.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000520.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000521.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000522.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000523.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000524.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000525.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000526.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000527.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000528.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000529.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000530.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000531.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000532.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000533.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000534.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000535.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000536.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000537.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000538.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000539.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000540.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000541.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000542.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000543.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000544.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000545.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000546.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000547.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000548.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000549.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000550.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000551.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000552.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000553.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000554.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000555.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000556.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000557.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000558.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000559.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000560.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000561.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000562.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000563.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000564.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000565.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000566.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000567.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000568.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000569.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000570.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000571.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000572.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000573.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_3_000574.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000575.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000576.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000577.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000578.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000579.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000580.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000581.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000582.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000583.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000584.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000585.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000586.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000587.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000588.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000589.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000590.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000591.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000592.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000593.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000594.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000595.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000596.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000597.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000598.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000599.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000600.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000601.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000602.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000603.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000604.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000605.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000606.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000607.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000608.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000609.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000610.jpg,3,measles,MSL,হাম,get_it_checked
-msld_4_000611.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000612.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000613.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000614.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000615.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000616.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000617.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000618.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000619.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000620.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000621.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000622.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000623.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000624.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000625.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_4_000626.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked
-msld_1_000627.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000628.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000629.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000630.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000631.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000632.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000633.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000634.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000635.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_1_000636.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon
-msld_5_000637.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000638.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000639.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000640.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000641.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000642.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000643.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000644.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000645.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000646.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000647.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000648.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000649.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000650.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000651.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000652.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000653.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000654.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000655.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000656.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000657.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_5_000658.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it
-msld_2_000659.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000660.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000661.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000662.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000663.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000664.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000665.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000666.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000667.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000668.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000669.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000670.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000671.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000672.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000673.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000674.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000675.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000676.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000677.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000678.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000679.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000680.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000681.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000682.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000683.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000684.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000685.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000686.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_2_000687.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked
-msld_0_000688.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000689.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000690.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000691.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000692.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000693.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000694.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000695.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000696.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000697.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000698.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000699.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000700.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000701.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000702.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000703.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000704.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000705.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000706.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000707.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000708.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000709.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000710.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000711.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000712.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000713.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000714.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000715.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000716.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000717.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000718.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000719.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000720.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000721.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000722.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000723.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000724.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000725.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000726.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000727.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000728.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000729.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000730.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000731.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000732.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000733.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000734.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000735.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000736.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000737.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000738.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000739.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000740.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000741.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_0_000742.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon
-msld_3_000743.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000744.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000745.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000746.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000747.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000748.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000749.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000750.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000751.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000752.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000753.jpg,3,measles,MSL,হাম,get_it_checked
-msld_3_000754.jpg,3,measles,MSL,হাম,get_it_checked
+file,label_id,code,condition,condition_bn,urgency,source_file,patient_id
+msld_4_000000.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_08_01.jpg,CHP_08
+msld_4_000001.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_08_02.jpg,CHP_08
+msld_4_000002.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_14_01.jpg,CHP_14
+msld_4_000003.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_14_02.jpg,CHP_14
+msld_4_000004.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_19_01.jpg,CHP_19
+msld_4_000005.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_25_01.jpg,CHP_25
+msld_4_000006.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_34_01.jpg,CHP_34
+msld_4_000007.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_48_01.jpg,CHP_48
+msld_4_000008.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/test/CHP_49_01.jpg,CHP_49
+msld_1_000009.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/test/CWP_02_01.jpg,CWP_02
+msld_1_000010.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/test/CWP_09_01.jpg,CWP_09
+msld_1_000011.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/test/CWP_30_01.jpg,CWP_30
+msld_1_000012.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/test/CWP_40_01.jpg,CWP_40
+msld_1_000013.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/test/CWP_40_02.jpg,CWP_40
+msld_1_000014.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/test/CWP_40_03.jpg,CWP_40
+msld_1_000015.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/test/CWP_40_04.jpg,CWP_40
+msld_5_000016.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_11_01.jpg,HEALTHY_11
+msld_5_000017.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_37_01.jpg,HEALTHY_37
+msld_5_000018.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_55_01.jpg,HEALTHY_55
+msld_5_000019.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_67_01.jpg,HEALTHY_67
+msld_5_000020.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_68_01.jpg,HEALTHY_68
+msld_5_000021.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_71_01.jpg,HEALTHY_71
+msld_5_000022.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_79_01.jpg,HEALTHY_79
+msld_5_000023.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_83_01.jpg,HEALTHY_83
+msld_5_000024.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/test/HEALTHY_98_01.jpg,HEALTHY_98
+msld_2_000025.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_09_01.jpg,HFMD_09
+msld_2_000026.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_100_01.jpg,HFMD_100
+msld_2_000027.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_109_01.jpg,HFMD_109
+msld_2_000028.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_125_01.jpg,HFMD_125
+msld_2_000029.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_130_01.jpg,HFMD_130
+msld_2_000030.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_132_01.jpg,HFMD_132
+msld_2_000031.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_139_01.jpg,HFMD_139
+msld_2_000032.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_18_01.jpg,HFMD_18
+msld_2_000033.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_23_01.jpg,HFMD_23
+msld_2_000034.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_29_01.jpg,HFMD_29
+msld_2_000035.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_49_01.jpg,HFMD_49
+msld_2_000036.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_60_01.jpg,HFMD_60
+msld_2_000037.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_60_02.jpg,HFMD_60
+msld_2_000038.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_81_01.jpg,HFMD_81
+msld_2_000039.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_84_01.jpg,HFMD_84
+msld_2_000040.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/test/HFMD_84_02.jpg,HFMD_84
+msld_0_000041.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_10_01.jpg,MKP_10
+msld_0_000042.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_10_02.jpg,MKP_10
+msld_0_000043.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_111_01.jpg,MKP_111
+msld_0_000044.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_118_01.jpg,MKP_118
+msld_0_000045.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_120_01.jpg,MKP_120
+msld_0_000046.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_138_01.jpg,MKP_138
+msld_0_000047.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_138_02.jpg,MKP_138
+msld_0_000048.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_141_01.jpg,MKP_141
+msld_0_000049.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_16_01.jpg,MKP_16
+msld_0_000050.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_24_01.jpg,MKP_24
+msld_0_000051.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_24_02.jpg,MKP_24
+msld_0_000052.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_26_01.jpg,MKP_26
+msld_0_000053.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_26_02.jpg,MKP_26
+msld_0_000054.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_28_01.jpg,MKP_28
+msld_0_000055.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_28_02.jpg,MKP_28
+msld_0_000056.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_28_03.jpg,MKP_28
+msld_0_000057.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_28_04.jpg,MKP_28
+msld_0_000058.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_38_01.jpg,MKP_38
+msld_0_000059.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_38_02.jpg,MKP_38
+msld_0_000060.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_55_01.jpg,MKP_55
+msld_0_000061.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_69_01.jpg,MKP_69
+msld_0_000062.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_69_02.jpg,MKP_69
+msld_0_000063.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_69_03.jpg,MKP_69
+msld_0_000064.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_71_01.jpg,MKP_71
+msld_0_000065.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_71_02.jpg,MKP_71
+msld_0_000066.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_71_03.jpg,MKP_71
+msld_0_000067.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/test/MKP_71_04.jpg,MKP_71
+msld_3_000068.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/test/MSL_16_01.jpg,MSL_16
+msld_3_000069.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/test/MSL_21_01.jpg,MSL_21
+msld_3_000070.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/test/MSL_23_01.jpg,MSL_23
+msld_3_000071.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/test/MSL_23_02.jpg,MSL_23
+msld_3_000072.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/test/MSL_42_01.jpg,MSL_42
+msld_3_000073.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/test/MSL_44_01.jpg,MSL_44
+msld_4_000074.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_01_01.jpg,CHP_01
+msld_4_000075.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_03_01.jpg,CHP_03
+msld_4_000076.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_04_01.jpg,CHP_04
+msld_4_000077.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_04_02.jpg,CHP_04
+msld_4_000078.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_04_03.jpg,CHP_04
+msld_4_000079.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_04_04.jpg,CHP_04
+msld_4_000080.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_04_05.jpg,CHP_04
+msld_4_000081.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_05_01.jpg,CHP_05
+msld_4_000082.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_09_01.jpg,CHP_09
+msld_4_000083.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_10_01.jpg,CHP_10
+msld_4_000084.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_11_01.jpg,CHP_11
+msld_4_000085.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_12_01.jpg,CHP_12
+msld_4_000086.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_13_01.jpg,CHP_13
+msld_4_000087.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_16_01.jpg,CHP_16
+msld_4_000088.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_16_02.jpg,CHP_16
+msld_4_000089.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_17_01.jpg,CHP_17
+msld_4_000090.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_18_01.jpg,CHP_18
+msld_4_000091.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_20_01.jpg,CHP_20
+msld_4_000092.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_21_01.jpg,CHP_21
+msld_4_000093.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_22_01.jpg,CHP_22
+msld_4_000094.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_23_01.jpg,CHP_23
+msld_4_000095.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_26_01.jpg,CHP_26
+msld_4_000096.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_27_01.jpg,CHP_27
+msld_4_000097.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_28_01.jpg,CHP_28
+msld_4_000098.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_29_01.jpg,CHP_29
+msld_4_000099.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_30_01.jpg,CHP_30
+msld_4_000100.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_31_01.jpg,CHP_31
+msld_4_000101.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_33_01.jpg,CHP_33
+msld_4_000102.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_35_01.jpg,CHP_35
+msld_4_000103.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_37_01.jpg,CHP_37
+msld_4_000104.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_38_01.jpg,CHP_38
+msld_4_000105.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_39_01.jpg,CHP_39
+msld_4_000106.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_41_01.jpg,CHP_41
+msld_4_000107.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_42_01.jpg,CHP_42
+msld_4_000108.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_43_01.jpg,CHP_43
+msld_4_000109.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_44_01.jpg,CHP_44
+msld_4_000110.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_45_01.jpg,CHP_45
+msld_4_000111.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_46_01.jpg,CHP_46
+msld_4_000112.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_51_01.jpg,CHP_51
+msld_4_000113.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_51_02.jpg,CHP_51
+msld_4_000114.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_52_01.jpg,CHP_52
+msld_4_000115.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_52_02.jpg,CHP_52
+msld_4_000116.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_54_01.jpg,CHP_54
+msld_4_000117.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_54_02.jpg,CHP_54
+msld_4_000118.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_55_01.jpg,CHP_55
+msld_4_000119.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_56_01.jpg,CHP_56
+msld_4_000120.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_59_01.jpg,CHP_59
+msld_4_000121.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_60_01.jpg,CHP_60
+msld_4_000122.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_61_01.jpg,CHP_61
+msld_4_000123.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/train/CHP_62_01.jpg,CHP_62
+msld_1_000124.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_01_01.jpg,CWP_01
+msld_1_000125.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_01_02.jpg,CWP_01
+msld_1_000126.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_03_01.jpg,CWP_03
+msld_1_000127.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_04_01.jpg,CWP_04
+msld_1_000128.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_06_01.jpg,CWP_06
+msld_1_000129.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_07_01.jpg,CWP_07
+msld_1_000130.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_10_01.jpg,CWP_10
+msld_1_000131.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_11_01.jpg,CWP_11
+msld_1_000132.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_12_01.jpg,CWP_12
+msld_1_000133.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_13_01.jpg,CWP_13
+msld_1_000134.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_14_01.jpg,CWP_14
+msld_1_000135.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_15_01.jpg,CWP_15
+msld_1_000136.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_16_01.jpg,CWP_16
+msld_1_000137.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_17_01.jpg,CWP_17
+msld_1_000138.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_19_01.jpg,CWP_19
+msld_1_000139.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_20_01.jpg,CWP_20
+msld_1_000140.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_21_01.jpg,CWP_21
+msld_1_000141.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_24_01.jpg,CWP_24
+msld_1_000142.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_25_01.jpg,CWP_25
+msld_1_000143.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_26_01.jpg,CWP_26
+msld_1_000144.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_28_01.jpg,CWP_28
+msld_1_000145.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_28_02.jpg,CWP_28
+msld_1_000146.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_29_01.jpg,CWP_29
+msld_1_000147.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_29_02.jpg,CWP_29
+msld_1_000148.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_33_01.jpg,CWP_33
+msld_1_000149.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_33_02.jpg,CWP_33
+msld_1_000150.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_33_03.jpg,CWP_33
+msld_1_000151.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_33_04.jpg,CWP_33
+msld_1_000152.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_33_05.jpg,CWP_33
+msld_1_000153.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_33_06.jpg,CWP_33
+msld_1_000154.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_33_07.jpg,CWP_33
+msld_1_000155.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_34_01.jpg,CWP_34
+msld_1_000156.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_35_01.jpg,CWP_35
+msld_1_000157.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_36_01.jpg,CWP_36
+msld_1_000158.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_01.jpg,CWP_37
+msld_1_000159.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_02.jpg,CWP_37
+msld_1_000160.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_03.jpg,CWP_37
+msld_1_000161.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_04.jpg,CWP_37
+msld_1_000162.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_05.jpg,CWP_37
+msld_1_000163.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_06.jpg,CWP_37
+msld_1_000164.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_07.jpg,CWP_37
+msld_1_000165.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_08.jpg,CWP_37
+msld_1_000166.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_37_09.jpg,CWP_37
+msld_1_000167.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_38_01.jpg,CWP_38
+msld_1_000168.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_38_02.jpg,CWP_38
+msld_1_000169.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_39_01.jpg,CWP_39
+msld_1_000170.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_41_01.jpg,CWP_41
+msld_1_000171.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_41_02.jpg,CWP_41
+msld_1_000172.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/train/CWP_41_03.jpg,CWP_41
+msld_5_000173.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_01_01.jpg,HEALTHY_01
+msld_5_000174.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_02_01.jpg,HEALTHY_02
+msld_5_000175.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_03_01.jpg,HEALTHY_03
+msld_5_000176.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_04_01.jpg,HEALTHY_04
+msld_5_000177.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_05_01.jpg,HEALTHY_05
+msld_5_000178.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_07_01.jpg,HEALTHY_07
+msld_5_000179.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_09_01.jpg,HEALTHY_09
+msld_5_000180.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_10_01.jpg,HEALTHY_10
+msld_5_000181.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_100_01.jpg,HEALTHY_100
+msld_5_000182.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_101_01.jpg,HEALTHY_101
+msld_5_000183.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_102_01.jpg,HEALTHY_102
+msld_5_000184.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_103_01.jpg,HEALTHY_103
+msld_5_000185.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_104_01.jpg,HEALTHY_104
+msld_5_000186.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_105_01.jpg,HEALTHY_105
+msld_5_000187.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_12_01.jpg,HEALTHY_12
+msld_5_000188.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_13_01.jpg,HEALTHY_13
+msld_5_000189.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_14_01.jpg,HEALTHY_14
+msld_5_000190.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_15_01.jpg,HEALTHY_15
+msld_5_000191.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_16_01.jpg,HEALTHY_16
+msld_5_000192.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_19_01.jpg,HEALTHY_19
+msld_5_000193.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_20_01.jpg,HEALTHY_20
+msld_5_000194.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_21_01.jpg,HEALTHY_21
+msld_5_000195.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_22_01.jpg,HEALTHY_22
+msld_5_000196.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_24_01.jpg,HEALTHY_24
+msld_5_000197.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_25_01.jpg,HEALTHY_25
+msld_5_000198.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_26_01.jpg,HEALTHY_26
+msld_5_000199.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_26_02.jpg,HEALTHY_26
+msld_5_000200.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_27_01.jpg,HEALTHY_27
+msld_5_000201.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_29_01.jpg,HEALTHY_29
+msld_5_000202.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_30_01.jpg,HEALTHY_30
+msld_5_000203.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_31_01.jpg,HEALTHY_31
+msld_5_000204.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_32_01.jpg,HEALTHY_32
+msld_5_000205.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_32_02.jpg,HEALTHY_32
+msld_5_000206.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_32_03.jpg,HEALTHY_32
+msld_5_000207.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_32_04.jpg,HEALTHY_32
+msld_5_000208.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_33_01.jpg,HEALTHY_33
+msld_5_000209.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_35_01.jpg,HEALTHY_35
+msld_5_000210.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_36_01.jpg,HEALTHY_36
+msld_5_000211.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_39_01.jpg,HEALTHY_39
+msld_5_000212.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_39_02.jpg,HEALTHY_39
+msld_5_000213.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_39_03.jpg,HEALTHY_39
+msld_5_000214.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_39_04.jpg,HEALTHY_39
+msld_5_000215.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_41_01.jpg,HEALTHY_41
+msld_5_000216.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_42_01.jpg,HEALTHY_42
+msld_5_000217.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_43_01.jpg,HEALTHY_43
+msld_5_000218.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_45_01.jpg,HEALTHY_45
+msld_5_000219.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_46_01.jpg,HEALTHY_46
+msld_5_000220.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_47_01.jpg,HEALTHY_47
+msld_5_000221.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_48_01.jpg,HEALTHY_48
+msld_5_000222.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_49_01.jpg,HEALTHY_49
+msld_5_000223.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_50_01.jpg,HEALTHY_50
+msld_5_000224.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_51_01.jpg,HEALTHY_51
+msld_5_000225.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_52_01.jpg,HEALTHY_52
+msld_5_000226.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_53_01.jpg,HEALTHY_53
+msld_5_000227.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_54_01.jpg,HEALTHY_54
+msld_5_000228.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_57_01.jpg,HEALTHY_57
+msld_5_000229.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_58_01.jpg,HEALTHY_58
+msld_5_000230.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_59_01.jpg,HEALTHY_59
+msld_5_000231.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_59_02.jpg,HEALTHY_59
+msld_5_000232.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_61_01.jpg,HEALTHY_61
+msld_5_000233.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_62_01.jpg,HEALTHY_62
+msld_5_000234.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_63_01.jpg,HEALTHY_63
+msld_5_000235.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_65_01.jpg,HEALTHY_65
+msld_5_000236.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_66_01.jpg,HEALTHY_66
+msld_5_000237.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_69_01.jpg,HEALTHY_69
+msld_5_000238.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_69_02.jpg,HEALTHY_69
+msld_5_000239.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_70_01.jpg,HEALTHY_70
+msld_5_000240.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_73_01.jpg,HEALTHY_73
+msld_5_000241.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_75_01.jpg,HEALTHY_75
+msld_5_000242.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_77_01.jpg,HEALTHY_77
+msld_5_000243.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_80_01.jpg,HEALTHY_80
+msld_5_000244.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_82_01.jpg,HEALTHY_82
+msld_5_000245.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_84_01.jpg,HEALTHY_84
+msld_5_000246.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_86_01.jpg,HEALTHY_86
+msld_5_000247.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_87_01.jpg,HEALTHY_87
+msld_5_000248.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_88_01.jpg,HEALTHY_88
+msld_5_000249.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_90_01.jpg,HEALTHY_90
+msld_5_000250.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_91_01.jpg,HEALTHY_91
+msld_5_000251.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_93_01.jpg,HEALTHY_93
+msld_5_000252.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_94_01.jpg,HEALTHY_94
+msld_5_000253.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_96_01.jpg,HEALTHY_96
+msld_5_000254.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_97_01.jpg,HEALTHY_97
+msld_5_000255.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/train/HEALTHY_99_01.jpg,HEALTHY_99
+msld_2_000256.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_01_01.jpg,HFMD_01
+msld_2_000257.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_02_01.jpg,HFMD_02
+msld_2_000258.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_03_01.jpg,HFMD_03
+msld_2_000259.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_05_01.jpg,HFMD_05
+msld_2_000260.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_05_02.jpg,HFMD_05
+msld_2_000261.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_06_01.jpg,HFMD_06
+msld_2_000262.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_08_01.jpg,HFMD_08
+msld_2_000263.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_10_01.jpg,HFMD_10
+msld_2_000264.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_101_01.jpg,HFMD_101
+msld_2_000265.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_102_01.jpg,HFMD_102
+msld_2_000266.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_103_01.jpg,HFMD_103
+msld_2_000267.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_104_01.jpg,HFMD_104
+msld_2_000268.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_107_01.jpg,HFMD_107
+msld_2_000269.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_110_01.jpg,HFMD_110
+msld_2_000270.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_111_01.jpg,HFMD_111
+msld_2_000271.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_113_01.jpg,HFMD_113
+msld_2_000272.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_114_01.jpg,HFMD_114
+msld_2_000273.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_114_02.jpg,HFMD_114
+msld_2_000274.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_115_01.jpg,HFMD_115
+msld_2_000275.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_116_01.jpg,HFMD_116
+msld_2_000276.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_117_01.jpg,HFMD_117
+msld_2_000277.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_117_02.jpg,HFMD_117
+msld_2_000278.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_118_01.jpg,HFMD_118
+msld_2_000279.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_119_01.jpg,HFMD_119
+msld_2_000280.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_12_01.jpg,HFMD_12
+msld_2_000281.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_120_01.jpg,HFMD_120
+msld_2_000282.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_121_01.jpg,HFMD_121
+msld_2_000283.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_124_01.jpg,HFMD_124
+msld_2_000284.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_126_01.jpg,HFMD_126
+msld_2_000285.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_128_01.jpg,HFMD_128
+msld_2_000286.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_129_01.jpg,HFMD_129
+msld_2_000287.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_13_01.jpg,HFMD_13
+msld_2_000288.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_131_01.jpg,HFMD_131
+msld_2_000289.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_134_01.jpg,HFMD_134
+msld_2_000290.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_135_01.jpg,HFMD_135
+msld_2_000291.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_136_01.jpg,HFMD_136
+msld_2_000292.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_137_01.jpg,HFMD_137
+msld_2_000293.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_138_01.jpg,HFMD_138
+msld_2_000294.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_140_01.jpg,HFMD_140
+msld_2_000295.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_141_01.jpg,HFMD_141
+msld_2_000296.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_142_01.jpg,HFMD_142
+msld_2_000297.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_143_01.jpg,HFMD_143
+msld_2_000298.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_144_01.jpg,HFMD_144
+msld_2_000299.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_15_01.jpg,HFMD_15
+msld_2_000300.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_16_01.jpg,HFMD_16
+msld_2_000301.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_16_02.jpg,HFMD_16
+msld_2_000302.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_16_03.jpg,HFMD_16
+msld_2_000303.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_17_01.jpg,HFMD_17
+msld_2_000304.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_19_01.jpg,HFMD_19
+msld_2_000305.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_21_01.jpg,HFMD_21
+msld_2_000306.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_22_01.jpg,HFMD_22
+msld_2_000307.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_24_01.jpg,HFMD_24
+msld_2_000308.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_25_01.jpg,HFMD_25
+msld_2_000309.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_26_01.jpg,HFMD_26
+msld_2_000310.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_27_01.jpg,HFMD_27
+msld_2_000311.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_28_01.jpg,HFMD_28
+msld_2_000312.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_30_01.jpg,HFMD_30
+msld_2_000313.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_31_01.jpg,HFMD_31
+msld_2_000314.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_32_01.jpg,HFMD_32
+msld_2_000315.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_33_01.jpg,HFMD_33
+msld_2_000316.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_34_01.jpg,HFMD_34
+msld_2_000317.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_35_01.jpg,HFMD_35
+msld_2_000318.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_36_01.jpg,HFMD_36
+msld_2_000319.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_37_01.jpg,HFMD_37
+msld_2_000320.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_38_01.jpg,HFMD_38
+msld_2_000321.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_39_01.jpg,HFMD_39
+msld_2_000322.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_40_01.jpg,HFMD_40
+msld_2_000323.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_41_01.jpg,HFMD_41
+msld_2_000324.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_42_01.jpg,HFMD_42
+msld_2_000325.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_43_01.jpg,HFMD_43
+msld_2_000326.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_44_01.jpg,HFMD_44
+msld_2_000327.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_46_01.jpg,HFMD_46
+msld_2_000328.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_47_01.jpg,HFMD_47
+msld_2_000329.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_51_01.jpg,HFMD_51
+msld_2_000330.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_52_01.jpg,HFMD_52
+msld_2_000331.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_53_01.jpg,HFMD_53
+msld_2_000332.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_54_01.jpg,HFMD_54
+msld_2_000333.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_55_01.jpg,HFMD_55
+msld_2_000334.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_57_01.jpg,HFMD_57
+msld_2_000335.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_57_02.jpg,HFMD_57
+msld_2_000336.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_57_03.jpg,HFMD_57
+msld_2_000337.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_57_04.jpg,HFMD_57
+msld_2_000338.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_57_05.jpg,HFMD_57
+msld_2_000339.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_62_01.jpg,HFMD_62
+msld_2_000340.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_63_01.jpg,HFMD_63
+msld_2_000341.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_63_02.jpg,HFMD_63
+msld_2_000342.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_63_03.jpg,HFMD_63
+msld_2_000343.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_65_01.jpg,HFMD_65
+msld_2_000344.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_66_01.jpg,HFMD_66
+msld_2_000345.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_66_02.jpg,HFMD_66
+msld_2_000346.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_68_01.jpg,HFMD_68
+msld_2_000347.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_69_01.jpg,HFMD_69
+msld_2_000348.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_69_02.jpg,HFMD_69
+msld_2_000349.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_69_03.jpg,HFMD_69
+msld_2_000350.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_71_01.jpg,HFMD_71
+msld_2_000351.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_72_01.jpg,HFMD_72
+msld_2_000352.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_73_01.jpg,HFMD_73
+msld_2_000353.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_78_01.jpg,HFMD_78
+msld_2_000354.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_79_01.jpg,HFMD_79
+msld_2_000355.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_82_01.jpg,HFMD_82
+msld_2_000356.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_83_01.jpg,HFMD_83
+msld_2_000357.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_83_02.jpg,HFMD_83
+msld_2_000358.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_85_01.jpg,HFMD_85
+msld_2_000359.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_86_01.jpg,HFMD_86
+msld_2_000360.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_87_01.jpg,HFMD_87
+msld_2_000361.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_88_01.jpg,HFMD_88
+msld_2_000362.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_89_01.jpg,HFMD_89
+msld_2_000363.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_90_01.jpg,HFMD_90
+msld_2_000364.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_90_02.jpg,HFMD_90
+msld_2_000365.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_92_01.jpg,HFMD_92
+msld_2_000366.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_93_01.jpg,HFMD_93
+msld_2_000367.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_94_01.jpg,HFMD_94
+msld_2_000368.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_96_01.jpg,HFMD_96
+msld_2_000369.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_97_01.jpg,HFMD_97
+msld_2_000370.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_98_01.jpg,HFMD_98
+msld_2_000371.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/train/HFMD_99_01.jpg,HFMD_99
+msld_0_000372.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_01_01.jpg,MKP_01
+msld_0_000373.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_01_02.jpg,MKP_01
+msld_0_000374.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_01_03.jpg,MKP_01
+msld_0_000375.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_01_04.jpg,MKP_01
+msld_0_000376.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_02_01.jpg,MKP_02
+msld_0_000377.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_02_02.jpg,MKP_02
+msld_0_000378.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_03_01.jpg,MKP_03
+msld_0_000379.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_04_01.jpg,MKP_04
+msld_0_000380.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_05_01.jpg,MKP_05
+msld_0_000381.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_05_02.jpg,MKP_05
+msld_0_000382.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_07_01.jpg,MKP_07
+msld_0_000383.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_09_01.jpg,MKP_09
+msld_0_000384.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_09_02.jpg,MKP_09
+msld_0_000385.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_09_03.jpg,MKP_09
+msld_0_000386.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_09_04.jpg,MKP_09
+msld_0_000387.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_100_01.jpg,MKP_100
+msld_0_000388.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_101_01.jpg,MKP_101
+msld_0_000389.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_102_01.jpg,MKP_102
+msld_0_000390.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_103_01.jpg,MKP_103
+msld_0_000391.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_106_01.jpg,MKP_106
+msld_0_000392.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_107_01.jpg,MKP_107
+msld_0_000393.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_108_01.jpg,MKP_108
+msld_0_000394.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_108_02.jpg,MKP_108
+msld_0_000395.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_108_03.jpg,MKP_108
+msld_0_000396.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_11_01.jpg,MKP_11
+msld_0_000397.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_112_01.jpg,MKP_112
+msld_0_000398.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_113_01.jpg,MKP_113
+msld_0_000399.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_113_02.jpg,MKP_113
+msld_0_000400.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_113_03.jpg,MKP_113
+msld_0_000401.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_114_01.jpg,MKP_114
+msld_0_000402.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_115_01.jpg,MKP_115
+msld_0_000403.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_116_01.jpg,MKP_116
+msld_0_000404.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_117_01.jpg,MKP_117
+msld_0_000405.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_12_01.jpg,MKP_12
+msld_0_000406.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_122_01.jpg,MKP_122
+msld_0_000407.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_122_02.jpg,MKP_122
+msld_0_000408.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_124_01.jpg,MKP_124
+msld_0_000409.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_124_02.jpg,MKP_124
+msld_0_000410.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_126_01.jpg,MKP_126
+msld_0_000411.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_128_01.jpg,MKP_128
+msld_0_000412.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_129_01.jpg,MKP_129
+msld_0_000413.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_13_01.jpg,MKP_13
+msld_0_000414.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_131_01.jpg,MKP_131
+msld_0_000415.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_132_01.jpg,MKP_132
+msld_0_000416.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_133_01.jpg,MKP_133
+msld_0_000417.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_134_01.jpg,MKP_134
+msld_0_000418.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_135_01.jpg,MKP_135
+msld_0_000419.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_136_01.jpg,MKP_136
+msld_0_000420.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_139_01.jpg,MKP_139
+msld_0_000421.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_139_02.jpg,MKP_139
+msld_0_000422.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_14_01.jpg,MKP_14
+msld_0_000423.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_143_01.jpg,MKP_143
+msld_0_000424.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_143_02.jpg,MKP_143
+msld_0_000425.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_15_01.jpg,MKP_15
+msld_0_000426.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_17_01.jpg,MKP_17
+msld_0_000427.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_17_02.jpg,MKP_17
+msld_0_000428.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_18_01.jpg,MKP_18
+msld_0_000429.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_18_02.jpg,MKP_18
+msld_0_000430.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_19_01.jpg,MKP_19
+msld_0_000431.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_19_02.jpg,MKP_19
+msld_0_000432.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_21_01.jpg,MKP_21
+msld_0_000433.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_21_02.jpg,MKP_21
+msld_0_000434.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_22_01.jpg,MKP_22
+msld_0_000435.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_27_01.jpg,MKP_27
+msld_0_000436.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_29_01.jpg,MKP_29
+msld_0_000437.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_29_02.jpg,MKP_29
+msld_0_000438.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_32_01.jpg,MKP_32
+msld_0_000439.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_32_02.jpg,MKP_32
+msld_0_000440.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_32_03.jpg,MKP_32
+msld_0_000441.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_32_04.jpg,MKP_32
+msld_0_000442.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_35_01.jpg,MKP_35
+msld_0_000443.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_35_02.jpg,MKP_35
+msld_0_000444.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_36_01.jpg,MKP_36
+msld_0_000445.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_37_01.jpg,MKP_37
+msld_0_000446.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_41_01.jpg,MKP_41
+msld_0_000447.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_42_01.jpg,MKP_42
+msld_0_000448.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_42_02.jpg,MKP_42
+msld_0_000449.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_43_01.jpg,MKP_43
+msld_0_000450.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_43_02.jpg,MKP_43
+msld_0_000451.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_43_03.jpg,MKP_43
+msld_0_000452.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_44_01.jpg,MKP_44
+msld_0_000453.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_46_01.jpg,MKP_46
+msld_0_000454.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_46_02.jpg,MKP_46
+msld_0_000455.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_47_01.jpg,MKP_47
+msld_0_000456.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_48_01.jpg,MKP_48
+msld_0_000457.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_48_02.jpg,MKP_48
+msld_0_000458.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_48_03.jpg,MKP_48
+msld_0_000459.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_49_01.jpg,MKP_49
+msld_0_000460.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_49_02.jpg,MKP_49
+msld_0_000461.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_49_03.jpg,MKP_49
+msld_0_000462.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_50_01.jpg,MKP_50
+msld_0_000463.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_50_02.jpg,MKP_50
+msld_0_000464.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_50_03.jpg,MKP_50
+msld_0_000465.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_51_01.jpg,MKP_51
+msld_0_000466.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_51_02.jpg,MKP_51
+msld_0_000467.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_52_01.jpg,MKP_52
+msld_0_000468.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_53_01.jpg,MKP_53
+msld_0_000469.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_54_01.jpg,MKP_54
+msld_0_000470.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_56_01.jpg,MKP_56
+msld_0_000471.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_56_02.jpg,MKP_56
+msld_0_000472.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_57_01.jpg,MKP_57
+msld_0_000473.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_01.jpg,MKP_58
+msld_0_000474.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_02.jpg,MKP_58
+msld_0_000475.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_03.jpg,MKP_58
+msld_0_000476.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_04.jpg,MKP_58
+msld_0_000477.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_05.jpg,MKP_58
+msld_0_000478.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_06.jpg,MKP_58
+msld_0_000479.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_07.jpg,MKP_58
+msld_0_000480.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_08.jpg,MKP_58
+msld_0_000481.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_09.jpg,MKP_58
+msld_0_000482.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_10.jpg,MKP_58
+msld_0_000483.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_11.jpg,MKP_58
+msld_0_000484.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_12.jpg,MKP_58
+msld_0_000485.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_13.jpg,MKP_58
+msld_0_000486.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_58_14.jpg,MKP_58
+msld_0_000487.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_60_01.jpg,MKP_60
+msld_0_000488.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_60_02.jpg,MKP_60
+msld_0_000489.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_61_01.jpg,MKP_61
+msld_0_000490.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_61_02.jpg,MKP_61
+msld_0_000491.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_62_01.jpg,MKP_62
+msld_0_000492.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_62_02.jpg,MKP_62
+msld_0_000493.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_62_03.jpg,MKP_62
+msld_0_000494.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_01.jpg,MKP_63
+msld_0_000495.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_02.jpg,MKP_63
+msld_0_000496.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_03.jpg,MKP_63
+msld_0_000497.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_04.jpg,MKP_63
+msld_0_000498.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_05.jpg,MKP_63
+msld_0_000499.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_06.jpg,MKP_63
+msld_0_000500.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_07.jpg,MKP_63
+msld_0_000501.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_08.jpg,MKP_63
+msld_0_000502.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_63_09.jpg,MKP_63
+msld_0_000503.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_01.jpg,MKP_64
+msld_0_000504.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_02.jpg,MKP_64
+msld_0_000505.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_03.jpg,MKP_64
+msld_0_000506.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_04.jpg,MKP_64
+msld_0_000507.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_05.jpg,MKP_64
+msld_0_000508.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_06.jpg,MKP_64
+msld_0_000509.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_07.jpg,MKP_64
+msld_0_000510.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_64_08.jpg,MKP_64
+msld_0_000511.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_65_01.jpg,MKP_65
+msld_0_000512.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_66_01.jpg,MKP_66
+msld_0_000513.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_67_01.jpg,MKP_67
+msld_0_000514.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_68_01.jpg,MKP_68
+msld_0_000515.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_01.jpg,MKP_72
+msld_0_000516.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_02.jpg,MKP_72
+msld_0_000517.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_03.jpg,MKP_72
+msld_0_000518.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_04.jpg,MKP_72
+msld_0_000519.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_05.jpg,MKP_72
+msld_0_000520.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_06.jpg,MKP_72
+msld_0_000521.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_07.jpg,MKP_72
+msld_0_000522.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_72_08.jpg,MKP_72
+msld_0_000523.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_73_01.jpg,MKP_73
+msld_0_000524.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_73_02.jpg,MKP_73
+msld_0_000525.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_73_03.jpg,MKP_73
+msld_0_000526.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_73_04.jpg,MKP_73
+msld_0_000527.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_73_05.jpg,MKP_73
+msld_0_000528.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_73_06.jpg,MKP_73
+msld_0_000529.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_75_01.jpg,MKP_75
+msld_0_000530.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_75_02.jpg,MKP_75
+msld_0_000531.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_75_03.jpg,MKP_75
+msld_0_000532.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_75_04.jpg,MKP_75
+msld_0_000533.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_75_05.jpg,MKP_75
+msld_0_000534.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_75_06.jpg,MKP_75
+msld_0_000535.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_76_01.jpg,MKP_76
+msld_0_000536.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_76_02.jpg,MKP_76
+msld_0_000537.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_77_01.jpg,MKP_77
+msld_0_000538.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_78_01.jpg,MKP_78
+msld_0_000539.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_78_02.jpg,MKP_78
+msld_0_000540.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_78_03.jpg,MKP_78
+msld_0_000541.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_78_04.jpg,MKP_78
+msld_0_000542.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_78_05.jpg,MKP_78
+msld_0_000543.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_78_06.jpg,MKP_78
+msld_0_000544.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_78_07.jpg,MKP_78
+msld_0_000545.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_79_01.jpg,MKP_79
+msld_0_000546.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_80_01.jpg,MKP_80
+msld_0_000547.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_80_02.jpg,MKP_80
+msld_0_000548.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_80_03.jpg,MKP_80
+msld_0_000549.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_80_04.jpg,MKP_80
+msld_0_000550.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_80_05.jpg,MKP_80
+msld_0_000551.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_83_01.jpg,MKP_83
+msld_0_000552.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_83_02.jpg,MKP_83
+msld_0_000553.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_83_03.jpg,MKP_83
+msld_0_000554.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_83_04.jpg,MKP_83
+msld_0_000555.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_83_05.jpg,MKP_83
+msld_0_000556.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_83_06.jpg,MKP_83
+msld_0_000557.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_86_01.jpg,MKP_86
+msld_0_000558.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_86_02.jpg,MKP_86
+msld_0_000559.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_86_03.jpg,MKP_86
+msld_0_000560.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_86_04.jpg,MKP_86
+msld_0_000561.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_87_01.jpg,MKP_87
+msld_0_000562.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_87_02.jpg,MKP_87
+msld_0_000563.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_87_03.jpg,MKP_87
+msld_0_000564.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_90_01.jpg,MKP_90
+msld_0_000565.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_90_02.jpg,MKP_90
+msld_0_000566.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_90_03.jpg,MKP_90
+msld_0_000567.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_90_04.jpg,MKP_90
+msld_0_000568.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_92_01.jpg,MKP_92
+msld_0_000569.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_94_01.jpg,MKP_94
+msld_0_000570.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_95_01.jpg,MKP_95
+msld_0_000571.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_96_01.jpg,MKP_96
+msld_0_000572.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_97_01.jpg,MKP_97
+msld_0_000573.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/train/MKP_99_01.jpg,MKP_99
+msld_3_000574.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_01_01.jpg,MSL_01
+msld_3_000575.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_01_02.jpg,MSL_01
+msld_3_000576.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_02_01.jpg,MSL_02
+msld_3_000577.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_03_01.jpg,MSL_03
+msld_3_000578.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_05_01.jpg,MSL_05
+msld_3_000579.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_05_02.jpg,MSL_05
+msld_3_000580.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_05_03.jpg,MSL_05
+msld_3_000581.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_06_01.jpg,MSL_06
+msld_3_000582.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_09_01.jpg,MSL_09
+msld_3_000583.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_09_02.jpg,MSL_09
+msld_3_000584.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_10_01.jpg,MSL_10
+msld_3_000585.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_11_01.jpg,MSL_11
+msld_3_000586.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_15_01.jpg,MSL_15
+msld_3_000587.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_17_01.jpg,MSL_17
+msld_3_000588.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_18_01.jpg,MSL_18
+msld_3_000589.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_19_01.jpg,MSL_19
+msld_3_000590.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_20_01.jpg,MSL_20
+msld_3_000591.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_22_01.jpg,MSL_22
+msld_3_000592.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_24_01.jpg,MSL_24
+msld_3_000593.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_26_01.jpg,MSL_26
+msld_3_000594.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_27_01.jpg,MSL_27
+msld_3_000595.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_28_01.jpg,MSL_28
+msld_3_000596.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_28_02.jpg,MSL_28
+msld_3_000597.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_29_01.jpg,MSL_29
+msld_3_000598.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_30_01.jpg,MSL_30
+msld_3_000599.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_31_01.jpg,MSL_31
+msld_3_000600.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_33_01.jpg,MSL_33
+msld_3_000601.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_34_01.jpg,MSL_34
+msld_3_000602.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_35_01.jpg,MSL_35
+msld_3_000603.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_36_01.jpg,MSL_36
+msld_3_000604.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_38_01.jpg,MSL_38
+msld_3_000605.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_39_01.jpg,MSL_39
+msld_3_000606.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_40_01.jpg,MSL_40
+msld_3_000607.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_40_02.jpg,MSL_40
+msld_3_000608.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_43_01.jpg,MSL_43
+msld_3_000609.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_45_01.jpg,MSL_45
+msld_3_000610.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/train/MSL_46_01.jpg,MSL_46
+msld_4_000611.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_02_01.jpg,CHP_02
+msld_4_000612.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_02_02.jpg,CHP_02
+msld_4_000613.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_06_01.jpg,CHP_06
+msld_4_000614.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_06_02.jpg,CHP_06
+msld_4_000615.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_07_01.jpg,CHP_07
+msld_4_000616.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_15_01.jpg,CHP_15
+msld_4_000617.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_15_02.jpg,CHP_15
+msld_4_000618.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_24_01.jpg,CHP_24
+msld_4_000619.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_32_01.jpg,CHP_32
+msld_4_000620.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_40_01.jpg,CHP_40
+msld_4_000621.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_47_01.jpg,CHP_47
+msld_4_000622.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_47_02.jpg,CHP_47
+msld_4_000623.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_50_01.jpg,CHP_50
+msld_4_000624.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_53_01.jpg,CHP_53
+msld_4_000625.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_57_01.jpg,CHP_57
+msld_4_000626.jpg,4,chickenpox,CHP,জলবসন্ত (চিকেনপক্স),get_it_checked,FOLDS/fold1/valid/CHP_58_01.jpg,CHP_58
+msld_1_000627.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_05_01.jpg,CWP_05
+msld_1_000628.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_05_02.jpg,CWP_05
+msld_1_000629.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_08_01.jpg,CWP_08
+msld_1_000630.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_18_01.jpg,CWP_18
+msld_1_000631.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_22_01.jpg,CWP_22
+msld_1_000632.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_22_02.jpg,CWP_22
+msld_1_000633.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_23_01.jpg,CWP_23
+msld_1_000634.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_27_01.jpg,CWP_27
+msld_1_000635.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_31_01.jpg,CWP_31
+msld_1_000636.jpg,1,cowpox,CWP,কাউপক্স সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/CWP_32_01.jpg,CWP_32
+msld_5_000637.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_06_01.jpg,HEALTHY_06
+msld_5_000638.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_08_01.jpg,HEALTHY_08
+msld_5_000639.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_23_01.jpg,HEALTHY_23
+msld_5_000640.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_28_01.jpg,HEALTHY_28
+msld_5_000641.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_28_02.jpg,HEALTHY_28
+msld_5_000642.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_34_01.jpg,HEALTHY_34
+msld_5_000643.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_38_01.jpg,HEALTHY_38
+msld_5_000644.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_40_01.jpg,HEALTHY_40
+msld_5_000645.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_44_01.jpg,HEALTHY_44
+msld_5_000646.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_56_01.jpg,HEALTHY_56
+msld_5_000647.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_60_01.jpg,HEALTHY_60
+msld_5_000648.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_64_01.jpg,HEALTHY_64
+msld_5_000649.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_72_01.jpg,HEALTHY_72
+msld_5_000650.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_74_01.jpg,HEALTHY_74
+msld_5_000651.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_76_01.jpg,HEALTHY_76
+msld_5_000652.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_78_01.jpg,HEALTHY_78
+msld_5_000653.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_81_01.jpg,HEALTHY_81
+msld_5_000654.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_85_01.jpg,HEALTHY_85
+msld_5_000655.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_89_01.jpg,HEALTHY_89
+msld_5_000656.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_92_01.jpg,HEALTHY_92
+msld_5_000657.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_92_02.jpg,HEALTHY_92
+msld_5_000658.jpg,5,healthy,HEALTHY,স্বাভাবিক ত্বক,watch_it,FOLDS/fold1/valid/HEALTHY_95_01.jpg,HEALTHY_95
+msld_2_000659.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_04_01.jpg,HFMD_04
+msld_2_000660.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_07_01.jpg,HFMD_07
+msld_2_000661.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_105_01.jpg,HFMD_105
+msld_2_000662.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_106_01.jpg,HFMD_106
+msld_2_000663.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_108_01.jpg,HFMD_108
+msld_2_000664.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_11_01.jpg,HFMD_11
+msld_2_000665.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_112_01.jpg,HFMD_112
+msld_2_000666.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_122_01.jpg,HFMD_122
+msld_2_000667.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_123_01.jpg,HFMD_123
+msld_2_000668.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_127_01.jpg,HFMD_127
+msld_2_000669.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_133_01.jpg,HFMD_133
+msld_2_000670.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_14_01.jpg,HFMD_14
+msld_2_000671.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_20_01.jpg,HFMD_20
+msld_2_000672.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_20_02.jpg,HFMD_20
+msld_2_000673.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_48_01.jpg,HFMD_48
+msld_2_000674.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_50_01.jpg,HFMD_50
+msld_2_000675.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_56_01.jpg,HFMD_56
+msld_2_000676.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_59_01.jpg,HFMD_59
+msld_2_000677.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_64_01.jpg,HFMD_64
+msld_2_000678.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_67_01.jpg,HFMD_67
+msld_2_000679.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_70_01.jpg,HFMD_70
+msld_2_000680.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_74_01.jpg,HFMD_74
+msld_2_000681.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_74_02.jpg,HFMD_74
+msld_2_000682.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_75_01.jpg,HFMD_75
+msld_2_000683.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_76_01.jpg,HFMD_76
+msld_2_000684.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_77_01.jpg,HFMD_77
+msld_2_000685.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_80_01.jpg,HFMD_80
+msld_2_000686.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_91_01.jpg,HFMD_91
+msld_2_000687.jpg,2,hfmd,HFMD,হাত-পা-মুখ রোগ,get_it_checked,FOLDS/fold1/valid/HFMD_95_01.jpg,HFMD_95
+msld_0_000688.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_06_01.jpg,MKP_06
+msld_0_000689.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_06_02.jpg,MKP_06
+msld_0_000690.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_08_01.jpg,MKP_08
+msld_0_000691.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_104_01.jpg,MKP_104
+msld_0_000692.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_105_01.jpg,MKP_105
+msld_0_000693.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_105_02.jpg,MKP_105
+msld_0_000694.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_109_01.jpg,MKP_109
+msld_0_000695.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_110_01.jpg,MKP_110
+msld_0_000696.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_119_01.jpg,MKP_119
+msld_0_000697.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_119_02.jpg,MKP_119
+msld_0_000698.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_123_01.jpg,MKP_123
+msld_0_000699.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_01.jpg,MKP_142
+msld_0_000700.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_02.jpg,MKP_142
+msld_0_000701.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_03.jpg,MKP_142
+msld_0_000702.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_04.jpg,MKP_142
+msld_0_000703.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_05.jpg,MKP_142
+msld_0_000704.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_06.jpg,MKP_142
+msld_0_000705.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_07.jpg,MKP_142
+msld_0_000706.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_142_08.jpg,MKP_142
+msld_0_000707.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_20_01.jpg,MKP_20
+msld_0_000708.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_20_02.jpg,MKP_20
+msld_0_000709.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_23_01.jpg,MKP_23
+msld_0_000710.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_25_01.jpg,MKP_25
+msld_0_000711.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_25_02.jpg,MKP_25
+msld_0_000712.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_31_01.jpg,MKP_31
+msld_0_000713.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_31_02.jpg,MKP_31
+msld_0_000714.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_33_01.jpg,MKP_33
+msld_0_000715.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_33_02.jpg,MKP_33
+msld_0_000716.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_34_01.jpg,MKP_34
+msld_0_000717.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_34_02.jpg,MKP_34
+msld_0_000718.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_34_03.jpg,MKP_34
+msld_0_000719.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_39_01.jpg,MKP_39
+msld_0_000720.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_39_02.jpg,MKP_39
+msld_0_000721.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_40_01.jpg,MKP_40
+msld_0_000722.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_40_02.jpg,MKP_40
+msld_0_000723.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_40_03.jpg,MKP_40
+msld_0_000724.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_45_01.jpg,MKP_45
+msld_0_000725.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_59_01.jpg,MKP_59
+msld_0_000726.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_70_01.jpg,MKP_70
+msld_0_000727.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_74_01.jpg,MKP_74
+msld_0_000728.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_74_02.jpg,MKP_74
+msld_0_000729.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_74_03.jpg,MKP_74
+msld_0_000730.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_81_01.jpg,MKP_81
+msld_0_000731.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_81_02.jpg,MKP_81
+msld_0_000732.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_82_01.jpg,MKP_82
+msld_0_000733.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_82_02.jpg,MKP_82
+msld_0_000734.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_88_01.jpg,MKP_88
+msld_0_000735.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_88_02.jpg,MKP_88
+msld_0_000736.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_88_03.jpg,MKP_88
+msld_0_000737.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_91_01.jpg,MKP_91
+msld_0_000738.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_93_01.jpg,MKP_93
+msld_0_000739.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_93_02.jpg,MKP_93
+msld_0_000740.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_93_03.jpg,MKP_93
+msld_0_000741.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_93_04.jpg,MKP_93
+msld_0_000742.jpg,0,monkeypox,MKP,মাংকিপক্স (এমপক্স) সন্দেহ,see_doctor_soon,FOLDS/fold1/valid/MKP_98_01.jpg,MKP_98
+msld_3_000743.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_04_01.jpg,MSL_04
+msld_3_000744.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_07_01.jpg,MSL_07
+msld_3_000745.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_08_01.jpg,MSL_08
+msld_3_000746.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_08_02.jpg,MSL_08
+msld_3_000747.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_08_03.jpg,MSL_08
+msld_3_000748.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_12_01.jpg,MSL_12
+msld_3_000749.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_14_01.jpg,MSL_14
+msld_3_000750.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_25_01.jpg,MSL_25
+msld_3_000751.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_32_01.jpg,MSL_32
+msld_3_000752.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_37_01.jpg,MSL_37
+msld_3_000753.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_41_01.jpg,MSL_41
+msld_3_000754.jpg,3,measles,MSL,হাম,get_it_checked,FOLDS/fold1/valid/MSL_41_02.jpg,MSL_41

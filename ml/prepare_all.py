@@ -107,7 +107,7 @@ def main() -> None:
     print(f"\nAll datasets and artifacts ready in {time.time() - t0:.0f}s.")
     if not args.with_skin:
         print("Image models not built. Add --with-skin to include them "
-              "(downloads about 4.5 GB).")
+              "(downloads over 15 GB; allow additional disk space for extraction).")
 
 
 if __name__ == "__main__":

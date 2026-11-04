@@ -1,0 +1,30 @@
+{
+  "dataset": "pad",
+  "seed": 42,
+  "input_signature": "6125cb2b87af0d1cd2cffadb8355f5309d133c04f3de57128b2a9241ba420648",
+  "source_rows": 2298,
+  "eligible_images": 2269,
+  "excluded_images": 29,
+  "exclusions": {
+    "exact_pixel_duplicate": 3,
+    "conflicting_labels_for_same_pixels": 26
+  },
+  "perceptual_hamming_limit": 4,
+  "near_duplicate_edges": 3,
+  "source_group_field": "patient_id",
+  "rows_with_source_group": 2298,
+  "source_groups_disjoint": true,
+  "all_subjects_known": true,
+  "patient_identity_limitation": null,
+  "components_disjoint": true,
+  "partition_sizes": {
+    "train": 1615,
+    "validation": 336,
+    "test": 318
+  },
+  "partition_components": {
+    "train": 975,
+    "validation": 198,
+    "test": 196
+  }
+}

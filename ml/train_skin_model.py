@@ -33,15 +33,14 @@ from __future__ import annotations
 
 import argparse
 import csv
+import os
 import json
 import sys
-import time
 from pathlib import Path
 
 import joblib
 import numpy as np
-from PIL import Image
-from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.ensemble import HistGradientBoostingClassifier, ExtraTreesClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     classification_report,
@@ -61,12 +60,14 @@ configure_worker_cpus()
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
-from app.ai.skin_features import extract_features, FEATURE_NAMES  # noqa: E402
+from app.ai.skin_features import FEATURE_NAMES  # noqa: E402
 
 SKIN = ROOT / "data" / "real" / "skin"
 IMAGES = SKIN / "images"
 METADATA = SKIN / "metadata.csv"
-ART = ROOT / "backend" / "app" / "ai" / "artifacts"
+ART = Path(os.environ.get("SASTHOSETU_ARTIFACT_DIR", ROOT / "backend" / "app" / "ai" / "artifacts"))
+
+from imaging_training import features_for_rows, make_split, recall_threshold
 
 SEED = 42
 
@@ -92,31 +93,10 @@ def _load(limit: int | None) -> tuple[np.ndarray, np.ndarray, list[str]]:
             index = rng.permutation(len(group))[:take]
             records.extend(group[i] for i in index)
 
-    features = []
-    labels = []
-    ids = []
-    started = time.time()
-
-    for position, record in enumerate(records, start=1):
-        path = IMAGES / f"{record['image_id']}.jpg"
-        if not path.exists():
-            continue
-        try:
-            with Image.open(path) as image:
-                vector = extract_features(image)
-        except Exception:  # noqa: BLE001 - a corrupt file must not stop training
-            continue
-
-        features.append(vector)
-        labels.append(record["diagnosis"])
-        ids.append(record["image_id"])
-
-        if position % 1000 == 0:
-            rate = position / (time.time() - started)
-            print(f"  {position:,}/{len(records):,} images "
-                  f"({rate:.0f}/s)", flush=True)
-
-    return np.array(features, dtype=np.float32), np.array(labels), ids
+    records = [dict(row, file=f"{row['image_id']}.jpg") for row in records
+               if (IMAGES / f"{row['image_id']}.jpg").exists()]
+    x, y = features_for_rows(records, IMAGES, "skin")
+    return x, y, [row["image_id"] for row in records]
 
 
 def main() -> None:
@@ -134,18 +114,19 @@ def main() -> None:
     x, y, ids = _load(args.limit)
     print(f"  {len(x):,} images, {x.shape[1]} features each")
 
-    from grouped_split import grouped_image_split
     with METADATA.open(encoding="utf-8") as source:
         by_id = {row["image_id"]: row for row in csv.DictReader(source)}
-    train_idx, val_idx, test_idx = grouped_image_split(
-        [IMAGES / f"{image_id}.jpg" for image_id in ids],
-        [by_id[image_id].get("lesion_id", "") for image_id in ids],
-        seed=SEED, val_fraction=0.1, test_fraction=0.1)
+    rows = [dict(by_id[image_id], file=f"{image_id}.jpg") for image_id in ids]
+    train_idx, val_idx, test_idx = make_split(rows, IMAGES, "skin", ART,
+                                            group_field="lesion_id", fraction=0.1)
 
     print(f"  train={len(train_idx):,} val={len(val_idx):,} "
           f"test={len(test_idx):,}")
 
     candidates = {
+        "extra_trees_balanced": ExtraTreesClassifier(
+            n_estimators=400, min_samples_leaf=2, class_weight="balanced",
+            n_jobs=2, random_state=SEED),
         "hist_gradient_boosting": HistGradientBoostingClassifier(
             max_iter=300, learning_rate=0.1, max_depth=8,
             class_weight="balanced", random_state=SEED,
@@ -198,19 +179,7 @@ def main() -> None:
     # benign lesions as possible are sent for review while still catching the
     # ones that matter.
     target_recall = 0.90
-    threshold = 0.02
-    # Walk from strict to lenient and stop at the first threshold that reaches
-    # the target, which is the highest one that still catches enough cases and
-    # therefore flags the fewest benign lesions.
-    for candidate in sorted(np.linspace(0.02, 0.9, 89), reverse=True):
-        if val_review_truth.sum() == 0:
-            break
-        flagged = val_review_score >= candidate
-        recall = float((flagged & val_review_truth).sum()
-                       / val_review_truth.sum())
-        if recall >= target_recall:
-            threshold = float(candidate)
-            break
+    threshold = recall_threshold(val_review_score, val_review_truth, target_recall)
     print(f"referral threshold = {threshold:.2f} "
           f"(chosen on validation for >={target_recall:.0%} recall)")
 
@@ -263,7 +232,9 @@ def main() -> None:
             "n_images": int(len(x)),
             "n_features": int(x.shape[1]),
             "seed": SEED,
-            "split_strategy": "lesion_groups_and_exact_duplicate_components",
+            "evaluation_protocol": "source_groups_and_pixel_phash_components_v1",
+            "clinically_validated": False,
+            "split_strategy": "lesion_groups_and_pixel_perceptual_components",
         }, indent=2),
         encoding="utf-8",
     )

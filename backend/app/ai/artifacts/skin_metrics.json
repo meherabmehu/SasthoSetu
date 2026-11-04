@@ -1,17 +1,27 @@
 {
   "selected_model": "hist_gradient_boosting",
   "validation_macro_f1": {
-    "hist_gradient_boosting": 0.4672,
-    "logistic_regression": 0.3328
+    "extra_trees_balanced": 0.4726,
+    "hist_gradient_boosting": 0.4812,
+    "logistic_regression": 0.3545
   },
-  "test_macro_f1": 0.5097,
-  "test_accuracy": 0.7435,
-  "malignant_recall": 0.9187,
-  "malignant_precision": 0.4174,
-  "referral_threshold": 0.02,
-  "macro_auc": 0.9098,
-  "test_size": 1002,
+  "test_macro_f1": 0.4326,
+  "test_accuracy": 0.7309,
+  "malignant_recall": 0.886,
+  "malignant_precision": 0.3734,
+  "referral_threshold": 0.017424693348149396,
+  "macro_auc": 0.9009,
+  "test_size": 970,
   "n_images": 10015,
   "n_features": 32,
-  "seed": 42
+  "seed": 42,
+  "evaluation_protocol": "source_groups_and_pixel_phash_components_v1",
+  "clinically_validated": false,
+  "split_strategy": "lesion_groups_and_pixel_perceptual_components",
+  "calibration": {
+    "partition": "validation",
+    "target_recall": 0.9,
+    "numerical_margin": 1e-12,
+    "test_used": false
+  }
 }

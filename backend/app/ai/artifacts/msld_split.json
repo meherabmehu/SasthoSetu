@@ -1,0 +1,29 @@
+{
+  "dataset": "msld",
+  "seed": 42,
+  "input_signature": "920504495a58a0e2fe5e015ca10e5437ad29ddbe969c3705a80b54e3472df02f",
+  "source_rows": 755,
+  "eligible_images": 754,
+  "excluded_images": 1,
+  "exclusions": {
+    "exact_pixel_duplicate": 1
+  },
+  "perceptual_hamming_limit": 4,
+  "near_duplicate_edges": 2,
+  "source_group_field": "patient_id",
+  "rows_with_source_group": 755,
+  "source_groups_disjoint": true,
+  "all_subjects_known": true,
+  "patient_identity_limitation": null,
+  "components_disjoint": true,
+  "partition_sizes": {
+    "train": 455,
+    "validation": 135,
+    "test": 164
+  },
+  "partition_components": {
+    "train": 313,
+    "validation": 103,
+    "test": 105
+  }
+}

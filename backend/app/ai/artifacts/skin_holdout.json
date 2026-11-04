@@ -1,0 +1,93 @@
+{
+  "dataset": "skin",
+  "model_sha256": "84107810a38c7fa35bfc8cdea5f831779f728797acce31614e6d05b07ccedaea",
+  "labels_sha256": "ae2085aab5dc8f4472e6e28fd4d25d3387974fe3a2f0c8e786ccf585b0720f0a",
+  "sklearn_version": "1.5.2",
+  "threshold": 0.017424693348149396,
+  "threshold_selection": "validation_positive_scores_only_target_recall_0.90",
+  "threshold_numerical_margin": 1e-12,
+  "test_used_for_classifier_or_threshold_selection": false,
+  "test_used_for_research_release_gate": true,
+  "clinically_validated": false,
+  "engineering_gate_passed": true,
+  "research_release_floor": {
+    "validation_recall": 0.9,
+    "heldout_recall": 0.8,
+    "minimum_positive_holdout_images": 10
+  },
+  "gate_limitation": "Research integrity/validation gate; not a clinical safety acceptance test.",
+  "split_audit": {
+    "dataset": "skin",
+    "seed": 42,
+    "input_signature": "0611e665cd6fff77ec5adb524023cd66a35879dd73cf370b07fec2e48620f48f",
+    "source_rows": 10015,
+    "eligible_images": 10013,
+    "excluded_images": 2,
+    "exclusions": {
+      "exact_pixel_duplicate": 2
+    },
+    "perceptual_hamming_limit": 4,
+    "near_duplicate_edges": 420,
+    "source_group_field": "lesion_id",
+    "rows_with_source_group": 10015,
+    "source_groups_disjoint": true,
+    "all_subjects_known": false,
+    "patient_identity_limitation": "Some or all patient IDs are unavailable; duplicate separation is not patient-level validation.",
+    "components_disjoint": true,
+    "partition_sizes": {
+      "train": 8029,
+      "validation": 1014,
+      "test": 970
+    },
+    "partition_components": {
+      "train": 5861,
+      "validation": 719,
+      "test": 701
+    }
+  },
+  "metrics": {
+    "validation": {
+      "tp": 171,
+      "fp": 294,
+      "tn": 531,
+      "fn": 18,
+      "recall": 0.9047619047619048,
+      "specificity": 0.6436363636363637,
+      "precision": 0.36774193548387096,
+      "referred_fraction": 0.45857988165680474,
+      "images": 1014,
+      "positive_images": 189,
+      "macro_f1": 0.4811900552255589,
+      "accuracy": 0.7514792899408284,
+      "referral_score_auc": 0.8700464967131634
+    },
+    "test": {
+      "tp": 171,
+      "fp": 287,
+      "tn": 490,
+      "fn": 22,
+      "recall": 0.8860103626943006,
+      "specificity": 0.6306306306306306,
+      "precision": 0.37336244541484714,
+      "referred_fraction": 0.47216494845360824,
+      "images": 970,
+      "positive_images": 193,
+      "macro_f1": 0.43259508737471375,
+      "accuracy": 0.7309278350515463,
+      "referral_score_auc": 0.858503210834817,
+      "confidence_intervals": {
+        "method": "component_bootstrap_percentile",
+        "repetitions": 1000,
+        "components": 701,
+        "recall_95": [
+          0.8359584859584859,
+          0.9333606557377049
+        ],
+        "specificity_95": [
+          0.5895948417779403,
+          0.6729809161093221
+        ]
+      }
+    }
+  }
+}
