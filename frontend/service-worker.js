@@ -6,16 +6,15 @@
  *     On 2G, waiting on the network before painting anything is the difference
  *     between a usable app and an abandoned one.
  *
- *   API reads                  network first, fall back to cache.
- *     Bed counts and appointments must be fresh when a connection exists, but
- *     a stale answer beats a blank screen when it does not.
+ *   API reads                  network only, never persisted by this worker.
+ *     The app owns encrypted, expiring, account-scoped offline storage.
  *
  *   API writes                 never cached; the app queues them itself.
  */
 /* Raising this discards the previous caches on activate. It must be raised
  * whenever the shell list or the caching rules change, otherwise a returning
  * visitor keeps being served the old app from their own disk. */
-const VERSION = 'v12';
+const VERSION = 'v13';
 const SHELL_CACHE = `sasthosetu-shell-${VERSION}`;
 const DATA_CACHE = `sasthosetu-data-${VERSION}`;
 

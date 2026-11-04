@@ -47,7 +47,7 @@ import { api, session } from './assets/js/api.js';
 import { bootstrap } from './assets/js/page.js';
 import {
   escapeHtml, formatDate, skeletonList, emptyState, errorState,
-  toast, setBusy, requireAuth, severityChip,
+  toast, setBusy, requireAuth, severityChip, bindDialog,
 } from './assets/js/ui.js';
 
 bootstrap('doctor.html');
@@ -90,7 +90,7 @@ function queueCard(item) {
   const actionable = !['COMPLETED', 'CANCELLED', 'REJECTED'].includes(item.status);
   return `<article class="list-item">
     <div class="flex-1">
-      <h4>${escapeHtml(formatDate(item.appointment_date))} · ${escapeHtml(item.appointment_time)}</h4>
+      <h3 class="heading-sm">${escapeHtml(formatDate(item.appointment_date))} · ${escapeHtml(item.appointment_time)}</h3>
       <div class="list-meta"><span>${escapeHtml(item.reason || '')}</span></div>
     </div>
     <div style="text-align:right">
@@ -184,7 +184,7 @@ async function openConsultation(appointmentId) {
 
         <hr style="border:none;border-top:1px solid var(--border);margin:1.25rem 0">
 
-        <h4>${escapeHtml(i18n.t('prescription.title'))}</h4>
+        <h4 class="heading-sm">${escapeHtml(i18n.t('prescription.title'))}</h4>
         <div id="rxItems"></div>
         <button class="btn btn-secondary btn-sm" type="button" id="addItem">
           + ${escapeHtml(i18n.t('prescription.medicine'))}</button>
@@ -192,8 +192,7 @@ async function openConsultation(appointmentId) {
         <button class="btn btn-block mt-4" type="button" id="issueBtn">
           ${BN ? 'প্রেসক্রিপশন দিন' : 'Issue prescription'}</button>
 
-        <button class="btn btn-block mt-4" type="button" id="closeConsultBtn"
-          style="background:var(--success)">
+        <button class="btn btn-success btn-block mt-4" type="button" id="closeConsultBtn">
           ${BN ? 'কনসালটেশন শেষ করুন' : 'Complete consultation'}</button>
         <p class="hint">${BN
           ? 'শেষ করার পর নোট আর পরিবর্তন করা যাবে না।'
@@ -201,7 +200,18 @@ async function openConsultation(appointmentId) {
       </div>
     </div>`;
 
-  const close = () => { host.innerHTML = ''; load(); };
+  let releaseDialog = () => {};
+  const close = async () => {
+    host.innerHTML = '';
+    releaseDialog();
+    await load();
+    if (document.activeElement === document.body) {
+      const opener = [...document.querySelectorAll('#queue .openBtn')]
+        .find(button => button.dataset.id === appointmentId);
+      (opener || document.getElementById('main')).focus();
+    }
+  };
+  releaseDialog = bindDialog(host.querySelector('[role="dialog"]'), close, '#complaint');
   document.getElementById('closeBtn').addEventListener('click', close);
   document.getElementById('backdrop').addEventListener('click', (e) => {
     if (e.target.id === 'backdrop') close();
@@ -230,7 +240,8 @@ async function openConsultation(appointmentId) {
           <input id="dur${index}" class="input rx-dur" placeholder="5 days">
         </div>
         <div class="field mb-0" style="align-self:end">
-          <button type="button" class="btn btn-ghost btn-sm removeItem">✕</button>
+          <button type="button" class="btn btn-ghost btn-sm removeItem"
+            aria-label="${BN ? 'ওষুধটি সরান' : 'Remove medicine'}">✕</button>
         </div>
       </div>`;
     rxItems.appendChild(row);

@@ -18,6 +18,7 @@
 <main id="main" class="page">
   <div class="container">
     <a href="hospitals.html" class="btn btn-ghost btn-sm" data-i18n="action.back">ফিরে যান</a>
+    <h1 id="hospitalTitle" class="mt-4" data-i18n="hospital.title">হাসপাতাল ও শয্যা</h1>
     <div id="content" class="mt-4" aria-live="polite"></div>
     <div id="forecast" class="mt-4"></div>
   </div>
@@ -74,7 +75,7 @@ async function load() {
       return `<div class="card" style="margin-bottom:.75rem">
         <div class="row-between">
           <div>
-            <h4 class="mb-0">${escapeHtml(wardLabel(ward.ward_type))}</h4>
+            <h2 class="heading-sm mb-0">${escapeHtml(wardLabel(ward.ward_type))}</h2>
             <div class="small muted">${escapeHtml(ward.name)}</div>
           </div>
           <div style="text-align:right">
@@ -98,9 +99,9 @@ async function load() {
       </div>`;
     }).join('');
 
+    document.getElementById('hospitalTitle').textContent = hospital.name;
     contentEl.innerHTML = `
       <div class="page-head">
-        <h1>${escapeHtml(hospital.name)}</h1>
         <p class="muted">${escapeHtml(hospital.area || '')} ${escapeHtml(hospital.district)}
           ${hospital.phone ? `· <a href="tel:${escapeHtml(hospital.phone)}">${escapeHtml(hospital.phone)}</a>` : ''}
         </p>
@@ -162,7 +163,7 @@ async function loadForecast(code) {
 
       return `<div class="card mb-4">
         <div class="row-between">
-          <h4 class="mb-0">${escapeHtml(wardLabel(ward.ward_type))}</h4>
+          <h3 class="heading-sm mb-0">${escapeHtml(wardLabel(ward.ward_type))}</h3>
           <span class="small muted">${BN ? 'ধারণক্ষমতা' : 'Capacity'} ${ward.capacity} ·
             ${BN ? 'এখন' : 'now'} ${ward.current_occupied}</span>
         </div>

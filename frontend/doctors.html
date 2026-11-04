@@ -51,7 +51,7 @@ import { bootstrap } from './assets/js/page.js';
 import {
   escapeHtml, formatBdt, formatDate, skeletonList, emptyState,
   errorState, toast, setBusy,
-  requireAuth,
+  requireAuth, bindDialog,
 } from './assets/js/ui.js';
 
 bootstrap('doctors.html');
@@ -91,7 +91,7 @@ function doctorCard(doctor) {
 
   return `<article class="list-item">
     <div class="flex-1">
-      <h4>${escapeHtml(doctor.name || 'Doctor')}</h4>
+      <h2 class="heading-sm">${escapeHtml(doctor.name || 'Doctor')}</h2>
       <div class="list-meta">
         <span>${escapeHtml(doctor.specialization || '')}</span>
         <span>${escapeHtml(doctor.experience_years || 0)} ${escapeHtml(i18n.t('doctor.years'))}</span>
@@ -188,13 +188,11 @@ function openBooking(data) {
     </div>`;
 
   const backdrop = document.getElementById('backdrop');
-  const close = () => { host.innerHTML = ''; };
+  let releaseDialog = () => {};
+  const close = () => { host.innerHTML = ''; releaseDialog(); };
+  releaseDialog = bindDialog(host.querySelector('[role="dialog"]'), close, '#bReason');
   document.getElementById('cancelBtn').addEventListener('click', close);
   backdrop.addEventListener('click', (e) => { if (e.target === backdrop) close(); });
-  document.addEventListener('keydown', function onEsc(e) {
-    if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onEsc); }
-  });
-  document.getElementById('bReason').focus();
 
   document.getElementById('bookForm').addEventListener('submit', async (event) => {
     event.preventDefault();

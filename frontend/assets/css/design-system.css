@@ -71,6 +71,7 @@
   --text-muted: var(--slate-600);
   --text-subtle: var(--slate-500);
   --on-accent: #ffffff;
+  --link: var(--teal-700);
 
   /* Type. Hind Siliguri renders Bangla conjuncts correctly; the system
      stack is the fallback so text never disappears on a slow connection. */
@@ -117,6 +118,7 @@
 /* Dark theme. Severity colours are re-tuned rather than inverted so the
    emergency red stays unmistakably red against a dark surface. */
 [data-theme="dark"] {
+  --link: var(--teal-300);
   --bg: #0b1220;
   --surface: #131c2e;
   --surface-alt: #1b263b;
@@ -183,11 +185,13 @@ h1 { font-size: var(--text-3xl); }
 h2 { font-size: var(--text-2xl); }
 h3 { font-size: var(--text-xl); }
 h4 { font-size: var(--text-lg); }
+.heading-sm { font-size: var(--text-lg); }
+.heading-md { font-size: var(--text-xl); }
 
 p { margin: 0 0 var(--space-3); }
 
 a {
-  color: var(--teal-600);
+  color: var(--link);
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
@@ -308,8 +312,10 @@ img { max-width: 100%; display: block; }
 }
 .btn-secondary:hover:not(:disabled) { background: var(--surface-alt); }
 
-.btn-danger { background: var(--danger); }
+.btn-danger { background: #b91c1c; color: #fff; }
 .btn-danger:hover:not(:disabled) { background: #991b1b; }
+.btn-success { background: #15803d; color: #fff; }
+.btn-success:hover:not(:disabled) { background: #166534; }
 
 .btn-ghost {
   background: transparent;

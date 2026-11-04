@@ -7,7 +7,7 @@ Only the fixture database under .tmp is written. Uses fixed TEST-ONLY accounts.
 import os
 import sys
 import uuid
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +25,8 @@ from app.core.database import SessionLocal
 from app.core.security import hash_password
 from app.models.appointment import Appointment
 from app.models.doctor import Doctor
+from app.models.doctor_availability import DoctorAvailability
+from app.models.hospital import Hospital, Ward
 from app.models.patient import Patient
 from app.models.provider import LabTest, Provider
 from app.models.user import User
@@ -54,6 +56,14 @@ with SessionLocal() as db:
         db.add(Appointment(id="qa-appointment", patient_id="qa-patient", doctor_id="qa-doctor",
                             appointment_date="2099-01-01", appointment_time="10:00", reason="QA only",
                             status="CONFIRMED"))
+    db.add(DoctorAvailability(id="qa-slot", doctor_id="qa-doctor",
+                             available_date=(date.today() + timedelta(days=2)).isoformat(),
+                             start_time="11:00", end_time="11:30", is_booked=False))
+    db.add(Hospital(id="qa-hospital", code="QA-HOSPITAL", name="QA Hospital",
+                    district="Dhaka", has_emergency=True, is_active=True))
+    db.flush()
+    db.add(Ward(id="qa-ward", hospital_id="qa-hospital", ward_type="general",
+                name="QA General Ward", total_beds=10, occupied_beds=3))
     if not db.get(Provider, "qa-lab"):
         db.add(Provider(id="qa-lab", code="QA-LAB", name="QA Laboratory", provider_type="LAB",
                          district="Dhaka", owner_user_id="qa-operator", is_verified=True))

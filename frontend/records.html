@@ -90,7 +90,7 @@ async function loadPrescriptions() {
     host.innerHTML = `<div class="list">${rows.map((rx) => `
       <article class="list-item">
         <div class="flex-1">
-          <h4 class="mono">${escapeHtml(rx.verification_code)}</h4>
+          <h2 class="heading-sm mono">${escapeHtml(rx.verification_code)}</h2>
           <div class="list-meta">
             <span>${escapeHtml(rx.diagnosis || '')}</span>
             <span>${escapeHtml(rx.doctor?.name || '')}</span>
@@ -125,7 +125,7 @@ async function loadLabs() {
     host.innerHTML = `<div class="list">${rows.map((order) => `
       <article class="list-item">
         <div class="flex-1">
-          <h4>${escapeHtml(order.test_name || '')}</h4>
+          <h2 class="heading-sm">${escapeHtml(order.test_name || '')}</h2>
           <div class="list-meta">
             <span class="mono">${escapeHtml(order.order_code)}</span>
             <span>${escapeHtml(formatDate(order.created_at))}</span>
@@ -156,7 +156,7 @@ async function loadTriage() {
     host.innerHTML = `<div class="list">${data.items.map((item) => `
       <article class="list-item">
         <div class="flex-1">
-          <h4>${escapeHtml(item.input_text.slice(0, 90))}${item.input_text.length > 90 ? '…' : ''}</h4>
+          <h2 class="heading-sm">${escapeHtml(item.input_text.slice(0, 90))}${item.input_text.length > 90 ? '…' : ''}</h2>
           <div class="list-meta">
             <span>${escapeHtml(formatDateTime(item.created_at))}</span>
             <span>${escapeHtml(item.recommended_specialty || '')}</span>

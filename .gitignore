@@ -92,3 +92,4 @@ data/real/imaging/oral/
 # freeze one deployment's API address into the repository.
 frontend/dist/
 .tmp/
+node_modules/
