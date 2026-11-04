@@ -4,6 +4,61 @@ import { api, session, queue, flushQueue } from './api.js';
 
 const THEME_KEY = 'sasthosetu.theme';
 
+/* Keyboard behavior shared by page tabs and modal forms. */
+function enhanceTabs() {
+  document.querySelectorAll('[role="tablist"]').forEach((list) => {
+    const tabs = () => [...list.querySelectorAll('[role="tab"]')];
+    const sync = () => tabs().forEach((tab) => {
+      tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+    });
+    sync();
+    list.addEventListener('click', sync);
+    list.addEventListener('keydown', (event) => {
+      const items = tabs();
+      const index = items.indexOf(document.activeElement);
+      if (index < 0 || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? items.length - 1
+        : (index + (event.key === 'ArrowRight' ? 1 : -1) + items.length) % items.length;
+      items[next].focus();
+      items[next].click();
+      sync();
+    });
+  });
+}
+
+export function bindDialog(dialog, dismiss, initialSelector) {
+  const previous = document.activeElement;
+  const focusable = () => [...dialog.querySelectorAll(
+    'button, a[href], input, select, textarea, [tabindex]')].filter((element) =>
+    !element.disabled && element.tabIndex >= 0 && element.getClientRects().length);
+  dialog.tabIndex = -1;
+  const onKey = (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      dismiss();
+    } else if (event.key === 'Tab') {
+      const items = focusable();
+      const first = items[0], last = items[items.length - 1];
+      if (!items.length) { event.preventDefault(); dialog.focus(); }
+      else if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog)) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || document.activeElement === dialog)) {
+        event.preventDefault(); first.focus();
+      }
+    }
+  };
+  document.addEventListener('keydown', onKey, true);
+  queueMicrotask(() => {
+    if (dialog.isConnected) (dialog.querySelector(initialSelector || '[autofocus]') || focusable()[0] || dialog).focus();
+  });
+  return () => {
+    document.removeEventListener('keydown', onKey, true);
+    if (previous?.isConnected) previous.focus();
+  };
+}
+
 /* ---------------------------------------------------------------- escaping */
 
 export function escapeHtml(value) {
@@ -217,9 +272,9 @@ export function renderChrome({ active = '' } = {}) {
   const header = document.createElement('header');
   header.className = 'site-header no-print';
   header.innerHTML = `
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">${i18n.lang === 'bn' ? 'মূল অংশে যান' : 'Skip to content'}</a>
     <div class="header-inner container">
-      <a class="brand" href="index.html">
+      <a class="brand" href="index.html" aria-label="${escapeHtml(i18n.t('app.name') + ' ' + i18n.t('app.tagline'))}">
         <span class="brand-mark" aria-hidden="true">✚</span>
         <span class="brand-text">
           <strong data-i18n="app.name">${escapeHtml(i18n.t('app.name'))}</strong>
@@ -231,7 +286,7 @@ export function renderChrome({ active = '' } = {}) {
       <nav class="primary-nav" id="primaryNav" aria-label="Primary">${links}</nav>
       <div class="header-actions">
         ${bell}
-        <button class="btn btn-ghost btn-sm" id="langBtn" aria-label="Change language">
+        <button class="btn btn-ghost btn-sm" id="langBtn" aria-label="${i18n.lang === 'bn' ? 'EN: Switch to English' : 'বাং: বাংলায় পরিবর্তন'}">
           ${i18n.lang === 'bn' ? 'EN' : 'বাং'}
         </button>
         <button class="btn btn-ghost btn-sm" id="themeBtn" aria-label="Toggle dark mode">
@@ -245,6 +300,12 @@ export function renderChrome({ active = '' } = {}) {
     </div>`;
 
   document.body.prepend(header);
+  enhanceTabs();
+  const main = document.getElementById('main');
+  if (main) {
+    if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+    header.querySelector('.skip-link').addEventListener('click', () => main.focus());
+  }
 
   const badge = header.querySelector('#notifBadge');
   if (badge && session.user?.user_id) {
@@ -264,6 +325,15 @@ export function renderChrome({ active = '' } = {}) {
     const nav = header.querySelector('#primaryNav');
     const open = nav.classList.toggle('open');
     event.currentTarget.setAttribute('aria-expanded', String(open));
+  });
+  header.addEventListener('keydown', (event) => {
+    const nav = header.querySelector('#primaryNav');
+    if (event.key === 'Escape' && nav.classList.contains('open')) {
+      nav.classList.remove('open');
+      const toggle = header.querySelector('#navToggle');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
   });
   const logout = header.querySelector('#logoutBtn');
   if (logout) {

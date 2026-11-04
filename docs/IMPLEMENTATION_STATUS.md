@@ -19,6 +19,7 @@ real money, SMS is not delivered, and real email is disabled by default.
 | Model compatibility | Runtime rejects incompatible scikit-learn artifacts. TB was genuinely retrained under the pinned 1.5.2 runtime and restored. Seven imaging models have recorded validation calibration and grouped holdout results. |
 | Evaluation split tooling | Acquired/refreshed seven image collections (42,580 source images). Patient/lesion and duplicate/perceptual components remain disjoint. Exclusions, source-file hashes, split manifests, per-image predictions and uncertainty intervals accompany the models. See MODEL_RETRAINING_2026-11-04.md. |
 | Data honesty | Demo labels on capacity, forecasts, surveillance and payment surfaces; API provenance flags distinguish simulated data from verified live feeds. |
+| Accessibility baseline | 140 local page/theme/language configurations with zero automated axe violations, plus keyboard-tested tabs, mobile navigation, skip links and modal focus. See ACCESSIBILITY_AUDIT_2026-11-04.md for coverage and incomplete/manual checks. |
 
 CI model generation uses the committed source data with `--skip-download`.
 The data generators and trainers still run; external dataset acquisition is
@@ -95,6 +96,11 @@ desktop rendering and language switching, but is not a full accessibility audit.
   disposable database. GitHub results are recorded in Actions after publication.
   Logs: `.tmp/retraining-full-suite-final.log`, `.tmp/deployment-artifact-tests.log`
   and `.tmp/ci-seed-check.log` (local and gitignored).
+- The subsequent remote smoke exposed anonymous calls to protected APIs.
+  `tools/http_smoke.py` now checks rejection, logs in using seeded demo credentials,
+  and asserts emergency/ML/surge/drug/FHIR responses over HTTP without logging
+  tokens. It passed against the separate migrated and seeded local database.
+  Browser CI now also runs the locked axe audit and keyboard checks.
 
 - Security regression checks cover patient grants/revocation, unrelated and
   unverified doctors, forged doctor IDs, FHIR, token replay/expiry, password and

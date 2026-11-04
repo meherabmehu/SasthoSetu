@@ -61,7 +61,7 @@ function card(item) {
 
   return `<article class="list-item">
     <div class="flex-1">
-      <h4>${escapeHtml(formatDate(item.appointment_date))} · ${escapeHtml(item.appointment_time)}</h4>
+      <h2 class="heading-sm">${escapeHtml(formatDate(item.appointment_date))} · ${escapeHtml(item.appointment_time)}</h2>
       <div class="list-meta">
         <span>${escapeHtml(item.reason || '')}</span>
       </div>

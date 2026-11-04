@@ -221,7 +221,7 @@
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 .list-item:hover { border-color: var(--teal-300); box-shadow: var(--shadow-sm); }
-.list-item h4 { margin-bottom: var(--space-1); }
+.list-item h4, .list-item .heading-sm { margin-bottom: var(--space-1); }
 .list-meta { display: flex; flex-wrap: wrap; gap: var(--space-3); font-size: var(--text-sm); color: var(--text-muted); }
 
 /* Bed occupancy bar - colour tracks pressure, not decoration */

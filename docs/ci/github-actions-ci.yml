@@ -55,6 +55,8 @@ jobs:
           cache: pip
       - run: pip install -r requirements-dev.txt
       - run: python -m playwright install --with-deps chromium
+      - name: Install pinned accessibility engine
+        run: npm ci --prefix tools/a11y --ignore-scripts --no-audit --no-fund
       - name: Start isolated fixture application
         run: python tools/review_server.py > /tmp/sasthosetu-browser.log 2>&1 &
       - name: Wait for application
@@ -71,11 +73,17 @@ jobs:
               raise SystemExit('Fixture server did not become ready')
           PY
       - run: python tools/browser_smoke.py
+      - name: Keyboard navigation and dialog focus
+        run: python tools/keyboard_smoke.py
+      - name: WCAG checks in both languages and themes
+        run: python tools/accessibility_audit.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: browser-screenshot
-          path: .tmp/browser-smoke.png
+          path: |
+            .tmp/browser-smoke.png
+            .tmp/accessibility-report.json
 
   lint:
     name: Lint
@@ -169,7 +177,7 @@ jobs:
 
       - name: Seed reference data
         env:
-          DATABASE_URL: sqlite:///./backend/smoke.db
+          DATABASE_URL: sqlite:///./smoke.db
           SECRET_KEY: ci-secret-key-at-least-32-characters-long
         run: python scripts/seed_database.py
 
@@ -190,30 +198,6 @@ jobs:
           echo "API failed to start"
           exit 1
 
-      # A red flag reaching the wrong triage level is the one defect class that
-      # must never ship, so it is asserted against a running server too.
-      - name: Verify emergency triage over HTTP
-        run: |
-          RESPONSE=$(curl -fsS -X POST http://127.0.0.1:8000/api/v1/triage \
-            -H 'Content-Type: application/json' \
-            -d '{"symptoms":"বুকে ব্যথা, শ্বাস নিতে কষ্ট","age_years":50}')
-          echo "$RESPONSE"
-          echo "$RESPONSE" | grep -q '"triage_level":"EMERGENCY"'
-
-      - name: Verify the AI triage endpoint serves
-        run: |
-          curl -fsS -X POST http://127.0.0.1:8000/api/v1/ai/triage-ml \
-            -H 'Content-Type: application/json' \
-            -d '{"symptoms":"তিন দিন ধরে জ্বর ও কাশি","age_years":30}' | grep -q severity_level
-
-      - name: Verify surge forecasting serves
-        run: curl -fsS http://127.0.0.1:8000/api/v1/hospitals/H001/surge-forecast | grep -q forecast
-
-      - name: Verify drug interaction screening serves
-        run: |
-          curl -fsS -X POST http://127.0.0.1:8000/api/v1/ai/drug-check \
-            -H 'Content-Type: application/json' \
-            -d '{"drugs":["Warfin","Ecosprin"]}' | grep -q '"highest_severity":"major"'
-
-      - name: Verify FHIR conformance endpoint
-        run: curl -fsS http://127.0.0.1:8000/api/v1/fhir/metadata | grep -q '4.0.1'
+      # Exercise the public auth boundary and protected routes over real HTTP.
+      - name: Authenticated API and emergency safety smoke
+        run: python tools/http_smoke.py

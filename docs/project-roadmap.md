@@ -56,8 +56,9 @@ or live external integrations.
 - Patient app: onboarding, triage, search, booking, records, prescriptions
 - Doctor portal: queue, consultation workspace, prescribing, schedule
 - Admin portal: verification, capacity, surveillance, settlement
-- Responsive Bangla/English UI, WCAG AA contrast, keyboard reachable,
-  reduced-motion honoured
+- Responsive Bangla/English UI, automated WCAG contrast/semantics checks,
+  keyboard-tested tabs/dialogs/skip links, reduced-motion honoured;
+  manual assistive-technology review remains required
 - Installable PWA with offline support
 
 ## Phase 3 — Consultation and clinical workflow ✅

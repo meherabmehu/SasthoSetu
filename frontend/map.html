@@ -177,7 +177,7 @@ function render(hospitals) {
         <article class="card" style="margin-bottom:.6rem">
           <div class="row-between">
             <div>
-              <h4 class="mb-0">${escapeHtml(h.name)}</h4>
+              <h2 class="heading-sm mb-0">${escapeHtml(h.name)}</h2>
               <div class="small muted">${escapeHtml(h.district || '')}
                 ${h.distance_km != null
                   ? `· ${h.distance_km} km ${escapeHtml(i18n.t('rec.away'))}` : ''}</div>

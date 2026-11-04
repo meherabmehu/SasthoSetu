@@ -175,7 +175,7 @@ function hospitalCard(hospital) {
 
   return `<article class="list-item">
     <div class="flex-1">
-      <h4>${escapeHtml(hospital.name)}</h4>
+      <h2 class="heading-sm">${escapeHtml(hospital.name)}</h2>
       <div class="list-meta">
         <span>${escapeHtml(hospital.area || '')} ${escapeHtml(hospital.district || '')}</span>
         ${distance}
@@ -217,7 +217,7 @@ function listCard(hospital) {
   return `<article class="card">
     <div class="row-between">
       <div>
-        <h4 class="mb-0">${escapeHtml(hospital.name)}</h4>
+        <h2 class="heading-sm mb-0">${escapeHtml(hospital.name)}</h2>
         <div class="small muted">${escapeHtml(hospital.area || '')} ${escapeHtml(hospital.district)}</div>
       </div>
       <span class="badge badge-info">${escapeHtml(i18n.t('hospital.beds'))}: ${hospital.available_beds}</span>

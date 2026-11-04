@@ -94,7 +94,7 @@ async function load() {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([date, items]) => `
         <div class="card mb-4">
-          <h4>${escapeHtml(formatDate(date))}</h4>
+          <h2 class="heading-sm">${escapeHtml(formatDate(date))}</h2>
           <div class="symptom-chips">
             ${items
               .sort((a, b) => a.start_time.localeCompare(b.start_time))
