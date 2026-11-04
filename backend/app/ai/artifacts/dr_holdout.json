@@ -1,7 +1,7 @@
 {
   "dataset": "dr",
   "model_sha256": "003d4b9134b0b05faa8c5b92080fb954cf07d3dc3ffa41705f3c6fc1707efee5",
-  "labels_sha256": "4589ef0bb73964c03be8d2a09add5884fa70558b528bfa990f6125f5c10bd0e4",
+  "labels_sha256": "b5d28e6afbe8a0da67748c62030030b7115f1eb6eb947a602905c96d7eea23e3",
   "sklearn_version": "1.5.2",
   "threshold": 0.5231569980157312,
   "threshold_selection": "validation_positive_scores_only_target_recall_0.90",
@@ -90,5 +90,6 @@
         ]
       }
     }
-  }
+  },
+  "labels_hash_format": "UTF-8 CSV bytes with CRLF normalized to LF"
 }

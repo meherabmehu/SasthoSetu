@@ -127,7 +127,8 @@ def evaluate(name, artifacts):
                         results["test"]["positive_images"] >= 10 and
                         results["test"]["recall"] >= 0.80)
     report = {"dataset": name, "model_sha256": hashlib.sha256(model_file.read_bytes()).hexdigest(),
-        "labels_sha256": hashlib.sha256(labels_file.read_bytes()).hexdigest(),
+        "labels_sha256": hashlib.sha256(labels_file.read_bytes().replace(b"\r\n", b"\n")).hexdigest(),
+        "labels_hash_format": "UTF-8 CSV bytes with CRLF normalized to LF",
         "sklearn_version": sklearn.__version__, "threshold": threshold,
         "threshold_selection": "validation_positive_scores_only_target_recall_0.90",
         "threshold_numerical_margin": 1e-12,

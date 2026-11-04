@@ -1,7 +1,7 @@
 {
   "dataset": "oral",
   "model_sha256": "129aacc6ef080c32b3ede560bf8dec626f439ba8683695948166e42bb2cfabc7",
-  "labels_sha256": "635d523beab2355d996b93ae44516b7e0b2a3571f2d0f6e66667a5e3b9dfc648",
+  "labels_sha256": "016836dc341b41af3c1ef015785c8224c8a25bdef590bd007c83615970366554",
   "sklearn_version": "1.5.2",
   "threshold": 0.5280748880984378,
   "threshold_selection": "validation_positive_scores_only_target_recall_0.90",
@@ -87,5 +87,6 @@
         ]
       }
     }
-  }
+  },
+  "labels_hash_format": "UTF-8 CSV bytes with CRLF normalized to LF"
 }
