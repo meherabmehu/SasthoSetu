@@ -42,3 +42,8 @@ model trained by mixing its 1,612 augmented images into train/test would report
 misleading performance. The next defensible training run needs clinician review
 and a patient/image-group split; it should be promoted only after a held-out,
 Bangladeshi evaluation passes predeclared safety thresholds.
+
+The in-product collection path is ready for that partner work: only a verified
+doctor can submit a triage review, and the retraining script joins reviewed
+sessions to verified doctors. General user feedback is deliberately excluded
+from model training.

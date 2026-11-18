@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 """Fold clinician feedback back into the triage model.
 
-Closes the learning loop. Two sources are used, both of which represent a
-human correcting the model:
-
-* ``triage_sessions`` rows a clinician reviewed and overrode, which carry the
-  original patient wording alongside the corrected severity.
-* ``ai_feedback`` rows submitted through ``POST /api/v1/ai/feedback``.
+Closes the learning loop using only ``triage_sessions`` rows reviewed by a
+**verified doctor**. General product feedback is valuable for UX work but is
+not a clinical label and must never train triage.
 
 Usage (from the repository root):
 
@@ -39,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
 from app.core.database import SessionLocal  # noqa: E402
-from app.models.ai_feedback import AIFeedback  # noqa: E402
+from app.models.doctor import Doctor  # noqa: E402
 from app.models.triage_session import TriageSession  # noqa: E402
 
 CSV = ROOT / "data" / "triage" / "symptom_triage_dataset.csv"
@@ -55,23 +52,16 @@ LEVEL5_RECALL_TOLERANCE = 0.0
 
 
 def collect_corrections(min_rows: int) -> pd.DataFrame:
-    """Gather every human correction available, de-duplicated by text."""
+    """Gather verified-clinician corrections, de-duplicated by text."""
     db = SessionLocal()
     try:
         reviewed = (
             db.query(TriageSession)
+            .join(Doctor, TriageSession.reviewed_by == Doctor.id)
             .filter(
                 TriageSession.clinician_level.isnot(None),
                 TriageSession.input_text.isnot(None),
-            )
-            .all()
-        )
-        submitted = (
-            db.query(AIFeedback)
-            .filter(
-                AIFeedback.feature == "triage",
-                AIFeedback.corrected_level.isnot(None),
-                AIFeedback.input_text.isnot(None),
+                Doctor.verification_status.is_(True),
             )
             .all()
         )
@@ -86,14 +76,6 @@ def collect_corrections(min_rows: int) -> pd.DataFrame:
             "source": "clinician_review",
         }
         for row in reviewed
-    ] + [
-        {
-            "text": row.input_text,
-            "triage_level": int(row.corrected_level),
-            "age": "",
-            "source": "ai_feedback",
-        }
-        for row in submitted
     ]
 
     frame = pd.DataFrame(records)

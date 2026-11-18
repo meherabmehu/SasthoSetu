@@ -196,6 +196,11 @@ def review_triage_session_service(session_id: str, payload, current_user, db: Se
         raise HTTPException(
             status_code=403, detail="Only a registered doctor can review triage"
         )
+    if not doctor.verification_status:
+        raise HTTPException(
+            status_code=403,
+            detail="Only a verified doctor can create training-eligible reviews",
+        )
 
     from app.core.security import require_self_or_clinician
     require_self_or_clinician(session.user_id, current_user, db)

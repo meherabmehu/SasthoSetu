@@ -98,7 +98,7 @@ class ClinicalTestCase(unittest.TestCase):
         self.assertIn(response.status_code, (200, 201), response.text)
         return user_id, headers
 
-    def _doctor(self, specialization="General Medicine"):
+    def _doctor(self, specialization="General Medicine", verified=True):
         user_id, headers = self._account("DOCTOR")
         response = self.client.post(
             f"/api/v1/doctors/{user_id}",
@@ -117,7 +117,7 @@ class ClinicalTestCase(unittest.TestCase):
         session = SessionLocal()
         try:
             doctor = session.query(Doctor).filter(Doctor.user_id == user_id).first()
-            doctor.verification_status = True
+            doctor.verification_status = verified
             session.commit()
             doctor_id = doctor.id
         finally:
@@ -325,6 +325,21 @@ class TriageSessionTests(ClinicalTestCase):
             f"/api/v1/triage/sessions/{created['triage_session_id']}/review",
             json={"clinician_level": 1},
             headers=headers,
+        )
+        self.assertEqual(403, response.status_code)
+
+    def test_unverified_doctor_cannot_create_training_eligible_review(self):
+        _, patient_headers = self._patient()
+        _, _, doctor_headers = self._doctor(verified=False)
+        created = self.client.post(
+            "/api/v1/triage/sessions",
+            json={"symptoms": "fever and cough", "age_years": 30},
+            headers=patient_headers,
+        ).json()
+        response = self.client.post(
+            f"/api/v1/triage/sessions/{created['triage_session_id']}/review",
+            json={"clinician_level": 3},
+            headers=doctor_headers,
         )
         self.assertEqual(403, response.status_code)
 
