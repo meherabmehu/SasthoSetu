@@ -207,7 +207,9 @@ async function loadSurveillance() {
   const host = document.getElementById('surveillance');
   host.innerHTML = skeletonList(2);
   try {
-    const data = await api.get('/population/surveillance?weeks=12');
+    const data = await api.get(
+      '/population/surveillance?weeks=12&source=bangladesh_dengue_estimates_2022_2024'
+    );
     const series = data.series || [];
     if (!series.length) {
       host.innerHTML = emptyState('status.none', '📊');
@@ -245,7 +247,12 @@ async function loadSurveillance() {
       </article>`;
     }).join('');
 
-    host.innerHTML = `<div class="grid">${cards}</div>`;
+    const sourceNotice = data.historical
+      ? `<p class="hint mt-4">${BN
+        ? 'ঐতিহাসিক ডেঙ্গু তথ্য (২০২২–২০২৪); এটি live alert নয়।'
+        : 'Historical dengue estimates (2022–2024); not a live alert feed.'}</p>`
+      : '';
+    host.innerHTML = `<div class="grid">${cards}</div>${sourceNotice}`;
   } catch (error) {
     host.innerHTML = errorState(error.message);
   }

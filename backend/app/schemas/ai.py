@@ -15,7 +15,7 @@ class SurveillanceQuery(BaseModel):
     weeks: int = Field(default=26, ge=1, le=160)
     source: Literal[
         "synthetic_demo", "bangladesh_dengue_estimates_2022_2024"
-    ] = "synthetic_demo"
+    ] = "bangladesh_dengue_estimates_2022_2024"
 
 
 class AIFeedbackCreate(BaseModel):

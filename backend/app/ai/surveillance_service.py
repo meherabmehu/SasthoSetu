@@ -108,8 +108,8 @@ def _historical_dengue(district: str | None, disease: str | None,
 
 def surveillance(district: str | None = None, disease: str | None = None,
                  weeks: int = 26, z_threshold: float = 2.5,
-                 source: str = "synthetic_demo") -> dict:
-    """Return a demo feed or a clearly-labelled historical source analysis."""
+                 source: str = "bangladesh_dengue_estimates_2022_2024") -> dict:
+    """Return historical real data by default; synthetic data is opt-in only."""
     if source == "bangladesh_dengue_estimates_2022_2024":
         return _historical_dengue(district, disease, weeks, z_threshold)
     if source != "synthetic_demo":

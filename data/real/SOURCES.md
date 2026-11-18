@@ -160,7 +160,8 @@ for 1 January 2022 through 31 December 2024, across all eight divisions.
 Fractional values are preserved because the supplied `effected` field is an
 estimate, not an integer official case count.
 
-**Product use:** A separately selected *historical* surveillance source only.
+**Product use:** The default *historical* surveillance source. The generated
+surveillance source remains explicitly opt-in for engineering tests only.
 It is neither live nor a DGHS official case feed; it cannot create an
 operational outbreak alert and it must not be described as current capacity or
 district-level surveillance.

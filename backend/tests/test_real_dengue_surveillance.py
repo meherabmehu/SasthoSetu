@@ -10,6 +10,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
 class HistoricalDengueTests(unittest.TestCase):
+    def test_default_source_is_historical_real_dengue(self):
+        from app.ai.surveillance_service import surveillance
+
+        result = surveillance(disease="dengue", weeks=1)
+        self.assertEqual("bangladesh_dengue_estimates_2022_2024", result["data_source"])
+        self.assertFalse(result["is_live"])
+
     def test_historical_source_is_not_live_and_has_eight_divisions(self):
         from app.ai.surveillance_service import surveillance
 

@@ -45,7 +45,8 @@ def surge_forecast_service(hospital_code: str):
 
 
 def surveillance_service_query(district: str | None, disease: str | None,
-                                weeks: int, source: str = "synthetic_demo"):
+                                weeks: int,
+                                source: str = "bangladesh_dengue_estimates_2022_2024"):
     try:
         return surveillance_service.surveillance(
             district=district, disease=disease, weeks=min(weeks, 160),

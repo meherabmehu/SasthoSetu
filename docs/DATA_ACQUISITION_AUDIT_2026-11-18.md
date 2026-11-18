@@ -8,7 +8,7 @@ treated as permission to train or deploy a clinical model.
 
 | Need | Source and licence | Result | Product use |
 |---|---|---|---|
-| Bangladesh dengue trend | [Mendeley daily dengue estimates](https://data.mendeley.com/datasets/z5mvwrfgsz/1), CC BY 4.0 | 8,768 division-day rows, 2022-01-01 to 2024-12-31 | Historical-only API source: `bangladesh_dengue_estimates_2022_2024`. It is not live, official, district-level, or suitable for real-time alerts. |
+| Bangladesh dengue trend | [Mendeley daily dengue estimates](https://data.mendeley.com/datasets/z5mvwrfgsz/1), CC BY 4.0 | 8,768 division-day rows, 2022-01-01 to 2024-12-31 | Default historical API source: `bangladesh_dengue_estimates_2022_2024`. It is not live, official, district-level, or suitable for real-time alerts. |
 | Bangladesh skin images | [SkinDiseaseBD v3](https://data.mendeley.com/datasets/9ggd3shdr7/3), CC BY-NC 4.0 | 197 original images are present separately from augmented archives | Kept out of the served model until patient/image split metadata and clinician validation are available. The augmented images are excluded to prevent leakage. |
 
 The dengue raw archive SHA-256 and the canonical table provenance are stored in
