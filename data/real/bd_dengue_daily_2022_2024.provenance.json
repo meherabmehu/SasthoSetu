@@ -1,0 +1,14 @@
+{
+  "source": "https://data.mendeley.com/datasets/z5mvwrfgsz/1",
+  "download": "https://data.mendeley.com/public-api/zip/z5mvwrfgsz/download/1",
+  "licence": "CC BY 4.0",
+  "source_archive_sha256": "cb2072acfb8f2017ca94c81bafb8453433d66185d94012c2e2b596092639c302",
+  "rows": 8768,
+  "coverage": {
+    "start": "2022-01-01",
+    "end": "2024-12-31"
+  },
+  "measure": "estimated daily dengue affected people; fractional values retained",
+  "not_live": true,
+  "not_official_case_feed": true
+}

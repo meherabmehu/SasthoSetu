@@ -1,0 +1,20 @@
+{
+  "source": "https://data.mendeley.com/datasets/37z8kgx79m/1",
+  "licence": "CC BY 4.0",
+  "rows": 5263,
+  "category_counts": {
+    "Emergency": 1353,
+    "General Query": 1181,
+    "Routine": 1268,
+    "Urgent": 1461
+  },
+  "text_integrity": {
+    "question_mark_ratio": 0.8258,
+    "rows_over_50_percent_question_marks": 5263,
+    "usable_for_text_training_or_evaluation": false
+  },
+  "method": "Metadata and text-integrity audit only; no source text is committed.",
+  "not_a_training_set": true,
+  "not_clinician_labelled": true,
+  "exclusion_reason": "The released CSV substitutes most Bangla text with question marks, and its four source categories cannot safely map to the product's five clinical urgency levels."
+}

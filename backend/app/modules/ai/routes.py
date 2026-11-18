@@ -84,7 +84,7 @@ def population_surveillance(
     current_user=Depends(get_current_user),
 ):
     return surveillance_service_query(
-        query.district, query.disease, query.weeks)
+        query.district, query.disease, query.weeks, query.source)
 
 
 @router.post("/ai/feedback")

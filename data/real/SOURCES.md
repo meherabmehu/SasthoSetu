@@ -9,6 +9,7 @@ Rebuild any of them with:
 ```bash
 python ml/fetch_real_data.py
 python ml/fetch_real_data.py --only nhamcs
+python ml/fetch_bangladesh_daily_dengue.py
 ```
 
 The raw downloads land in `_cache/` and are not committed — they are large and
@@ -144,6 +145,25 @@ is often a district away.
 **Caveats.** Paediatric films from a single hospital in Guangzhou. Adult films
 and different equipment will look different, and a photograph of a film taken
 on a phone is not the same as the film itself.
+
+---
+
+## `bd_dengue_daily_2022_2024.csv` — 8,768 division-day dengue estimates
+
+**Source:** [An Empirical Study of Dengue Outbreaks in Bangladesh](https://data.mendeley.com/datasets/z5mvwrfgsz/1).
+
+**Licence:** CC BY 4.0. The source archive hash, URL, dates and limitations are
+in `bd_dengue_daily_2022_2024.provenance.json`.
+
+**Contents:** Daily division-level estimated affected people and weather fields
+for 1 January 2022 through 31 December 2024, across all eight divisions.
+Fractional values are preserved because the supplied `effected` field is an
+estimate, not an integer official case count.
+
+**Product use:** A separately selected *historical* surveillance source only.
+It is neither live nor a DGHS official case feed; it cannot create an
+operational outbreak alert and it must not be described as current capacity or
+district-level surveillance.
 
 ---
 

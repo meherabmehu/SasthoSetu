@@ -45,10 +45,11 @@ def surge_forecast_service(hospital_code: str):
 
 
 def surveillance_service_query(district: str | None, disease: str | None,
-                                weeks: int):
+                                weeks: int, source: str = "synthetic_demo"):
     try:
         return surveillance_service.surveillance(
-            district=district, disease=disease, weeks=min(weeks, 60))
+            district=district, disease=disease, weeks=min(weeks, 160),
+            source=source)
     except FileNotFoundError:
         raise HTTPException(
             status_code=503,

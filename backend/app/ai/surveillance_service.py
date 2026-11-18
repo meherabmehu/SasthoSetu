@@ -37,6 +37,16 @@ def _weekly() -> pd.DataFrame:
     return df
 
 
+@lru_cache(maxsize=1)
+def _bangladesh_dengue_daily() -> pd.DataFrame:
+    """Return the documented historical estimate series, not a live feed."""
+    path = _DATA_DIR / "real" / "bd_dengue_daily_2022_2024.csv"
+    df = pd.read_csv(path)
+    df["date"] = pd.to_datetime(df["date"], format="%d-%m-%y")
+    df["estimated_cases"] = pd.to_numeric(df["estimated_cases"], errors="raise")
+    return df
+
+
 def _detect(series: pd.Series, z_threshold: float, span: int = 8
             ) -> tuple[pd.Series, pd.Series]:
     baseline = series.ewm(span=span, adjust=False).mean().shift(1)
@@ -47,9 +57,63 @@ def _detect(series: pd.Series, z_threshold: float, span: int = 8
     return z, baseline
 
 
+def _historical_dengue(district: str | None, disease: str | None,
+                       weeks: int, z_threshold: float) -> dict:
+    """Serve a clearly labelled historical dengue-estimate analysis."""
+    if disease and disease.lower() != "dengue":
+        raise ValueError("this historical source contains dengue estimates only")
+    df = _bangladesh_dengue_daily()
+    if district:
+        df = df[df.division.str.lower() == district.lower()]
+    if df.empty:
+        raise ValueError("no historical dengue data for the given division")
+
+    cutoff = df["date"].max() - pd.Timedelta(weeks=weeks)
+    series_out, alerts = [], []
+    for division, group in df.groupby("division"):
+        weekly = (group.set_index("date")["estimated_cases"].sort_index()
+                  .resample("W-SUN").sum().reset_index())
+        z, baseline = _detect(weekly["estimated_cases"], z_threshold)
+        weekly = weekly.assign(z=z.round(2), baseline=baseline.round(2))
+        recent = weekly[weekly.date > cutoff]
+        points = [{
+            "week_ending": row.date.date().isoformat(),
+            "cases": round(float(row.estimated_cases), 2),
+            "expected": None if pd.isna(row.baseline) else float(row.baseline),
+            "z_score": float(row.z),
+            "anomaly": bool(row.z >= z_threshold),
+        } for row in recent.itertuples()]
+        series_out.append({"district": division, "disease": "dengue", "points": points})
+        for point in points:
+            if point["anomaly"]:
+                alerts.append({"district": division, "disease": "dengue", **point})
+    alerts.sort(key=lambda alert: (alert["week_ending"], -alert["z_score"]), reverse=True)
+    return {
+        "data_source": "bangladesh_dengue_estimates_2022_2024",
+        "is_live": False,
+        "historical": True,
+        "geographic_level": "division",
+        "coverage": {"start": "2022-01-01", "end": "2024-12-31"},
+        "measure": "Estimated dengue affected people (fractional values retained)",
+        "not_for_real_time_alerting": True,
+        "window_weeks": weeks,
+        "z_threshold": z_threshold,
+        "series": series_out,
+        "active_alerts": alerts[:50],
+        "alert_count": len(alerts),
+        "detector": "EWMA(span=8) + robust z-score; retrospective analysis",
+        "model_version": "banglamed-surveillance-v1.1",
+    }
+
+
 def surveillance(district: str | None = None, disease: str | None = None,
-                 weeks: int = 26, z_threshold: float = 2.5) -> dict:
-    """Return recent trends + anomaly alerts, optionally filtered."""
+                 weeks: int = 26, z_threshold: float = 2.5,
+                 source: str = "synthetic_demo") -> dict:
+    """Return a demo feed or a clearly-labelled historical source analysis."""
+    if source == "bangladesh_dengue_estimates_2022_2024":
+        return _historical_dengue(district, disease, weeks, z_threshold)
+    if source != "synthetic_demo":
+        raise ValueError("unknown surveillance source")
     df = _weekly()
     if district:
         df = df[df.district.str.lower() == district.lower()]

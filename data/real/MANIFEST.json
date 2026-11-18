@@ -15,6 +15,10 @@
     "rows": 288,
     "bytes": 3562
   },
+  "bd_dengue_daily_2022_2024.csv": {
+    "rows": 8768,
+    "bytes": 601325
+  },
   "bd_health_facilities.csv": {
     "rows": 5807,
     "bytes": 466437

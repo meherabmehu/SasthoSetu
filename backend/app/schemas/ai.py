@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from pydantic import Field
+from typing import Literal
 
 
 class DrugCheckRequest(BaseModel):
@@ -11,7 +12,10 @@ class SurveillanceQuery(BaseModel):
 
     district: str | None = None
     disease: str | None = None
-    weeks: int = 26
+    weeks: int = Field(default=26, ge=1, le=160)
+    source: Literal[
+        "synthetic_demo", "bangladesh_dengue_estimates_2022_2024"
+    ] = "synthetic_demo"
 
 
 class AIFeedbackCreate(BaseModel):
