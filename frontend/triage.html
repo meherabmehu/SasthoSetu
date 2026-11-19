@@ -361,8 +361,8 @@ function renderResult(data) {
   );
   const evidenceCards = evidence.length
     ? `<div class="card mt-4">
-         <h3 class="mb-0">${BN ? 'চিকিৎসক পর্যালোচনার উৎস' : 'References for clinician review'}</h3>
-         <p class="hint mt-2">${BN
+         <h3 class="mb-0">${i18n.lang === 'bn' ? 'চিকিৎসক পর্যালোচনার উৎস' : 'References for clinician review'}</h3>
+         <p class="hint mt-2">${i18n.lang === 'bn'
            ? 'এগুলো রোগ নির্ণয় বা ব্যক্তিগত চিকিৎসা নির্দেশনা নয়।'
            : 'These are references, not a diagnosis or personal treatment plan.'}</p>
          <div class="stack mt-4">${evidence.map((source) => `
@@ -371,7 +371,7 @@ function renderResult(data) {
              <div class="tiny subtle mt-2">${escapeHtml(source.publisher || '')} · ${escapeHtml(String(source.year || ''))}</div>
              <div class="small mt-2">${escapeHtml(source.scope || '')}</div>
              <a class="small" href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer">
-               ${BN ? 'মূল উৎস দেখুন' : 'Open primary source'}</a>
+               ${i18n.lang === 'bn' ? 'মূল উৎস দেখুন' : 'Open primary source'}</a>
            </div>`).join('')}</div>
        </div>`
     : '';
@@ -380,7 +380,7 @@ function renderResult(data) {
   const graphNodes = (graph?.nodes || []).map((node) => escapeHtml(node.label || node.id)).join(' → ');
   const graphCard = graphNodes
     ? `<div class="card mt-4">
-         <h3 class="mb-0">${BN ? 'AI নিরাপত্তা পথ' : 'AI safety pathway'}</h3>
+         <h3 class="mb-0">${i18n.lang === 'bn' ? 'AI নিরাপত্তা পথ' : 'AI safety pathway'}</h3>
          <p class="small mt-2">${graphNodes}</p>
          <p class="hint mt-2">${escapeHtml(graph.invariant || '')}</p>
        </div>`
