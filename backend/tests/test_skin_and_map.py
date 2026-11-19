@@ -42,6 +42,26 @@ def _photo(colour=(180, 140, 120), size=(200, 200), blob=True):
     return buffer.getvalue()
 
 
+class ImageSafetyTests(unittest.TestCase):
+    def test_a_valid_nonuniform_image_is_accepted(self):
+        from app.ai.image_safety import validate_image_quality
+
+        image = Image.open(io.BytesIO(_photo()))
+        result = validate_image_quality(image, purpose="skin photograph")
+        self.assertTrue(result["accepted"])
+        self.assertEqual([], result["reasons"])
+
+    def test_blank_uniform_images_are_rejected(self):
+        from app.ai.image_safety import ImageQualityError
+        from app.ai.image_safety import validate_image_quality
+
+        for colour in ((0, 0, 0), (255, 255, 255), (128, 128, 128)):
+            with self.subTest(colour=colour):
+                image = Image.new("RGB", (200, 200), colour)
+                with self.assertRaises(ImageQualityError):
+                    validate_image_quality(image, purpose="test photograph")
+
+
 class SkinFeatureTests(unittest.TestCase):
     """The measurements must be stable and finite whatever arrives."""
 

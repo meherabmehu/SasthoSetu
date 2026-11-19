@@ -14,6 +14,7 @@ EXPECTED_TABLES = {
     "account_tokens",
     "patient_care_consents",
     "ai_feedback",
+    "ai_inference_events",
     "alembic_version",
     "appointments",
     "bed_status_history",

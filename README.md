@@ -185,6 +185,14 @@ auditable and must never regress silently between model versions.
 | Surveillance detector | District × disease outbreak anomalies | EWMA + robust z-score, 25/25 injected outbreaks detected |
 | Drug interaction screen | Brand-aware pair checking | 81 curated pairs, 152 brand aliases |
 
+**Added AI safety controls:** uploaded clinical images now pass blur, brightness,
+contrast and uniformity checks before inference; triage responses expose
+confidence band and low-confidence uncertainty metadata; external LLM endpoints
+are hostname allowlisted and obvious phone/email identifiers are redacted;
+de-identified inference events are available to admins for 24-hour health
+summaries. These controls improve safe operation but do not establish clinical
+validation.
+
 Current imaging methods, exclusions, 95% component-bootstrap intervals and source
 hashes are in [the retraining report](docs/MODEL_RETRAINING_2026-11-04.md).
 Non-imaging scores retain their earlier evaluation. Historical imaging scores in

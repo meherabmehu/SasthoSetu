@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Optional
 
 from .artifact_loading import load_artifact
+from .image_safety import validate_image_quality
 from PIL import Image
 
 from .skin_features import extract_features
@@ -141,6 +142,7 @@ def assess_eye_photo(payload: bytes, age: Optional[int] = None) -> dict:
                 for c in model.classes_}
 
     image = _open(payload)
+    validate_image_quality(image, purpose="fundus photograph")
     features = extract_features(image).reshape(1, -1)
 
     probabilities = model.predict_proba(features)[0]

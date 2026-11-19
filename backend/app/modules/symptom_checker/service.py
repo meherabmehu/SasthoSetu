@@ -133,6 +133,30 @@ def _needs_doctor(severity: str) -> bool:
     return severity in _DOCTOR_FROM_SEVERITY
 
 
+def _uncertainty(confidence: int, matched_count: int, thin: bool = False) -> tuple:
+    low = confidence < 60 or matched_count == 0 or thin
+    if confidence >= 85:
+        return "high", low, (
+            "The symptom pattern is comparatively clear, but this remains "
+            "decision support rather than a diagnosis.",
+            "লক্ষণগুলোর ধরন তুলনামূলক স্পষ্ট, তবে এটি এখনও রোগ নির্ণয় নয় "
+            "বরং সিদ্ধান্ত-সহায়ক তথ্য।",
+        )
+    if confidence >= 60:
+        return "moderate", low, (
+            "The result is suggestive, not certain. A clinician should confirm "
+            "the presentation and clinical context.",
+            "ফলটি সম্ভাব্য নির্দেশনা দেয়, নিশ্চিত নয়। চিকিৎসককে লক্ষণ ও "
+            "সামগ্রিক পরিস্থিতি নিশ্চিত করতে হবে।",
+        )
+    return "low", True, (
+        "The wording is insufficient or ambiguous. Obtain a clinician review "
+        "instead of treating this as a diagnosis.",
+        "লেখাটি অপর্যাপ্ত বা অস্পষ্ট হতে পারে। এটি রোগ নির্ণয় হিসেবে "
+        "নেবেন না; চিকিৎসকের পর্যালোচনা নিন।",
+    )
+
+
 def triage_symptoms(request: TriageRequest) -> TriageResponse:
     # The language model only widens what is understood from the note; every
     # decision below still runs on the deterministic rules. When it is not
@@ -164,6 +188,7 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         ]
 
     if flags:
+        band, low, notes = _uncertainty(99, len(found))
         return TriageResponse(
             triage_level=TriageLevel.EMERGENCY,
             possible_condition=flags[0]["en"],
@@ -183,6 +208,10 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
                 safety_flags=[flag["flag"] for flag in flags],
                 possible_condition=flags[0]["en"],
             ),
+            confidence_band=band,
+            uncertainty_note=notes[0],
+            uncertainty_note_bn=notes[1],
+            low_confidence=low,
         )
 
     # ---- Condition rules -------------------------------------------------
@@ -220,12 +249,18 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
                 else rule["specialty"]
             )
 
+        confidence = _confidence(rule, len(matched))
+        band, low, notes = _uncertainty(confidence, len(matched), thin)
         return TriageResponse(
             triage_level=TriageLevel(severity),
             possible_condition=condition_en,
             possible_condition_bn=condition_bn,
             recommended_specialty=referral,
-            confidence=_confidence(rule, len(matched)),
+            confidence=confidence,
+            confidence_band=band,
+            uncertainty_note=notes[0],
+            uncertainty_note_bn=notes[1],
+            low_confidence=low,
             matched_symptoms=[_readable(s) for s in found],
             safety_flags=[],
             differential=conditions,
@@ -253,6 +288,7 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         severity = LEVEL_TO_SEVERITY[baseline]
         headline = _headline(conditions)
         thin = is_underdetermined(found)
+        band, low, notes = _uncertainty(60, len(found), thin)
         return TriageResponse(
             triage_level=TriageLevel(severity),
             possible_condition=(
@@ -277,6 +313,10 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
                 recommended_specialty(conditions) or _specialty_for(found)
             ),
             confidence=60,
+            confidence_band=band,
+            uncertainty_note=notes[0],
+            uncertainty_note_bn=notes[1],
+            low_confidence=low,
             matched_symptoms=[_readable(s) for s in found],
             safety_flags=[],
             differential=conditions,
@@ -308,12 +348,17 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         )
 
     # ---- Nothing recognised: safe fallback -------------------------------
+    band, low, notes = _uncertainty(0, 0)
     return TriageResponse(
         triage_level=TriageLevel.TELECONSULT,
         possible_condition="Symptoms need clinical review",
         possible_condition_bn="উপসর্গগুলোর জন্য চিকিৎসকের পর্যালোচনা প্রয়োজন",
         recommended_specialty="General Physician",
         confidence=0,
+        confidence_band=band,
+        uncertainty_note=notes[0],
+        uncertainty_note_bn=notes[1],
+        low_confidence=low,
         matched_symptoms=[],
         safety_flags=[],
         advice="Book a consultation for a proper clinical assessment.",

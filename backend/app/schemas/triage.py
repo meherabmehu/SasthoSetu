@@ -74,6 +74,12 @@ class TriageResponse(BaseModel):
     possible_condition_bn: str = ""
     recommended_specialty: str
     confidence: int = Field(ge=0, le=100)
+    # Human-useful uncertainty metadata. "Low confidence" must trigger a
+    # clinician review rather than a more confident-looking answer.
+    confidence_band: Literal["high", "moderate", "low"] = "moderate"
+    uncertainty_note: str = ""
+    uncertainty_note_bn: str = ""
+    low_confidence: bool = False
     matched_symptoms: list[str]
     safety_flags: list[str]
     # Ranked possible conditions. Always a list of possibilities, never a

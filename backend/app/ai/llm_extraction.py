@@ -39,6 +39,7 @@ import os
 import re
 import urllib.error
 import urllib.request
+from urllib.parse import urlparse
 from dataclasses import replace
 from typing import Optional
 
@@ -64,6 +65,21 @@ REQUEST_TIMEOUT_SECONDS = 6.0
 ALLOWED_KEYS = {"symptoms", "duration_days", "age", "qualifier", "negated"}
 
 QUALIFIERS = {"severe", "mild", "intermittent"}
+
+PII_REDACTION_PATTERNS = (
+    (re.compile(r"\b(?:\+88)?01[3-9]\d{8}\b"), "[PHONE]"),
+    (re.compile(r"\b\d{11,17}\b"), "[IDENTIFIER]"),
+    (re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE),
+     "[EMAIL]"),
+)
+
+
+def redact_pii(text: str) -> str:
+    """Remove obvious identifiers before sending text to an external provider."""
+    redacted = text or ""
+    for pattern, replacement in PII_REDACTION_PATTERNS:
+        redacted = pattern.sub(replacement, redacted)
+    return redacted
 
 
 def _vocabulary() -> str:
@@ -186,8 +202,33 @@ def _explain(error: urllib.error.HTTPError) -> str:
     return " | ".join(parts)
 
 
+def _is_llm_host_allowed(host: str) -> bool:
+    host = (host or "").lower()
+    default_hosts = {
+        "api.groq.com",
+        "openrouter.ai",
+        "generativelanguage.googleapis.com",
+        "localhost",
+        "127.0.0.1",
+        "::1",
+    }
+    extra_hosts = {
+        item.strip().lower()
+        for item in os.environ.get("LLM_ALLOWED_HOSTS", "").split(",")
+        if item.strip()
+    }
+    return host in default_hosts | extra_hosts
+
+
 def _post(url: str, key: str, payload: dict) -> dict:
     """Send one request and return the decoded body."""
+    parsed = urlparse(url)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme not in {"http", "https"} or not host:
+        raise ValueError("LLM endpoint must be an absolute HTTP(S) URL")
+    if not _is_llm_host_allowed(host):
+        raise ValueError("LLM endpoint host is not in the configured allowlist")
+
     request = urllib.request.Request(
         url,
         data=json.dumps(payload).encode("utf-8"),
@@ -225,7 +266,7 @@ def _call_model(text: str) -> Optional[dict]:
                 "role": "user",
                 "content": (
                     f"Allowed identifiers: {_vocabulary()}\n\n"
-                    f"Patient description: {text}"
+                    f"Patient description: {redact_pii(text)}"
                 ),
             },
         ],
@@ -254,10 +295,10 @@ def _call_model(text: str) -> Optional[dict]:
                 "LLM request failed, using rules only: %s", _explain(error)
             )
             return None
-        except (urllib.error.URLError, TimeoutError, OSError) as error:
+        except (urllib.error.URLError, TimeoutError, OSError, ValueError) as error:
             logger.warning("LLM request failed, using rules only: %s", error)
             return None
-        except (KeyError, IndexError, ValueError) as error:
+        except (KeyError, IndexError) as error:
             logger.warning("LLM response unusable, using rules only: %s", error)
             return None
     return None

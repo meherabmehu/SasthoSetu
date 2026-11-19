@@ -94,6 +94,40 @@ class MergeSafetyTests(unittest.TestCase):
                 self.assertIn("chest_pain", merged.symptoms)
 
 
+class PrivacyAndEndpointGuardTests(unittest.TestCase):
+    def test_obvious_pii_is_redacted_before_provider_transport(self):
+        from app.ai.llm_extraction import redact_pii
+
+        redacted = redact_pii(
+            "আমি 01712345678 নম্বরে আছি, email patient@example.com"
+        )
+        self.assertNotIn("01712345678", redacted)
+        self.assertNotIn("patient@example.com", redacted)
+        self.assertIn("[PHONE]", redacted)
+        self.assertIn("[EMAIL]", redacted)
+
+    def test_external_endpoint_must_be_allowlisted(self):
+        from app.ai.llm_extraction import _post
+
+        with self.assertRaises(ValueError):
+            _post(
+                "https://example.invalid/v1/chat/completions",
+                "test-key",
+                {},
+            )
+
+    def test_operator_can_explicitly_allow_a_private_endpoint(self):
+        from app.ai.llm_extraction import _is_llm_host_allowed
+
+        os.environ["LLM_ALLOWED_HOSTS"] = "private-model.local"
+        try:
+            self.assertTrue(
+                _is_llm_host_allowed("private-model.local")
+            )
+        finally:
+            os.environ.pop("LLM_ALLOWED_HOSTS", None)
+
+
 class EnvFileLoadingTests(unittest.TestCase):
     """A key written to backend/.env must actually be picked up.
 

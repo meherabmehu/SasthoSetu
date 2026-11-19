@@ -18,11 +18,13 @@ from app.models.medical_record import MedicalRecord
 from app.models.file_record import FileRecord
 from app.models.notification import Notification
 from app.models.ai_feedback import AIFeedback
+from app.models.ai_inference_event import AIInferenceEvent
 
 
 # Imports above register every model with Base.metadata for autogeneration.
 _MODELS = (
     AIFeedback,
+    AIInferenceEvent,
     Appointment,
     Doctor,
     DoctorAvailability,

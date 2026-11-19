@@ -344,6 +344,16 @@ class TemperatureUnitTests(unittest.TestCase):
 
 
 class TriageServiceTests(unittest.TestCase):
+    def test_uncertainty_metadata_is_present_and_safe(self):
+        emergency = run("বুকে ব্যথা, শ্বাস নিতে কষ্ট")
+        unknown = run("something feels unusual today")
+
+        self.assertIn(emergency.confidence_band, ("high", "moderate", "low"))
+        self.assertTrue(emergency.uncertainty_note)
+        self.assertTrue(emergency.uncertainty_note_bn)
+        self.assertTrue(unknown.low_confidence)
+        self.assertEqual("low", unknown.confidence_band)
+
     def test_cardiorespiratory_combination_is_emergency(self):
         result = run("chest pain and shortness of breath")
         self.assertIs(TriageLevel.EMERGENCY, result.triage_level)

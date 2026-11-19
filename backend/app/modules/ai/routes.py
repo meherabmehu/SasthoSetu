@@ -4,11 +4,16 @@ from fastapi import File
 from fastapi import Form
 from fastapi import HTTPException
 from fastapi import UploadFile
+from fastapi import Request
+import time
 
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
 from app.core.security import get_current_user
+from app.core.security import require_admin
+from app.ai.observability import record_event
+from app.ai.observability import telemetry_summary
 
 from app.schemas.ai import (
     DrugCheckRequest,
@@ -64,10 +69,24 @@ def drug_check(
             "override - complements the rule-based /triage endpoint",
 )
 def triage_ml(
+    http_request: Request,
     request: TriageRequest,
     current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
-    return ml_triage_service(request.symptoms, age=request.age_years)
+    started = time.perf_counter()
+    result = ml_triage_service(request.symptoms, age=request.age_years)
+    record_event(
+        db,
+        feature="triage",
+        model_version=result.get("model_version", "banglamed-triage-v1.1"),
+        outcome=str(result.get("severity_label", "unknown")),
+        latency_ms=round((time.perf_counter() - started) * 1000, 2),
+        low_confidence=bool(result.get("low_confidence")),
+        age_years=request.age_years,
+        request_id=getattr(http_request.state, "request_id", None) if http_request else None,
+    )
+    return result
 
 
 @router.get("/hospitals/{hospital_code}/surge-forecast")
@@ -102,9 +121,11 @@ def submit_feedback(
             "needs a dermatologist",
 )
 async def skin_check(
+    http_request: Request,
     image: UploadFile = File(...),
     age_years: int | None = Form(default=None),
     current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """Read one photograph and return a referral band.
 
@@ -118,7 +139,19 @@ async def skin_check(
         raise HTTPException(status_code=400, detail="No image was uploaded")
 
     try:
-        return assess_skin_image(payload, age=age_years)
+        started = time.perf_counter()
+        result = assess_skin_image(payload, age=age_years)
+        record_event(
+            db,
+            feature="skin",
+            model_version=result.get("model_version", "sasthosetu-skin-v1.0"),
+            outcome=result.get("band", "unknown"),
+            latency_ms=round((time.perf_counter() - started) * 1000, 2),
+            low_confidence=bool(result.get("low_confidence")),
+            age_years=age_years,
+            request_id=getattr(http_request.state, "request_id", None) if http_request else None,
+        )
+        return result
     except SkinModelError as error:
         # A missing artifact is a setup step the operator has not run, not a
         # fault in the request.
@@ -140,9 +173,11 @@ def skin_check_status(current_user=Depends(get_current_user)):
     summary="Screen a chest X-ray for signs of pneumonia",
 )
 async def xray_check(
+    http_request: Request,
     image: UploadFile = File(...),
     age_years: int | None = Form(default=None),
     current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """Screen one chest film.
 
@@ -155,7 +190,19 @@ async def xray_check(
         raise HTTPException(status_code=400, detail="No image was uploaded")
 
     try:
-        return assess_chest_xray(payload, age=age_years)
+        started = time.perf_counter()
+        result = assess_chest_xray(payload, age=age_years)
+        record_event(
+            db,
+            feature="xray",
+            model_version=result.get("model_version", "sasthosetu-cxr-v1.0"),
+            outcome=result.get("band", "unknown"),
+            latency_ms=round((time.perf_counter() - started) * 1000, 2),
+            low_confidence=bool(result.get("low_confidence")),
+            age_years=age_years,
+            request_id=getattr(http_request.state, "request_id", None) if http_request else None,
+        )
+        return result
     except XrayModelError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ValueError as error:
@@ -177,9 +224,11 @@ def xray_check_status(current_user=Depends(get_current_user)):
     summary="Screen a retina photograph for diabetic retinopathy",
 )
 async def eye_check(
+    http_request: Request,
     image: UploadFile = File(...),
     age_years: int | None = Form(default=None),
     current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """Screen one fundus photograph.
 
@@ -192,7 +241,19 @@ async def eye_check(
         raise HTTPException(status_code=400, detail="No image was uploaded")
 
     try:
-        return assess_eye_photo(payload, age=age_years)
+        started = time.perf_counter()
+        result = assess_eye_photo(payload, age=age_years)
+        record_event(
+            db,
+            feature="retina",
+            model_version=result.get("model_version", "sasthosetu-dr-v1.0"),
+            outcome=result.get("band", "unknown"),
+            latency_ms=round((time.perf_counter() - started) * 1000, 2),
+            low_confidence=bool(result.get("low_confidence")),
+            age_years=age_years,
+            request_id=getattr(http_request.state, "request_id", None) if http_request else None,
+        )
+        return result
     except EyeModelError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ValueError as error:
@@ -212,9 +273,11 @@ def eye_check_status(current_user=Depends(get_current_user)):
     summary="Screen a mouth photograph for signs of oral cancer",
 )
 async def oral_check(
+    http_request: Request,
     image: UploadFile = File(...),
     age_years: int | None = Form(default=None),
     current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """Screen one photograph of the inside of a mouth.
 
@@ -227,7 +290,19 @@ async def oral_check(
         raise HTTPException(status_code=400, detail="No image was uploaded")
 
     try:
-        return assess_oral_photo(payload, age=age_years)
+        started = time.perf_counter()
+        result = assess_oral_photo(payload, age=age_years)
+        record_event(
+            db,
+            feature="oral",
+            model_version=result.get("model_version", "sasthosetu-oral-v1.0"),
+            outcome=result.get("band", "unknown"),
+            latency_ms=round((time.perf_counter() - started) * 1000, 2),
+            low_confidence=bool(result.get("low_confidence")),
+            age_years=age_years,
+            request_id=getattr(http_request.state, "request_id", None) if http_request else None,
+        )
+        return result
     except OralModelError as error:
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ValueError as error:
@@ -240,3 +315,46 @@ async def oral_check(
 )
 def oral_check_status(current_user=Depends(get_current_user)):
     return {"available": oral_model_available()}
+
+
+@router.get(
+    "/ai/telemetry/summary",
+    dependencies=[Depends(require_admin)],
+)
+def ai_telemetry_summary(
+    hours: int = 24,
+    db: Session = Depends(get_db),
+):
+    hours = min(max(hours, 1), 168)
+    return telemetry_summary(db, hours=hours)
+
+
+@router.get("/ai/data-sources/status")
+def ai_data_sources_status(current_user=Depends(get_current_user)):
+    return {
+        "triage": {
+            "status": "synthetic_and_external_vocab",
+            "clinically_validated": False,
+            "replacement_required": "clinician-labelled Bangla corpus",
+        },
+        "surge": {
+            "status": "synthetic_demo",
+            "is_live": False,
+            "clinically_validated": False,
+        },
+        "surveillance": {
+            "status": "historical_dengue_estimates",
+            "is_live": False,
+            "not_for_real_time_alerting": True,
+        },
+        "imaging": {
+            "status": "research_demo",
+            "clinically_validated": False,
+            "licensing_review_required": True,
+        },
+        "llm": {
+            "configured": bool(__import__("os").environ.get("LLM_API_KEY")),
+            "role": "symptom_normalisation_only",
+            "deterministic_fallback": True,
+        },
+    }

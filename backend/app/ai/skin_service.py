@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Optional
 
 from .artifact_loading import load_artifact
+from .image_safety import validate_image_quality
 from PIL import Image
 
 from .skin_features import extract_features
@@ -433,6 +434,7 @@ def _open(payload: bytes) -> Image.Image:
     if min(image.size) < 32:
         raise ValueError("image is too small to assess")
 
+    validate_image_quality(image, purpose="skin photograph")
     return image
 
 

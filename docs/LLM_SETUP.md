@@ -205,3 +205,24 @@ If the provider is down, out of quota or misconfigured, triage silently falls
 back to the rules and the patient still gets a full assessment. This is covered
 by 20 automated tests, several of which feed the merge step deliberately
 hostile output and assert the rules still win.
+
+---
+
+## Privacy and endpoint controls
+
+Before text is sent to an external provider, obvious phone numbers and email
+addresses are redacted. The provider URL is also restricted by hostname:
+Groq, OpenRouter, Gemini, localhost and loopback hosts are allowed by default.
+For a private/vendored endpoint, add only its exact hostname:
+
+```text
+LLM_ALLOWED_HOSTS=private-model.example.internal
+```
+
+AI transport telemetry is de-identified: it stores feature name, model version,
+outcome band, latency, fallback status and a broad age band, but never the raw
+symptom text or uploaded image. Admins can inspect the last 1–168 hours through:
+
+```text
+GET /api/v1/ai/telemetry/summary?hours=24
+```

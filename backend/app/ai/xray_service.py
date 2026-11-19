@@ -25,6 +25,7 @@ from PIL import Image
 
 from .skin_features import extract_features
 from .artifact_loading import IncompatibleArtifact, load_artifact
+from .image_safety import validate_image_quality
 
 _ART = Path(__file__).resolve().parent / "artifacts"
 
@@ -207,6 +208,12 @@ def assess_chest_xray(payload: bytes, age: Optional[int] = None) -> dict:
     threshold = bundle.get("threshold", 0.5)
 
     image = _open(payload)
+    validate_image_quality(
+        image,
+        purpose="chest X-ray",
+        min_std=3.0,
+        min_detail=0.008,
+    )
     features = extract_features(image).reshape(1, -1)
 
     probabilities = model.predict_proba(features)[0]

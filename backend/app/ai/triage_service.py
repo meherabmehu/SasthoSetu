@@ -102,6 +102,15 @@ def triage(notes: str, age: Optional[int] = None,
     if flags:                      # rule override is deterministic, not probabilistic
         confidence = max(confidence, 0.98)
 
+    confidence_percent = round(confidence * 100)
+    if confidence_percent >= 85:
+        confidence_band = "high"
+    elif confidence_percent >= 60:
+        confidence_band = "moderate"
+    else:
+        confidence_band = "low"
+    low_confidence = confidence_percent < 60 or level != ml_level
+
     return {
         "severity_level": level,
         "severity_label": TRIAGE_LABELS[level],
@@ -110,6 +119,23 @@ def triage(notes: str, age: Optional[int] = None,
         "recommended_pathway": CARE_PATHWAYS[level],
         "matched_specialties": _specialties(ents.symptoms, flags),
         "confidence_score": round(confidence, 3),
+        "confidence": confidence_percent,
+        "confidence_band": confidence_band,
+        "low_confidence": low_confidence,
+        "uncertainty_note": (
+            "The ML score is suggestive and is not a diagnosis. "
+            "Safety red flags and clinician review remain authoritative."
+            if not low_confidence
+            else "The model result is uncertain or safety-overridden. "
+                 "A clinician should review it."
+        ),
+        "uncertainty_note_bn": (
+            "মডেলের স্কোর সম্ভাব্য নির্দেশনা, রোগ নির্ণয় নয়। "
+            "নিরাপত্তা রেড ফ্ল্যাগ ও চিকিৎসকের পর্যালোচনা প্রাধান্য পায়।"
+            if not low_confidence
+            else "মডেলের ফল অনিশ্চিত বা নিরাপত্তা নিয়ম দ্বারা বদলানো হয়েছে। "
+                 "চিকিৎসকের পর্যালোচনা প্রয়োজন।"
+        ),
         "safety_flags": flags,
         "entities": ents.to_dict(),
         "level_probabilities": {int(c): round(float(p), 3)
