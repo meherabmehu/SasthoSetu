@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import get_db
 from app.core.security import get_current_user, require_admin
 
-from app.payments.gateways import SUPPORTED_METHODS
+from app.payments.gateways import SUPPORTED_METHODS, registered_gateway_status
 from app.schemas.provider import (
     CheckoutRequest,
     PaymentCallback,
@@ -33,7 +33,14 @@ router = APIRouter()
 
 @router.get("/payments/methods")
 def list_methods():
-    return {"methods": SUPPORTED_METHODS, "currency": "BDT", "is_sandbox": True, "mode": "demo"}
+    return {
+        "methods": SUPPORTED_METHODS,
+        "currency": "BDT",
+        "is_sandbox": True,
+        "mode": "demo",
+        "notice": "No money is moved in this deployment.",
+        "providers": registered_gateway_status(),
+    }
 
 
 class SimulationResult(BaseModel):

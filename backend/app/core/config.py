@@ -128,6 +128,9 @@ class Settings:
     rocket_api_secret: str
     sslcommerz_api_key: str
     sslcommerz_api_secret: str
+    sms_provider_name: str
+    sms_provider_api_url: str
+    sms_provider_api_key: str
 
     @classmethod
     def from_env(
@@ -189,6 +192,9 @@ class Settings:
             rocket_api_secret=values.get("ROCKET_API_SECRET", "").strip(),
             sslcommerz_api_key=values.get("SSLCOMMERZ_API_KEY", "").strip(),
             sslcommerz_api_secret=values.get("SSLCOMMERZ_API_SECRET", "").strip(),
+            sms_provider_name=values.get("SMS_PROVIDER_NAME", "").strip(),
+            sms_provider_api_url=values.get("SMS_PROVIDER_API_URL", "").strip(),
+            sms_provider_api_key=values.get("SMS_PROVIDER_API_KEY", "").strip(),
         )
 
 

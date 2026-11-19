@@ -29,12 +29,14 @@
       <button class="tab" role="tab" aria-selected="false" data-panel="capacity" id="t2"></button>
       <button class="tab" role="tab" aria-selected="false" data-panel="surveillance" id="t3"></button>
       <button class="tab" role="tab" aria-selected="false" data-panel="finance" id="t4"></button>
+      <button class="tab" role="tab" aria-selected="false" data-panel="operations" id="t5"></button>
     </div>
 
     <section id="pending" role="tabpanel" aria-live="polite"></section>
     <section id="capacity" role="tabpanel" class="hidden" aria-live="polite"></section>
     <section id="surveillance" role="tabpanel" class="hidden" aria-live="polite"></section>
     <section id="finance" role="tabpanel" class="hidden" aria-live="polite"></section>
+    <section id="operations" role="tabpanel" class="hidden" aria-live="polite"></section>
   </div>
 </main>
 
@@ -59,6 +61,7 @@ document.getElementById('t1').textContent = BN ? 'যাচাই অপেক�
 document.getElementById('t2').textContent = BN ? 'শয্যা ধারণক্ষমতা' : 'Bed capacity';
 document.getElementById('t3').textContent = BN ? 'রোগ নজরদারি' : 'Disease surveillance';
 document.getElementById('t4').textContent = BN ? 'আর্থিক হিসাব' : 'Settlement';
+document.getElementById('t5').textContent = BN ? 'অপারেশনস' : 'Operations';
 
 const tabs = document.querySelectorAll('.tab');
 tabs.forEach((tab) => {
@@ -278,11 +281,42 @@ async function loadFinance() {
   }
 }
 
+async function loadOperations() {
+  const host = document.getElementById('operations');
+  host.innerHTML = skeletonList(2);
+  try {
+    const report = await api.get('/admin/operations/summary?hours=24');
+    const ai = report.ai_telemetry || {};
+    const providers = report.providers || {};
+    const paymentRows = (providers.payments || []).map((provider) => `<li>
+      <strong>${escapeHtml(provider.provider)}</strong> · ${provider.credentials_configured ? 'configured' : 'credentials missing'} · ${escapeHtml(provider.mode)}
+    </li>`).join('');
+    const messaging = providers.messaging || {};
+    host.innerHTML = `<div class="alert alert-warning" role="note">${escapeHtml(report.demo_notice || '')}</div>
+      <div class="metric-grid mt-4">
+        ${metric(ai.total ?? 0, BN ? 'AI অনুরোধ (২৪ ঘ.)' : 'AI requests (24h)')}
+        ${metric(ai.average_latency_ms ?? 0, BN ? 'গড় বিলম্ব (ms)' : 'Average latency (ms)')}
+        ${metric(ai.low_confidence ?? 0, BN ? 'কম আত্মবিশ্বাস' : 'Low confidence')}
+        ${metric(ai.fallbacks ?? 0, BN ? 'Fallback' : 'Fallbacks')}
+        ${metric(ai.errors ?? 0, BN ? 'ত্রুটি' : 'Errors', 'var(--danger)')}
+      </div>
+      <article class="card mt-4"><h3>${BN ? 'Provider readiness' : 'Provider readiness'}</h3>
+        <p class="hint">${escapeHtml(providers.notice || '')}</p>
+        <h4>Payments</h4><ul>${paymentRows || '<li>No providers registered</li>'}</ul>
+        <h4>SMS / IVR</h4><p>${escapeHtml(messaging.provider || 'not selected')} · ${messaging.configured ? 'configured' : 'credentials missing'} · ${escapeHtml(messaging.mode || 'sandbox_only')}</p>
+        <p class="hint">${escapeHtml(messaging.next_step || '')}</p>
+      </article>`;
+  } catch (error) {
+    host.innerHTML = errorState(error.message);
+  }
+}
+
 loadMetrics();
 loadPending();
 loadCapacity();
 loadSurveillance();
 loadFinance();
+loadOperations();
 const demoPanel = document.createElement('section');
 demoPanel.className = 'card';
 demoPanel.innerHTML = `<h2>Demo tools / ডেমো সরঞ্জাম</h2><p><a href="provider.html">Lab workspace / ল্যাব পরিচালনা</a></p><button class="btn btn-secondary" id="loadOutbox">Demo email outbox / ডেমো ইমেইল</button><div id="outbox" aria-live="polite"></div>`;

@@ -444,5 +444,31 @@ class NoUnguardedRouteTests(AccessTestCase):
         )
 
 
+class OperationsDashboardTests(AccessTestCase):
+    def test_operations_summary_is_admin_only_and_never_claims_live_providers(self):
+        self.assertEqual(401, self.client.get("/api/v1/admin/operations/summary").status_code)
+        _, patient_headers = self._account("PATIENT")
+        self.assertEqual(
+            403,
+            self.client.get(
+                "/api/v1/admin/operations/summary", headers=patient_headers
+            ).status_code,
+        )
+
+        _, admin_headers = self._account("ADMIN")
+        response = self.client.get(
+            "/api/v1/admin/operations/summary?hours=999", headers=admin_headers
+        )
+        self.assertEqual(200, response.status_code, response.text)
+        body = response.json()
+        self.assertEqual(168, body["ai_telemetry"]["window_hours"])
+        self.assertFalse(body["providers"]["live_integrations_enabled"])
+        self.assertFalse(body["providers"]["messaging"]["live_enabled"])
+        self.assertTrue(all(
+            not provider["live_enabled"]
+            for provider in body["providers"]["payments"]
+        ))
+
+
 if __name__ == "__main__":
     unittest.main()

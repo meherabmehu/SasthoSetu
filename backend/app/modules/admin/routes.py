@@ -5,6 +5,9 @@ from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_db
 from app.core.security import require_admin
+from app.core.config import settings
+from app.ai.observability import telemetry_summary
+from app.integrations.providers import provider_readiness
 
 from app.modules.admin.service import (
     get_all_users_service,
@@ -15,6 +18,27 @@ from app.modules.admin.service import (
 )
 
 router = APIRouter()
+
+
+@router.get(
+    "/admin/operations/summary",
+    dependencies=[Depends(require_admin)],
+)
+def operations_summary(
+    hours: int = 24,
+    db: Session = Depends(get_db),
+):
+    """Admin-only, de-identified production-readiness dashboard data."""
+    hours = min(max(hours, 1), 168)
+    return {
+        "environment": settings.app_env,
+        "ai_telemetry": telemetry_summary(db, hours=hours),
+        "providers": provider_readiness(),
+        "demo_notice": (
+            "This deployment is a sandbox: no payment, SMS or IVR is delivered, "
+            "and AI outputs are not diagnoses."
+        ),
+    }
 
 
 @router.get(

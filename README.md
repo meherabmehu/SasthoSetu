@@ -2,7 +2,7 @@
 
 **AI-assisted health platform for Bangladesh.** Bilingual symptom triage, doctor
 matching and booking, teleconsultation, cryptographically verifiable
-prescriptions, live hospital bed capacity, labs and pharmacies, payments, FHIR
+prescriptions, hospital-capacity workflows, labs and pharmacies, sandbox payments, FHIR
 R4 interoperability, and access channels for people without a smartphone.
 
 ---
@@ -38,10 +38,13 @@ users rather than an afterthought.
 
 ## Current scope
 
-This version is a **demo/sandbox**. Payments move no real money; bed capacity,
-forecasts and surveillance are not verified live feeds. Shared patient records
-require explicit consent for verified treating doctors. The TB artifact has been
-rebuilt under the pinned runtime and is available alongside pneumonia screening.
+This version is a **demo/sandbox**. Payments move no real money and no SMS/IVR
+message is delivered; bed capacity, forecasts and surveillance are not verified
+live feeds. AI outputs are care-navigation/screening aids, not diagnoses; an
+emergency needs immediate local clinical care or Bangladesh's 999 service.
+Shared patient records require explicit consent for verified treating doctors.
+The TB artifact has been rebuilt under the pinned runtime and is available
+alongside pneumonia screening.
 
 See [implementation status](docs/IMPLEMENTATION_STATUS.md) for completed fixes,
 local verification, new pages, migrations and externally blocked work. The seven
@@ -57,13 +60,13 @@ retrained imaging models use the grouped research evaluation linked below.
 | **Consultations** | Notes, diagnosis, two-way messaging between patient and clinician; records become append-only once signed |
 | **Prescriptions** | Multi-item, HMAC-signed, single-use dispensing, forgery and expiry detection |
 | **Drug safety** | 152 Bangladeshi brand aliases over 73 generics, 81 curated interaction pairs, duplicate-therapy detection |
-| **Hospital capacity** | Per-ward bed tracking, append-only history, emergency routing by availability then distance |
+| **Hospital capacity** | Per-ward bed tracking, append-only history, emergency routing by availability then distance (demo/staff-reported unless verified) |
 | **Surge forecasting** | 24/48/72-hour per-ward bed demand, holdout MAE ≈ 2.9 beds |
 | **Surveillance** | District × disease anomaly detection for outbreak early warning |
 | **Labs & pharmacies** | Ordering, results under patient consent, generic-matched stock search |
-| **Payments** | bKash, Nagad, Rocket, SSLCommerz behind one interface; idempotent, signature-verified, reconciled |
+| **Payments** | Sandbox bKash, Nagad, Rocket and SSLCommerz adapters; idempotent, signature-verified and reconciled, with no real money movement |
 | **Interoperability** | FHIR R4 resources and a per-patient `$everything` bundle |
-| **Rural access** | SMS triage, IVR menus, offline CHW batch submission |
+| **Rural access** | SMS triage and IVR menu sandbox flows, plus offline CHW batch submission; no telecom delivery in this build |
 | **Notifications** | Every booking, prescription and payment writes to a feed; unread count on every page |
 | **Accounts** | Self-service password and profile changes; role-scoped sign-in doors for patients, clinicians and staff |
 | **Web apps** | Patient, doctor and admin surfaces; installable PWA that works offline |

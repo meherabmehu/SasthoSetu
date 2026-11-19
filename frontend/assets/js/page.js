@@ -10,8 +10,8 @@ export function bootstrap(active) {
   demo.className = 'container alert alert-warning';
   demo.setAttribute('role', 'note');
   demo.textContent = i18n.lang === 'bn'
-    ? 'ডেমো সংস্করণ: পেমেন্টে আসল টাকা কাটা হয় না। হাসপাতালের শয্যা ও পূর্বাভাস যাচাইকৃত live তথ্য নয়। AI ফল চিকিৎসকের বিকল্প নয়।'
-    : 'Demo: payments move no real money. Bed capacity and forecasts are not verified live data. AI results require a clinician.';
+    ? 'ডেমো/স্যান্ডবক্স: কোনো আসল টাকা, SMS বা IVR পাঠানো হয় না। হাসপাতালের শয্যা ও পূর্বাভাস live যাচাইকৃত তথ্য নয়। AI ফল রোগ নির্ণয় নয়—জরুরি বিপদে এখনই নিকটস্থ হাসপাতালে যান বা ৯৯৯-এ কল করুন।'
+    : 'Demo/sandbox: no real money, SMS or IVR is delivered. Bed capacity and forecasts are not verified live data. AI is not a diagnosis; for an emergency, go to the nearest hospital or call 999.';
   document.querySelector('main')?.prepend(demo);
   registerServiceWorker();
 }

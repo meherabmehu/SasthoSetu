@@ -187,3 +187,22 @@ def get_gateway(method: str) -> PaymentGateway:
     if gateway is None:
         raise KeyError(method)
     return gateway
+
+
+def registered_gateway_status() -> list[dict]:
+    """Safe readiness view for the operator dashboard.
+
+    The current adapters intentionally remain simulators even when credentials
+    exist. This prevents a configuration mistake from turning a demo checkout
+    into a real charge.
+    """
+    return [
+        {
+            "provider": name,
+            "credentials_configured": gateway.is_configured() and bool(gateway.api_secret()),
+            "live_enabled": False,
+            "mode": "sandbox_only",
+            "next_step": "Implement, contract-test and provider-certify the live adapter",
+        }
+        for name, gateway in sorted(_REGISTRY.items())
+    ]
