@@ -68,7 +68,27 @@ def record_event(
             "low_confidence": low_confidence,
         },
     )
+    # Alert evaluation is event-driven so it works on a simple Render web
+    # service without a separate worker. Delivery is opt-in and throttled.
+    try:
+        from app.operations.alerts import dispatch_alerts, evaluate_alerts
+        from app.operations.release import release_status
+        summary = telemetry_summary(db, hours=1)
+        dispatch_alerts(evaluate_alerts(summary), release=release_status(db))
+    except Exception:
+        logger.exception("Operational alert evaluation failed")
     return event
+
+
+def record_failure(
+    db: Session, *, feature: str, model_version: str, status_code: int,
+    age_years: int | None = None, request_id: str | None = None,
+) -> AIInferenceEvent:
+    """Persist a de-identified failure; never store exception text or input."""
+    return record_event(
+        db, feature=feature, model_version=model_version, outcome="error",
+        status_code=status_code, age_years=age_years, request_id=request_id,
+    )
 
 
 def telemetry_summary(db: Session, hours: int = 24) -> dict:

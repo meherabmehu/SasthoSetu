@@ -13,6 +13,7 @@ from app.core.dependencies import get_db
 from app.core.security import get_current_user
 from app.core.security import require_admin
 from app.ai.observability import record_event
+from app.ai.observability import record_failure
 from app.ai.observability import telemetry_summary
 
 from app.schemas.ai import (
@@ -55,6 +56,14 @@ from app.modules.ai.service import (
 router = APIRouter()
 
 
+def _record_inference_failure(db, request, *, feature, version, status_code, age_years=None):
+    record_failure(
+        db, feature=feature, model_version=version, status_code=status_code,
+        age_years=age_years,
+        request_id=getattr(request.state, "request_id", None),
+    )
+
+
 @router.post("/ai/drug-check")
 def drug_check(
     payload: DrugCheckRequest,
@@ -75,7 +84,11 @@ def triage_ml(
     db: Session = Depends(get_db),
 ):
     started = time.perf_counter()
-    result = ml_triage_service(request.symptoms, age=request.age_years)
+    try:
+        result = ml_triage_service(request.symptoms, age=request.age_years)
+    except Exception:
+        _record_inference_failure(db, http_request, feature="triage", version="banglamed-triage-v1.1", status_code=500, age_years=request.age_years)
+        raise
     record_event(
         db,
         feature="triage",
@@ -155,8 +168,10 @@ async def skin_check(
     except SkinModelError as error:
         # A missing artifact is a setup step the operator has not run, not a
         # fault in the request.
+        _record_inference_failure(db, http_request, feature="skin", version="sasthosetu-skin-v1.0", status_code=503, age_years=age_years)
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ValueError as error:
+        _record_inference_failure(db, http_request, feature="skin", version="sasthosetu-skin-v1.0", status_code=400, age_years=age_years)
         raise HTTPException(status_code=400, detail=str(error)) from error
 
 
@@ -204,8 +219,10 @@ async def xray_check(
         )
         return result
     except XrayModelError as error:
+        _record_inference_failure(db, http_request, feature="xray", version="sasthosetu-cxr-v1.0", status_code=503, age_years=age_years)
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ValueError as error:
+        _record_inference_failure(db, http_request, feature="xray", version="sasthosetu-cxr-v1.0", status_code=400, age_years=age_years)
         raise HTTPException(status_code=400, detail=str(error)) from error
 
 
@@ -255,8 +272,10 @@ async def eye_check(
         )
         return result
     except EyeModelError as error:
+        _record_inference_failure(db, http_request, feature="retina", version="sasthosetu-dr-v1.0", status_code=503, age_years=age_years)
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ValueError as error:
+        _record_inference_failure(db, http_request, feature="retina", version="sasthosetu-dr-v1.0", status_code=400, age_years=age_years)
         raise HTTPException(status_code=400, detail=str(error)) from error
 
 
@@ -304,8 +323,10 @@ async def oral_check(
         )
         return result
     except OralModelError as error:
+        _record_inference_failure(db, http_request, feature="oral", version="sasthosetu-oral-v1.0", status_code=503, age_years=age_years)
         raise HTTPException(status_code=503, detail=str(error)) from error
     except ValueError as error:
+        _record_inference_failure(db, http_request, feature="oral", version="sasthosetu-oral-v1.0", status_code=400, age_years=age_years)
         raise HTTPException(status_code=400, detail=str(error)) from error
 
 

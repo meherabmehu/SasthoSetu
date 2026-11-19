@@ -10,6 +10,7 @@ from app.models.doctor_availability import DoctorAvailability
 from app.models.patient import Patient
 from app.models.triage_session import TriageSession
 from app.modules.symptom_checker.service import triage_symptoms
+from app.ai.care_pathway_graph import build_care_pathway_graph
 from app.schemas.triage import TriageRequest
 
 LEVEL_TO_NAME = {
@@ -103,6 +104,11 @@ def create_triage_session_service(
         result["model_version"] = "rules-v1.1"
 
     patient_id, user_id = _resolve_patient(current_user, db)
+
+    result["care_pathway_graph"] = build_care_pathway_graph(
+        triage_level=result["triage_level"],
+        safety_flags=result.get("safety_flags") or [],
+    )
 
     session = TriageSession(
         patient_id=patient_id,

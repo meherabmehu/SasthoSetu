@@ -6,10 +6,15 @@ import logging
 import urllib.error
 import urllib.request
 from urllib.parse import urlparse
+from datetime import datetime, timedelta, timezone
+from threading import RLock
 
 from app.core.config import settings
 
 logger = logging.getLogger("sasthosetu.operations")
+_DELIVERY_LOCK = RLock()
+_last_delivery_at: datetime | None = None
+_COOLDOWN = timedelta(minutes=5)
 
 
 def evaluate_alerts(summary: dict) -> list[dict]:
@@ -40,6 +45,12 @@ def dispatch_alerts(alerts: list[dict], *, release: dict) -> dict:
     status = webhook_status()
     if not alerts or not status["enabled"]:
         return {**status, "sent": 0}
+    global _last_delivery_at
+    with _DELIVERY_LOCK:
+        now = datetime.now(timezone.utc)
+        if _last_delivery_at and now - _last_delivery_at < _COOLDOWN:
+            return {**status, "sent": 0, "cooldown": True}
+        _last_delivery_at = now
     payload = json.dumps({"service": "SasthoSetu", "alerts": alerts, "release": release}).encode("utf-8")
     request = urllib.request.Request(
         settings.alert_webhook_url,

@@ -376,6 +376,16 @@ function renderResult(data) {
        </div>`
     : '';
 
+  const graph = data.care_pathway_graph;
+  const graphNodes = (graph?.nodes || []).map((node) => escapeHtml(node.label || node.id)).join(' → ');
+  const graphCard = graphNodes
+    ? `<div class="card mt-4">
+         <h3 class="mb-0">${BN ? 'AI নিরাপত্তা পথ' : 'AI safety pathway'}</h3>
+         <p class="small mt-2">${graphNodes}</p>
+         <p class="hint mt-2">${escapeHtml(graph.invariant || '')}</p>
+       </div>`
+    : '';
+
   resultEl.innerHTML = `
     <div class="card severity-banner severity-${level}">
       <div class="row-between">
@@ -390,6 +400,7 @@ function renderResult(data) {
 
     ${differential}
     ${evidenceCards}
+    ${graphCard}
 
     <div class="card mt-4">
       ${matched}
