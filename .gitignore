@@ -94,3 +94,4 @@ data/real/imaging/oral/
 frontend/dist/
 .tmp/
 node_modules/
+artifacts/aibc-video/
