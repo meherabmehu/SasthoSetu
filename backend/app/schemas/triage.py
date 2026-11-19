@@ -81,6 +81,9 @@ class TriageResponse(BaseModel):
     differential: list[dict] = []
     # Which layer contributed what: rules alone, or rules plus model.
     understanding: dict = {}
+    # Curated primary-source cards retrieved after triage. These are citations
+    # for clinician review, never generated treatment instructions.
+    evidence_sources: list[dict] = []
     # Whether this result actually warrants seeing a doctor. Sending everyone
     # to a clinic devalues the advice and wastes the visit for people who do
     # not need one.

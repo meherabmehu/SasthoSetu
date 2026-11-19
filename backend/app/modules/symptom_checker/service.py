@@ -19,6 +19,7 @@ from app.ai.differential import is_underdetermined, recommended_specialty
 from app.ai.lexicon import SYMPTOMS
 from app.ai.llm_extraction import extract_with_llm
 from app.ai.safety import check_red_flags
+from app.ai.guidance_sources import retrieve_guidance_sources
 from app.modules.symptom_checker.rules import (
     CONDITION_RULES,
     LEVEL_TO_SEVERITY,
@@ -177,6 +178,11 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
             understanding=provenance,
+            evidence_sources=retrieve_guidance_sources(
+                symptoms=found,
+                safety_flags=[flag["flag"] for flag in flags],
+                possible_condition=flags[0]["en"],
+            ),
         )
 
     # ---- Condition rules -------------------------------------------------
@@ -228,6 +234,9 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
             understanding=provenance,
+            evidence_sources=retrieve_guidance_sources(
+                symptoms=found, safety_flags=[], possible_condition=condition_en,
+            ),
             needs_doctor=_needs_doctor(severity),
             self_care_note=(
                 "" if _needs_doctor(severity) else _SELF_CARE_NOTE_EN
@@ -284,6 +293,10 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
             disclaimer=CLINICAL_DISCLAIMER,
             disclaimer_bn=CLINICAL_DISCLAIMER_BN,
             understanding=provenance,
+            evidence_sources=retrieve_guidance_sources(
+                symptoms=found, safety_flags=[],
+                possible_condition=headline["name_en"] if headline else "",
+            ),
             needs_doctor=_needs_doctor(severity),
             self_care_note=(
                 "" if _needs_doctor(severity) else _SELF_CARE_NOTE_EN
@@ -308,6 +321,9 @@ def triage_symptoms(request: TriageRequest) -> TriageResponse:
         disclaimer=CLINICAL_DISCLAIMER,
         disclaimer_bn=CLINICAL_DISCLAIMER_BN,
         understanding=provenance,
+        evidence_sources=retrieve_guidance_sources(
+            symptoms=[], safety_flags=[], possible_condition="",
+        ),
     )
 
 
