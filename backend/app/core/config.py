@@ -131,6 +131,12 @@ class Settings:
     sms_provider_name: str
     sms_provider_api_url: str
     sms_provider_api_key: str
+    sentry_dsn: str
+    sentry_traces_sample_rate: float
+    alert_webhook_url: str
+    alert_webhook_enabled: bool
+    alert_error_rate_threshold: float
+    alert_latency_ms_threshold: int
 
     @classmethod
     def from_env(
@@ -195,6 +201,24 @@ class Settings:
             sms_provider_name=values.get("SMS_PROVIDER_NAME", "").strip(),
             sms_provider_api_url=values.get("SMS_PROVIDER_API_URL", "").strip(),
             sms_provider_api_key=values.get("SMS_PROVIDER_API_KEY", "").strip(),
+            sentry_dsn=values.get("SENTRY_DSN", "").strip(),
+            sentry_traces_sample_rate=_rate(
+                values.get("SENTRY_TRACES_SAMPLE_RATE", "0.0"),
+                "SENTRY_TRACES_SAMPLE_RATE",
+            ),
+            alert_webhook_url=values.get("ALERT_WEBHOOK_URL", "").strip(),
+            alert_webhook_enabled=_boolean(
+                values.get("ALERT_WEBHOOK_ENABLED", "false"),
+                "ALERT_WEBHOOK_ENABLED",
+            ),
+            alert_error_rate_threshold=_rate(
+                values.get("ALERT_ERROR_RATE_THRESHOLD", "0.05"),
+                "ALERT_ERROR_RATE_THRESHOLD",
+            ),
+            alert_latency_ms_threshold=_positive_int(
+                values.get("ALERT_LATENCY_MS_THRESHOLD", "2500"),
+                "ALERT_LATENCY_MS_THRESHOLD",
+            ),
         )
 
 

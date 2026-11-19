@@ -16,6 +16,7 @@ from app.modules.symptom_checker.service import (
     analyze_symptoms_service,
     triage_symptoms,
 )
+from app.ai.care_pathway_graph import build_care_pathway_graph
 
 router = APIRouter()
 
@@ -29,7 +30,12 @@ def create_triage(
     request: TriageRequest,
     current_user=Depends(get_current_user),
 ) -> TriageResponse:
-    return triage_symptoms(request)
+    result = triage_symptoms(request)
+    result.care_pathway_graph = build_care_pathway_graph(
+        triage_level=result.triage_level.value,
+        safety_flags=result.safety_flags,
+    )
+    return result
 
 
 @router.post(

@@ -34,6 +34,16 @@ class GuidanceSourceTests(unittest.TestCase):
         for source in retrieve_guidance_sources(symptoms=[], safety_flags=[]):
             self.assertIn("not patient-specific treatment advice", source["retrieval_note"])
 
+    def test_safety_graph_keeps_red_flags_before_ml_and_rag(self):
+        from app.ai.care_pathway_graph import build_care_pathway_graph
+
+        graph = build_care_pathway_graph(
+            triage_level="EMERGENCY", safety_flags=["chest_pain"]
+        )
+        self.assertIn(["safety", "ml"], graph["edges"])
+        self.assertIn(["ml", "rag"], graph["edges"])
+        self.assertEqual("emergency_referral", graph["nodes"][-1]["id"])
+
 
 if __name__ == "__main__":
     unittest.main()

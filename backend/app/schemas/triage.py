@@ -90,6 +90,8 @@ class TriageResponse(BaseModel):
     # Curated primary-source cards retrieved after triage. These are citations
     # for clinician review, never generated treatment instructions.
     evidence_sources: list[dict] = []
+    # A directed, inspectable map of the safety, ML and source-retrieval path.
+    care_pathway_graph: dict = {}
     # Whether this result actually warrants seeing a doctor. Sending everyone
     # to a clinic devalues the advice and wastes the visit for people who do
     # not need one.

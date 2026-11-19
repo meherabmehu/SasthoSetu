@@ -8,6 +8,8 @@ from app.core.security import require_admin
 from app.core.config import settings
 from app.ai.observability import telemetry_summary
 from app.integrations.providers import provider_readiness
+from app.operations.alerts import dispatch_alerts, evaluate_alerts, webhook_status
+from app.operations.release import release_status
 
 from app.modules.admin.service import (
     get_all_users_service,
@@ -30,14 +32,37 @@ def operations_summary(
 ):
     """Admin-only, de-identified production-readiness dashboard data."""
     hours = min(max(hours, 1), 168)
+    telemetry = telemetry_summary(db, hours=hours)
+    release = release_status(db)
     return {
         "environment": settings.app_env,
-        "ai_telemetry": telemetry_summary(db, hours=hours),
+        "ai_telemetry": telemetry,
+        "alert_preview": evaluate_alerts(telemetry),
+        "alert_webhook": webhook_status(),
+        "release": release,
         "providers": provider_readiness(),
         "demo_notice": (
             "This deployment is a sandbox: no payment, SMS or IVR is delivered, "
             "and AI outputs are not diagnoses."
         ),
+    }
+
+
+@router.post(
+    "/admin/operations/dispatch-alerts",
+    dependencies=[Depends(require_admin)],
+)
+def dispatch_operations_alerts(
+    hours: int = 24,
+    db: Session = Depends(get_db),
+):
+    """Manually evaluate and dispatch aggregate alerts; useful before automation."""
+    hours = min(max(hours, 1), 168)
+    telemetry = telemetry_summary(db, hours=hours)
+    alerts = evaluate_alerts(telemetry)
+    return {
+        "alerts": alerts,
+        "delivery": dispatch_alerts(alerts, release=release_status(db)),
     }
 
 

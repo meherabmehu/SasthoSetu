@@ -468,6 +468,21 @@ class OperationsDashboardTests(AccessTestCase):
             not provider["live_enabled"]
             for provider in body["providers"]["payments"]
         ))
+        self.assertIn("release", body)
+        self.assertFalse(body["alert_webhook"]["enabled"])
+
+    def test_manual_alert_dispatch_is_admin_only_and_safe_when_disabled(self):
+        self.assertEqual(
+            401,
+            self.client.post("/api/v1/admin/operations/dispatch-alerts").status_code,
+        )
+        _, admin_headers = self._account("ADMIN")
+        response = self.client.post(
+            "/api/v1/admin/operations/dispatch-alerts", headers=admin_headers
+        )
+        self.assertEqual(200, response.status_code, response.text)
+        self.assertFalse(response.json()["delivery"]["enabled"])
+        self.assertEqual(0, response.json()["delivery"]["sent"])
 
 
 if __name__ == "__main__":

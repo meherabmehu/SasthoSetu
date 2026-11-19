@@ -13,6 +13,7 @@ from app.core.middleware import (
 )
 from app.core.schema_check import verify_schema
 from app.core.readiness import router as readiness_router
+from app.operations.sentry import initialize_sentry
 
 from app.modules.users.routes import router as user_router
 from app.modules.auth.routes import router as auth_router
@@ -88,6 +89,9 @@ logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
     format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
+
+# Optional, privacy-preserving error monitoring. No DSN means no outbound call.
+initialize_sentry()
 
 app = FastAPI(
     title=settings.app_name,

@@ -288,6 +288,9 @@ async function loadOperations() {
     const report = await api.get('/admin/operations/summary?hours=24');
     const ai = report.ai_telemetry || {};
     const providers = report.providers || {};
+    const release = report.release || {};
+    const alertPreview = report.alert_preview || [];
+    const webhook = report.alert_webhook || {};
     const paymentRows = (providers.payments || []).map((provider) => `<li>
       <strong>${escapeHtml(provider.provider)}</strong> · ${provider.credentials_configured ? 'configured' : 'credentials missing'} · ${escapeHtml(provider.mode)}
     </li>`).join('');
@@ -305,6 +308,12 @@ async function loadOperations() {
         <h4>Payments</h4><ul>${paymentRows || '<li>No providers registered</li>'}</ul>
         <h4>SMS / IVR</h4><p>${escapeHtml(messaging.provider || 'not selected')} · ${messaging.configured ? 'configured' : 'credentials missing'} · ${escapeHtml(messaging.mode || 'sandbox_only')}</p>
         <p class="hint">${escapeHtml(messaging.next_step || '')}</p>
+      </article>
+      <article class="card mt-4"><h3>${BN ? 'Release & alerts' : 'Release & alerts'}</h3>
+        <p><strong>${BN ? 'Commit' : 'Commit'}:</strong> ${escapeHtml(release.git_commit || '')}</p>
+        <p><strong>${BN ? 'Migration' : 'Migration'}:</strong> ${escapeHtml(release.migration_revision || '')}</p>
+        <p><strong>Sentry:</strong> ${release.sentry_configured ? 'configured' : 'not configured'} · <strong>Webhook:</strong> ${escapeHtml(webhook.delivery || 'disabled')}</p>
+        <p>${alertPreview.length ? escapeHtml(alertPreview.map((item) => item.message).join(' ')) : (BN ? 'কোনো সক্রিয় AI alert নেই।' : 'No active AI alerts.')}</p>
       </article>`;
   } catch (error) {
     host.innerHTML = errorState(error.message);
