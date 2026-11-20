@@ -37,6 +37,7 @@ DISTRIBUTION = {
     "dotenv": "python-dotenv",
     "multipart": "python-multipart",
     "psycopg2": "psycopg2-binary",
+    "sentry_sdk": "sentry-sdk[fastapi]",
     "sqlalchemy": "SQLAlchemy",
     "yaml": "PyYAML",
 }

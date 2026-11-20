@@ -1,7 +1,8 @@
 import logging
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -84,6 +85,9 @@ from app.modules.recommendations.routes import (
 from app.modules.ai.routes import (
     router as ai_router
 )
+from app.modules.docs.routes import router as docs_router, _is_public, _publication
+from app.core.dependencies import get_db
+from sqlalchemy.orm import Session
 
 logging.basicConfig(
     level=logging.DEBUG if settings.debug else logging.INFO,
@@ -102,6 +106,8 @@ app = FastAPI(
         "doctor matching, consultations, verifiable prescriptions, hospital "
         "capacity, labs, pharmacies, payments and FHIR R4 interoperability."
     ),
+    docs_url="/api-docs",
+    redoc_url="/api-redoc",
 )
 app.include_router(readiness_router)
 
@@ -252,6 +258,7 @@ app.include_router(
     prefix="/api/v1",
     tags=["BanglaMed-AI"]
 )
+app.include_router(docs_router, prefix="/api/v1", tags=["Live documentation"])
 @app.on_event("startup")
 def check_schema_on_startup() -> None:
     """Warn loudly if the code is ahead of the database.
@@ -277,6 +284,19 @@ def health_check():
 _FRONTEND = Path(__file__).resolve().parents[2] / "frontend"
 _BUILT = _FRONTEND / "dist"
 _PAGES = _BUILT if (_BUILT / "index.html").exists() else _FRONTEND
+_DOCS_PAGE = _PAGES / "docs.html"
+if not _DOCS_PAGE.exists():
+    # A stale local dist directory must not make the new public page vanish.
+    # Deployment builds copy docs.html into dist; source is the safe dev fallback.
+    _DOCS_PAGE = _FRONTEND / "docs.html"
+
+
+@app.get("/docs", include_in_schema=False)
+def documentation_showcase(db: Session = Depends(get_db)):
+    """Public judging and technical documentation, gated before any HTML is sent."""
+    if not _is_public(_publication(db)):
+        raise HTTPException(status_code=404, detail="Documentation is not available at this time.")
+    return FileResponse(_DOCS_PAGE, headers={"Cache-Control": "no-store"})
 
 if (_PAGES / "index.html").exists():
     app.mount(

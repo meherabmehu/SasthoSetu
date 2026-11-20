@@ -23,6 +23,8 @@ EXPECTED_TABLES = {
     "doctor_availability",
     "doctor_rating_summaries",
     "doctor_reviews",
+    "docs_publications",
+    "docs_publication_versions",
     "doctors",
     "file_records",
     "medical_records",
